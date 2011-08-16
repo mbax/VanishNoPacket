@@ -1,0 +1,29 @@
+name: VanishNoPacket
+main: to.joe.vanish.VanishPlugin
+version: 1.0
+website: http://forums.joe.to
+depend: [Spout]
+author: mbaxter
+description: Vanish by filtering packets using Spout
+commands:
+  vanish:
+    description: poof
+    usage: vanish
+permissions:
+  vanish.vanish:
+    description: |
+      Allows player to vanish. 
+      REALLY should give players with this access to vanish.see
+  vanish.see:
+    description: Allows player to see vanished players
+  vanish.nopickup:
+    description: If true player can pick up items when vanished
+  vanish.nofollow:
+    description: If true mobs do not follow player when vanished
+  vanish.standard:
+    description: Can vanish, see vanished, no pickup when vanished
+    children:
+      vanish.see: true
+      vanish.vanish: true
+      vanish.nopickup: true
+      vanish.nofollow: true
