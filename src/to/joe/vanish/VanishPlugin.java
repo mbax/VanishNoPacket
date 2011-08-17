@@ -44,17 +44,18 @@ public class VanishPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.selfDescription = this.getDescription();
-        
+
         this.manager.reset();
-        
+
         this.log = Logger.getLogger("Minecraft");
-        
+
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
-        
+
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
-        
+
         this.log("Version " + this.selfDescription.getVersion() + " enabled.");
     }
 }

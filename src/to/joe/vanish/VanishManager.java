@@ -151,7 +151,7 @@ public class VanishManager {
                 player.sendMessage(messageVanisher);
             } /*else {
                 player.sendMessage(messageRegular);
-            }*/
+              }*/
         }
     }
 

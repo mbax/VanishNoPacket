@@ -17,8 +17,16 @@ public class Perms {
     public static boolean canVanish(Player player) {
         return player.hasPermission("vanish.vanish");
     }
-    
-    public static boolean canNotFollow(Player player){
+
+    public static boolean canNotFollow(Player player) {
         return player.hasPermission("vanish.nofollow");
+    }
+
+    public static boolean blockOutgoingDamage(Player player) {
+        return player.hasPermission("vanish.preventoutgoingdamage");
+    }
+
+    public static boolean blockIncomingDamage(Player player) {
+        return player.hasPermission("vanish.preventincomingdamage");
     }
 }

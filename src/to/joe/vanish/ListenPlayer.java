@@ -16,7 +16,7 @@ public class ListenPlayer extends PlayerListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.plugin.getManager().removeVanished(event.getPlayer());
     }
-    
+
     @Override
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && Perms.canNotPickUp(event.getPlayer())) {

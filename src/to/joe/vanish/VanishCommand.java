@@ -17,14 +17,14 @@ public class VanishCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if ((sender instanceof Player) && Perms.canVanish((Player) sender)) {
-            Player player=(Player)sender;
+            final Player player = (Player) sender;
             if (args.length == 0) {
                 this.plugin.getManager().toggleVanish(player);
             } else if (args[0].equals("check")) {
-                if(this.plugin.getManager().isVanished(player)){
-                    player.sendMessage(ChatColor.DARK_AQUA+"You are invisible.");
-                }else{
-                    player.sendMessage(ChatColor.DARK_AQUA+"You are not invisible.");
+                if (this.plugin.getManager().isVanished(player)) {
+                    player.sendMessage(ChatColor.DARK_AQUA + "You are invisible.");
+                } else {
+                    player.sendMessage(ChatColor.DARK_AQUA + "You are not invisible.");
                 }
             }
         }

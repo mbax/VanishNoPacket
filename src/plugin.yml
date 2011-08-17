@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.1
+version: 1.2
 website: http://forums.joe.to
 depend: [Spout]
 author: mbaxter
@@ -22,6 +22,10 @@ permissions:
     description: If true player can pick up items when vanished
   vanish.nofollow:
     description: If true mobs do not follow player when vanished
+  vanish.preventincomingdamage:
+    description: Prevent being harmed by things around you while vanished
+  vanish.preventoutgoingdamage:
+    description: Prevent accidentally hurting stuff while vanished
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
     children:
@@ -29,3 +33,5 @@ permissions:
       vanish.vanish: true
       vanish.nopickup: true
       vanish.nofollow: true
+      vanish.preventincomingdamage: true
+      vanish.preventoutgoingdamage: true
