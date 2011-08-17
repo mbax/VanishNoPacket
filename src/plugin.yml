@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.0
+version: 1.1
 website: http://forums.joe.to
 depend: [Spout]
 author: mbaxter
@@ -8,7 +8,9 @@ description: Vanish by filtering packets using Spout
 commands:
   vanish:
     description: poof
-    usage: vanish
+    usage: |
+      /vanish
+      /vanish check
 permissions:
   vanish.vanish:
     description: |
