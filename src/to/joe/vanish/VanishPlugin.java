@@ -2,6 +2,7 @@ package to.joe.vanish;
 
 import java.util.logging.Logger;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -36,6 +37,14 @@ public class VanishPlugin extends JavaPlugin {
         this.log.info("[VANISH] " + message);
     }
 
+    public void messageSeers(String message) {
+        for (final Player player : this.getServer().getOnlinePlayers()) {
+            if (player != null && Perms.canSeeAll(player)) {
+                player.sendMessage(message);
+            }
+        }
+    }
+
     @Override
     public void onDisable() {
         this.log("Version " + this.selfDescription.getVersion() + " disabled.");
@@ -53,6 +62,7 @@ public class VanishPlugin extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayer, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
 

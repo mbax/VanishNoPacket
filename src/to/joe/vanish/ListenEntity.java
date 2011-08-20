@@ -15,10 +15,11 @@ public class ListenEntity extends EntityListener {
         this.plugin = instance;
     }
 
-    @Override
-    public void onEntityTarget(EntityTargetEvent event) {
-        if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && Perms.canNotFollow((Player) event.getTarget())) {
-            event.setCancelled(true);
+    public void message(String message) {
+        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+            if (player != null) {
+                player.sendMessage(message);
+            }
         }
     }
 
@@ -43,11 +44,10 @@ public class ListenEntity extends EntityListener {
         }
     }
 
-    public void message(String message) {
-        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if (player != null) {
-                player.sendMessage(message);
-            }
+    @Override
+    public void onEntityTarget(EntityTargetEvent event) {
+        if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && Perms.canNotFollow((Player) event.getTarget())) {
+            event.setCancelled(true);
         }
     }
 

@@ -1,6 +1,7 @@
 package to.joe.vanish;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
@@ -36,8 +37,10 @@ public class VanishManager {
     public int RANGE = 512;
 
     private final VanishPlugin plugin;
-    private final Object sync = new Object();
+    private final Object syncEID = new Object();
+    private final Object syncLogin = new Object();
     private ArrayList<Integer> listOfEntityIDs;
+    private HashMap<String, String> playerLoginStatements;
 
     public VanishManager(VanishPlugin plugin) {
         this.reset();
@@ -61,6 +64,18 @@ public class VanishManager {
         SpoutManager.getPacketManager().addListener(39, new Sniffer39AttachEntity(this));
     }
 
+    public void addLoginLine(String player, String message) {
+        synchronized (this.syncLogin) {
+            this.playerLoginStatements.put(player, message);
+        }
+    }
+
+    public boolean hasLoginLineStored(String player) {
+        synchronized (this.syncLogin) {
+            return this.playerLoginStatements.containsKey(player);
+        }
+    }
+
     /**
      * Is the player vanished?
      * 
@@ -68,8 +83,33 @@ public class VanishManager {
      * @return true if vanished
      */
     public boolean isVanished(Player player) {
-        synchronized (this.sync) {
+        synchronized (this.syncEID) {
             return this.listOfEntityIDs.contains(((CraftPlayer) player).getEntityId());
+        }
+    }
+
+    public void packetSending(Player vanishingPlayer) {
+        final boolean vanishing = !this.isVanished(vanishingPlayer);
+        final String vanishingPlayerName = vanishingPlayer.getName();
+        if (vanishing) {
+            this.addEIDVanished(((CraftPlayer) vanishingPlayer).getEntityId());
+            this.plugin.log(vanishingPlayerName + " disappeared.");
+        } else {
+            this.removeVanished(((CraftPlayer) vanishingPlayer).getEntityId());
+            this.plugin.log(vanishingPlayerName + " reappeared.");
+        }
+        final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
+        for (final Player otherPlayer : playerList) {
+            if ((this.getDistance(vanishingPlayer, otherPlayer) > this.RANGE) || (otherPlayer.equals(vanishingPlayer))) {
+                continue;
+            }
+            if (!Perms.canSeeAll(otherPlayer)) {
+                if (vanishing) {
+                    this.destroyEntity(vanishingPlayer, otherPlayer);
+                } else {
+                    this.undestroyEntity(vanishingPlayer, otherPlayer);
+                }
+            }
         }
     }
 
@@ -87,7 +127,12 @@ public class VanishManager {
      * Smack that vanish list. Smack it hard.
      */
     public void reset() {
-        this.listOfEntityIDs = new ArrayList<Integer>();
+        synchronized (this.syncEID) {
+            this.listOfEntityIDs = new ArrayList<Integer>();
+        }
+        synchronized (this.syncLogin) {
+            this.playerLoginStatements = new HashMap<String, String>();
+        }
     }
 
     /**
@@ -111,58 +156,47 @@ public class VanishManager {
      *            The player disappearing
      */
     public void toggleVanish(Player vanishingPlayer) {
-        boolean vanishing = true;
-        if (this.isVanished(vanishingPlayer)) {
-            vanishing = false;
-        }
+        this.packetSending(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
-        final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
-        for (final Player otherPlayer : playerList) {
-            if ((this.getDistance(vanishingPlayer, otherPlayer) > this.RANGE) || (otherPlayer.equals(vanishingPlayer))) {
-                continue;
-            }
-            if (!Perms.canSeeAll(otherPlayer)) {
-                if (vanishing) {
-                    this.destroyEntity(vanishingPlayer, otherPlayer);
-                } else {
-                    this.undestroyEntity(vanishingPlayer, otherPlayer);
-                }
-            }
-        }
-        if (vanishing) {
-            this.addEIDVanished(((CraftPlayer) vanishingPlayer).getEntityId());
-            this.plugin.log(vanishingPlayerName + " disappeared.");
-        } else {
-            this.removeVanished(((CraftPlayer) vanishingPlayer).getEntityId());
-            this.plugin.log(vanishingPlayerName + " reappeared.");
-        }
-        //String messageRegular;
         String messageVanisher;
+        String messageJoin = null;
         final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
         if (this.isVanished(vanishingPlayer)) {
-            //messageRegular = base + "left the game.";
             messageVanisher = base + "vanished. Poof.";
         } else {
-            //messageRegular = base + "joined the game.";
             messageVanisher = base + "become visible.";
+            messageJoin = this.fetchLoginLine(vanishingPlayerName);
         }
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+            if (player == null) {
+                continue;
+            }
             if (Perms.canSeeAll(player)) {
                 player.sendMessage(messageVanisher);
-            } /*else {
-                player.sendMessage(messageRegular);
-              }*/
+            }
+            if (messageJoin != null) {
+                player.sendMessage(messageJoin);
+            }
         }
     }
 
     private void addEIDVanished(int id) {
-        synchronized (this.sync) {
+        synchronized (this.syncEID) {
             this.listOfEntityIDs.add(id);
         }
     }
 
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
         ((CraftPlayer) obliviousPlayer).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
+    }
+
+    private String fetchLoginLine(String player) {
+        String message;
+        synchronized (this.syncLogin) {
+            message = this.playerLoginStatements.get(player);
+            this.playerLoginStatements.remove(player);
+        }
+        return message;
     }
 
     private double getDistance(Player player1, Player player2) {
@@ -172,13 +206,13 @@ public class VanishManager {
     }
 
     private boolean isVanished(int id) {
-        synchronized (this.sync) {
+        synchronized (this.syncEID) {
             return this.listOfEntityIDs.contains(id);
         }
     }
 
     private void removeVanished(int id) {
-        synchronized (this.sync) {
+        synchronized (this.syncEID) {
             this.listOfEntityIDs.remove(Integer.valueOf(id));
         }
     }

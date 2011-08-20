@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.2
+version: 1.3
 website: http://forums.joe.to
 depend: [Spout]
 author: mbaxter
@@ -26,6 +26,8 @@ permissions:
     description: Prevent being harmed by things around you while vanished
   vanish.preventoutgoingdamage:
     description: Prevent accidentally hurting stuff while vanished
+  vanish.silentjoin:
+    description: Join silently. Announce on toggling vanish off
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
     children:
