@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.3.2
+version: 1.3.3
 website: http://forums.joe.to
 depend: [Spout]
 author: mbaxter
@@ -13,10 +13,12 @@ commands:
       /vanish check
 permissions:
   vanish.vanish:
+    default: op
     description: |
       Allows player to vanish. 
       REALLY should give players with this access to vanish.see
   vanish.see:
+    default: op
     description: Allows player to see vanished players
   vanish.nopickup:
     description: If true player can pick up items when vanished
