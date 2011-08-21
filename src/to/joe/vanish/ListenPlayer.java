@@ -25,6 +25,7 @@ public class ListenPlayer extends PlayerListener {
                 add = " To appear: /vanish";
             }
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined invisibly." + add);
+            this.plugin.messageSeers(ChatColor.DARK_AQUA+event.getPlayer().getName()+" has joined vanished");
         }
     }
 
