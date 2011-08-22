@@ -2,6 +2,7 @@ package to.joe.vanish.sniffers;
 
 import net.minecraft.server.Packet20NamedEntitySpawn;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.getspout.spout.packet.standard.MCCraftPacket;
 import org.getspout.spoutapi.packet.listener.PacketListener;
@@ -19,7 +20,12 @@ public class Sniffer20NamedEntitySpawn implements PacketListener {
 
     @Override
     public boolean checkPacket(Player player, MCPacket packet) {
-        return !this.vanish.shouldHide(player, ((Packet20NamedEntitySpawn) ((MCCraftPacket) packet).getPacket()).a);
+        final Packet20NamedEntitySpawn packet20 = (Packet20NamedEntitySpawn) ((MCCraftPacket) packet).getPacket();
+        final String name = packet20.b;
+        if (this.vanish.getPlugin().colorationEnabled() && this.vanish.isVanished(name)) {
+            packet20.b = ChatColor.DARK_AQUA + name;
+        }
+        return !this.vanish.shouldHide(player, packet20.a);
     }
 
 }

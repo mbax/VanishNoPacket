@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.config.Configuration;
 
 public class VanishPlugin extends JavaPlugin {
 
@@ -18,6 +19,12 @@ public class VanishPlugin extends JavaPlugin {
     private PluginDescriptionFile selfDescription;
 
     private Logger log;
+
+    private boolean enableColoration;
+
+    public boolean colorationEnabled() {
+        return this.enableColoration;
+    }
 
     /**
      * Please, sir, can I have some more?
@@ -39,7 +46,7 @@ public class VanishPlugin extends JavaPlugin {
 
     public void messageSeers(String message) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
-            if (player != null && Perms.canSeeAll(player)) {
+            if ((player != null) && Perms.canSeeAll(player)) {
                 player.sendMessage(message);
             }
         }
@@ -52,6 +59,11 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        final Configuration config = this.getConfiguration();
+        this.enableColoration = config.getBoolean("enableColoration", false);
+        config.save();
+
         this.selfDescription = this.getDescription();
 
         this.manager.reset();

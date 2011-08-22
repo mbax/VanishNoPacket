@@ -25,7 +25,7 @@ public class ListenPlayer extends PlayerListener {
                 add = " To appear: /vanish";
             }
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined invisibly." + add);
-            this.plugin.messageSeers(ChatColor.DARK_AQUA+event.getPlayer().getName()+" has joined vanished");
+            this.plugin.messageSeers(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined vanished");
         }
     }
 
@@ -40,7 +40,7 @@ public class ListenPlayer extends PlayerListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.plugin.getManager().removeVanished(event.getPlayer());
         if (this.plugin.getManager().hasLoginLineStored(event.getPlayer().getName())) {
-            this.plugin.messageSeers(ChatColor.DARK_AQUA+event.getPlayer().getName()+" has quit, still vanished");
+            this.plugin.messageSeers(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit, still vanished");
             event.setQuitMessage(null);
         }
     }

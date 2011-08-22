@@ -34,8 +34,6 @@ import to.joe.vanish.sniffers.Sniffer5EntityEquipment;
  */
 public class VanishManager {
 
-    public int RANGE = 512;
-
     private final VanishPlugin plugin;
     private final Object syncEID = new Object();
     private final Object syncLogin = new Object();
@@ -70,6 +68,10 @@ public class VanishManager {
         }
     }
 
+    public VanishPlugin getPlugin() {
+        return this.plugin;
+    }
+
     public boolean hasLoginLineStored(String player) {
         synchronized (this.syncLogin) {
             return this.playerLoginStatements.containsKey(player);
@@ -88,6 +90,14 @@ public class VanishManager {
         }
     }
 
+    public boolean isVanished(String playerName) {
+        final Player player = this.plugin.getServer().getPlayer(playerName);
+        if (player != null) {
+            return this.isVanished(player);
+        }
+        return false;
+    }
+
     public void packetSending(Player vanishingPlayer) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
@@ -100,15 +110,19 @@ public class VanishManager {
         }
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
-            if ((this.getDistance(vanishingPlayer, otherPlayer) > this.RANGE) || (otherPlayer.equals(vanishingPlayer))) {
+            if ((this.getDistance(vanishingPlayer, otherPlayer) > 512) || (otherPlayer.equals(vanishingPlayer))) {
                 continue;
             }
-            if (!Perms.canSeeAll(otherPlayer)) {
-                if (vanishing) {
-                    this.destroyEntity(vanishingPlayer, otherPlayer);
-                } else {
+            if (vanishing) {
+                this.destroyEntity(vanishingPlayer, otherPlayer);
+                if (Perms.canSeeAll(otherPlayer)) {
                     this.undestroyEntity(vanishingPlayer, otherPlayer);
                 }
+            } else {
+                if (Perms.canSeeAll(otherPlayer)) {
+                    this.destroyEntity(vanishingPlayer, otherPlayer);
+                }
+                this.undestroyEntity(vanishingPlayer, otherPlayer);
             }
         }
     }
