@@ -3,6 +3,7 @@ main: to.joe.vanish.VanishPlugin
 version: 1.5alpha
 website: http://forums.joe.to
 depend: [Spout]
+softdepend: [Essentials]
 author: mbaxter
 description: Vanish by filtering packets using Spout
 commands:
@@ -39,3 +40,13 @@ permissions:
       vanish.nofollow: true
       vanish.preventincomingdamage: true
       vanish.preventoutgoingdamage: true
+  vanish.*:
+    description: Oh god everything.
+    children:
+      vanish.see: true
+      vanish.vanish: true
+      vanish.nopickup: true
+      vanish.nofollow: true
+      vanish.preventincomingdamage: true
+      vanish.preventoutgoingdamage: true
+      vanish.silentjoin: true
