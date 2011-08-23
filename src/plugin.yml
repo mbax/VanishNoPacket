@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.4
+version: 1.5alpha
 website: http://forums.joe.to
 depend: [Spout]
 author: mbaxter

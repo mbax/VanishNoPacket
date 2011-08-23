@@ -9,12 +9,16 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
+import to.joe.vanish.hooks.EssentialsHook;
+
 public class VanishPlugin extends JavaPlugin {
 
     private final VanishManager manager = new VanishManager(this);
 
     private final ListenEntity listenEntity = new ListenEntity(this);
     private final ListenPlayer listenPlayer = new ListenPlayer(this);
+
+    private final EssentialsHook essentialsHook = new EssentialsHook(this);
 
     private PluginDescriptionFile selfDescription;
 
@@ -33,6 +37,14 @@ public class VanishPlugin extends JavaPlugin {
      */
     public VanishManager getManager() {
         return this.manager;
+    }
+
+    public void hooksUnvanish(Player player) {
+        this.essentialsHook.unvanish(player);
+    }
+
+    public void hooksVanish(Player player) {
+        this.essentialsHook.vanish(player);
     }
 
     /**
@@ -54,6 +66,8 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.essentialsHook.onPluginDisable();
+        this.manager.disable();
         this.log("Version " + this.selfDescription.getVersion() + " disabled.");
     }
 
@@ -62,11 +76,12 @@ public class VanishPlugin extends JavaPlugin {
 
         final Configuration config = this.getConfiguration();
         this.enableColoration = config.getBoolean("enableColoration", false);
+        this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         config.save();
 
         this.selfDescription = this.getDescription();
 
-        this.manager.reset();
+        this.manager.startup();
 
         this.log = Logger.getLogger("Minecraft");
 
