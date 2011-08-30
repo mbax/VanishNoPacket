@@ -24,6 +24,9 @@ public class Sniffer20NamedEntitySpawn implements PacketListener {
         final String name = packet20.b;
         if (this.vanish.getPlugin().colorationEnabled() && this.vanish.isVanished(name)) {
             packet20.b = ChatColor.DARK_AQUA + name;
+            if(packet20.b.length()>16){
+                packet20.b=packet20.b.substring(0, 15);
+            }
         }
         return !this.vanish.shouldHide(player, packet20.a);
     }

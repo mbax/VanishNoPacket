@@ -107,9 +107,11 @@ public class VanishManager {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
+            vanishingPlayer.addAttachment(plugin, "vanish.currentlyVanished", true);
             this.addEIDVanished(((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
+            vanishingPlayer.addAttachment(plugin, "vanish.currentlyVanished", true);
             this.removeVanished(((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
@@ -200,6 +202,7 @@ public class VanishManager {
         if (this.isVanished(togglingPlayer)) {
             this.plugin.hooksVanish(togglingPlayer);
             messageVanisher = base + "vanished. Poof.";
+            
         } else {
             this.plugin.hooksUnvanish(togglingPlayer);
             messageVanisher = base + "become visible.";

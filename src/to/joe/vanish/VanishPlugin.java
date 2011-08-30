@@ -17,6 +17,8 @@ public class VanishPlugin extends JavaPlugin {
 
     private final ListenEntity listenEntity = new ListenEntity(this);
     private final ListenPlayer listenPlayer = new ListenPlayer(this);
+    private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
+    private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
 
@@ -89,7 +91,8 @@ public class VanishPlugin extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayer, Priority.Highest, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
 
