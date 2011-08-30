@@ -49,6 +49,11 @@ public class EssentialsHook {
             this.essentials = ((IEssentials) grab);
             this.plugin.log("Now hooking into Essentials");
         }
+        else{
+            this.plugin.log("You wanted Essentials support. I could not find Essentials.");
+            this.essentials = null;
+            this.enabled = false;
+        }
     }
 
     private void setHidden(Player player, boolean hide) {
