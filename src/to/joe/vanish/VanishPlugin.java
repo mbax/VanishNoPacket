@@ -75,7 +75,8 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        this.log = Logger.getLogger("Minecraft");
+        
         final Configuration config = this.getConfiguration();
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
@@ -84,8 +85,6 @@ public class VanishPlugin extends JavaPlugin {
         this.selfDescription = this.getDescription();
 
         this.manager.startup();
-
-        this.log = Logger.getLogger("Minecraft");
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 
