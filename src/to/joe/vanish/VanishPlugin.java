@@ -9,6 +9,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
+import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
 
 public class VanishPlugin extends JavaPlugin {
@@ -21,6 +22,7 @@ public class VanishPlugin extends JavaPlugin {
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
+    private final DynmapHook dynmapHook = new DynmapHook(this);
 
     private PluginDescriptionFile selfDescription;
 
@@ -43,10 +45,12 @@ public class VanishPlugin extends JavaPlugin {
 
     public void hooksUnvanish(Player player) {
         this.essentialsHook.unvanish(player);
+        this.dynmapHook.unvanish(player);
     }
 
     public void hooksVanish(Player player) {
         this.essentialsHook.vanish(player);
+        this.dynmapHook.vanish(player);
     }
 
     /**
@@ -69,6 +73,7 @@ public class VanishPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         this.essentialsHook.onPluginDisable();
+        this.dynmapHook.onPluginDisable();
         this.manager.disable();
         this.log("Version " + this.selfDescription.getVersion() + " disabled.");
     }
@@ -80,6 +85,7 @@ public class VanishPlugin extends JavaPlugin {
         final Configuration config = this.getConfiguration();
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
+        this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
         config.save();
 
         this.selfDescription = this.getDescription();
