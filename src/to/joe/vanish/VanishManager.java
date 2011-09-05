@@ -1,7 +1,6 @@
 package to.joe.vanish;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
@@ -36,23 +35,18 @@ public class VanishManager {
 
     private final VanishPlugin plugin;
     private final Object syncEID = new Object();
-    private final Object syncLogin = new Object();
+
     private ArrayList<Integer> listOfEntityIDs;
-    private HashMap<String, String> playerLoginStatements;
+
+    private VanishAnnounceManipulator manipulator;
 
     public VanishManager(VanishPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void addLoginLine(String player, String message) {
-        synchronized (this.syncLogin) {
-            this.playerLoginStatements.put(player, message);
-        }
-    }
-
     public void disable() {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if ((player != null) && Perms.canVanish(player)) {
+            if ((player != null) && VanishPerms.canVanish(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "[VANISH] Disabled. All users visible now.");
             }
         }
@@ -73,14 +67,12 @@ public class VanishManager {
         this.revealAll();
     }
 
-    public VanishPlugin getPlugin() {
-        return this.plugin;
+    public VanishAnnounceManipulator getAnnounceManipulator() {
+        return this.manipulator;
     }
 
-    public boolean hasLoginLineStored(String player) {
-        synchronized (this.syncLogin) {
-            return this.playerLoginStatements.containsKey(player);
-        }
+    public VanishPlugin getPlugin() {
+        return this.plugin;
     }
 
     /**
@@ -107,11 +99,11 @@ public class VanishManager {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
-            vanishingPlayer.addAttachment(plugin, "vanish.currentlyVanished", true);
+            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.addEIDVanished(((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
-            vanishingPlayer.addAttachment(plugin, "vanish.currentlyVanished", true);
+            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.removeVanished(((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
@@ -122,14 +114,44 @@ public class VanishManager {
             }
             if (vanishing) {
                 this.destroyEntity(vanishingPlayer, otherPlayer);
-                if (Perms.canSeeAll(otherPlayer)) {
+                if (VanishPerms.canSeeAll(otherPlayer)) {
                     this.undestroyEntity(vanishingPlayer, otherPlayer);
                 }
             } else {
-                if (Perms.canSeeAll(otherPlayer)) {
+                if (VanishPerms.canSeeAll(otherPlayer)) {
                     this.destroyEntity(vanishingPlayer, otherPlayer);
                 }
                 this.undestroyEntity(vanishingPlayer, otherPlayer);
+            }
+        }
+    }
+    
+    public void resetSeeing(Player player){
+        if(VanishPerms.canSeeAll(player)){
+            this.showVanished(player);
+        } else{
+            this.hideVanished(player);
+        }
+    }
+    
+    private void hideVanished(Player player){
+        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+            if ((this.getDistance(player, otherPlayer) > 512) || (otherPlayer.equals(player))) {
+                continue;
+            }
+            if(this.isVanished(otherPlayer)){
+                this.destroyEntity(otherPlayer, player);
+            }
+        }
+    }
+    
+    private void showVanished(Player player){
+        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+            if ((this.getDistance(player, otherPlayer) > 512) || (otherPlayer.equals(player))) {
+                continue;
+            }
+            if(this.isVanished(otherPlayer)){
+                this.undestroyEntity(otherPlayer, player);
             }
         }
     }
@@ -152,7 +174,7 @@ public class VanishManager {
      * @return if the eid is vanished and the player shouldn't see it
      */
     public boolean shouldHide(Player player, int eid) {
-        if (!Perms.canSeeAll(player)) {
+        if (!VanishPerms.canSeeAll(player)) {
             return this.isVanished(eid);
         }
         return false;
@@ -161,7 +183,7 @@ public class VanishManager {
     /**
      * Smack that vanish list. Smack it hard.
      */
-    public void startup() {
+    public void startup(String fakejoin, String fakequit) {
         SpoutManager.getPacketManager().addListener(5, new Sniffer5EntityEquipment(this));
         SpoutManager.getPacketManager().addListener(17, new Sniffer17(this));
         SpoutManager.getPacketManager().addListener(18, new Sniffer18ArmAnimation(this));
@@ -179,12 +201,8 @@ public class VanishManager {
         SpoutManager.getPacketManager().addListener(34, new Sniffer34EntityTeleport(this));
         SpoutManager.getPacketManager().addListener(38, new Sniffer38EntityStatus(this));
         SpoutManager.getPacketManager().addListener(39, new Sniffer39AttachEntity(this));
-        synchronized (this.syncEID) {
-            this.listOfEntityIDs = new ArrayList<Integer>();
-        }
-        synchronized (this.syncLogin) {
-            this.playerLoginStatements = new HashMap<String, String>();
-        }
+        this.manipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit);
+
     }
 
     /**
@@ -197,26 +215,22 @@ public class VanishManager {
         this.packetSending(togglingPlayer);
         final String vanishingPlayerName = togglingPlayer.getName();
         String messageVanisher;
-        String messageJoin = null;
         final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
         if (this.isVanished(togglingPlayer)) {
             this.plugin.hooksVanish(togglingPlayer);
             messageVanisher = base + "vanished. Poof.";
-            
+
         } else {
             this.plugin.hooksUnvanish(togglingPlayer);
             messageVanisher = base + "become visible.";
-            messageJoin = this.fetchLoginLine(vanishingPlayerName);
+            this.manipulator.toggled(togglingPlayer.getName());
         }
         for (final Player observer : this.plugin.getServer().getOnlinePlayers()) {
             if (observer == null) {
                 continue;
             }
-            if (Perms.canSeeAll(observer)) {
+            if (observer.equals(togglingPlayer) || VanishPerms.canSeeStatusUpdates(observer)) {
                 observer.sendMessage(messageVanisher);
-            }
-            if (messageJoin != null) {
-                observer.sendMessage(messageJoin);
             }
         }
     }
@@ -229,15 +243,6 @@ public class VanishManager {
 
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
         ((CraftPlayer) obliviousPlayer).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
-    }
-
-    private String fetchLoginLine(String player) {
-        String message;
-        synchronized (this.syncLogin) {
-            message = this.playerLoginStatements.get(player);
-            this.playerLoginStatements.remove(player);
-        }
-        return message;
     }
 
     private double getDistance(Player player1, Player player2) {

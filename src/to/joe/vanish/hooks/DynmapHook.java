@@ -35,13 +35,13 @@ public class DynmapHook {
     }
 
     public void unvanish(Player player) {
-        if(this.enabled && this.dynmap!=null){
+        if (this.enabled && (this.dynmap != null)) {
             this.dynmap.playerList.show(player.getName());
         }
     }
 
     public void vanish(Player player) {
-        if(this.enabled && this.dynmap!=null){
+        if (this.enabled && (this.dynmap != null)) {
             this.dynmap.playerList.hide(player.getName());
         }
     }
@@ -51,8 +51,7 @@ public class DynmapHook {
         if (grab != null) {
             this.dynmap = ((DynmapPlugin) grab);
             this.plugin.log("Now hooking into Dynmap");
-        }
-        else{
+        } else {
             this.plugin.log("You wanted Dynmap support. I could not find Dynmap.");
             this.dynmap = null;
             this.enabled = false;

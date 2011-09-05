@@ -1,7 +1,10 @@
-package to.joe.vanish;
+package to.joe.vanish.listeners;
 
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+
+import to.joe.vanish.VanishPerms;
+import to.joe.vanish.VanishPlugin;
 
 public class ListenPlayerJoinEarly extends PlayerListener {
 
@@ -13,7 +16,7 @@ public class ListenPlayerJoinEarly extends PlayerListener {
 
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (Perms.silentJoin(event.getPlayer())) {
+        if (VanishPerms.silentJoin(event.getPlayer())) {
             this.plugin.getManager().packetSending(event.getPlayer());
         }
     }

@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.5.3
+version: 1.6alpha
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials]
@@ -21,6 +21,8 @@ permissions:
   vanish.see:
     default: op
     description: Allows player to see vanished players
+  vanish.statusupdates:
+    description: Informed about players changing status
   vanish.nopickup:
     description: If true player can pick up items when vanished
   vanish.nofollow:
@@ -29,8 +31,37 @@ permissions:
     description: Prevent being harmed by things around you while vanished
   vanish.preventoutgoingdamage:
     description: Prevent accidentally hurting stuff while vanished
+  vanish.preventdamage:
+    description: Prevent damage both ways
+    children:
+      vanish.preventoutgoingdamage: true
+      vanish.preventincomingdamage: true
   vanish.silentjoin:
     description: Join silently. Announce on toggling vanish off
+  vanish.toggle.see:
+    description: Toggle seeing other vanished players
+  vanish.toggle.nopickup:
+    description: Toggle pickup ability
+  vanish.toggle.nofollow:
+    description: Toggle mob aggro
+  vanish.toggle.damageout:
+    description: Toggle outgoing damage
+  vanish.toggle.damagein:
+    description: Toggle incoming damage
+  vanish.toggle.damage:
+    description: Toggle both damage in and out
+    children:
+      vanish.toggle.damageout: true
+      vanish.toggle.damagein: true
+  vanish.toggle.all:
+    description: Allows user to toggle all their settings ingame
+    children:
+      vanish.toggle.see: true
+      vanish.toggle.nopickup: true
+      vanish.toggle.nofollow: true
+      vanish.toggle.damage: true
+  vanish.fakeannounce:
+    description: Fake joining/leaving
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
     children:
@@ -38,8 +69,7 @@ permissions:
       vanish.vanish: true
       vanish.nopickup: true
       vanish.nofollow: true
-      vanish.preventincomingdamage: true
-      vanish.preventoutgoingdamage: true
+      vanish.preventdamage: true
   vanish.*:
     description: Oh god everything.
     children:
@@ -47,6 +77,7 @@ permissions:
       vanish.vanish: true
       vanish.nopickup: true
       vanish.nofollow: true
-      vanish.preventincomingdamage: true
-      vanish.preventoutgoingdamage: true
+      vanish.preventdamage: true
       vanish.silentjoin: true
+      vanish.toggle.all: true
+      vanish.fakeannounce

@@ -1,8 +1,11 @@
-package to.joe.vanish;
+package to.joe.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+
+import to.joe.vanish.VanishPerms;
+import to.joe.vanish.VanishPlugin;
 
 public class ListenPlayerJoinLate extends PlayerListener {
 
@@ -14,11 +17,11 @@ public class ListenPlayerJoinLate extends PlayerListener {
 
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (Perms.silentJoin(event.getPlayer())) {
-            this.plugin.getManager().addLoginLine(event.getPlayer().getName(), event.getJoinMessage());
+        if (VanishPerms.silentJoin(event.getPlayer())) {
+            this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
             event.setJoinMessage(null);
             String add = "";
-            if (Perms.canVanish(event.getPlayer())) {
+            if (VanishPerms.canVanish(event.getPlayer())) {
                 add = " To appear: /vanish";
             }
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined invisibly." + add);

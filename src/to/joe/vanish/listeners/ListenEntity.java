@@ -1,4 +1,4 @@
-package to.joe.vanish;
+package to.joe.vanish.listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -6,6 +6,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
+
+import to.joe.vanish.VanishPerms;
+import to.joe.vanish.VanishPlugin;
 
 public class ListenEntity extends EntityListener {
 
@@ -28,7 +31,7 @@ public class ListenEntity extends EntityListener {
         final Entity smacked = event.getEntity();
         if (smacked instanceof Player) {
             final Player player = (Player) smacked;
-            if (this.plugin.getManager().isVanished(player) && Perms.blockIncomingDamage(player)) {
+            if (this.plugin.getManager().isVanished(player) && VanishPerms.blockIncomingDamage(player)) {
                 event.setCancelled(true);
             }
         }
@@ -37,7 +40,7 @@ public class ListenEntity extends EntityListener {
             final Entity damager = ev.getDamager();
             if (damager instanceof Player) {
                 final Player player = (Player) damager;
-                if (this.plugin.getManager().isVanished(player) && Perms.blockOutgoingDamage(player)) {
+                if (this.plugin.getManager().isVanished(player) && VanishPerms.blockOutgoingDamage(player)) {
                     event.setCancelled(true);
                 }
             }
@@ -46,7 +49,7 @@ public class ListenEntity extends EntityListener {
 
     @Override
     public void onEntityTarget(EntityTargetEvent event) {
-        if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && Perms.canNotFollow((Player) event.getTarget())) {
+        if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
             event.setCancelled(true);
         }
     }

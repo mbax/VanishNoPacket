@@ -11,6 +11,10 @@ import org.bukkit.util.config.Configuration;
 
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
+import to.joe.vanish.listeners.ListenEntity;
+import to.joe.vanish.listeners.ListenPlayer;
+import to.joe.vanish.listeners.ListenPlayerJoinEarly;
+import to.joe.vanish.listeners.ListenPlayerJoinLate;
 
 public class VanishPlugin extends JavaPlugin {
 
@@ -64,7 +68,7 @@ public class VanishPlugin extends JavaPlugin {
 
     public void messageSeers(String message) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
-            if ((player != null) && Perms.canSeeAll(player)) {
+            if ((player != null) && VanishPerms.canSeeAll(player)) {
                 player.sendMessage(message);
             }
         }
@@ -81,16 +85,16 @@ public class VanishPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.log = Logger.getLogger("Minecraft");
-        
+
         final Configuration config = this.getConfiguration();
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
+
+        this.manager.startup(config.getString("fakeannounce.join", "%p has joined the game."), config.getString("fakeannounce.quit", "%p has left the game."));
         config.save();
 
         this.selfDescription = this.getDescription();
-
-        this.manager.startup();
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 

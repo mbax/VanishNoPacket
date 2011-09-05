@@ -48,8 +48,7 @@ public class EssentialsHook {
         if (grab != null) {
             this.essentials = ((IEssentials) grab);
             this.plugin.log("Now hooking into Essentials");
-        }
-        else{
+        } else {
             this.plugin.log("You wanted Essentials support. I could not find Essentials.");
             this.essentials = null;
             this.enabled = false;
