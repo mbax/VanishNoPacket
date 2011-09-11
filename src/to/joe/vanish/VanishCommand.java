@@ -18,8 +18,10 @@ public class VanishCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if ((sender instanceof Player)) {
             final Player player = (Player) sender;
-            if ((args.length == 0) && VanishPerms.canVanish((Player) sender)) {
-                this.plugin.getManager().toggleVanish(player);
+            if ((args.length == 0)) {
+                if (VanishPerms.canVanish((Player) sender)) {
+                    this.plugin.getManager().toggleVanish(player);
+                }
             } else if (args[0].equalsIgnoreCase("check") && VanishPerms.canVanish((Player) sender)) {
                 if (this.plugin.getManager().isVanished(player)) {
                     player.sendMessage(ChatColor.DARK_AQUA + "You are invisible.");
@@ -30,20 +32,20 @@ public class VanishCommand implements CommandExecutor {
                 if (args.length == 1) {
                     final StringBuilder toggleList = new StringBuilder();
                     if (VanishPerms.canToggleSee(player)) {
-                        toggleList.append("see");
+                        toggleList.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
                         this.plugin.getManager().resetSeeing(player);
                     }
                     if (VanishPerms.canToggleNoPickup(player)) {
-                        this.comma(toggleList, "nopickup");
+                        this.comma(toggleList, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleNoFollow(player)) {
-                        this.comma(toggleList, "nofollow");
+                        this.comma(toggleList, this.colorize(VanishPerms.canNotFollow(player)) + "nofollow" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleDamageIn(player)) {
-                        this.comma(toggleList, "damage-in");
+                        this.comma(toggleList, this.colorize(VanishPerms.blockIncomingDamage(player)) + "damage-in" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleDamageOut(player)) {
-                        this.comma(toggleList, "damage-out");
+                        this.comma(toggleList, this.colorize(VanishPerms.blockOutgoingDamage(player)) + "damage-out" + ChatColor.DARK_AQUA);
                     }
                     if (toggleList.length() > 0) {
                         toggleList.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
@@ -85,9 +87,9 @@ public class VanishCommand implements CommandExecutor {
                         player.sendMessage(ChatColor.DARK_AQUA + "You can't toggle that!");
                     }
                 }
-            } else if (args[1].equalsIgnoreCase("fakequit") && VanishPerms.canFakeAnnounce(player)) {
+            } else if ((args[0].equalsIgnoreCase("fakequit") || args[0].equalsIgnoreCase("fq")) && VanishPerms.canFakeAnnounce(player)) {
                 this.plugin.getManager().getAnnounceManipulator().fakeQuit(player.getName());
-            } else if (args[1].equalsIgnoreCase("fakejoin") && VanishPerms.canFakeAnnounce(player)) {
+            } else if ((args[0].equalsIgnoreCase("fakejoin") || args[0].equalsIgnoreCase("fj")) && VanishPerms.canFakeAnnounce(player)) {
                 this.plugin.getManager().getAnnounceManipulator().fakeJoin(player.getName());
             }
         }
@@ -99,5 +101,13 @@ public class VanishCommand implements CommandExecutor {
             builder.append(", ");
         }
         builder.append(string);
+    }
+
+    private String colorize(boolean has) {
+        if (has) {
+            return ChatColor.GREEN.toString();
+        } else {
+            return ChatColor.RED.toString();
+        }
     }
 }

@@ -36,6 +36,21 @@ public class VanishManager {
     private final VanishPlugin plugin;
     private final Object syncEID = new Object();
 
+    private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
+    private final Sniffer17 sniffer17 = new Sniffer17(this);
+    private final Sniffer18ArmAnimation sniffer18 = new Sniffer18ArmAnimation(this);
+    private final Sniffer19EntityAction sniffer19 = new Sniffer19EntityAction(this);
+    private final Sniffer20NamedEntitySpawn sniffer20 = new Sniffer20NamedEntitySpawn(this);
+    private final Sniffer28EntityVelocity sniffer28 = new Sniffer28EntityVelocity(this);
+    //private final Sniffer29DestroyEntity sniffer29 = new Sniffer29DestroyEntity(this);
+    private final Sniffer30Entity sniffer30 = new Sniffer30Entity(this);
+    private final Sniffer31RelEntityMove sniffer31 = new Sniffer31RelEntityMove(this);
+    private final Sniffer32EntityLook sniffer32 = new Sniffer32EntityLook(this);
+    private final Sniffer33RelEntityMoveLook sniffer33 = new Sniffer33RelEntityMoveLook(this);
+    private final Sniffer34EntityTeleport sniffer34 = new Sniffer34EntityTeleport(this);
+    private final Sniffer38EntityStatus sniffer38 = new Sniffer38EntityStatus(this);
+    private final Sniffer39AttachEntity sniffer39 = new Sniffer39AttachEntity(this);
+
     private ArrayList<Integer> listOfEntityIDs;
 
     private VanishAnnounceManipulator manipulator;
@@ -50,20 +65,20 @@ public class VanishManager {
                 player.sendMessage(ChatColor.DARK_AQUA + "[VANISH] Disabled. All users visible now.");
             }
         }
-        SpoutManager.getPacketManager().removeListener(5, new Sniffer5EntityEquipment(this));
-        SpoutManager.getPacketManager().removeListener(17, new Sniffer17(this));
-        SpoutManager.getPacketManager().removeListener(18, new Sniffer18ArmAnimation(this));
-        SpoutManager.getPacketManager().removeListener(19, new Sniffer19EntityAction(this));
-        SpoutManager.getPacketManager().removeListener(20, new Sniffer20NamedEntitySpawn(this));
-        SpoutManager.getPacketManager().removeListener(28, new Sniffer28EntityVelocity(this));
-        // SpoutManager.getPacketManager().addListener(29, new Sniffer29DestroyEntity(this));
-        SpoutManager.getPacketManager().removeListener(30, new Sniffer30Entity(this));
-        SpoutManager.getPacketManager().removeListener(31, new Sniffer31RelEntityMove(this));
-        SpoutManager.getPacketManager().removeListener(32, new Sniffer32EntityLook(this));
-        SpoutManager.getPacketManager().removeListener(33, new Sniffer33RelEntityMoveLook(this));
-        SpoutManager.getPacketManager().removeListener(34, new Sniffer34EntityTeleport(this));
-        SpoutManager.getPacketManager().removeListener(38, new Sniffer38EntityStatus(this));
-        SpoutManager.getPacketManager().removeListener(39, new Sniffer39AttachEntity(this));
+        SpoutManager.getPacketManager().removeListener(5, this.sniffer5);
+        SpoutManager.getPacketManager().removeListener(17, this.sniffer17);
+        SpoutManager.getPacketManager().removeListener(18, this.sniffer18);
+        SpoutManager.getPacketManager().removeListener(19, this.sniffer19);
+        SpoutManager.getPacketManager().removeListener(20, this.sniffer20);
+        SpoutManager.getPacketManager().removeListener(28, this.sniffer28);
+        // SpoutManager.getPacketManager().removeListener(29, sniffer29);
+        SpoutManager.getPacketManager().removeListener(30, this.sniffer30);
+        SpoutManager.getPacketManager().removeListener(31, this.sniffer31);
+        SpoutManager.getPacketManager().removeListener(32, this.sniffer32);
+        SpoutManager.getPacketManager().removeListener(33, this.sniffer33);
+        SpoutManager.getPacketManager().removeListener(34, this.sniffer34);
+        SpoutManager.getPacketManager().removeListener(38, this.sniffer38);
+        SpoutManager.getPacketManager().removeListener(39, this.sniffer39);
         this.revealAll();
     }
 
@@ -125,36 +140,6 @@ public class VanishManager {
             }
         }
     }
-    
-    public void resetSeeing(Player player){
-        if(VanishPerms.canSeeAll(player)){
-            this.showVanished(player);
-        } else{
-            this.hideVanished(player);
-        }
-    }
-    
-    private void hideVanished(Player player){
-        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if ((this.getDistance(player, otherPlayer) > 512) || (otherPlayer.equals(player))) {
-                continue;
-            }
-            if(this.isVanished(otherPlayer)){
-                this.destroyEntity(otherPlayer, player);
-            }
-        }
-    }
-    
-    private void showVanished(Player player){
-        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if ((this.getDistance(player, otherPlayer) > 512) || (otherPlayer.equals(player))) {
-                continue;
-            }
-            if(this.isVanished(otherPlayer)){
-                this.undestroyEntity(otherPlayer, player);
-            }
-        }
-    }
 
     /**
      * Drop a player from the list of vanished
@@ -164,6 +149,14 @@ public class VanishManager {
      */
     public void removeVanished(Player player) {
         this.removeVanished(((CraftPlayer) player).getEntityId());
+    }
+
+    public void resetSeeing(Player player) {
+        if (VanishPerms.canSeeAll(player)) {
+            this.showVanished(player);
+        } else {
+            this.hideVanished(player);
+        }
     }
 
     /**
@@ -183,26 +176,23 @@ public class VanishManager {
     /**
      * Smack that vanish list. Smack it hard.
      */
-    public void startup(String fakejoin, String fakequit) {
-        SpoutManager.getPacketManager().addListener(5, new Sniffer5EntityEquipment(this));
-        SpoutManager.getPacketManager().addListener(17, new Sniffer17(this));
-        SpoutManager.getPacketManager().addListener(18, new Sniffer18ArmAnimation(this));
-        SpoutManager.getPacketManager().addListener(19, new Sniffer19EntityAction(this));
-        SpoutManager.getPacketManager().addListener(20, new Sniffer20NamedEntitySpawn(this));
-        SpoutManager.getPacketManager().addListener(28, new Sniffer28EntityVelocity(this));
-        // SpoutManager.getPacketManager().addListener(29, new Sniffer29DestroyEntity(this));
-        /*
-         * All players will receive the DestroyEntity packet Rather minor
-         */
-        SpoutManager.getPacketManager().addListener(30, new Sniffer30Entity(this));
-        SpoutManager.getPacketManager().addListener(31, new Sniffer31RelEntityMove(this));
-        SpoutManager.getPacketManager().addListener(32, new Sniffer32EntityLook(this));
-        SpoutManager.getPacketManager().addListener(33, new Sniffer33RelEntityMoveLook(this));
-        SpoutManager.getPacketManager().addListener(34, new Sniffer34EntityTeleport(this));
-        SpoutManager.getPacketManager().addListener(38, new Sniffer38EntityStatus(this));
-        SpoutManager.getPacketManager().addListener(39, new Sniffer39AttachEntity(this));
-        this.manipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit);
-
+    public void startup(String fakejoin, String fakequit, boolean delayedJoinTracking) {
+        SpoutManager.getPacketManager().addListener(5, this.sniffer5);
+        SpoutManager.getPacketManager().addListener(17, this.sniffer17);
+        SpoutManager.getPacketManager().addListener(18, this.sniffer18);
+        SpoutManager.getPacketManager().addListener(19, this.sniffer19);
+        SpoutManager.getPacketManager().addListener(20, this.sniffer20);
+        SpoutManager.getPacketManager().addListener(28, this.sniffer28);
+        // SpoutManager.getPacketManager().addListener(29, sniffer29);
+        SpoutManager.getPacketManager().addListener(30, this.sniffer30);
+        SpoutManager.getPacketManager().addListener(31, this.sniffer31);
+        SpoutManager.getPacketManager().addListener(32, this.sniffer32);
+        SpoutManager.getPacketManager().addListener(33, this.sniffer33);
+        SpoutManager.getPacketManager().addListener(34, this.sniffer34);
+        SpoutManager.getPacketManager().addListener(38, this.sniffer38);
+        SpoutManager.getPacketManager().addListener(39, this.sniffer39);
+        this.manipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit, delayedJoinTracking);
+        this.listOfEntityIDs = new ArrayList<Integer>();
     }
 
     /**
@@ -225,14 +215,7 @@ public class VanishManager {
             messageVanisher = base + "become visible.";
             this.manipulator.toggled(togglingPlayer.getName());
         }
-        for (final Player observer : this.plugin.getServer().getOnlinePlayers()) {
-            if (observer == null) {
-                continue;
-            }
-            if (observer.equals(togglingPlayer) || VanishPerms.canSeeStatusUpdates(observer)) {
-                observer.sendMessage(messageVanisher);
-            }
-        }
+        this.plugin.messageUpdate(messageVanisher);
     }
 
     private void addEIDVanished(int id) {
@@ -249,6 +232,17 @@ public class VanishManager {
         final Location loc1 = player1.getLocation();
         final Location loc2 = player1.getLocation();
         return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0D) + Math.pow(loc1.getY() - loc2.getY(), 2.0D) + Math.pow(loc1.getZ() - loc2.getZ(), 2.0D));
+    }
+
+    private void hideVanished(Player player) {
+        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+            if ((this.getDistance(player, otherPlayer) > 512) || (otherPlayer.equals(player))) {
+                continue;
+            }
+            if (this.isVanished(otherPlayer)) {
+                this.destroyEntity(otherPlayer, player);
+            }
+        }
     }
 
     private boolean isVanished(int id) {
@@ -270,6 +264,17 @@ public class VanishManager {
                     this.destroyEntity(player, player2);
                     this.undestroyEntity(player, player2);
                 }
+            }
+        }
+    }
+
+    private void showVanished(Player player) {
+        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+            if ((this.getDistance(player, otherPlayer) > 512) || (otherPlayer.equals(player))) {
+                continue;
+            }
+            if (this.isVanished(otherPlayer)) {
+                this.undestroyEntity(otherPlayer, player);
             }
         }
     }

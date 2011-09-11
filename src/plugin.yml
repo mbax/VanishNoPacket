@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6alpha
+version: 1.6beta
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials]
@@ -12,6 +12,7 @@ commands:
     usage: |
       /vanish
       /vanish check
+    aliases: v
 permissions:
   vanish.vanish:
     default: op
@@ -80,4 +81,4 @@ permissions:
       vanish.preventdamage: true
       vanish.silentjoin: true
       vanish.toggle.all: true
-      vanish.fakeannounce
+      vanish.fakeannounce: true

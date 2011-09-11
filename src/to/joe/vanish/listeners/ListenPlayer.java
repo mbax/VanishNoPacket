@@ -26,8 +26,8 @@ public class ListenPlayer extends PlayerListener {
     @Override
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.plugin.getManager().removeVanished(event.getPlayer());
-        if (this.plugin.getManager().getAnnounceManipulator().delayedAnnounce(event.getPlayer().getName())) {
-            this.plugin.messageSeers(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit, still vanished");
+        if (this.plugin.getManager().getAnnounceManipulator().delayedAnnounceKill(event.getPlayer().getName())) {
+            this.plugin.messageUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit, still vanished");
             event.setQuitMessage(null);
         }
     }

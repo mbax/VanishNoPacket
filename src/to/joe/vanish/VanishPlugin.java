@@ -66,9 +66,9 @@ public class VanishPlugin extends JavaPlugin {
         this.log.info("[VANISH] " + message);
     }
 
-    public void messageSeers(String message) {
+    public void messageUpdate(String message) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
-            if ((player != null) && VanishPerms.canSeeAll(player)) {
+            if ((player != null) && VanishPerms.canSeeStatusUpdates(player)) {
                 player.sendMessage(message);
             }
         }
@@ -91,7 +91,7 @@ public class VanishPlugin extends JavaPlugin {
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
 
-        this.manager.startup(config.getString("fakeannounce.join", "%p has joined the game."), config.getString("fakeannounce.quit", "%p has left the game."));
+        this.manager.startup(config.getString("fakeannounce.join", "%p has joined the game."), config.getString("fakeannounce.quit", "%p has left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
         config.save();
 
         this.selfDescription = this.getDescription();
