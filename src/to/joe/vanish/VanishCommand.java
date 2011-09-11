@@ -28,7 +28,7 @@ public class VanishCommand implements CommandExecutor {
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "You are not invisible.");
                 }
-            } else if (args[0].equalsIgnoreCase("toggle")) {
+            } else if (args[0].equalsIgnoreCase("toggle")||args[0].equalsIgnoreCase("t")) {
                 if (args.length == 1) {
                     final StringBuilder toggleList = new StringBuilder();
                     if (VanishPerms.canToggleSee(player)) {

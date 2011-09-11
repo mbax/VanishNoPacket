@@ -71,6 +71,7 @@ permissions:
       vanish.nopickup: true
       vanish.nofollow: true
       vanish.preventdamage: true
+      vanish.statusupdates: true
   vanish.*:
     description: Oh god everything.
     children:
@@ -82,3 +83,4 @@ permissions:
       vanish.silentjoin: true
       vanish.toggle.all: true
       vanish.fakeannounce: true
+      vanish.statusupdates: true
