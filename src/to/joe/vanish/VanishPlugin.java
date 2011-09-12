@@ -1,110 +1,276 @@
-package to.joe.vanish;
+public class VanishManager {
 
-import java.util.logging.Logger;
+    private final VanishPlugin plugin;
+	private final Object syncEID = new Object();
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
+	private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
+	private final Sniffer17 sniffer17 = new Sniffer17(this);
+	private final Sniffer18ArmAnimation sniffer18 = new Sniffer18ArmAnimation(this);
+	private final Sniffer19EntityAction sniffer19 = new Sniffer19EntityAction(this);
+	private final Sniffer20NamedEntitySpawn sniffer20 = new Sniffer20NamedEntitySpawn(this);
+	private final Sniffer28EntityVelocity sniffer28 = new Sniffer28EntityVelocity(this);
 
-import to.joe.vanish.hooks.DynmapHook;
-import to.joe.vanish.hooks.EssentialsHook;
-import to.joe.vanish.listeners.ListenEntity;
-import to.joe.vanish.listeners.ListenPlayer;
-import to.joe.vanish.listeners.ListenPlayerJoinEarly;
-import to.joe.vanish.listeners.ListenPlayerJoinLate;
+	private final Sniffer30Entity sniffer30 = new Sniffer30Entity(this);
+	private final Sniffer31RelEntityMove sniffer31 = new Sniffer31RelEntityMove(this);
+	private final Sniffer32EntityLook sniffer32 = new Sniffer32EntityLook(this);
+	private final Sniffer33RelEntityMoveLook sniffer33 = new Sniffer33RelEntityMoveLook(this);
+	private final Sniffer34EntityTeleport sniffer34 = new Sniffer34EntityTeleport(this);
+	private final Sniffer38EntityStatus sniffer38 = new Sniffer38EntityStatus(this);
+	private final Sniffer39AttachEntity sniffer39 = new Sniffer39AttachEntity(this);
 
-public class VanishPlugin extends JavaPlugin {
+	private ArrayList<Integer> listOfEntityIDs;
+	private PacketManager sPm;
+	private VanishAnnounceManipulator manipulator;
 
-    private final VanishManager manager = new VanishManager(this);
+	public VanishManager(VanishPlugin plugin) {
+		this.plugin = plugin;
+        
+       
+	}
 
-    private final ListenEntity listenEntity = new ListenEntity(this);
-    private final ListenPlayer listenPlayer = new ListenPlayer(this);
-    private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
-    private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
+	public void disable() {
+		for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+			if ((player != null) && VanishPerms.canVanish(player)) {
+				player.sendMessage(ChatColor.DARK_AQUA
+						+ "[VANISH] Disabled. All users visible now.");
+			}
+		}
+		pm.removeListener(5, this.sniffer5);
+		pm.removeListener(17, this.sniffer17);
+		pm.removeListener(18, this.sniffer18);
+		pm.removeListener(19, this.sniffer19);
+		pm.removeListener(20, this.sniffer20);
+		pm.removeListener(28, this.sniffer28);
+		pm.removeListener(30, this.sniffer30);
+		pm.removeListener(31, this.sniffer31);
+		pm.removeListener(32, this.sniffer32);
+		pm.removeListener(33, this.sniffer33);
+		pm.removeListener(34, this.sniffer34);
+		pm.removeListener(38, this.sniffer38);
+		pm.removeListener(39, this.sniffer39);
+        
+		this.revealAll();
+	}
 
-    private final EssentialsHook essentialsHook = new EssentialsHook(this);
-    private final DynmapHook dynmapHook = new DynmapHook(this);
+	public VanishAnnounceManipulator getAnnounceManipulator() {
+		return this.manipulator;
+	}
 
-    private PluginDescriptionFile selfDescription;
+	public VanishPlugin getPlugin() {
+		return this.plugin;
+	}
 
-    private Logger log;
+	/**
+	 * Is the player vanished?
+	 * 
+	 * @param player
+	 * @return true if vanished
+	 */
+	public boolean isVanished(Player player) {
+		synchronized (this.syncEID) {
+			return this.listOfEntityIDs.contains(((CraftPlayer) player)
+					.getEntityId());
+		}
+	}
 
-    private boolean enableColoration;
+	public boolean isVanished(String playerName) {
+		final Player player = this.plugin.getServer().getPlayer(playerName);
+		if (player != null) {
+			return this.isVanished(player);
+		}
+		return false;
+	}
 
-    public boolean colorationEnabled() {
-        return this.enableColoration;
-    }
+	public void packetSending(Player vanishingPlayer) {
+		final boolean vanishing = !this.isVanished(vanishingPlayer);
+		final String vanishingPlayerName = vanishingPlayer.getName();
+		if (vanishing) {
+			vanishingPlayer.addAttachment(this.plugin,
+					"vanish.currentlyVanished", true);
+			this.addEIDVanished(((CraftPlayer) vanishingPlayer).getEntityId());
+			this.plugin.log(vanishingPlayerName + " disappeared.");
+		} else {
+			vanishingPlayer.addAttachment(this.plugin,
+					"vanish.currentlyVanished", true);
+			this.removeVanished(((CraftPlayer) vanishingPlayer).getEntityId());
+			this.plugin.log(vanishingPlayerName + " reappeared.");
+		}
+		final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
+		for (final Player otherPlayer : playerList) {
+			if ((this.getDistance(vanishingPlayer, otherPlayer) > 512)
+					|| (otherPlayer.equals(vanishingPlayer))) {
+				continue;
+			}
+			if (vanishing) {
+				this.destroyEntity(vanishingPlayer, otherPlayer);
+				if (VanishPerms.canSeeAll(otherPlayer)) {
+					this.undestroyEntity(vanishingPlayer, otherPlayer);
+				}
+			} else {
+				if (VanishPerms.canSeeAll(otherPlayer)) {
+					this.destroyEntity(vanishingPlayer, otherPlayer);
+				}
+				this.undestroyEntity(vanishingPlayer, otherPlayer);
+			}
+		}
+	}
 
-    /**
-     * Please, sir, can I have some more?
-     * 
-     * @return the VanishManager. Duh.
-     */
-    public VanishManager getManager() {
-        return this.manager;
-    }
+	/**
+	 * Drop a player from the list of vanished Useful for when they quit
+	 * 
+	 * @param player
+	 */
+	public void removeVanished(Player player) {
+		this.removeVanished(((CraftPlayer) player).getEntityId());
+	}
 
-    public void hooksUnvanish(Player player) {
-        this.essentialsHook.unvanish(player);
-        this.dynmapHook.unvanish(player);
-    }
+	public void resetSeeing(Player player) {
+		if (VanishPerms.canSeeAll(player)) {
+			this.showVanished(player);
+		} else {
+			this.hideVanished(player);
+		}
+	}
 
-    public void hooksVanish(Player player) {
-        this.essentialsHook.vanish(player);
-        this.dynmapHook.vanish(player);
-    }
+	/**
+	 * If the entity id eid should be hidden from the player
+	 * 
+	 * @param player
+	 * @param eid
+	 * @return if the eid is vanished and the player shouldn't see it
+	 */
+	public boolean shouldHide(Player player, int eid) {
+		if (!VanishPerms.canSeeAll(player)) {
+			return this.isVanished(eid);
+		}
+		return false;
+	}
 
-    /**
-     * Tag that log!
-     * 
-     * @param message
-     */
-    public void log(String message) {
-        this.log.info("[VANISH] " + message);
-    }
+	/**
+	 * Smack that vanish list. Smack it hard.
+	 */
+	public void startup(String fakejoin, String fakequit,
+			boolean delayedJoinTracking) {
+           
+        //create a new instance of packetmanager 
+        sPm = SpoutManager.getPacketManager();
+        
+		pm.addListener(5, this.sniffer5);
+		pm.addListener(17, this.sniffer17);
+		pm.addListener(18, this.sniffer18);
+		pm.addListener(19, this.sniffer19);
+		pm.addListener(20, this.sniffer20);
+		pm.addListener(28, this.sniffer28);
+		pm.addListener(30, this.sniffer30);
+		pm.addListener(31, this.sniffer31);
+		pm.addListener(32, this.sniffer32);
+		pm.addListener(33, this.sniffer33);
+		pm.addListener(34, this.sniffer34);
+		pm.addListener(38, this.sniffer38);
+		pm.addListener(39, this.sniffer39);
+        
+		this.manipulator = new VanishAnnounceManipulator(this.plugin, fakejoin,	fakequit, delayedJoinTracking);
+		this.listOfEntityIDs = new ArrayList<Integer>();
+	}
 
-    public void messageUpdate(String message) {
-        for (final Player player : this.getServer().getOnlinePlayers()) {
-            if ((player != null) && VanishPerms.canSeeStatusUpdates(player)) {
-                player.sendMessage(message);
-            }
-        }
-    }
+	/**
+	 * Toggle a player's visibility
+	 * 
+	 * @param togglingPlayer
+	 *            The player disappearing
+	 */
+	public void toggleVanish(Player togglingPlayer) {
+		this.packetSending(togglingPlayer);
+		final String vanishingPlayerName = togglingPlayer.getName();
+		String messageVanisher;
+		final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
+		if (this.isVanished(togglingPlayer)) {
+			this.plugin.hooksVanish(togglingPlayer);
+			messageVanisher = base + "vanished. Poof.";
 
-    @Override
-    public void onDisable() {
-        this.essentialsHook.onPluginDisable();
-        this.dynmapHook.onPluginDisable();
-        this.manager.disable();
-        this.log("Version " + this.selfDescription.getVersion() + " disabled.");
-    }
+		} else {
+			this.plugin.hooksUnvanish(togglingPlayer);
+			messageVanisher = base + "become visible.";
+			this.manipulator.toggled(togglingPlayer.getName());
+		}
+		this.plugin.messageUpdate(messageVanisher);
+	}
 
-    @Override
-    public void onEnable() {
-        this.log = Logger.getLogger("Minecraft");
+	private void addEIDVanished(int id) {
+		synchronized (this.syncEID) {
+			this.listOfEntityIDs.add(id);
+		}
+	}
 
-        final Configuration config = this.getConfiguration();
-        this.enableColoration = config.getBoolean("enableColoration", false);
-        this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
-        this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
+	private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
+		((CraftPlayer) obliviousPlayer).getHandle().netServerHandler
+				.sendPacket(new Packet29DestroyEntity(
+						((CraftPlayer) vanishingPlayer).getEntityId()));
+	}
 
-        this.manager.startup(config.getString("fakeannounce.join", "%p has joined the game."), config.getString("fakeannounce.quit", "%p has left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
-        config.save();
+	private double getDistance(Player player1, Player player2) {
+		final Location loc1 = player1.getLocation();
+		final Location loc2 = player1.getLocation();
+		return Math.sqrt(Math.pow(loc1.getX() - loc2.getX(), 2.0D)
+				+ Math.pow(loc1.getY() - loc2.getY(), 2.0D)
+				+ Math.pow(loc1.getZ() - loc2.getZ(), 2.0D));
+	}
 
-        this.selfDescription = this.getDescription();
+	private void hideVanished(Player player) {
+		for (final Player otherPlayer : this.plugin.getServer()
+				.getOnlinePlayers()) {
+			if ((this.getDistance(player, otherPlayer) > 512)
+					|| (otherPlayer.equals(player))) {
+				continue;
+			}
+			if (this.isVanished(otherPlayer)) {
+				this.destroyEntity(otherPlayer, player);
+			}
+		}
+	}
 
-        this.getCommand("vanish").setExecutor(new VanishCommand(this));
+	private boolean isVanished(int id) {
+		synchronized (this.syncEID) {
+			return this.listOfEntityIDs.contains(id);
+		}
+	}
 
-        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
+	private void removeVanished(int id) {
+		synchronized (this.syncEID) {
+			this.listOfEntityIDs.remove(Integer.valueOf(id));
+		}
+	}
 
-        this.log("Version " + this.selfDescription.getVersion() + " enabled.");
-    }
+	private void revealAll() {
+		for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+			for (final Player player2 : this.plugin.getServer()
+					.getOnlinePlayers()) {
+				if ((player != null) && (player2 != null)
+						&& !player.equals(player2)) {
+					this.destroyEntity(player, player2);
+					this.undestroyEntity(player, player2);
+				}
+			}
+		}
+	}
+
+	private void showVanished(Player player) {
+		for (final Player otherPlayer : this.plugin.getServer()
+				.getOnlinePlayers()) {
+			if ((this.getDistance(player, otherPlayer) > 512)
+					|| (otherPlayer.equals(player))) {
+				continue;
+			}
+			if (this.isVanished(otherPlayer)) {
+				this.undestroyEntity(otherPlayer, player);
+			}
+		}
+	}
+
+	private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
+		((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler
+				.sendPacket(new Packet20NamedEntitySpawn(
+						((CraftPlayer) revealPlayer).getHandle()));
+	}
+
 }
