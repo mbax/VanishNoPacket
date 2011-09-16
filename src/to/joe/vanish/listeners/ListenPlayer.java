@@ -1,6 +1,7 @@
 package to.joe.vanish.listeners;
 
-import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -25,9 +26,11 @@ public class ListenPlayer extends PlayerListener {
 
     @Override
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.plugin.getManager().removeVanished(event.getPlayer());
-        if (this.plugin.getManager().getAnnounceManipulator().delayedAnnounceKill(event.getPlayer().getName())) {
-            this.plugin.messageUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit, still vanished");
+        final Player player = event.getPlayer();
+        this.plugin.getManager().safelist29Mod(((CraftPlayer) player).getEntityId(), this.plugin.getServer().getOnlinePlayers().length);
+        this.plugin.getManager().removeVanished(player);
+        this.plugin.getManager().getAnnounceManipulator().delayedAnnounceKill(player.getName());
+        if (this.plugin.getManager().getAnnounceManipulator().onQuitDoUsPart(player.getName())) {
             event.setQuitMessage(null);
         }
     }

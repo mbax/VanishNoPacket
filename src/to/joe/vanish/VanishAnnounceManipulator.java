@@ -1,6 +1,7 @@
 package to.joe.vanish;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 
@@ -11,13 +12,14 @@ public class VanishAnnounceManipulator {
     private final String fakeJoin;
     private final String fakeQuit;
     private final boolean delayedJoinTracking;
+    private final HashMap<String, Boolean> status;
 
     public VanishAnnounceManipulator(VanishPlugin plugin, String fakeJoin, String fakeQuit, boolean delayedJoinTracking) {
         this.plugin = plugin;
         this.fakeJoin = fakeJoin;
         this.fakeQuit = fakeQuit;
         this.delayedJoinTracking = delayedJoinTracking;
-
+        this.status = new HashMap<String, Boolean>();
         synchronized (this.syncLogin) {
             this.delayedAnnounce = new ArrayList<String>();
         }
@@ -43,11 +45,20 @@ public class VanishAnnounceManipulator {
     public void fakeJoin(String player) {
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeJoin.replace("%p", player));
         this.plugin.log(player + " faked joining");
+        this.status.put(player, true);
     }
 
     public void fakeQuit(String player) {
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeQuit.replace("%p", player));
         this.plugin.log(player + " faked quitting");
+        this.status.put(player, false);
+    }
+
+    public boolean onQuitDoUsPart(String player) {
+        if (this.status.containsKey(player)) {
+            return this.status.remove(player);
+        }
+        return false;
     }
 
     public void toggled(String player) {

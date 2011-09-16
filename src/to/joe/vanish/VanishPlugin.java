@@ -67,8 +67,12 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     public void messageUpdate(String message) {
+        this.messageUpdate(message, null);
+    }
+
+    public void messageUpdate(String message, Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
-            if ((player != null) && VanishPerms.canSeeStatusUpdates(player)) {
+            if ((player != null) && !player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
                 player.sendMessage(message);
             }
         }

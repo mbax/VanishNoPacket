@@ -28,7 +28,7 @@ public class VanishCommand implements CommandExecutor {
                 } else {
                     player.sendMessage(ChatColor.DARK_AQUA + "You are not invisible.");
                 }
-            } else if (args[0].equalsIgnoreCase("toggle")||args[0].equalsIgnoreCase("t")) {
+            } else if (args[0].equalsIgnoreCase("toggle") || args[0].equalsIgnoreCase("t")) {
                 if (args.length == 1) {
                     final StringBuilder toggleList = new StringBuilder();
                     if (VanishPerms.canToggleSee(player)) {
@@ -96,18 +96,18 @@ public class VanishCommand implements CommandExecutor {
         return true;
     }
 
-    private void comma(StringBuilder builder, String string) {
-        if (builder.length() > 0) {
-            builder.append(", ");
-        }
-        builder.append(string);
-    }
-
     private String colorize(boolean has) {
         if (has) {
             return ChatColor.GREEN.toString();
         } else {
             return ChatColor.RED.toString();
         }
+    }
+
+    private void comma(StringBuilder builder, String string) {
+        if (builder.length() > 0) {
+            builder.append(", ");
+        }
+        builder.append(string);
     }
 }

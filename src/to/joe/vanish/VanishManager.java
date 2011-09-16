@@ -1,7 +1,9 @@
 package to.joe.vanish;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
 
@@ -14,8 +16,10 @@ import org.getspout.spoutapi.SpoutManager;
 import to.joe.vanish.sniffers.Sniffer17;
 import to.joe.vanish.sniffers.Sniffer18ArmAnimation;
 import to.joe.vanish.sniffers.Sniffer19EntityAction;
+import to.joe.vanish.sniffers.Sniffer201PlayerInfo;
 import to.joe.vanish.sniffers.Sniffer20NamedEntitySpawn;
 import to.joe.vanish.sniffers.Sniffer28EntityVelocity;
+import to.joe.vanish.sniffers.Sniffer29DestroyEntity;
 import to.joe.vanish.sniffers.Sniffer30Entity;
 import to.joe.vanish.sniffers.Sniffer31RelEntityMove;
 import to.joe.vanish.sniffers.Sniffer32EntityLook;
@@ -23,6 +27,9 @@ import to.joe.vanish.sniffers.Sniffer33RelEntityMoveLook;
 import to.joe.vanish.sniffers.Sniffer34EntityTeleport;
 import to.joe.vanish.sniffers.Sniffer38EntityStatus;
 import to.joe.vanish.sniffers.Sniffer39AttachEntity;
+import to.joe.vanish.sniffers.Sniffer40EntityMetadata;
+import to.joe.vanish.sniffers.Sniffer41MobEffect;
+import to.joe.vanish.sniffers.Sniffer42RemoveMobEffect;
 import to.joe.vanish.sniffers.Sniffer5EntityEquipment;
 
 /**
@@ -35,6 +42,9 @@ public class VanishManager {
 
     private final VanishPlugin plugin;
     private final Object syncEID = new Object();
+    private final Object syncNames = new Object();
+    private final Object syncSafeList29 = new Object();
+    private final Object syncSafeList201 = new Object();
 
     private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
     private final Sniffer17 sniffer17 = new Sniffer17(this);
@@ -42,7 +52,7 @@ public class VanishManager {
     private final Sniffer19EntityAction sniffer19 = new Sniffer19EntityAction(this);
     private final Sniffer20NamedEntitySpawn sniffer20 = new Sniffer20NamedEntitySpawn(this);
     private final Sniffer28EntityVelocity sniffer28 = new Sniffer28EntityVelocity(this);
-    //private final Sniffer29DestroyEntity sniffer29 = new Sniffer29DestroyEntity(this);
+    private final Sniffer29DestroyEntity sniffer29 = new Sniffer29DestroyEntity(this);
     private final Sniffer30Entity sniffer30 = new Sniffer30Entity(this);
     private final Sniffer31RelEntityMove sniffer31 = new Sniffer31RelEntityMove(this);
     private final Sniffer32EntityLook sniffer32 = new Sniffer32EntityLook(this);
@@ -50,8 +60,15 @@ public class VanishManager {
     private final Sniffer34EntityTeleport sniffer34 = new Sniffer34EntityTeleport(this);
     private final Sniffer38EntityStatus sniffer38 = new Sniffer38EntityStatus(this);
     private final Sniffer39AttachEntity sniffer39 = new Sniffer39AttachEntity(this);
+    private final Sniffer40EntityMetadata sniffer40 = new Sniffer40EntityMetadata(this);
+    private final Sniffer41MobEffect sniffer41 = new Sniffer41MobEffect(this);
+    private final Sniffer42RemoveMobEffect sniffer42 = new Sniffer42RemoveMobEffect(this);
+    private final Sniffer201PlayerInfo sniffer201 = new Sniffer201PlayerInfo(this);
 
     private ArrayList<Integer> listOfEntityIDs;
+    private ArrayList<String> listOfPlayerNames;
+    private HashMap<Integer, Integer> safeList29;
+    private HashMap<String, Integer> safeList201;
 
     private VanishAnnounceManipulator manipulator;
 
@@ -71,7 +88,7 @@ public class VanishManager {
         SpoutManager.getPacketManager().removeListener(19, this.sniffer19);
         SpoutManager.getPacketManager().removeListener(20, this.sniffer20);
         SpoutManager.getPacketManager().removeListener(28, this.sniffer28);
-        // SpoutManager.getPacketManager().removeListener(29, sniffer29);
+        SpoutManager.getPacketManager().removeListener(29, this.sniffer29);
         SpoutManager.getPacketManager().removeListener(30, this.sniffer30);
         SpoutManager.getPacketManager().removeListener(31, this.sniffer31);
         SpoutManager.getPacketManager().removeListener(32, this.sniffer32);
@@ -79,6 +96,10 @@ public class VanishManager {
         SpoutManager.getPacketManager().removeListener(34, this.sniffer34);
         SpoutManager.getPacketManager().removeListener(38, this.sniffer38);
         SpoutManager.getPacketManager().removeListener(39, this.sniffer39);
+        SpoutManager.getPacketManager().removeListener(40, this.sniffer40);
+        SpoutManager.getPacketManager().removeListener(41, this.sniffer41);
+        SpoutManager.getPacketManager().removeListener(42, this.sniffer42);
+        SpoutManager.getPacketManager().removeListener(201, this.sniffer201);
         this.revealAll();
     }
 
@@ -97,9 +118,7 @@ public class VanishManager {
      * @return true if vanished
      */
     public boolean isVanished(Player player) {
-        synchronized (this.syncEID) {
-            return this.listOfEntityIDs.contains(((CraftPlayer) player).getEntityId());
-        }
+        return this.listOfPlayerNames.contains(player.getName());
     }
 
     public boolean isVanished(String playerName) {
@@ -110,16 +129,24 @@ public class VanishManager {
         return false;
     }
 
+    public boolean onSafeList201(String name) {
+        return this.safeList201.containsKey(name);
+    }
+
+    public boolean onSafeList29(Integer eid) {
+        return this.safeList29.containsKey(eid);
+    }
+
     public void packetSending(Player vanishingPlayer) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
-            this.addEIDVanished(((CraftPlayer) vanishingPlayer).getEntityId());
+            this.addVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
-            this.removeVanished(((CraftPlayer) vanishingPlayer).getEntityId());
+            this.removeVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
@@ -148,7 +175,7 @@ public class VanishManager {
      * @param player
      */
     public void removeVanished(Player player) {
-        this.removeVanished(((CraftPlayer) player).getEntityId());
+        this.removeVanished(player.getName(), ((CraftPlayer) player).getEntityId());
     }
 
     public void resetSeeing(Player player) {
@@ -159,16 +186,72 @@ public class VanishManager {
         }
     }
 
+    public void safelist201Mod(String name, Integer diff) {
+        synchronized (this.syncSafeList201) {
+            if (this.safeList201.containsKey(name)) {
+                diff += this.safeList201.get(name);
+            }
+            if (diff == 0) {
+                this.safeList201.remove(name);
+            } else {
+                this.safeList201.put(name, diff);
+            }
+        }
+    }
+
+    public void safelist29Mod(Integer eid, Integer diff) {
+        synchronized (this.syncSafeList29) {
+            if (this.safeList29.containsKey(eid)) {
+                diff += this.safeList29.get(eid);
+            }
+            if (diff == 0) {
+                this.safeList29.remove(eid);
+            } else {
+                this.safeList29.put(eid, diff);
+            }
+        }
+    }
+
     /**
      * If the entity id eid should be hidden from the player
+     * This is called for all packets but 29
+     * See shouldHide(Player player, int eid, boolean is29)
      * 
      * @param player
      * @param eid
      * @return if the eid is vanished and the player shouldn't see it
      */
     public boolean shouldHide(Player player, int eid) {
+        return this.shouldHide(player, eid, false);
+    }
+
+    /**
+     * If the entity id eid should be hidden from the player
+     * If it's packet 29, handle the safelist.
+     * 
+     * @param player
+     * @param eid
+     * @param is29
+     * @return
+     */
+    public boolean shouldHide(Player player, int eid, boolean is29) {
+        if (is29 && this.onSafeList29(eid)) {
+            this.safelist29Mod(eid, -1);
+            return false;
+        }
         if (!VanishPerms.canSeeAll(player)) {
             return this.isVanished(eid);
+        }
+        return false;
+    }
+
+    public boolean shouldHide(Player player, String name, boolean status) {
+        if (!status && this.onSafeList201(name)) {
+            this.safelist201Mod(name, -1);
+            return false;
+        }
+        if (!VanishPerms.canSeeAll(player)) {
+            return this.isVanished(name);
         }
         return false;
     }
@@ -183,7 +266,7 @@ public class VanishManager {
         SpoutManager.getPacketManager().addListener(19, this.sniffer19);
         SpoutManager.getPacketManager().addListener(20, this.sniffer20);
         SpoutManager.getPacketManager().addListener(28, this.sniffer28);
-        // SpoutManager.getPacketManager().addListener(29, sniffer29);
+        SpoutManager.getPacketManager().addListener(29, this.sniffer29);
         SpoutManager.getPacketManager().addListener(30, this.sniffer30);
         SpoutManager.getPacketManager().addListener(31, this.sniffer31);
         SpoutManager.getPacketManager().addListener(32, this.sniffer32);
@@ -191,8 +274,15 @@ public class VanishManager {
         SpoutManager.getPacketManager().addListener(34, this.sniffer34);
         SpoutManager.getPacketManager().addListener(38, this.sniffer38);
         SpoutManager.getPacketManager().addListener(39, this.sniffer39);
+        SpoutManager.getPacketManager().addListener(40, this.sniffer40);
+        SpoutManager.getPacketManager().addListener(41, this.sniffer41);
+        SpoutManager.getPacketManager().addListener(42, this.sniffer42);
+        SpoutManager.getPacketManager().addListener(201, this.sniffer201);
         this.manipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit, delayedJoinTracking);
         this.listOfEntityIDs = new ArrayList<Integer>();
+        this.listOfPlayerNames = new ArrayList<String>();
+        this.safeList29 = new HashMap<Integer, Integer>();
+        this.safeList201 = new HashMap<String, Integer>();
     }
 
     /**
@@ -204,28 +294,37 @@ public class VanishManager {
     public void toggleVanish(Player togglingPlayer) {
         this.packetSending(togglingPlayer);
         final String vanishingPlayerName = togglingPlayer.getName();
-        String messageVanisher;
+        String messageBit;
         final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
         if (this.isVanished(togglingPlayer)) {
             this.plugin.hooksVanish(togglingPlayer);
-            messageVanisher = base + "vanished. Poof.";
+            messageBit = "vanished. Poof.";
 
         } else {
             this.plugin.hooksUnvanish(togglingPlayer);
-            messageVanisher = base + "become visible.";
+            messageBit = "become visible.";
             this.manipulator.toggled(togglingPlayer.getName());
         }
-        this.plugin.messageUpdate(messageVanisher);
+        final String message = base + messageBit;
+        togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
+        this.plugin.messageUpdate(message, togglingPlayer);
     }
 
-    private void addEIDVanished(int id) {
+    private void addVanished(String name, int id) {
         synchronized (this.syncEID) {
             this.listOfEntityIDs.add(id);
+        }
+        synchronized (this.syncNames) {
+            this.listOfPlayerNames.add(name);
         }
     }
 
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
-        ((CraftPlayer) obliviousPlayer).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
+        final CraftPlayer craftPlayer = ((CraftPlayer) obliviousPlayer);
+        final int eid = craftPlayer.getEntityId();
+        this.safelist29Mod(eid, 1);
+        craftPlayer.getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
+        craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
     }
 
     private double getDistance(Player player1, Player player2) {
@@ -251,9 +350,12 @@ public class VanishManager {
         }
     }
 
-    private void removeVanished(int id) {
+    private void removeVanished(String name, int id) {
         synchronized (this.syncEID) {
             this.listOfEntityIDs.remove(Integer.valueOf(id));
+        }
+        synchronized (this.syncNames) {
+            this.listOfPlayerNames.remove(name);
         }
     }
 
