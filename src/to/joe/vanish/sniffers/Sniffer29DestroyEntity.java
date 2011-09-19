@@ -19,7 +19,12 @@ public class Sniffer29DestroyEntity implements PacketListener {
 
     @Override
     public boolean checkPacket(Player player, MCPacket packet) {
-        return !this.vanish.shouldHide(player, ((Packet29DestroyEntity) ((MCCraftPacket) packet).getPacket()).a, true);
+        final Packet29DestroyEntity packit = ((Packet29DestroyEntity) ((MCCraftPacket) packet).getPacket());
+        if (packit instanceof VanishManager.Hat) {
+            ((MCCraftPacket) packet).setPacket(new Packet29DestroyEntity(packit.a), 29);
+            return true;
+        }
+        return !this.vanish.shouldHide(player, packit.a);
     }
 
 }

@@ -1,7 +1,9 @@
 package to.joe.vanish;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet20NamedEntitySpawn;
@@ -40,12 +42,39 @@ import to.joe.vanish.sniffers.Sniffer5EntityEquipment;
  */
 public class VanishManager {
 
+    public class Hat extends Packet29DestroyEntity {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public Hat(int eid) {
+            super(eid);
+            Field field;
+            try {
+                field = Hat.class.getSuperclass().getSuperclass().getDeclaredField("b");
+            } catch (final NoSuchFieldException e) {
+                return;
+            } catch (final SecurityException e) {
+                return;
+            }
+            field.setAccessible(true);
+            Map<Class, Integer> map;
+            try {
+                map = (Map<Class, Integer>) field.get(this);
+            } catch (final Exception e) {
+                return;
+            }
+            map.put(Hat.class, 29);
+            try {
+                field.set(this, map);
+            } catch (final Exception e) {
+            }
+        }
+    }
+
     private final VanishPlugin plugin;
     private final Object syncEID = new Object();
     private final Object syncNames = new Object();
     private final Object syncSafeList29 = new Object();
-    private final Object syncSafeList201 = new Object();
 
+    private final Object syncSafeList201 = new Object();
     private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
     private final Sniffer17 sniffer17 = new Sniffer17(this);
     private final Sniffer18ArmAnimation sniffer18 = new Sniffer18ArmAnimation(this);
@@ -63,11 +92,12 @@ public class VanishManager {
     private final Sniffer40EntityMetadata sniffer40 = new Sniffer40EntityMetadata(this);
     private final Sniffer41MobEffect sniffer41 = new Sniffer41MobEffect(this);
     private final Sniffer42RemoveMobEffect sniffer42 = new Sniffer42RemoveMobEffect(this);
-    private final Sniffer201PlayerInfo sniffer201 = new Sniffer201PlayerInfo(this);
 
+    private final Sniffer201PlayerInfo sniffer201 = new Sniffer201PlayerInfo(this);
     private ArrayList<Integer> listOfEntityIDs;
     private ArrayList<String> listOfPlayerNames;
     private HashMap<Integer, Integer> safeList29;
+
     private HashMap<String, Integer> safeList201;
 
     private VanishAnnounceManipulator manipulator;
@@ -323,7 +353,9 @@ public class VanishManager {
         final CraftPlayer craftPlayer = ((CraftPlayer) obliviousPlayer);
         final int eid = craftPlayer.getEntityId();
         this.safelist29Mod(eid, 1);
-        craftPlayer.getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
+        this.safelist201Mod(vanishingPlayer.getName(), 1);
+        craftPlayer.getHandle().netServerHandler.sendPacket(new Hat(((CraftPlayer) vanishingPlayer).getEntityId()));
+        //craftPlayer.getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
         craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
     }
 
@@ -383,6 +415,11 @@ public class VanishManager {
 
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
         ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));
+        ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
+    }
+
+    public int numVanished() {
+        return this.listOfEntityIDs.size();
     }
 
 }
