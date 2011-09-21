@@ -25,36 +25,49 @@ permissions:
   vanish.statusupdates:
     description: Informed about players changing status
   vanish.nopickup:
+    default: false
     description: If true player can pick up items when vanished
   vanish.nofollow:
+    default: false
     description: If true mobs do not follow player when vanished
   vanish.preventincomingdamage:
+    default: false
     description: Prevent being harmed by things around you while vanished
   vanish.preventoutgoingdamage:
+    default: false
     description: Prevent accidentally hurting stuff while vanished
   vanish.preventdamage:
+    default: false
     description: Prevent damage both ways
     children:
       vanish.preventoutgoingdamage: true
       vanish.preventincomingdamage: true
   vanish.silentjoin:
+    default: false
     description: Join silently. Announce on toggling vanish off
   vanish.toggle.see:
+    default: false
     description: Toggle seeing other vanished players
   vanish.toggle.nopickup:
+    default: false
     description: Toggle pickup ability
   vanish.toggle.nofollow:
+    default: false
     description: Toggle mob aggro
   vanish.toggle.damageout:
+    default: false
     description: Toggle outgoing damage
   vanish.toggle.damagein:
+    default: false
     description: Toggle incoming damage
   vanish.toggle.damage:
+    default: false
     description: Toggle both damage in and out
     children:
       vanish.toggle.damageout: true
       vanish.toggle.damagein: true
   vanish.toggle.all:
+    default: false
     description: Allows user to toggle all their settings ingame
     children:
       vanish.toggle.see: true
@@ -62,6 +75,7 @@ permissions:
       vanish.toggle.nofollow: true
       vanish.toggle.damage: true
   vanish.fakeannounce:
+    default: false
     description: Fake joining/leaving
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
