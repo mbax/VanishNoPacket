@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.2
+version: 1.6.3
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials]
@@ -79,6 +79,7 @@ permissions:
     description: Fake joining/leaving
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
+    default: false
     children:
       vanish.see: true
       vanish.vanish: true
@@ -88,6 +89,7 @@ permissions:
       vanish.statusupdates: true
   vanish.*:
     description: Oh god everything.
+    default: false
     children:
       vanish.see: true
       vanish.vanish: true
