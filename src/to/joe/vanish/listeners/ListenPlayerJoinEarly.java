@@ -18,6 +18,7 @@ public class ListenPlayerJoinEarly extends PlayerListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (VanishPerms.silentJoin(event.getPlayer())) {
             this.plugin.getManager().packetSending(event.getPlayer());
+            this.plugin.hooksVanish(event.getPlayer());
         }
     }
 }

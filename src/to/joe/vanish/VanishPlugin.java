@@ -95,7 +95,7 @@ public class VanishPlugin extends JavaPlugin {
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
 
-        this.manager.startup(config.getString("fakeannounce.join", "%p has joined the game."), config.getString("fakeannounce.quit", "%p has left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
+        this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
         config.save();
 
         this.selfDescription = this.getDescription();
