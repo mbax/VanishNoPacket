@@ -88,8 +88,18 @@ public class VanishCommand implements CommandExecutor {
                     }
                 }
             } else if ((args[0].equalsIgnoreCase("fakequit") || args[0].equalsIgnoreCase("fq")) && VanishPerms.canFakeAnnounce(player)) {
+                if (!this.plugin.getManager().isVanished(player)) {
+                    this.plugin.getManager().toggleVanish(player);
+                } else {
+                    player.sendMessage(ChatColor.RED+"Already invisible :)");
+                }
                 this.plugin.getManager().getAnnounceManipulator().fakeQuit(player.getName());
             } else if ((args[0].equalsIgnoreCase("fakejoin") || args[0].equalsIgnoreCase("fj")) && VanishPerms.canFakeAnnounce(player)) {
+                if (this.plugin.getManager().isVanished(player)) {
+                    this.plugin.getManager().toggleVanish(player);
+                } else {
+                    player.sendMessage(ChatColor.RED+"Already invisible :)");
+                }
                 this.plugin.getManager().getAnnounceManipulator().fakeJoin(player.getName());
             }
         }
