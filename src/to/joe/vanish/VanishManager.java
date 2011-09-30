@@ -175,7 +175,7 @@ public class VanishManager {
             this.addVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
-            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
+            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
@@ -340,7 +340,7 @@ public class VanishManager {
         this.plugin.messageUpdate(message, togglingPlayer);
     }
 
-    private void addVanished(String name, int id) {
+    public void addVanished(String name, int id) {
         synchronized (this.syncEID) {
             this.listOfEntityIDs.add(id);
         }

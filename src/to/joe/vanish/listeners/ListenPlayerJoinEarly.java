@@ -1,5 +1,6 @@
 package to.joe.vanish.listeners;
 
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 
@@ -17,6 +18,7 @@ public class ListenPlayerJoinEarly extends PlayerListener {
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (VanishPerms.silentJoin(event.getPlayer())) {
+            this.plugin.getManager().addVanished(event.getPlayer().getName(), ((CraftPlayer)event.getPlayer()).getEntityId());
             this.plugin.getManager().packetSending(event.getPlayer());
             this.plugin.hooksVanish(event.getPlayer());
         }
