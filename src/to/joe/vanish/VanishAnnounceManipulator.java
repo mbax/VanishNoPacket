@@ -16,8 +16,8 @@ public class VanishAnnounceManipulator {
 
     public VanishAnnounceManipulator(VanishPlugin plugin, String fakeJoin, String fakeQuit, boolean delayedJoinTracking) {
         this.plugin = plugin;
-        this.fakeJoin = fakeJoin;
-        this.fakeQuit = fakeQuit;
+        this.fakeJoin = fakeJoin.replace("&&", "§");
+        this.fakeQuit = fakeQuit.replace("&&", "§");
         this.delayedJoinTracking = delayedJoinTracking;
         this.status = new HashMap<String, Boolean>();
         synchronized (this.syncLogin) {

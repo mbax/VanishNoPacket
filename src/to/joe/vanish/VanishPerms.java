@@ -84,6 +84,10 @@ public class VanishPerms {
     public static boolean toggleSeeAll(Player player) {
         return VanishPerms.getUser(player).toggleSeeAll();
     }
+    
+    public static boolean canReceiveAdminAlerts(Player player) {
+        return player.hasPermission("vanish.adminalerts");
+    }
 
     private static VanishUser getUser(Player player) {
         VanishUser user = VanishPerms.users.get(player.getName());

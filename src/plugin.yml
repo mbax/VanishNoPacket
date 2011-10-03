@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.7
+version: 1.6.8
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials]
@@ -24,6 +24,7 @@ permissions:
     description: Allows player to see vanished players
   vanish.statusupdates:
     description: Informed about players changing status
+    default: op
   vanish.nopickup:
     default: false
     description: If true player can pick up items when vanished
@@ -77,6 +78,9 @@ permissions:
   vanish.fakeannounce:
     default: false
     description: Fake joining/leaving
+  vanish.adminalerts:
+    default: op
+    description: Receive alerts about updates and such
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
     default: false
@@ -100,3 +104,4 @@ permissions:
       vanish.toggle.all: true
       vanish.fakeannounce: true
       vanish.statusupdates: true
+      vanish.adminalerts: true

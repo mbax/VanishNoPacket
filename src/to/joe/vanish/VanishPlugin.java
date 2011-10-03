@@ -1,5 +1,10 @@
 package to.joe.vanish;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
@@ -18,6 +23,45 @@ import to.joe.vanish.listeners.ListenPlayerJoinLate;
 
 public class VanishPlugin extends JavaPlugin {
 
+    private class UpdateCheck implements Runnable {
+
+        VanishPlugin plugin;
+
+        public UpdateCheck(VanishPlugin vanishPlugin) {
+            this.plugin = vanishPlugin;
+        }
+
+        @Override
+        public void run() {
+            URL url;
+            URLConnection connection;
+            try {
+                url = new URL("http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort());
+                connection = url.openConnection();
+                connection.setConnectTimeout(8000);
+                connection.setReadTimeout(15000);
+                connection.setRequestProperty("User-agent", "VanishNoPacket "+selfDescription.getVersion());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String version;
+                if ((version = bufferedReader.readLine()) != null){
+                    this.plugin.latestVersion=version;
+                    if(!this.plugin.selfDescription.getVersion().equals(version)){
+                        this.plugin.log("Found a different version available: "+version);
+                        this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
+                        this.plugin.versionDiff=true;
+                    }
+                    return;
+                }
+            } catch (Exception e) {
+            }
+            this.plugin.log("Error: Could not check if plugin was up to date.");
+        }
+
+    }
+
+    public String latestVersion = null;
+    public boolean versionDiff = false;
+
     private final VanishManager manager = new VanishManager(this);
 
     private final ListenEntity listenEntity = new ListenEntity(this);
@@ -28,7 +72,7 @@ public class VanishPlugin extends JavaPlugin {
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
 
-    private PluginDescriptionFile selfDescription;
+    public PluginDescriptionFile selfDescription;
 
     private Logger log;
 
@@ -83,22 +127,42 @@ public class VanishPlugin extends JavaPlugin {
         this.essentialsHook.onPluginDisable();
         this.dynmapHook.onPluginDisable();
         this.manager.disable();
+        this.getServer().getScheduler().cancelTasks(this);
         this.log("Version " + this.selfDescription.getVersion() + " disabled.");
     }
 
     @Override
     public void onEnable() {
         this.log = Logger.getLogger("Minecraft");
+        this.selfDescription = this.getDescription();
 
+        File check = new File("plugins/VanishNoPacket/config.yml");
+        boolean firstTime = false;
+        if (!check.exists()) {
+            firstTime = true;
+        }
         final Configuration config = this.getConfiguration();
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
 
         this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
-        config.save();
+        boolean updateCheck = config.getBoolean("updates.check", true);
+        if (firstTime) {
+            updateCheck = false;
+            this.log("This is your first time (or you wiped your config)");
+            this.log("In future startups, VanishNoPacket will send usage data");
+            this.log("and check for updated versions. If you hate useful info");
+            this.log("The setting can be disabled in the config file");
+        }
+        if (this.latestVersion != null) {
+            this.latestVersion = this.selfDescription.getVersion();
+        }
+        if (updateCheck) {
+            this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
+        }
 
-        this.selfDescription = this.getDescription();
+        config.save();
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 

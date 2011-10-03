@@ -29,6 +29,7 @@ public class ListenPlayer extends PlayerListener {
         final Player player = event.getPlayer();
         this.plugin.getManager().safelist29Mod(((CraftPlayer) player).getEntityId(), this.plugin.getServer().getOnlinePlayers().length);
         this.plugin.getManager().removeVanished(player);
+        this.plugin.hooksUnvanish(player);
         this.plugin.getManager().getAnnounceManipulator().delayedAnnounceKill(player.getName());
         if (this.plugin.getManager().getAnnounceManipulator().onQuitDoUsPart(player.getName())) {
             event.setQuitMessage(null);
