@@ -18,6 +18,14 @@ public class VanishCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if ((sender instanceof Player)) {
             final Player player = (Player) sender;
+            if(label.equals("np")){
+                this.toggle(player, "nopickup");
+                return true;
+            }
+            if(label.equals("nf")){
+                this.toggle(player, "nofollow");
+                return true;
+            }
             if ((args.length == 0)) {
                 if (VanishPerms.canVanish((Player) sender)) {
                     this.plugin.getManager().toggleVanish(player);
@@ -56,36 +64,7 @@ public class VanishCommand implements CommandExecutor {
                     }
                     player.sendMessage(toggleList.toString());
                 } else {
-                    final StringBuilder message = new StringBuilder();
-                    boolean status = false;;
-                    if (args[1].equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
-                        status = VanishPerms.toggleSeeAll(player);
-                        message.append("see all");
-                    } else if (args[1].equalsIgnoreCase("nopickup") && VanishPerms.canToggleNoPickup(player)) {
-                        status = VanishPerms.toggleNoPickup(player);
-                        message.append("no pickup");
-                    } else if (args[1].equalsIgnoreCase("nofollow") && VanishPerms.canToggleNoFollow(player)) {
-                        status = VanishPerms.toggleNoFollow(player);
-                        message.append("no mob follow");
-                    } else if (args[1].equalsIgnoreCase("damage-in") && VanishPerms.canToggleDamageIn(player)) {
-                        status = VanishPerms.toggleDamageIn(player);
-                        message.append("block incoming damage");
-                    } else if (args[1].equalsIgnoreCase("damage-out") && VanishPerms.canToggleDamageOut(player)) {
-                        status = VanishPerms.toggleDamageOut(player);
-                        message.append("block outgoing damage");
-                    }
-                    if (message.length() > 0) {
-                        message.insert(0, ChatColor.DARK_AQUA + "Status: ");
-                        message.append(": ");
-                        if (status) {
-                            message.append("enabled");
-                        } else {
-                            message.append("disabled");
-                        }
-                        player.sendMessage(message.toString());
-                    } else if (VanishPerms.canVanish(player)) {
-                        player.sendMessage(ChatColor.DARK_AQUA + "You can't toggle that!");
-                    }
+                    this.toggle(player, args[1]);
                 }
             } else if ((args[0].equalsIgnoreCase("fakequit") || args[0].equalsIgnoreCase("fq")) && VanishPerms.canFakeAnnounce(player)) {
                 if (!this.plugin.getManager().isVanished(player)) {
@@ -106,6 +85,39 @@ public class VanishCommand implements CommandExecutor {
         return true;
     }
 
+    private void toggle(Player player,String toggle){
+        final StringBuilder message = new StringBuilder();
+        boolean status = false;;
+        if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
+            status = VanishPerms.toggleSeeAll(player);
+            message.append("see all");
+        } else if (toggle.equalsIgnoreCase("nopickup") && VanishPerms.canToggleNoPickup(player)) {
+            status = VanishPerms.toggleNoPickup(player);
+            message.append("no pickup");
+        } else if (toggle.equalsIgnoreCase("nofollow") && VanishPerms.canToggleNoFollow(player)) {
+            status = VanishPerms.toggleNoFollow(player);
+            message.append("no mob follow");
+        } else if (toggle.equalsIgnoreCase("damage-in") && VanishPerms.canToggleDamageIn(player)) {
+            status = VanishPerms.toggleDamageIn(player);
+            message.append("block incoming damage");
+        } else if (toggle.equalsIgnoreCase("damage-out") && VanishPerms.canToggleDamageOut(player)) {
+            status = VanishPerms.toggleDamageOut(player);
+            message.append("block outgoing damage");
+        }
+        if (message.length() > 0) {
+            message.insert(0, ChatColor.DARK_AQUA + "Status: ");
+            message.append(": ");
+            if (status) {
+                message.append("enabled");
+            } else {
+                message.append("disabled");
+            }
+            player.sendMessage(message.toString());
+        } else if (VanishPerms.canVanish(player)) {
+            player.sendMessage(ChatColor.DARK_AQUA + "You can't toggle that!");
+        }
+    }
+    
     private String colorize(boolean has) {
         if (has) {
             return ChatColor.GREEN.toString();

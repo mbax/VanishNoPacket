@@ -26,6 +26,7 @@ public class VanishAnnounceManipulator {
     }
 
     public void addToDelayedAnnounce(String player) {
+        this.status.put(player, false);
         if (!this.delayedJoinTracking) {
             return;
         }
@@ -54,11 +55,11 @@ public class VanishAnnounceManipulator {
         this.status.put(player, false);
     }
 
-    public boolean onQuitDoUsPart(String player) {
+    public boolean wasPlayerMarkedOnline(String player) {
         if (this.status.containsKey(player)) {
             return this.status.remove(player);
         }
-        return false;
+        return true;
     }
 
     public void toggled(String player) {
