@@ -31,7 +31,7 @@ public class ListenPlayer extends PlayerListener {
         this.plugin.getManager().removeVanished(player);
         this.plugin.hooksUnvanish(player);
         this.plugin.getManager().getAnnounceManipulator().delayedAnnounceKill(player.getName());
-        if (!this.plugin.getManager().getAnnounceManipulator().wasPlayerMarkedOnline(player.getName())) {
+        if (!this.plugin.getManager().getAnnounceManipulator().wasPlayerMarkedOnline(player.getName())||VanishPerms.silentQuit(player)) {
             event.setQuitMessage(null);
         }
     }

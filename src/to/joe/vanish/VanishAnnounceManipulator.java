@@ -44,12 +44,18 @@ public class VanishAnnounceManipulator {
     }
 
     public void fakeJoin(String player) {
+        if(this.status.get(player)){
+            return;
+        }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeJoin.replace("%p", player));
         this.plugin.log(player + " faked joining");
         this.status.put(player, true);
     }
 
     public void fakeQuit(String player) {
+        if(!this.status.get(player)){
+            return;
+        }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeQuit.replace("%p", player));
         this.plugin.log(player + " faked quitting");
         this.status.put(player, false);
@@ -68,6 +74,7 @@ public class VanishAnnounceManipulator {
         }
         this.fakeJoin(player);
         this.delAnnounce(player);
+        this.status.put(player, true);
     }
 
     private void delAnnounce(String player) {

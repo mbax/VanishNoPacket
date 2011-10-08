@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.9
+version: 1.6.9.2
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap]
@@ -46,6 +46,9 @@ permissions:
   vanish.silentjoin:
     default: false
     description: Join silently. Announce on toggling vanish off
+  vanish.silentquit:
+    default: false
+    description: ALWAYS quit silently. 
   vanish.toggle.see:
     default: false
     description: Toggle seeing other vanished players
