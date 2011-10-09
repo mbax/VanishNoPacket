@@ -106,6 +106,15 @@ public class VanishManager {
         this.plugin = plugin;
     }
 
+    public void addVanished(String name, int id) {
+        synchronized (this.syncEID) {
+            this.listOfEntityIDs.add(id);
+        }
+        synchronized (this.syncNames) {
+            this.listOfPlayerNames.add(name);
+        }
+    }
+
     public void disable() {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             if ((player != null) && VanishPerms.canVanish(player)) {
@@ -157,6 +166,10 @@ public class VanishManager {
             return this.isVanished(player);
         }
         return false;
+    }
+
+    public int numVanished() {
+        return this.listOfEntityIDs.size();
     }
 
     public boolean onSafeList201(String name) {
@@ -340,15 +353,6 @@ public class VanishManager {
         this.plugin.messageUpdate(message, togglingPlayer);
     }
 
-    public void addVanished(String name, int id) {
-        synchronized (this.syncEID) {
-            this.listOfEntityIDs.add(id);
-        }
-        synchronized (this.syncNames) {
-            this.listOfPlayerNames.add(name);
-        }
-    }
-
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
         final CraftPlayer craftPlayer = ((CraftPlayer) obliviousPlayer);
         final int eid = craftPlayer.getEntityId();
@@ -416,10 +420,6 @@ public class VanishManager {
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
         ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));
         ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
-    }
-
-    public int numVanished() {
-        return this.listOfEntityIDs.size();
     }
 
 }

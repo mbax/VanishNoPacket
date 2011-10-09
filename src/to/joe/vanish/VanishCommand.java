@@ -18,11 +18,11 @@ public class VanishCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if ((sender instanceof Player)) {
             final Player player = (Player) sender;
-            if(label.equals("np")){
+            if (label.equals("np")) {
                 this.toggle(player, "nopickup");
                 return true;
             }
-            if(label.equals("nf")){
+            if (label.equals("nf")) {
                 this.toggle(player, "nofollow");
                 return true;
             }
@@ -70,14 +70,14 @@ public class VanishCommand implements CommandExecutor {
                 if (!this.plugin.getManager().isVanished(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 } else {
-                    player.sendMessage(ChatColor.RED+"Already invisible :)");
+                    player.sendMessage(ChatColor.RED + "Already invisible :)");
                 }
                 this.plugin.getManager().getAnnounceManipulator().fakeQuit(player.getName());
             } else if ((args[0].equalsIgnoreCase("fakejoin") || args[0].equalsIgnoreCase("fj")) && VanishPerms.canFakeAnnounce(player)) {
                 if (this.plugin.getManager().isVanished(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 } else {
-                    player.sendMessage(ChatColor.RED+"Already invisible :)");
+                    player.sendMessage(ChatColor.RED + "Already invisible :)");
                 }
                 this.plugin.getManager().getAnnounceManipulator().fakeJoin(player.getName());
             }
@@ -85,7 +85,22 @@ public class VanishCommand implements CommandExecutor {
         return true;
     }
 
-    private void toggle(Player player,String toggle){
+    private String colorize(boolean has) {
+        if (has) {
+            return ChatColor.GREEN.toString();
+        } else {
+            return ChatColor.RED.toString();
+        }
+    }
+
+    private void comma(StringBuilder builder, String string) {
+        if (builder.length() > 0) {
+            builder.append(", ");
+        }
+        builder.append(string);
+    }
+
+    private void toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
         boolean status = false;;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
@@ -116,20 +131,5 @@ public class VanishCommand implements CommandExecutor {
         } else if (VanishPerms.canVanish(player)) {
             player.sendMessage(ChatColor.DARK_AQUA + "You can't toggle that!");
         }
-    }
-    
-    private String colorize(boolean has) {
-        if (has) {
-            return ChatColor.GREEN.toString();
-        } else {
-            return ChatColor.RED.toString();
-        }
-    }
-
-    private void comma(StringBuilder builder, String string) {
-        if (builder.length() > 0) {
-            builder.append(", ");
-        }
-        builder.append(string);
     }
 }

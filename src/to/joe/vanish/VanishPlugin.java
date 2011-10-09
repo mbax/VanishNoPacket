@@ -36,23 +36,23 @@ public class VanishPlugin extends JavaPlugin {
             URL url;
             URLConnection connection;
             try {
-                url = new URL("http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort());
+                url = new URL("http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + VanishPlugin.this.selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort());
                 connection = url.openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);
-                connection.setRequestProperty("User-agent", "VanishNoPacket "+selfDescription.getVersion());
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                connection.setRequestProperty("User-agent", "VanishNoPacket " + VanishPlugin.this.selfDescription.getVersion());
+                final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String version;
-                if ((version = bufferedReader.readLine()) != null){
-                    this.plugin.latestVersion=version;
-                    if(!this.plugin.selfDescription.getVersion().equals(version)){
-                        this.plugin.log("Found a different version available: "+version);
+                if ((version = bufferedReader.readLine()) != null) {
+                    this.plugin.latestVersion = version;
+                    if (!this.plugin.selfDescription.getVersion().equals(version)) {
+                        this.plugin.log("Found a different version available: " + version);
                         this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
-                        this.plugin.versionDiff=true;
+                        this.plugin.versionDiff = true;
                     }
                     return;
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
             }
             this.plugin.log("Error: Could not check if plugin was up to date.");
         }
@@ -136,7 +136,7 @@ public class VanishPlugin extends JavaPlugin {
         this.log = Logger.getLogger("Minecraft");
         this.selfDescription = this.getDescription();
 
-        File check = new File("plugins/VanishNoPacket/config.yml");
+        final File check = new File("plugins/VanishNoPacket/config.yml");
         boolean firstTime = false;
         if (!check.exists()) {
             firstTime = true;
@@ -168,6 +168,7 @@ public class VanishPlugin extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);

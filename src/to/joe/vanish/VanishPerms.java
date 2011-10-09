@@ -29,6 +29,10 @@ public class VanishPerms {
         return VanishPerms.getUser(player).getNoPickup();
     }
 
+    public static boolean canNotTrample(Player player) {
+        return player.hasPermission("vanish.notrample");
+    }
+
     public static boolean canReceiveAdminAlerts(Player player) {
         return player.hasPermission("vanish.adminalerts");
     }
@@ -69,7 +73,7 @@ public class VanishPerms {
         return player.hasPermission("vanish.silentjoin");
     }
 
-    public static boolean silentQuit(Player player){
+    public static boolean silentQuit(Player player) {
         return player.hasPermission("vanish.silentquit");
     }
 
@@ -84,11 +88,11 @@ public class VanishPerms {
     public static boolean toggleNoFollow(Player player) {
         return VanishPerms.getUser(player).toggleNoFollow();
     }
-    
+
     public static boolean toggleNoPickup(Player player) {
         return VanishPerms.getUser(player).toggleNoPickup();
     }
-    
+
     public static boolean toggleSeeAll(Player player) {
         return VanishPerms.getUser(player).toggleSeeAll();
     }

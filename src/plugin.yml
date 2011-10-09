@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.9.2
+version: 1.6.9.3
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap]
@@ -9,9 +9,7 @@ description: Vanish by filtering packets using Spout
 commands:
   vanish:
     description: poof
-    usage: |
-      /vanish
-      /vanish check
+    usage: /vanish
     aliases: [v,np,nf]
 permissions:
   vanish.vanish:
@@ -31,6 +29,9 @@ permissions:
   vanish.nofollow:
     default: false
     description: If true mobs do not follow player when vanished
+  vanish.notrample:
+    default: false
+    description: If true player does not trample crops
   vanish.preventincomingdamage:
     default: false
     description: Prevent being harmed by things around you while vanished
@@ -92,19 +93,15 @@ permissions:
       vanish.vanish: true
       vanish.nopickup: true
       vanish.nofollow: true
+      vanish.notrample: true
+      vanish.fakeannounce:true
       vanish.preventdamage: true
       vanish.statusupdates: true
   vanish.*:
     description: Oh god everything.
     default: false
     children:
-      vanish.see: true
-      vanish.vanish: true
-      vanish.nopickup: true
-      vanish.nofollow: true
-      vanish.preventdamage: true
+      vanish.standard: true
       vanish.silentjoin: true
       vanish.toggle.all: true
-      vanish.fakeannounce: true
-      vanish.statusupdates: true
       vanish.adminalerts: true

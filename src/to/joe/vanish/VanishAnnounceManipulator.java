@@ -44,7 +44,7 @@ public class VanishAnnounceManipulator {
     }
 
     public void fakeJoin(String player) {
-        if(this.status.get(player)){
+        if (this.status.get(player)) {
             return;
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeJoin.replace("%p", player));
@@ -53,19 +53,12 @@ public class VanishAnnounceManipulator {
     }
 
     public void fakeQuit(String player) {
-        if(!this.status.get(player)){
+        if (!this.status.get(player)) {
             return;
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeQuit.replace("%p", player));
         this.plugin.log(player + " faked quitting");
         this.status.put(player, false);
-    }
-
-    public boolean wasPlayerMarkedOnline(String player) {
-        if (this.status.containsKey(player)) {
-            return this.status.remove(player);
-        }
-        return true;
     }
 
     public void toggled(String player) {
@@ -75,6 +68,13 @@ public class VanishAnnounceManipulator {
         this.fakeJoin(player);
         this.delAnnounce(player);
         this.status.put(player, true);
+    }
+
+    public boolean wasPlayerMarkedOnline(String player) {
+        if (this.status.containsKey(player)) {
+            return this.status.remove(player);
+        }
+        return true;
     }
 
     private void delAnnounce(String player) {
