@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 
 public class VanishUser {
     private boolean seeAll;
-    private boolean statusUpdates;
     private boolean noPickup;
     private boolean noFollow;
     private boolean preventIncomingDamage;
@@ -12,7 +11,6 @@ public class VanishUser {
 
     public VanishUser(Player player) {
         this.seeAll = player.hasPermission("vanish.see");
-        this.statusUpdates = player.hasPermission("vanish.statusupdates");
         this.noPickup = player.hasPermission("vanish.nopickup");
         this.noFollow = player.hasPermission("vanish.nofollow");
         this.preventIncomingDamage = player.hasPermission("vanish.preventincomingdamage");
@@ -37,10 +35,6 @@ public class VanishUser {
 
     public boolean getSeeAll() {
         return this.seeAll;
-    }
-
-    public boolean getStatusUpdates() {
-        return this.statusUpdates;
     }
 
     public boolean toggleIncomingDamage() {
@@ -68,8 +62,4 @@ public class VanishUser {
         return this.seeAll;
     }
 
-    public boolean toggleStatusUpdates() {
-        this.statusUpdates = !this.statusUpdates;
-        return this.statusUpdates;
-    }
 }

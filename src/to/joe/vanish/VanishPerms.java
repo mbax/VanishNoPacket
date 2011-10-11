@@ -42,7 +42,7 @@ public class VanishPerms {
     }
 
     public static boolean canSeeStatusUpdates(Player player) {
-        return VanishPerms.getUser(player).getStatusUpdates();
+        return player.hasPermission("vanish.statusupdates");
     }
 
     public static boolean canToggleDamageIn(Player player) {
