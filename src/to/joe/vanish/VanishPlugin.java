@@ -13,6 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.config.Configuration;
 
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
@@ -141,8 +142,9 @@ public class VanishPlugin extends JavaPlugin {
         if (!check.exists()) {
             firstTime = true;
         }
-        final FileConfiguration config=this.getConfig();
-        config.options().copyDefaults(true);
+        //final FileConfiguration config=this.getConfig();
+        final Configuration config=this.getConfiguration();
+        //config.options().copyDefaults(true);
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
@@ -163,7 +165,8 @@ public class VanishPlugin extends JavaPlugin {
             this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
         }
 
-        this.saveConfig();
+        config.save();
+        //this.saveConfig();
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 
