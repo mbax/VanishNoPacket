@@ -44,7 +44,7 @@ public class VanishAnnounceManipulator {
     }
 
     public void fakeJoin(String player) {
-        if (this.status.get(player)) {
+        if (this.status.containsKey(player) && this.status.get(player)) {
             return;
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeJoin.replace("%p", player));
@@ -53,7 +53,7 @@ public class VanishAnnounceManipulator {
     }
 
     public void fakeQuit(String player) {
-        if (!this.status.get(player)) {
+        if (this.status.containsKey(player) && !this.status.get(player)) {
             return;
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeQuit.replace("%p", player));
