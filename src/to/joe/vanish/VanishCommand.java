@@ -77,7 +77,7 @@ public class VanishCommand implements CommandExecutor {
                 if (this.plugin.getManager().isVanished(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 } else {
-                    player.sendMessage(ChatColor.RED + "Already invisible :)");
+                    player.sendMessage(ChatColor.RED + "Already visible :)");
                 }
                 this.plugin.getManager().getAnnounceManipulator().fakeJoin(player.getName());
             }

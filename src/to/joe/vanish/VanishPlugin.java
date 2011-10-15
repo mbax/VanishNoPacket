@@ -55,7 +55,7 @@ public class VanishPlugin extends JavaPlugin {
                 }
             } catch (final Exception e) {
             }
-            this.plugin.log("Error: Could not check if plugin was up to date.");
+            this.plugin.log("Error: Could not check if plugin was up to date. Will try later");
         }
 
     }
