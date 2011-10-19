@@ -7,7 +7,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -17,11 +16,13 @@ import org.bukkit.util.config.Configuration;
 
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
+import to.joe.vanish.hooks.JSONAPIHook;
 import to.joe.vanish.listeners.ListenEntity;
 import to.joe.vanish.listeners.ListenPlayer;
 import to.joe.vanish.listeners.ListenPlayerJoinEarly;
 import to.joe.vanish.listeners.ListenPlayerJoinLate;
 
+@SuppressWarnings("deprecation")
 public class VanishPlugin extends JavaPlugin {
 
     private class UpdateCheck implements Runnable {
@@ -37,7 +38,8 @@ public class VanishPlugin extends JavaPlugin {
             URL url;
             URLConnection connection;
             try {
-                url = new URL("http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + VanishPlugin.this.selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort());
+                String address="http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + VanishPlugin.this.selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort();
+                url = new URL(address.replace(" ", "%20"));
                 connection = url.openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);
@@ -51,7 +53,12 @@ public class VanishPlugin extends JavaPlugin {
                         this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
                         this.plugin.versionDiff = true;
                     }
+                    bufferedReader.close();
+                    connection.getInputStream().close();
                     return;
+                } else {
+                    bufferedReader.close();
+                    connection.getInputStream().close();
                 }
             } catch (final Exception e) {
             }
@@ -72,6 +79,7 @@ public class VanishPlugin extends JavaPlugin {
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
+    private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
 
     public PluginDescriptionFile selfDescription;
 
@@ -148,6 +156,8 @@ public class VanishPlugin extends JavaPlugin {
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
+        this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable(){ public void run() {jsonapiHook.onPluginEnable(config.getBoolean("hooks.JSONAPI", false)); }}, 80);
+        
 
         this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
         boolean updateCheck = config.getBoolean("updates.check", true);
@@ -179,5 +189,14 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
 
         this.log("Version " + this.selfDescription.getVersion() + " enabled.");
+    }
+    
+    /**
+     * Ah the things I do for APIs
+     * @param player name
+     * @return if player is vanished
+     */
+    public boolean isVanished(String player){
+        return this.getManager().isVanished(player);
     }
 }

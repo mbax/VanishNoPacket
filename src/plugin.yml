@@ -1,9 +1,9 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.9.8alpha
+version: 1.6.9.8
 website: http://forums.joe.to
 depend: [Spout]
-softdepend: [Essentials,dynmap]
+softdepend: [Essentials,dynmap,JSONAPI]
 author: mbaxter
 description: Vanish by filtering packets using Spout
 commands:
