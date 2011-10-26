@@ -35,7 +35,7 @@ public class DynmapHook {
     }
 
     public void unvanish(Player player) {
-        if (this.enabled && (this.dynmap != null)) {
+        if (this.enabled && (this.dynmap != null) && !player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
             this.dynmap.playerList.show(player.getName());
         }
     }

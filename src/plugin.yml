@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.9.8
+version: 1.6.9.9
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap,JSONAPI]
@@ -85,6 +85,21 @@ permissions:
   vanish.adminalerts:
     default: op
     description: Receive alerts about updates and such
+  vanish.permtest.self:
+    default: true
+    description: If PermTest is enabled, be able to use it on yourself
+  vanish.permtest.other:
+    default: op
+    description: If PermTest is enabled, be able to use it on others
+  vanish.permtest.all:
+    default: op
+    description: If PermTest is enabled, be able to use on self and others
+    children:
+      vanish.permtest.self: true
+      vanish.permtest.other: true
+  vanish.hooks.dynmap.alwayshidden:
+    default: false
+    description: Always hide from dynmap
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
     default: false
@@ -106,3 +121,5 @@ permissions:
       vanish.silentjoin: true
       vanish.silentquit: true
       vanish.toggle.all: true
+      vanish.hooks.dynmap.alwayshidden: true
+      vanish.permtest.all: true

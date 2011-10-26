@@ -17,10 +17,7 @@ import org.bukkit.util.config.Configuration;
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
 import to.joe.vanish.hooks.JSONAPIHook;
-import to.joe.vanish.listeners.ListenEntity;
-import to.joe.vanish.listeners.ListenPlayer;
-import to.joe.vanish.listeners.ListenPlayerJoinEarly;
-import to.joe.vanish.listeners.ListenPlayerJoinLate;
+import to.joe.vanish.listeners.*;
 
 @SuppressWarnings("deprecation")
 public class VanishPlugin extends JavaPlugin {
@@ -76,6 +73,7 @@ public class VanishPlugin extends JavaPlugin {
     private final ListenPlayer listenPlayer = new ListenPlayer(this);
     private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
+    private final ListenPlayerCommandPreProcess listenPlayerCommandPreProcess = new ListenPlayerCommandPreProcess(this);
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
@@ -174,6 +172,7 @@ public class VanishPlugin extends JavaPlugin {
         if (updateCheck) {
             this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
         }
+        this.listenPlayerCommandPreProcess.setEnabled(config.getBoolean("permtest.enable", false));
 
         config.save();
         //this.saveConfig();
@@ -182,11 +181,12 @@ public class VanishPlugin extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, this.listenPlayerCommandPreProcess, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
 
         this.log("Version " + this.selfDescription.getVersion() + " enabled.");
     }

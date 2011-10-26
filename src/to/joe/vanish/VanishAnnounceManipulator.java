@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public class VanishAnnounceManipulator {
     private ArrayList<String> delayedAnnounce;
@@ -16,8 +17,8 @@ public class VanishAnnounceManipulator {
 
     public VanishAnnounceManipulator(VanishPlugin plugin, String fakeJoin, String fakeQuit, boolean delayedJoinTracking) {
         this.plugin = plugin;
-        this.fakeJoin = fakeJoin.replace("&&", "\167");
-        this.fakeQuit = fakeQuit.replace("&&", "\167");
+        this.fakeJoin = fakeJoin.replace("&&", "§");
+        this.fakeQuit = fakeQuit.replace("&&", "§");
         this.delayedJoinTracking = delayedJoinTracking;
         this.status = new HashMap<String, Boolean>();
         synchronized (this.syncLogin) {
@@ -43,31 +44,30 @@ public class VanishAnnounceManipulator {
         return false;
     }
 
-    public void fakeJoin(String player) {
+    public void fakeJoin(Player player) {
         if (this.status.containsKey(player) && this.status.get(player)) {
             return;
         }
-        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeJoin.replace("%p", player));
-        this.plugin.log(player + " faked joining");
-        this.status.put(player, true);
+        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeJoin.replace("%p", player.getName()).replace("%d",player.getDisplayName()));
+        this.plugin.log(player.getName() + " faked joining");
+        this.status.put(player.getName(), true);
     }
 
-    public void fakeQuit(String player) {
-        if (this.status.containsKey(player) && !this.status.get(player)) {
+    public void fakeQuit(Player player) {
+        if (this.status.containsKey(player) && !this.status.get(player.getName())) {
             return;
         }
-        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeQuit.replace("%p", player));
-        this.plugin.log(player + " faked quitting");
-        this.status.put(player, false);
+        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.fakeQuit.replace("%p", player.getName()).replace("%d",player.getDisplayName()));
+        this.plugin.log(player.getName() + " faked quitting");
+        this.status.put(player.getName(), false);
     }
 
-    public void toggled(String player) {
+    public void toggled(Player player) {
         if (!this.delayedJoinTracking || !this.delayedAnnounce.contains(player)) {
             return;
         }
         this.fakeJoin(player);
-        this.delAnnounce(player);
-        this.status.put(player, true);
+        this.delAnnounce(player.getName());
     }
 
     public boolean wasPlayerMarkedOnline(String player) {

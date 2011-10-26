@@ -97,6 +97,7 @@ public class VanishManager {
     private ArrayList<Integer> listOfEntityIDs;
     private ArrayList<String> listOfPlayerNames;
     private HashMap<Integer, Integer> safeList29;
+    private HashMap<String, Boolean> sleepIgnored;//temporary is the plan
 
     private HashMap<String, Integer> safeList201;
 
@@ -184,10 +185,12 @@ public class VanishManager {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
+            this.sleepIgnored.put(vanishingPlayerName, vanishingPlayer.isSleepingIgnored());
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.addVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
+            vanishingPlayer.setSleepingIgnored(this.sleepIgnored.remove(vanishingPlayerName));
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " reappeared.");
@@ -326,6 +329,7 @@ public class VanishManager {
         this.listOfPlayerNames = new ArrayList<String>();
         this.safeList29 = new HashMap<Integer, Integer>();
         this.safeList201 = new HashMap<String, Integer>();
+        this.sleepIgnored = new HashMap<String, Boolean>();
     }
 
     /**
@@ -346,7 +350,7 @@ public class VanishManager {
         } else {
             this.plugin.hooksUnvanish(togglingPlayer);
             messageBit = "become visible.";
-            this.manipulator.toggled(togglingPlayer.getName());
+            this.manipulator.toggled(togglingPlayer);
         }
         final String message = base + messageBit;
         togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
