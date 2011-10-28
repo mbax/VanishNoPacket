@@ -107,15 +107,9 @@ public class VanishManager {
         this.plugin = plugin;
     }
 
-    public void addVanished(String name, int id) {
-        synchronized (this.syncEID) {
-            this.listOfEntityIDs.add(id);
-        }
-        synchronized (this.syncNames) {
-            this.listOfPlayerNames.add(name);
-        }
-    }
-
+    /**
+     * Only call this when disabling the plugin
+     */
     public void disable() {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             if ((player != null) && VanishPerms.canVanish(player)) {
@@ -143,10 +137,16 @@ public class VanishManager {
         this.revealAll();
     }
 
+    /**
+     * @return the Announce Manipulator
+     */
     public VanishAnnounceManipulator getAnnounceManipulator() {
         return this.manipulator;
     }
 
+    /**
+     * @return Daddy!
+     */
     public VanishPlugin getPlugin() {
         return this.plugin;
     }
@@ -161,6 +161,10 @@ public class VanishManager {
         return this.listOfPlayerNames.contains(player.getName());
     }
 
+    /**
+     * @param playerName
+     * @return if the named player is currently vanished
+     */
     public boolean isVanished(String playerName) {
         final Player player = this.plugin.getServer().getPlayer(playerName);
         if (player != null) {
@@ -169,92 +173,28 @@ public class VanishManager {
         return false;
     }
 
+    /**
+     * @return the number of players currently vanished
+     */
     public int numVanished() {
         return this.listOfEntityIDs.size();
     }
 
-    public boolean onSafeList201(String name) {
-        return this.safeList201.containsKey(name);
-    }
-
-    public boolean onSafeList29(Integer eid) {
-        return this.safeList29.containsKey(eid);
-    }
-
-    public void packetSending(Player vanishingPlayer) {
-        final boolean vanishing = !this.isVanished(vanishingPlayer);
-        final String vanishingPlayerName = vanishingPlayer.getName();
-        if (vanishing) {
-            this.sleepIgnored.put(vanishingPlayerName, vanishingPlayer.isSleepingIgnored());
-            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
-            this.addVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
-            this.plugin.log(vanishingPlayerName + " disappeared.");
-        } else {
-            vanishingPlayer.setSleepingIgnored(this.sleepIgnored.remove(vanishingPlayerName));
-            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
-            this.removeVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
-            this.plugin.log(vanishingPlayerName + " reappeared.");
-        }
-        final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
-        for (final Player otherPlayer : playerList) {
-            if ((this.getDistance(vanishingPlayer, otherPlayer) > 512) || (otherPlayer.equals(vanishingPlayer))) {
-                continue;
-            }
-            if (vanishing) {
-                this.destroyEntity(vanishingPlayer, otherPlayer);
-                if (VanishPerms.canSeeAll(otherPlayer)) {
-                    this.undestroyEntity(vanishingPlayer, otherPlayer);
-                }
-            } else {
-                if (VanishPerms.canSeeAll(otherPlayer)) {
-                    this.destroyEntity(vanishingPlayer, otherPlayer);
-                }
-                this.undestroyEntity(vanishingPlayer, otherPlayer);
-            }
-        }
+    public void playerQuit(Player player) {
+        this.removeVanished(player.getName(), ((CraftPlayer) player).getEntityId());
+        this.plugin.getManager().safelist29Mod(((CraftPlayer) player).getEntityId(), this.plugin.getServer().getOnlinePlayers().length);
     }
 
     /**
-     * Drop a player from the list of vanished
-     * Useful for when they quit
+     * Force a refresh of who a player can or can't see.
      * 
      * @param player
      */
-    public void removeVanished(Player player) {
-        this.removeVanished(player.getName(), ((CraftPlayer) player).getEntityId());
-    }
-
     public void resetSeeing(Player player) {
         if (VanishPerms.canSeeAll(player)) {
             this.showVanished(player);
         } else {
             this.hideVanished(player);
-        }
-    }
-
-    public void safelist201Mod(String name, Integer diff) {
-        synchronized (this.syncSafeList201) {
-            if (this.safeList201.containsKey(name)) {
-                diff += this.safeList201.get(name);
-            }
-            if (diff == 0) {
-                this.safeList201.remove(name);
-            } else {
-                this.safeList201.put(name, diff);
-            }
-        }
-    }
-
-    public void safelist29Mod(Integer eid, Integer diff) {
-        synchronized (this.syncSafeList29) {
-            if (this.safeList29.containsKey(eid)) {
-                diff += this.safeList29.get(eid);
-            }
-            if (diff == 0) {
-                this.safeList29.remove(eid);
-            } else {
-                this.safeList29.put(eid, diff);
-            }
         }
     }
 
@@ -291,6 +231,15 @@ public class VanishManager {
         return false;
     }
 
+    /**
+     * If the named player should be hidden from the Player player
+     * Called for Packet 201, the tab menu packet
+     * 
+     * @param player
+     * @param name
+     * @param status
+     * @return
+     */
     public boolean shouldHide(Player player, String name, boolean status) {
         if (!status && this.onSafeList201(name)) {
             this.safelist201Mod(name, -1);
@@ -304,6 +253,7 @@ public class VanishManager {
 
     /**
      * Smack that vanish list. Smack it hard.
+     * But really, don't call this.
      */
     public void startup(String fakejoin, String fakequit, boolean delayedJoinTracking) {
         SpoutManager.getPacketManager().addListener(5, this.sniffer5);
@@ -334,12 +284,14 @@ public class VanishManager {
 
     /**
      * Toggle a player's visibility
+     * Called when a player calls /vanish
+     * Talks to the player and everyone with vanish.see
      * 
      * @param togglingPlayer
      *            The player disappearing
      */
     public void toggleVanish(Player togglingPlayer) {
-        this.packetSending(togglingPlayer);
+        this.toggleVanishQuiet(togglingPlayer);
         final String vanishingPlayerName = togglingPlayer.getName();
         String messageBit;
         final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
@@ -350,11 +302,60 @@ public class VanishManager {
         } else {
             this.plugin.hooksUnvanish(togglingPlayer);
             messageBit = "become visible.";
-            this.manipulator.toggled(togglingPlayer);
+            this.manipulator.vanishToggled(togglingPlayer);
         }
         final String message = base + messageBit;
         togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
         this.plugin.messageUpdate(message, togglingPlayer);
+    }
+
+    /**
+     * Handle vanishing or unvanishing for a player
+     * Does not say anything.
+     * Called by toggleVanish(Player)
+     * 
+     * @param vanishingPlayer
+     */
+    public void toggleVanishQuiet(Player vanishingPlayer) {
+        final boolean vanishing = !this.isVanished(vanishingPlayer);
+        final String vanishingPlayerName = vanishingPlayer.getName();
+        if (vanishing) {
+            this.sleepIgnored.put(vanishingPlayerName, vanishingPlayer.isSleepingIgnored());
+            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
+            this.addVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
+            this.plugin.log(vanishingPlayerName + " disappeared.");
+        } else {
+            vanishingPlayer.setSleepingIgnored(this.sleepIgnored.remove(vanishingPlayerName));
+            vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
+            this.removeVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
+            this.plugin.log(vanishingPlayerName + " reappeared.");
+        }
+        final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
+        for (final Player otherPlayer : playerList) {
+            if ((this.getDistance(vanishingPlayer, otherPlayer) > 512) || (otherPlayer.equals(vanishingPlayer))) {
+                continue;
+            }
+            if (vanishing) {
+                this.destroyEntity(vanishingPlayer, otherPlayer);
+                if (VanishPerms.canSeeAll(otherPlayer)) {
+                    this.undestroyEntity(vanishingPlayer, otherPlayer);
+                }
+            } else {
+                if (VanishPerms.canSeeAll(otherPlayer)) {
+                    this.destroyEntity(vanishingPlayer, otherPlayer);
+                }
+                this.undestroyEntity(vanishingPlayer, otherPlayer);
+            }
+        }
+    }
+
+    private void addVanished(String name, int id) {
+        synchronized (this.syncEID) {
+            this.listOfEntityIDs.add(id);
+        }
+        synchronized (this.syncNames) {
+            this.listOfPlayerNames.add(name);
+        }
     }
 
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
@@ -390,6 +391,14 @@ public class VanishManager {
         }
     }
 
+    private boolean onSafeList201(String name) {
+        return this.safeList201.containsKey(name);
+    }
+
+    private boolean onSafeList29(Integer eid) {
+        return this.safeList29.containsKey(eid);
+    }
+
     private void removeVanished(String name, int id) {
         synchronized (this.syncEID) {
             this.listOfEntityIDs.remove(Integer.valueOf(id));
@@ -406,6 +415,32 @@ public class VanishManager {
                     this.destroyEntity(player, player2);
                     this.undestroyEntity(player, player2);
                 }
+            }
+        }
+    }
+
+    private void safelist201Mod(String name, Integer diff) {
+        synchronized (this.syncSafeList201) {
+            if (this.safeList201.containsKey(name)) {
+                diff += this.safeList201.get(name);
+            }
+            if (diff == 0) {
+                this.safeList201.remove(name);
+            } else {
+                this.safeList201.put(name, diff);
+            }
+        }
+    }
+
+    private void safelist29Mod(Integer eid, Integer diff) {
+        synchronized (this.syncSafeList29) {
+            if (this.safeList29.containsKey(eid)) {
+                diff += this.safeList29.get(eid);
+            }
+            if (diff == 0) {
+                this.safeList29.remove(eid);
+            } else {
+                this.safeList29.put(eid, diff);
             }
         }
     }

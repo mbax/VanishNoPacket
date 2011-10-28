@@ -25,6 +25,10 @@ public class VanishPerms {
         return VanishPerms.getUser(player).getNoFollow();
     }
 
+    public static boolean canNotInteract(Player player) {
+        return VanishPerms.getUser(player).getNoInteract();
+    }
+
     public static boolean canNotPickUp(Player player) {
         return VanishPerms.getUser(player).getNoPickup();
     }
@@ -61,6 +65,10 @@ public class VanishPerms {
         return player.hasPermission("vanish.toggle.nopickup");
     }
 
+    public static boolean canToggleNoInteract(Player player) {
+        return player.hasPermission("vanish.toggle.nointeract");
+    }
+
     public static boolean canToggleSee(Player player) {
         return player.hasPermission("vanish.toggle.see");
     }
@@ -83,6 +91,10 @@ public class VanishPerms {
 
     public static boolean silentQuit(Player player) {
         return player.hasPermission("vanish.silentquit");
+    }
+
+    public static boolean toggleNoInteract(Player player) {
+        return VanishPerms.getUser(player).toggleNoInteract();
     }
 
     public static boolean toggleDamageIn(Player player) {

@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.6.9.9
+version: 1.7alpha
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap,JSONAPI]
@@ -10,7 +10,7 @@ commands:
   vanish:
     description: poof
     usage: /vanish
-    aliases: [v,np,nf]
+    aliases: [v,np,nf,ni]
 permissions:
   vanish.vanish:
     default: op
@@ -32,6 +32,9 @@ permissions:
   vanish.notrample:
     default: false
     description: If true player does not trample crops
+  vanish.nointeract:
+    default: false
+    description: If true player cannot press buttons, open doors, activate pressure pads etc
   vanish.preventincomingdamage:
     default: false
     description: Prevent being harmed by things around you while vanished
@@ -59,6 +62,9 @@ permissions:
   vanish.toggle.nofollow:
     default: false
     description: Toggle mob aggro
+  vanish.toggle.nointeract:
+    default: false
+    description: Toggle interaction ability (doors, pressurepads, buttons, etc)
   vanish.toggle.damageout:
     default: false
     description: Toggle outgoing damage
@@ -79,6 +85,7 @@ permissions:
       vanish.toggle.nopickup: true
       vanish.toggle.nofollow: true
       vanish.toggle.damage: true
+      vanish.toggle.nointeract: true
   vanish.fakeannounce:
     default: false
     description: Fake joining/leaving
@@ -109,6 +116,7 @@ permissions:
       vanish.nopickup: true
       vanish.nofollow: true
       vanish.notrample: true
+      vanish.nointeract: true
       vanish.fakeannounce: true
       vanish.preventdamage: true
       vanish.statusupdates: true

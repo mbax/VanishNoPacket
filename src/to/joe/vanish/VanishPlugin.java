@@ -35,12 +35,12 @@ public class VanishPlugin extends JavaPlugin {
             URL url;
             URLConnection connection;
             try {
-                String address="http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + VanishPlugin.this.selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort();
+                final String address = "http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + this.plugin.selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort();
                 url = new URL(address.replace(" ", "%20"));
                 connection = url.openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);
-                connection.setRequestProperty("User-agent", "VanishNoPacket " + VanishPlugin.this.selfDescription.getVersion());
+                connection.setRequestProperty("User-agent", "VanishNoPacket " + this.plugin.selfDescription.getVersion());
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String version;
                 if ((version = bufferedReader.readLine()) != null) {
@@ -149,13 +149,17 @@ public class VanishPlugin extends JavaPlugin {
             firstTime = true;
         }
         //final FileConfiguration config=this.getConfig();
-        final Configuration config=this.getConfiguration();
+        final Configuration config = this.getConfiguration();
         //config.options().copyDefaults(true);
         this.enableColoration = config.getBoolean("enableColoration", false);
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
-        this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable(){ public void run() {jsonapiHook.onPluginEnable(config.getBoolean("hooks.JSONAPI", false)); }}, 80);
-        
+        this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+            @Override
+            public void run() {
+                VanishPlugin.this.jsonapiHook.onPluginEnable(config.getBoolean("hooks.JSONAPI", false));
+            }
+        }, 80);
 
         this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
         boolean updateCheck = config.getBoolean("updates.check", true);
@@ -182,7 +186,7 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, this.listenPlayerCommandPreProcess, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.listenPlayer, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.listenPlayer, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
@@ -190,13 +194,14 @@ public class VanishPlugin extends JavaPlugin {
 
         this.log("Version " + this.selfDescription.getVersion() + " enabled.");
     }
-    
+
     /**
      * Ah the things I do for APIs
-     * @param player name
+     * 
+     * @param player
      * @return if player is vanished
      */
-    public boolean isVanished(String player){
+    public boolean isVanished(String player) {
         return this.getManager().isVanished(player);
     }
 }

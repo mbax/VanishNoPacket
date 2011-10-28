@@ -1,7 +1,6 @@
 package to.joe.vanish.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,6 +26,9 @@ public class ListenPlayer extends PlayerListener {
                 event.setCancelled(true);
             }
         }
+        if (VanishPerms.canNotInteract(event.getPlayer())) {
+            event.setCancelled(true);
+        }
     }
 
     @Override
@@ -39,10 +41,9 @@ public class ListenPlayer extends PlayerListener {
     @Override
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
-        this.plugin.getManager().safelist29Mod(((CraftPlayer) player).getEntityId(), this.plugin.getServer().getOnlinePlayers().length);
-        this.plugin.getManager().removeVanished(player);
+        this.plugin.getManager().playerQuit(player);
         this.plugin.hooksUnvanish(player);
-        this.plugin.getManager().getAnnounceManipulator().delayedAnnounceKill(player.getName());
+        this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().wasPlayerMarkedOnline(player.getName()) || VanishPerms.silentQuit(player)) {
             event.setQuitMessage(null);
         }

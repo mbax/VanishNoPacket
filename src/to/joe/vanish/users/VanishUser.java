@@ -8,6 +8,7 @@ public class VanishUser {
     private boolean noFollow;
     private boolean preventIncomingDamage;
     private boolean preventOutgoingDamage;
+    private boolean noInteract;
 
     public VanishUser(Player player) {
         this.seeAll = player.hasPermission("vanish.see");
@@ -15,10 +16,15 @@ public class VanishUser {
         this.noFollow = player.hasPermission("vanish.nofollow");
         this.preventIncomingDamage = player.hasPermission("vanish.preventincomingdamage");
         this.preventOutgoingDamage = player.hasPermission("vanish.preventoutgoingdamage");
+        this.noInteract = player.hasPermission("vanish.nointeract");
     }
 
     public boolean getNoFollow() {
         return this.noFollow;
+    }
+
+    public boolean getNoInteract() {
+        return this.noInteract;
     }
 
     public boolean getNoPickup() {
@@ -45,6 +51,11 @@ public class VanishUser {
     public boolean toggleNoFollow() {
         this.noFollow = !this.noFollow;
         return this.noFollow;
+    }
+
+    public boolean toggleNoInteract() {
+        this.noInteract = !this.noInteract;
+        return this.noInteract;
     }
 
     public boolean toggleNoPickup() {
