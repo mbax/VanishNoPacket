@@ -28,6 +28,7 @@ public class VanishCommand implements CommandExecutor {
             }
             if (label.equals("ni")) {
                 this.toggle(player, "nointeract");
+                return true;
             }
             if ((args.length == 0)) {
                 if (VanishPerms.canVanish((Player) sender)) {

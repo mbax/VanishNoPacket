@@ -21,7 +21,7 @@ public class ListenPlayer extends PlayerListener {
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (VanishPerms.canNotInteract(event.getPlayer())) {
+        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
