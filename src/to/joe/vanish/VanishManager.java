@@ -15,24 +15,7 @@ import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
 
-import to.joe.vanish.sniffers.Sniffer17;
-import to.joe.vanish.sniffers.Sniffer18ArmAnimation;
-import to.joe.vanish.sniffers.Sniffer19EntityAction;
-import to.joe.vanish.sniffers.Sniffer201PlayerInfo;
-import to.joe.vanish.sniffers.Sniffer20NamedEntitySpawn;
-import to.joe.vanish.sniffers.Sniffer28EntityVelocity;
-import to.joe.vanish.sniffers.Sniffer29DestroyEntity;
-import to.joe.vanish.sniffers.Sniffer30Entity;
-import to.joe.vanish.sniffers.Sniffer31RelEntityMove;
-import to.joe.vanish.sniffers.Sniffer32EntityLook;
-import to.joe.vanish.sniffers.Sniffer33RelEntityMoveLook;
-import to.joe.vanish.sniffers.Sniffer34EntityTeleport;
-import to.joe.vanish.sniffers.Sniffer38EntityStatus;
-import to.joe.vanish.sniffers.Sniffer39AttachEntity;
-import to.joe.vanish.sniffers.Sniffer40EntityMetadata;
-import to.joe.vanish.sniffers.Sniffer41MobEffect;
-import to.joe.vanish.sniffers.Sniffer42RemoveMobEffect;
-import to.joe.vanish.sniffers.Sniffer5EntityEquipment;
+import to.joe.vanish.sniffers.*;
 
 /**
  * It's the vanishing manager!

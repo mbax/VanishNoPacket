@@ -21,13 +21,14 @@ public class ListenPlayer extends PlayerListener {
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (VanishPerms.canNotInteract(event.getPlayer())) {
+            event.setCancelled(true);
+            return;
+        }
         if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock().getType() == Material.SOIL)) {
             if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotTrample(event.getPlayer())) {
                 event.setCancelled(true);
             }
-        }
-        if (VanishPerms.canNotInteract(event.getPlayer())) {
-            event.setCancelled(true);
         }
     }
 

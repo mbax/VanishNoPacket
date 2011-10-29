@@ -2,7 +2,8 @@ package to.joe.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerListener;
 
 import to.joe.vanish.VanishPerms;
 import to.joe.vanish.VanishPlugin;

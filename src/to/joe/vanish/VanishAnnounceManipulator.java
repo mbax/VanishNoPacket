@@ -54,6 +54,7 @@ public class VanishAnnounceManipulator {
     /**
      * Call a fake join announce for the player.
      * Only fires if the server previously was saying they were offline
+     * 
      * @param player
      */
     public void fakeJoin(Player player) {
@@ -68,6 +69,7 @@ public class VanishAnnounceManipulator {
     /**
      * Call a fake quit for the player.
      * Only fires if the server previously was saying they were online
+     * 
      * @param player
      */
     public void fakeQuit(Player player) {
@@ -79,9 +81,11 @@ public class VanishAnnounceManipulator {
         this.playerOnlineStatus.put(player.getName(), false);
     }
 
-    /** Called when a player's vanish status has been toggled
+    /**
+     * Called when a player's vanish status has been toggled
      * If the player has a queued up join announce from a silentjoin,
      * it will fire at this time.
+     * 
      * @param player
      */
     public void vanishToggled(Player player) {
@@ -94,7 +98,9 @@ public class VanishAnnounceManipulator {
 
     /**
      * Called when a player quits
-     * @param player Who just quit?
+     * 
+     * @param player
+     *            Who just quit?
      * @return the former fake online status of the player
      */
     public boolean wasPlayerMarkedOnline(String player) {
@@ -106,6 +112,7 @@ public class VanishAnnounceManipulator {
 
     /**
      * Remove a player's delayed announce
+     * 
      * @param player
      */
     public void dropDelayedAnnounce(String player) {
