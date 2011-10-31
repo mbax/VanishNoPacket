@@ -125,7 +125,7 @@ public class VanishCommand implements CommandExecutor {
         } else if (toggle.equalsIgnoreCase("damage-out") && VanishPerms.canToggleDamageOut(player)) {
             status = VanishPerms.toggleDamageOut(player);
             message.append("block outgoing damage");
-        } else if (toggle.equalsIgnoreCase("nointeract") && VanishPerms.canToggleDamageOut(player)) {
+        } else if (toggle.equalsIgnoreCase("nointeract") && VanishPerms.canToggleNoInteract(player)) {
             status = VanishPerms.toggleNoInteract(player);
             message.append("no interact");
         }
