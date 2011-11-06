@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.7.fix.srsly
+version: 1.8alpha
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap,JSONAPI]
