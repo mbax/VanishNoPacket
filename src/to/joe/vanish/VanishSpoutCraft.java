@@ -25,6 +25,7 @@ public class VanishSpoutCraft {
     private boolean enabled;
 
     private final VanishPlugin plugin;
+    
     private final HashMap<String, String> cloaks;
     private final HashMap<String, String> skins;
 
@@ -40,33 +41,6 @@ public class VanishSpoutCraft {
         this.titles = new HashMap<String, String>();
     }
 
-    private PlayerData initPlayer(Player player) {
-        String skin = null;
-        String cloak = null;
-        String title = null;
-        for (final String skinGroup : new HashSet<String>(this.skins.keySet())) {
-            if (player.hasPermission("vanish.skingroup." + skinGroup)) {
-                skin = this.skins.get(skinGroup);
-                break;
-            }
-        }
-        for (final String cloakGroup : new HashSet<String>(this.cloaks.keySet())) {
-            if (player.hasPermission("vanish.cloakgroup." + cloakGroup)) {
-                cloak = this.cloaks.get(cloakGroup);
-                break;
-            }
-        }
-        for (final String titleGroup : new HashSet<String>(this.titles.keySet())) {
-            if (player.hasPermission("vanish.titlegroup." + titleGroup)) {
-                title = this.titles.get(titleGroup).replace("%n", player.getName());
-                break;
-            }
-        }
-        final PlayerData pd = new PlayerData(skin, cloak, title);
-        this.playerData.put(player.getName(), pd);
-        return pd;
-    }
-
     public void onPluginEnable(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
@@ -74,7 +48,7 @@ public class VanishSpoutCraft {
         }
     }
 
-    public void playerSpout(SpoutPlayer newPlayer) {
+    public void playerHasSpout(SpoutPlayer newPlayer) {
         if (!this.enabled || !VanishPerms.canSeeAll(newPlayer)) {
             return;
         }
@@ -134,12 +108,10 @@ public class VanishSpoutCraft {
             config.setProperty("cloaks.moderator", "http://s3.amazonaws.com/MinecraftCloaks/jeb_.png");
             config.setProperty("titles.vanished", "&&b%n%rVanished");
             config.save();
-            System.out.println("Found nothing");
         }
         config.load();
         for (final String skinGroup : config.getKeys("skins")) {
             this.skins.put(skinGroup, config.getString("skins." + skinGroup));
-            System.out.println(skinGroup);
         }
         for (final String cloakGroup : config.getKeys("cloaks")) {
             this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
@@ -149,8 +121,36 @@ public class VanishSpoutCraft {
         }
     }
 
+    private PlayerData initPlayer(Player player) {
+        String skin = null;
+        String cloak = null;
+        String title = null;
+        for (final String skinGroup : new HashSet<String>(this.skins.keySet())) {
+            if (player.hasPermission("vanish.skingroup." + skinGroup)) {
+                skin = this.skins.get(skinGroup);
+                break;
+            }
+        }
+        for (final String cloakGroup : new HashSet<String>(this.cloaks.keySet())) {
+            if (player.hasPermission("vanish.cloakgroup." + cloakGroup)) {
+                cloak = this.cloaks.get(cloakGroup);
+                break;
+            }
+        }
+        for (final String titleGroup : new HashSet<String>(this.titles.keySet())) {
+            if (player.hasPermission("vanish.titlegroup." + titleGroup)) {
+                title = this.titles.get(titleGroup).replace("%n", player.getName());
+                break;
+            }
+        }
+        final PlayerData pData = new PlayerData(skin, cloak, title);
+        this.playerData.put(player.getName(), pData);
+        return pData;
+    }
+
     /**
      * For player target, update spout vanishness with data.
+     * 
      * @param vanished
      * @param data
      * @param target

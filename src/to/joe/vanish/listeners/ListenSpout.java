@@ -15,6 +15,6 @@ public class ListenSpout extends SpoutListener{
     
     @Override
     public void onSpoutCraftEnable(SpoutCraftEnableEvent event){
-        this.plugin.spoutCraft.playerSpout(event.getPlayer());
+        this.plugin.spoutCraft.playerHasSpout(event.getPlayer());
     }
 }
