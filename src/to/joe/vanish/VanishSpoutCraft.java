@@ -38,10 +38,9 @@ public class VanishSpoutCraft {
         this.cloaks = new HashMap<String, String>();
         this.skins = new HashMap<String, String>();
         this.titles = new HashMap<String, String>();
-
     }
 
-    public PlayerData initPlayer(Player player) {
+    private PlayerData initPlayer(Player player) {
         String skin = null;
         String cloak = null;
         String title = null;
@@ -76,7 +75,7 @@ public class VanishSpoutCraft {
     }
 
     public void playerSpout(SpoutPlayer newPlayer) {
-        if (!this.enabled) {
+        if (!this.enabled || !VanishPerms.canSeeAll(newPlayer)) {
             return;
         }
         final SpoutPlayer sPlayer = SpoutManager.getPlayer(newPlayer);
@@ -115,10 +114,7 @@ public class VanishSpoutCraft {
         if (data == null) {
             data = this.initPlayer(vanishing);
         }
-        final boolean hasSkin = data.skin != null;
-        final boolean hasCloak = data.cloak != null;
-        final boolean hasTitle = data.title != null;
-        if (!hasSkin && !hasCloak && !hasTitle) {
+        if (data.skin != null && data.cloak != null && data.title != null) {
             return;
         }
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
@@ -153,6 +149,12 @@ public class VanishSpoutCraft {
         }
     }
 
+    /**
+     * For player target, update spout vanishness with data.
+     * @param vanished
+     * @param data
+     * @param target
+     */
     private void playerUpdate(Player vanished, PlayerData data, SpoutPlayer target) {
         if ((target != null) && target.hasPermission("vanish.see") && target.isSpoutCraftEnabled()) {
             if (data.skin != null) {
