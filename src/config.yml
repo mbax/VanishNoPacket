@@ -1,0 +1,15 @@
+fakeannounce:
+    automaticforsilentjoin: false
+    join: '%p joined the game.'
+    quit: '%p left the game.'
+hooks:
+    essentials: false
+    dynmap: false
+    JSONAPI: false
+enableColoration: false
+spoutcraft:
+    enable: false
+updates:
+    check: true
+permtest:
+    enable: false

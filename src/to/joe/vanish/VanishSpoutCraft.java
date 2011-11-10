@@ -1,15 +1,17 @@
 package to.joe.vanish;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.logging.Level;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.util.config.Configuration;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
-@SuppressWarnings("deprecation")
 public class VanishSpoutCraft {
 
     private class PlayerData {
@@ -25,7 +27,7 @@ public class VanishSpoutCraft {
     private boolean enabled;
 
     private final VanishPlugin plugin;
-    
+
     private final HashMap<String, String> cloaks;
     private final HashMap<String, String> skins;
 
@@ -99,24 +101,21 @@ public class VanishSpoutCraft {
     private void init() {
         this.playerData = new HashMap<String, PlayerData>();
         final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
-        final boolean existed = confFile.exists();
-        final Configuration config = new Configuration(confFile);
-        if (!existed) {
-            config.setProperty("skins.admin", "http://s3.amazonaws.com/MinecraftSkins/Notch.png");
-            config.setProperty("skins.moderator", "http://s3.amazonaws.com/MinecraftSkins/jeb_.png");
-            config.setProperty("cloaks.admin", "http://s3.amazonaws.com/MinecraftCloaks/Notch.png");
-            config.setProperty("cloaks.moderator", "http://s3.amazonaws.com/MinecraftCloaks/jeb_.png");
-            config.setProperty("titles.vanished", "&&b%n%rVanished");
-            config.save();
+        final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
+        config.options().copyDefaults(true);
+        config.setDefaults(YamlConfiguration.loadConfiguration(plugin.getResource("spoutcraft.yml")));
+        try {
+            config.save(confFile);
+        } catch (IOException e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE, "Could not save spoutcraft.yml", e);
         }
-        config.load();
-        for (final String skinGroup : config.getKeys("skins")) {
+        for (final String skinGroup : config.getConfigurationSection("skins").getKeys(false)) {
             this.skins.put(skinGroup, config.getString("skins." + skinGroup));
         }
-        for (final String cloakGroup : config.getKeys("cloaks")) {
+        for (final String cloakGroup : config.getConfigurationSection("cloaks").getKeys(false)) {
             this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
         }
-        for (final String titleGroup : config.getKeys("titles")) {
+        for (final String titleGroup : config.getConfigurationSection("titles").getKeys(false)) {
             this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", "§"));
         }
     }

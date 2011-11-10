@@ -7,19 +7,18 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
 import to.joe.vanish.hooks.JSONAPIHook;
 import to.joe.vanish.listeners.*;
 
-@SuppressWarnings("deprecation")
 public class VanishPlugin extends JavaPlugin {
 
     private class UpdateCheck implements Runnable {
@@ -151,9 +150,8 @@ public class VanishPlugin extends JavaPlugin {
         if (!check.exists()) {
             firstTime = true;
         }
-        //final FileConfiguration config=this.getConfig();
-        final Configuration config = this.getConfiguration();
-        //config.options().copyDefaults(true);
+        final FileConfiguration config=this.getConfig();
+        config.options().copyDefaults(true);
 
         this.enableColoration = config.getBoolean("enableColoration", false);
 
@@ -170,17 +168,6 @@ public class VanishPlugin extends JavaPlugin {
         
         this.spoutCraft.onPluginEnable(config.getBoolean("spoutcraft.enable",false));
         
-        this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable(){
-           @Override
-           public void run() {
-               if(getServer().getPluginManager().isPluginEnabled("PermissionsEx")){
-                   log("You are running PermissionsEx. This install is unsupported.");
-                   log("PermissionsEx has a history of intentionally breaking plugins.");
-                   log("You are advised to use another permissions manager.");
-                   log("Alternatives: bPermissions, PermissionsBukkit");
-               }
-           }}, 90);
-
         this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
 
         boolean updateCheck = config.getBoolean("updates.check", true);
@@ -200,8 +187,7 @@ public class VanishPlugin extends JavaPlugin {
 
         this.listenPlayerCommandPreProcess.setEnabled(config.getBoolean("permtest.enable", false));
 
-        config.save();
-        //this.saveConfig();
+        this.saveConfig();
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 
