@@ -34,7 +34,7 @@ permissions:
     description: If true player does not trample crops
   vanish.nointeract:
     default: false
-    description: If true player cannot press buttons, open doors, activate pressure pads etc
+    description: If true player cannot press buttons, break or place blocks, open doors, activate pressure pads etc
   vanish.preventincomingdamage:
     default: false
     description: Prevent being harmed by things around you while vanished
@@ -64,7 +64,7 @@ permissions:
     description: Toggle mob aggro
   vanish.toggle.nointeract:
     default: false
-    description: Toggle interaction ability (doors, pressurepads, buttons, etc)
+    description: Toggle interaction ability (doors, pressurepads, buttons, breaking or placing blocks, etc)
   vanish.toggle.damageout:
     default: false
     description: Toggle outgoing damage
