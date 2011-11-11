@@ -13,6 +13,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
@@ -60,50 +61,81 @@ public class VanishPlugin extends JavaPlugin {
         }
 
     }
-
-    public String latestVersion = null;
-    public boolean versionDiff = false;
+    
+    private String latestVersion = null;
+    
+    private boolean versionDiff = false;
 
     private final VanishManager manager = new VanishManager(this);
-
     private final ListenEntity listenEntity = new ListenEntity(this);
+
     private final ListenPlayer listenPlayer = new ListenPlayer(this);
+
     private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
     private final ListenPlayerCommandPreProcess listenPlayerCommandPreProcess = new ListenPlayerCommandPreProcess(this);
     private final ListenSpout listenSpout= new ListenSpout(this);
-
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
+
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
+    private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
+    private PluginDescriptionFile selfDescription;
     
-    public final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
-
-    public PluginDescriptionFile selfDescription;
-
     private Logger log;
 
     private boolean enableColoration;
 
+    /**
+     * @return whether or not the hacky packet user coloration is enabled
+     */
     public boolean colorationEnabled() {
         return this.enableColoration;
     }
+    
+    /**
+     * @return version of VanishNoPacket in use
+     */
+    public String getCurrentVersion(){
+        return this.selfDescription.getVersion();
+    }
+    
+    /** Called when a player's spoutcraft client authenticates
+     * @param player
+     */
+    public void playerHasSpout(SpoutPlayer player){
+        this.spoutCraft.playerHasSpout(player);
+    }
 
     /**
-     * Please, sir, can I have some more?
+     * Will show this version, if update checks are disabled
+     * @return The latest found version of VanishNoPacket
+     */
+    public String getLatestVersion(){
+        return this.latestVersion;
+    }
+
+    /**
      * 
-     * @return the VanishManager. Duh.
+     * @return the VanishManager
      */
     public VanishManager getManager() {
         return this.manager;
     }
 
+    /**
+     * 
+     * @param player The un-vanishing user
+     */
     public void hooksUnvanish(Player player) {
         this.essentialsHook.unvanish(player);
         this.dynmapHook.unvanish(player);
         this.spoutCraft.unvanish(player);
     }
 
+    /**
+     * @param player The vanishing player
+     */
     public void hooksVanish(Player player) {
         this.essentialsHook.vanish(player);
         this.dynmapHook.vanish(player);
@@ -111,18 +143,36 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Tag that log!
+     * Ah the things I do for APIs
      * 
+     * @param player
+     * @return if player is vanished
+     */
+    public boolean isVanished(String player) {
+        return this.getManager().isVanished(player);
+    }
+
+    /**
+     * Logs at level INFO prefixed with [VANISH]
      * @param message
      */
     public void log(String message) {
         this.log.info("[VANISH] " + message);
     }
 
+    /**
+     * Send a message to all players with vanish.statusupdates
+     * @param message
+     */
     public void messageUpdate(String message) {
         this.messageUpdate(message, null);
     }
 
+    /**
+     * Send a message to all players with vanish.statusupdates but one
+     * @param message
+     * @param avoid Player to not send the message to
+     */
     public void messageUpdate(String message, Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
             if ((player != null) && !player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
@@ -205,12 +255,10 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Ah the things I do for APIs
-     * 
-     * @param player
-     * @return if player is vanished
+     * Will always be false if update checks are disabled
+     * @return whether or not there's a new version available
      */
-    public boolean isVanished(String player) {
-        return this.getManager().isVanished(player);
+    public boolean versionDifference(){
+        return this.versionDiff;
     }
 }

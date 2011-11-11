@@ -27,8 +27,8 @@ public class ListenPlayerJoinLate extends PlayerListener {
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined invisibly." + add);
             this.plugin.messageUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined vanished");
         }
-        if (VanishPerms.canReceiveAdminAlerts(event.getPlayer()) && this.plugin.versionDiff) {
-            event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] This is version " + ChatColor.DARK_AQUA + this.plugin.selfDescription.getVersion() + ChatColor.AQUA + ", latest is " + ChatColor.DARK_AQUA + this.plugin.latestVersion);
+        if (VanishPerms.canReceiveAdminAlerts(event.getPlayer()) && this.plugin.versionDifference()) {
+            event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] This is version " + ChatColor.DARK_AQUA + this.plugin.getCurrentVersion() + ChatColor.AQUA + ", latest is " + ChatColor.DARK_AQUA + this.plugin.getLatestVersion());
             event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] Check " + ChatColor.DARK_AQUA + "http://dev.bukkit.org/server-mods/vanish/");
         }
     }
