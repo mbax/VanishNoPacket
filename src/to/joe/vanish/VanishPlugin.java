@@ -194,7 +194,7 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        
+
         this.log = Logger.getLogger("Minecraft");
         this.selfDescription = this.getDescription();
 

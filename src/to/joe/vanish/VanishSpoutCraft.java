@@ -45,7 +45,7 @@ public class VanishSpoutCraft {
     public VanishSpoutCraft(VanishPlugin plugin) {
         this.plugin = plugin;
         this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20);
-        this.box = (GenericGradient) new GenericGradient().setTopColor(boxColor).setBottomColor(boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
+        this.box = (GenericGradient) new GenericGradient().setTopColor(this.boxColor).setBottomColor(this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
         this.cloaks = new HashMap<String, String>();
         this.skins = new HashMap<String, String>();
         this.titles = new HashMap<String, String>();
@@ -119,8 +119,8 @@ public class VanishSpoutCraft {
         final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
         final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
         config.options().copyDefaults(true);
-        InputStream stream=this.plugin.getResource("spoutcraft.yml");
-        if(stream==null){
+        final InputStream stream = this.plugin.getResource("spoutcraft.yml");
+        if (stream == null) {
             this.plugin.log("Defaults for spoutcraft.yml not loaded");
             this.plugin.log("The /reload command is not fully supported");
             return;
@@ -191,15 +191,14 @@ public class VanishSpoutCraft {
     }
 
     public void disable() {
-        if(!this.enabled){
+        if (!this.enabled) {
             return;
         }
-        if(this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")){
-        for(SpoutPlayer player:SpoutManager.getOnlinePlayers()){
+        if (this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
+            for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
                 player.getMainScreen().removeWidgets(this.plugin);
             }
-        }
-        else {
+        } else {
             this.plugin.log("Reloads are not supported by spout.");
             this.plugin.log("This reload was not clean, there may be spare widgets on people's screens");
         }
