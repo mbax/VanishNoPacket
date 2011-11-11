@@ -52,6 +52,17 @@ public class VanishAnnounceManipulator {
     }
 
     /**
+     * Remove a player's delayed announce
+     * 
+     * @param player
+     */
+    public void dropDelayedAnnounce(String player) {
+        synchronized (this.syncDelayedAnnouncePlayerList) {
+            this.delayedAnnouncePlayerList.remove(player);
+        }
+    }
+
+    /**
      * Call a fake join announce for the player.
      * Only fires if the server previously was saying they were offline
      * 
@@ -108,17 +119,6 @@ public class VanishAnnounceManipulator {
             return this.playerOnlineStatus.remove(player);
         }
         return true;
-    }
-
-    /**
-     * Remove a player's delayed announce
-     * 
-     * @param player
-     */
-    public void dropDelayedAnnounce(String player) {
-        synchronized (this.syncDelayedAnnouncePlayerList) {
-            this.delayedAnnouncePlayerList.remove(player);
-        }
     }
 
     private String injectPlayerInformation(String message, Player player) {

@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -61,9 +62,9 @@ public class VanishPlugin extends JavaPlugin {
         }
 
     }
-    
+
     private String latestVersion = null;
-    
+
     private boolean versionDiff = false;
 
     private final VanishManager manager = new VanishManager(this);
@@ -74,14 +75,14 @@ public class VanishPlugin extends JavaPlugin {
     private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
     private final ListenPlayerCommandPreProcess listenPlayerCommandPreProcess = new ListenPlayerCommandPreProcess(this);
-    private final ListenSpout listenSpout= new ListenSpout(this);
+    private final ListenSpout listenSpout = new ListenSpout(this);
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
 
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
     private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
     private PluginDescriptionFile selfDescription;
-    
+
     private Logger log;
 
     private boolean enableColoration;
@@ -92,26 +93,20 @@ public class VanishPlugin extends JavaPlugin {
     public boolean colorationEnabled() {
         return this.enableColoration;
     }
-    
+
     /**
      * @return version of VanishNoPacket in use
      */
-    public String getCurrentVersion(){
+    public String getCurrentVersion() {
         return this.selfDescription.getVersion();
-    }
-    
-    /** Called when a player's spoutcraft client authenticates
-     * @param player
-     */
-    public void playerHasSpout(SpoutPlayer player){
-        this.spoutCraft.playerHasSpout(player);
     }
 
     /**
      * Will show this version, if update checks are disabled
+     * 
      * @return The latest found version of VanishNoPacket
      */
-    public String getLatestVersion(){
+    public String getLatestVersion() {
         return this.latestVersion;
     }
 
@@ -125,7 +120,8 @@ public class VanishPlugin extends JavaPlugin {
 
     /**
      * 
-     * @param player The un-vanishing user
+     * @param player
+     *            The un-vanishing user
      */
     public void hooksUnvanish(Player player) {
         this.essentialsHook.unvanish(player);
@@ -134,7 +130,8 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * @param player The vanishing player
+     * @param player
+     *            The vanishing player
      */
     public void hooksVanish(Player player) {
         this.essentialsHook.vanish(player);
@@ -154,6 +151,7 @@ public class VanishPlugin extends JavaPlugin {
 
     /**
      * Logs at level INFO prefixed with [VANISH]
+     * 
      * @param message
      */
     public void log(String message) {
@@ -162,6 +160,7 @@ public class VanishPlugin extends JavaPlugin {
 
     /**
      * Send a message to all players with vanish.statusupdates
+     * 
      * @param message
      */
     public void messageUpdate(String message) {
@@ -170,8 +169,10 @@ public class VanishPlugin extends JavaPlugin {
 
     /**
      * Send a message to all players with vanish.statusupdates but one
+     * 
      * @param message
-     * @param avoid Player to not send the message to
+     * @param avoid
+     *            Player to not send the message to
      */
     public void messageUpdate(String message, Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
@@ -183,6 +184,7 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.spoutCraft.disable();
         this.essentialsHook.onPluginDisable();
         this.dynmapHook.onPluginDisable();
         this.manager.disable();
@@ -192,6 +194,7 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        
         this.log = Logger.getLogger("Minecraft");
         this.selfDescription = this.getDescription();
 
@@ -200,7 +203,7 @@ public class VanishPlugin extends JavaPlugin {
         if (!check.exists()) {
             firstTime = true;
         }
-        final FileConfiguration config=this.getConfig();
+        final FileConfiguration config = this.getConfig();
         config.options().copyDefaults(true);
 
         this.enableColoration = config.getBoolean("enableColoration", false);
@@ -209,15 +212,21 @@ public class VanishPlugin extends JavaPlugin {
 
         this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
 
+        //Post-load stuff
         this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
                 VanishPlugin.this.jsonapiHook.onPluginEnable(config.getBoolean("hooks.JSONAPI", false));
+                for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
+                    if ((player != null) && VanishPerms.canVanish(player)) {
+                        player.sendMessage(ChatColor.DARK_AQUA + "[VANISH] You have been forced visible by a reload.");
+                    }
+                }
             }
         }, 80);
-        
-        this.spoutCraft.onPluginEnable(config.getBoolean("spoutcraft.enable",false));
-        
+
+        this.spoutCraft.onPluginEnable(config.getBoolean("spoutcraft.enable", false));
+
         this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
 
         boolean updateCheck = config.getBoolean("updates.check", true);
@@ -255,10 +264,20 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
+     * Called when a player's spoutcraft client authenticates
+     * 
+     * @param player
+     */
+    public void playerHasSpout(SpoutPlayer player) {
+        this.spoutCraft.playerHasSpout(player);
+    }
+
+    /**
      * Will always be false if update checks are disabled
+     * 
      * @return whether or not there's a new version available
      */
-    public boolean versionDifference(){
+    public boolean versionDifference() {
         return this.versionDiff;
     }
 }

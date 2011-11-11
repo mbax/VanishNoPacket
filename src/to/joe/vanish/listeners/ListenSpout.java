@@ -5,16 +5,16 @@ import org.getspout.spoutapi.event.spout.SpoutListener;
 
 import to.joe.vanish.VanishPlugin;
 
-public class ListenSpout extends SpoutListener{
-    
-    private VanishPlugin plugin;
-    
-    public ListenSpout(VanishPlugin plugin){
-        this.plugin=plugin;
+public class ListenSpout extends SpoutListener {
+
+    private final VanishPlugin plugin;
+
+    public ListenSpout(VanishPlugin plugin) {
+        this.plugin = plugin;
     }
-    
+
     @Override
-    public void onSpoutCraftEnable(SpoutCraftEnableEvent event){
+    public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
         this.plugin.playerHasSpout(event.getPlayer());
     }
 }

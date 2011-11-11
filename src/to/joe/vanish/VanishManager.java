@@ -94,11 +94,6 @@ public class VanishManager {
      * Only call this when disabling the plugin
      */
     public void disable() {
-        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if ((player != null) && VanishPerms.canVanish(player)) {
-                player.sendMessage(ChatColor.DARK_AQUA + "[VANISH] You have been forced visible.");
-            }
-        }
         SpoutManager.getPacketManager().removeListener(5, this.sniffer5);
         SpoutManager.getPacketManager().removeListener(17, this.sniffer17);
         SpoutManager.getPacketManager().removeListener(18, this.sniffer18);

@@ -17,10 +17,6 @@ public class ListenPlayerCommandPreProcess extends PlayerListener {
         this.plugin = instance;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (this.enabled) {
@@ -65,5 +61,9 @@ public class ListenPlayerCommandPreProcess extends PlayerListener {
             }
 
         }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
