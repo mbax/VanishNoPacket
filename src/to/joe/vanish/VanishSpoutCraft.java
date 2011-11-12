@@ -36,7 +36,7 @@ public class VanishSpoutCraft {
 
     private final HashMap<String, String> titles;
 
-    private HashMap<String, PlayerData> playerData;
+    private HashMap<String, PlayerData> playerDataMap;
 
     private final GenericLabel label;
     private final GenericGradient box;
@@ -49,6 +49,17 @@ public class VanishSpoutCraft {
         this.cloaks = new HashMap<String, String>();
         this.skins = new HashMap<String, String>();
         this.titles = new HashMap<String, String>();
+    }
+
+    public void disablePlugin() {
+        if (!this.enabled) {
+            return;
+        }
+        if (this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
+            for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
+                player.getMainScreen().removeWidgets(this.plugin);
+            }
+        }
     }
 
     public void onPluginEnable(boolean enabled) {
@@ -65,7 +76,7 @@ public class VanishSpoutCraft {
         final SpoutPlayer sPlayer = SpoutManager.getPlayer(newPlayer);
         for (final SpoutPlayer p : SpoutManager.getOnlinePlayers()) {
             if (this.plugin.isVanished(p.getName())) {
-                PlayerData data = this.playerData.get(p.getName());
+                PlayerData data = this.playerDataMap.get(p.getName());
                 if (data == null) {
                     data = this.initPlayer(p);
                 }
@@ -102,7 +113,7 @@ public class VanishSpoutCraft {
         if (sPlayer.isSpoutCraftEnabled() && VanishPerms.canSeeSpoutStatus(vanishing)) {
             sPlayer.getMainScreen().attachWidget(this.plugin, this.label).attachWidget(this.plugin, this.box);
         }
-        PlayerData data = this.playerData.get(vanishing.getName());
+        PlayerData data = this.playerDataMap.get(vanishing.getName());
         if (data == null) {
             data = this.initPlayer(vanishing);
         }
@@ -115,14 +126,15 @@ public class VanishSpoutCraft {
     }
 
     private void init() {
-        this.playerData = new HashMap<String, PlayerData>();
+        this.playerDataMap = new HashMap<String, PlayerData>();
         final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
         final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
         config.options().copyDefaults(true);
         final InputStream stream = this.plugin.getResource("spoutcraft.yml");
         if (stream == null) {
             this.plugin.log("Defaults for spoutcraft.yml not loaded");
-            this.plugin.log("The /reload command is not fully supported");
+            this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
+            this.enabled = false;
             return;
         }
         config.setDefaults(YamlConfiguration.loadConfiguration(stream));
@@ -164,9 +176,9 @@ public class VanishSpoutCraft {
                 break;
             }
         }
-        final PlayerData pData = new PlayerData(skin, cloak, title);
-        this.playerData.put(player.getName(), pData);
-        return pData;
+        final PlayerData playerData = new PlayerData(skin, cloak, title);
+        this.playerDataMap.put(player.getName(), playerData);
+        return playerData;
     }
 
     /**
@@ -187,20 +199,6 @@ public class VanishSpoutCraft {
             if (data.title != null) {
                 SpoutManager.getAppearanceManager().setPlayerTitle(target, vanished, data.title);
             }
-        }
-    }
-
-    public void disable() {
-        if (!this.enabled) {
-            return;
-        }
-        if (this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
-            for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
-                player.getMainScreen().removeWidgets(this.plugin);
-            }
-        } else {
-            this.plugin.log("Reloads are not supported by spout.");
-            this.plugin.log("This reload was not clean, there may be spare widgets on people's screens");
         }
     }
 

@@ -184,7 +184,7 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.spoutCraft.disable();
+        this.spoutCraft.disablePlugin();
         this.essentialsHook.onPluginDisable();
         this.dynmapHook.onPluginDisable();
         this.manager.disable();
