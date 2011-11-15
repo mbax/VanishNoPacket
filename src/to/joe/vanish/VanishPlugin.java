@@ -118,6 +118,11 @@ public class VanishPlugin extends JavaPlugin {
         return this.manager;
     }
 
+    public void hooksQuit(Player player) {
+        this.hooksUnvanish(player);
+        this.spoutCraft.playerQuit(player);
+    }
+
     /**
      * 
      * @param player
@@ -223,7 +228,7 @@ public class VanishPlugin extends JavaPlugin {
                     }
                 }
             }
-        }, 80);
+        }, 1);
 
         this.spoutCraft.onPluginEnable(config.getBoolean("spoutcraft.enable", false));
 

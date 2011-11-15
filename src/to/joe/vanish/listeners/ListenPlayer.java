@@ -43,7 +43,7 @@ public class ListenPlayer extends PlayerListener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         this.plugin.getManager().playerQuit(player);
-        this.plugin.hooksUnvanish(player);
+        this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().wasPlayerMarkedOnline(player.getName()) || VanishPerms.silentQuit(player)) {
             event.setQuitMessage(null);

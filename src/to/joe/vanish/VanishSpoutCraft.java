@@ -27,6 +27,26 @@ public class VanishSpoutCraft {
         }
     }
 
+    private class StatusBar {
+        private final GenericLabel label;
+        private final GenericGradient box;
+        SpoutPlayer player;
+
+        public StatusBar(SpoutPlayer player) {
+            this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20);
+            this.box = (GenericGradient) new GenericGradient().setTopColor(VanishSpoutCraft.this.boxColor).setBottomColor(VanishSpoutCraft.this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
+            this.player = player;
+        }
+
+        public void assign() {
+            this.player.getMainScreen().attachWidget(VanishSpoutCraft.this.plugin, this.box).attachWidget(VanishSpoutCraft.this.plugin, this.label);
+        }
+
+        public void remove() {
+            this.player.getMainScreen().removeWidget(this.box).removeWidget(this.label);
+        }
+    }
+
     private boolean enabled;
 
     private final VanishPlugin plugin;
@@ -38,17 +58,16 @@ public class VanishSpoutCraft {
 
     private HashMap<String, PlayerData> playerDataMap;
 
-    private final GenericLabel label;
-    private final GenericGradient box;
     private final Color boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
+
+    private final HashMap<String, StatusBar> bars;
 
     public VanishSpoutCraft(VanishPlugin plugin) {
         this.plugin = plugin;
-        this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20);
-        this.box = (GenericGradient) new GenericGradient().setTopColor(this.boxColor).setBottomColor(this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
         this.cloaks = new HashMap<String, String>();
         this.skins = new HashMap<String, String>();
         this.titles = new HashMap<String, String>();
+        this.bars = new HashMap<String, StatusBar>();
     }
 
     public void disablePlugin() {
@@ -88,14 +107,21 @@ public class VanishSpoutCraft {
         }
     }
 
+    public void playerQuit(Player player) {
+        final String name=player.getName();
+        this.plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, new Runnable(){
+            @Override
+            public void run() {
+                VanishSpoutCraft.this.bars.remove(name);                
+            }
+        }, 1);
+    }
+
     public void unvanish(Player revealing) {
         if (!this.enabled) {
             return;
         }
-        final SpoutPlayer sPlayer = SpoutManager.getPlayer(revealing);
-        if (sPlayer.isSpoutCraftEnabled() && VanishPerms.canSeeSpoutStatus(revealing)) {
-            sPlayer.getMainScreen().removeWidget(this.label).removeWidget(this.box);
-        }
+        this.removeStatusBar(SpoutManager.getPlayer(revealing));
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
             if ((player != null) && player.hasPermission("vanish.see") && player.isSpoutCraftEnabled()) {
                 SpoutManager.getAppearanceManager().resetPlayerSkin(player, revealing);
@@ -109,10 +135,7 @@ public class VanishSpoutCraft {
         if (!this.enabled) {
             return;
         }
-        final SpoutPlayer sPlayer = SpoutManager.getPlayer(vanishing);
-        if (sPlayer.isSpoutCraftEnabled() && VanishPerms.canSeeSpoutStatus(vanishing)) {
-            sPlayer.getMainScreen().attachWidget(this.plugin, this.label).attachWidget(this.plugin, this.box);
-        }
+        this.attachStatusBar(SpoutManager.getPlayer(vanishing));
         PlayerData data = this.playerDataMap.get(vanishing.getName());
         if (data == null) {
             data = this.initPlayer(vanishing);
@@ -123,6 +146,21 @@ public class VanishSpoutCraft {
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
             this.playerUpdate(vanishing, data, player);
         }
+    }
+
+    private void attachStatusBar(SpoutPlayer player) {
+        if (player.isSpoutCraftEnabled() && VanishPerms.canSeeSpoutStatus(player)) {
+            this.getStatusBar(player).assign();
+        }
+    }
+
+    private StatusBar getStatusBar(SpoutPlayer player) {
+        StatusBar bar = this.bars.get(player.getName());
+        if (bar == null) {
+            bar = new StatusBar(player);
+            this.bars.put(player.getName(), bar);
+        }
+        return bar;
     }
 
     private void init() {
@@ -199,6 +237,12 @@ public class VanishSpoutCraft {
             if (data.title != null) {
                 SpoutManager.getAppearanceManager().setPlayerTitle(target, vanished, data.title);
             }
+        }
+    }
+
+    private void removeStatusBar(SpoutPlayer player) {
+        if (player.isSpoutCraftEnabled() && VanishPerms.canSeeSpoutStatus(player)) {
+            this.getStatusBar(player).remove();
         }
     }
 
