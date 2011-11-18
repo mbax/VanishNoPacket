@@ -107,6 +107,9 @@ permissions:
   vanish.hooks.dynmap.alwayshidden:
     default: false
     description: Always hide from dynmap
+  vanish.hooks.essentials.hide:
+    default: false
+    description: Hide user in Essentials
   vanish.spout.status:
     default: false
     description: See a status bar if vanished in spoutcraft
@@ -133,5 +136,6 @@ permissions:
       vanish.silentquit: true
       vanish.toggle.all: true
       vanish.hooks.dynmap.alwayshidden: true
+      anish.hooks.essentials.hide: true
       vanish.permtest.all: true
       vanish.spout.status: true
