@@ -42,9 +42,9 @@ public class EssentialsHook {
     }
 
     public void vanish(Player player) {
-    	if(player.hasPermission("vanish.hooks.essentials.hide")){
+        if(player.hasPermission("vanish.hooks.essentials.hide")){
             this.setHidden(player, true);
-    	}
+        }
     }
 
     private void grabEssentials() {

@@ -136,6 +136,6 @@ permissions:
       vanish.silentquit: true
       vanish.toggle.all: true
       vanish.hooks.dynmap.alwayshidden: true
-      anish.hooks.essentials.hide: true
+      vanish.hooks.essentials.hide: true
       vanish.permtest.all: true
       vanish.spout.status: true
