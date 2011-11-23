@@ -92,14 +92,13 @@ public class VanishSpoutCraft {
         if (!this.enabled || !VanishPerms.canSeeAll(newPlayer)) {
             return;
         }
-        final SpoutPlayer sPlayer = SpoutManager.getPlayer(newPlayer);
         for (final SpoutPlayer p : SpoutManager.getOnlinePlayers()) {
             if (this.plugin.isVanished(p.getName())) {
                 PlayerData data = this.playerDataMap.get(p.getName());
                 if (data == null) {
                     data = this.initPlayer(p);
                 }
-                this.playerUpdate(p, data, sPlayer);
+                this.playerUpdate(p, data, newPlayer);
             }
         }
         if (this.plugin.isVanished(newPlayer.getName())) {
@@ -121,12 +120,13 @@ public class VanishSpoutCraft {
         if (!this.enabled) {
             return;
         }
-        this.removeStatusBar(SpoutManager.getPlayer(revealing));
+        SpoutPlayer revealingPlayer=SpoutManager.getPlayer(revealing);
+        this.removeStatusBar(revealingPlayer);
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
             if ((player != null) && player.hasPermission("vanish.see") && player.isSpoutCraftEnabled()) {
-                SpoutManager.getAppearanceManager().resetPlayerSkin(player, revealing);
-                SpoutManager.getAppearanceManager().resetPlayerCloak(player, revealing);
-                SpoutManager.getAppearanceManager().resetPlayerTitle(player, revealing);
+                revealingPlayer.resetSkinFor(player);
+                revealingPlayer.resetCapeFor(player);
+                revealingPlayer.resetTitleFor(player);
             }
         }
     }
@@ -144,7 +144,7 @@ public class VanishSpoutCraft {
             return;
         }
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
-            this.playerUpdate(vanishing, data, player);
+            this.playerUpdate(SpoutManager.getPlayer(vanishing), data, player);
         }
     }
 
@@ -226,16 +226,16 @@ public class VanishSpoutCraft {
      * @param data
      * @param target
      */
-    private void playerUpdate(Player vanished, PlayerData data, SpoutPlayer target) {
+    private void playerUpdate(SpoutPlayer vanished, PlayerData data, SpoutPlayer target) {
         if ((target != null) && target.hasPermission("vanish.see") && target.isSpoutCraftEnabled()) {
             if (data.skin != null) {
-                SpoutManager.getAppearanceManager().setPlayerSkin(target, vanished, data.skin);
+                vanished.setSkinFor(target, data.skin);
             }
             if (data.cloak != null) {
-                SpoutManager.getAppearanceManager().setPlayerCloak(target, vanished, data.cloak);
+                vanished.setCapeFor(target, data.cloak);
             }
             if (data.title != null) {
-                SpoutManager.getAppearanceManager().setPlayerTitle(target, vanished, data.title);
+                vanished.setTitleFor(target, data.title);
             }
         }
     }
