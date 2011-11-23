@@ -36,13 +36,13 @@ public class EssentialsHook {
     }
 
     public void unvanish(Player player) {
-        if(player.hasPermission("vanish.hooks.essentials.hide")){
+        if (player.hasPermission("vanish.hooks.essentials.hide")) {
             this.setHidden(player, false);
         }
     }
 
     public void vanish(Player player) {
-        if(player.hasPermission("vanish.hooks.essentials.hide")){
+        if (player.hasPermission("vanish.hooks.essentials.hide")) {
             this.setHidden(player, true);
         }
     }

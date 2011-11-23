@@ -107,11 +107,11 @@ public class VanishSpoutCraft {
     }
 
     public void playerQuit(Player player) {
-        final String name=player.getName();
-        this.plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, new Runnable(){
+        final String name = player.getName();
+        this.plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, new Runnable() {
             @Override
             public void run() {
-                VanishSpoutCraft.this.bars.remove(name);                
+                VanishSpoutCraft.this.bars.remove(name);
             }
         }, 1);
     }
@@ -120,7 +120,7 @@ public class VanishSpoutCraft {
         if (!this.enabled) {
             return;
         }
-        SpoutPlayer revealingPlayer=SpoutManager.getPlayer(revealing);
+        final SpoutPlayer revealingPlayer = SpoutManager.getPlayer(revealing);
         this.removeStatusBar(revealingPlayer);
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
             if ((player != null) && player.hasPermission("vanish.see") && player.isSpoutCraftEnabled()) {
