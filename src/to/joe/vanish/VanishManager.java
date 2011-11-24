@@ -31,7 +31,7 @@ public class VanishManager {
             super(eid);
             Field field;
             try {
-                field = Hat.class.getSuperclass().getSuperclass().getDeclaredField("b");
+                field = Hat.class.getSuperclass().getSuperclass().getDeclaredField("a");
             } catch (final NoSuchFieldException e) {
                 return;
             } catch (final SecurityException e) {
