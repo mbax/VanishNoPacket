@@ -59,7 +59,7 @@ public class VanishManager {
 
     private final Object syncSafeList201 = new Object();
     private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
-    private final Sniffer17 sniffer17 = new Sniffer17(this);
+    private final Sniffer17EntityLocationAction sniffer17 = new Sniffer17EntityLocationAction(this);
     private final Sniffer18ArmAnimation sniffer18 = new Sniffer18ArmAnimation(this);
     private final Sniffer19EntityAction sniffer19 = new Sniffer19EntityAction(this);
     private final Sniffer20NamedEntitySpawn sniffer20 = new Sniffer20NamedEntitySpawn(this);

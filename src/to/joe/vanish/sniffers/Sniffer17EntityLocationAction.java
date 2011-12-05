@@ -1,6 +1,6 @@
 package to.joe.vanish.sniffers;
 
-import net.minecraft.server.Packet17;
+import net.minecraft.server.Packet17EntityLocationAction;
 
 import org.bukkit.entity.Player;
 import org.getspout.spout.packet.standard.MCCraftPacket;
@@ -9,17 +9,17 @@ import org.getspout.spoutapi.packet.standard.MCPacket;
 
 import to.joe.vanish.VanishManager;
 
-public class Sniffer17 implements PacketListener {
+public class Sniffer17EntityLocationAction implements PacketListener {
 
     private final VanishManager vanish;
 
-    public Sniffer17(VanishManager vanish) {
+    public Sniffer17EntityLocationAction(VanishManager vanish) {
         this.vanish = vanish;
     }
 
     @Override
     public boolean checkPacket(Player player, MCPacket packet) {
-        return !this.vanish.shouldHide(player, ((Packet17) ((MCCraftPacket) packet).getPacket()).a);
+        return !this.vanish.shouldHide(player, ((Packet17EntityLocationAction) ((MCCraftPacket) packet).getPacket()).a);
     }
 
 }
