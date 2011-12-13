@@ -128,7 +128,7 @@ public class VanishManager {
     public VanishPlugin getPlugin() {
         return this.plugin;
     }
-
+    
     /**
      * Is the player vanished?
      * 
