@@ -77,7 +77,7 @@ public class VanishPlugin extends JavaPlugin {
     private final ListenPlayerCommandPreProcess listenPlayerCommandPreProcess = new ListenPlayerCommandPreProcess(this);
     private final ListenServer listenServer = new ListenServer(this);
     private final ListenSpout listenSpout = new ListenSpout(this);
-    
+
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
 

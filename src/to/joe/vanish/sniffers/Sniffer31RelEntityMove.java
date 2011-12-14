@@ -4,21 +4,18 @@ import net.minecraft.server.Packet31RelEntityMove;
 
 import org.bukkit.entity.Player;
 import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.listener.PacketListener;
 import org.getspout.spoutapi.packet.standard.MCPacket;
 
 import to.joe.vanish.VanishManager;
 
-public class Sniffer31RelEntityMove implements PacketListener {
-
-    private final VanishManager vanish;
+public class Sniffer31RelEntityMove extends Sniffer {
 
     public Sniffer31RelEntityMove(VanishManager vanish) {
-        this.vanish = vanish;
+        super(net.minecraft.server.Packet31RelEntityMove.class, vanish);
     }
 
     @Override
-    public boolean checkPacket(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) {
         return !this.vanish.shouldHide(player, ((Packet31RelEntityMove) ((MCCraftPacket) packet).getPacket()).a);
     }
 

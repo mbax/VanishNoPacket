@@ -4,21 +4,18 @@ import net.minecraft.server.Packet38EntityStatus;
 
 import org.bukkit.entity.Player;
 import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.listener.PacketListener;
 import org.getspout.spoutapi.packet.standard.MCPacket;
 
 import to.joe.vanish.VanishManager;
 
-public class Sniffer38EntityStatus implements PacketListener {
-
-    private final VanishManager vanish;
+public class Sniffer38EntityStatus extends Sniffer {
 
     public Sniffer38EntityStatus(VanishManager vanish) {
-        this.vanish = vanish;
+        super(net.minecraft.server.Packet38EntityStatus.class, vanish);
     }
 
     @Override
-    public boolean checkPacket(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) {
         return !this.vanish.shouldHide(player, ((Packet38EntityStatus) ((MCCraftPacket) packet).getPacket()).a);
     }
 

@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet20NamedEntitySpawn;
@@ -53,11 +54,12 @@ public class VanishManager {
     }
 
     private final VanishPlugin plugin;
+
     private final Object syncEID = new Object();
     private final Object syncNames = new Object();
     private final Object syncSafeList29 = new Object();
-
     private final Object syncSafeList201 = new Object();
+
     private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
     private final Sniffer17EntityLocationAction sniffer17 = new Sniffer17EntityLocationAction(this);
     private final Sniffer18ArmAnimation sniffer18 = new Sniffer18ArmAnimation(this);
@@ -75,13 +77,12 @@ public class VanishManager {
     private final Sniffer40EntityMetadata sniffer40 = new Sniffer40EntityMetadata(this);
     private final Sniffer41MobEffect sniffer41 = new Sniffer41MobEffect(this);
     private final Sniffer42RemoveMobEffect sniffer42 = new Sniffer42RemoveMobEffect(this);
-
     private final Sniffer201PlayerInfo sniffer201 = new Sniffer201PlayerInfo(this);
+
     private ArrayList<Integer> listOfEntityIDs;
     private ArrayList<String> listOfPlayerNames;
     private HashMap<Integer, Integer> safeList29;
     private HashMap<String, Boolean> sleepIgnored;//temporary is the plan
-
     private HashMap<String, Integer> safeList201;
 
     private VanishAnnounceManipulator manipulator;
@@ -128,7 +129,7 @@ public class VanishManager {
     public VanishPlugin getPlugin() {
         return this.plugin;
     }
-    
+
     /**
      * Is the player vanished?
      * 
@@ -174,6 +175,15 @@ public class VanishManager {
         } else {
             this.hideVanished(player);
         }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public boolean sanityCheck(Class c1, Class c2) {
+        final boolean status = c1 == c2;
+        if (!status && !(c1 == Hat.class)) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE, "Spout sent a MAJOR MISTAKE. Report this bug to SpoutDev. Sent packet " + c1 + " to a listener for " + c2);
+        }
+        return status;
     }
 
     /**

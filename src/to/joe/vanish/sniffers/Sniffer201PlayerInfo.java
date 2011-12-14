@@ -4,21 +4,18 @@ import net.minecraft.server.Packet201PlayerInfo;
 
 import org.bukkit.entity.Player;
 import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.listener.PacketListener;
 import org.getspout.spoutapi.packet.standard.MCPacket;
 
 import to.joe.vanish.VanishManager;
 
-public class Sniffer201PlayerInfo implements PacketListener {
-
-    private final VanishManager vanish;
+public class Sniffer201PlayerInfo extends Sniffer {
 
     public Sniffer201PlayerInfo(VanishManager vanish) {
-        this.vanish = vanish;
+        super(net.minecraft.server.Packet201PlayerInfo.class, vanish);
     }
 
     @Override
-    public boolean checkPacket(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) {
         final Packet201PlayerInfo packit = ((Packet201PlayerInfo) ((MCCraftPacket) packet).getPacket());
         return !this.vanish.shouldHide(player, packit.a, packit.b);
     }
