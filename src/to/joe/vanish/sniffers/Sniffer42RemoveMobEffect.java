@@ -11,11 +11,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer42RemoveMobEffect extends Sniffer {
 
     public Sniffer42RemoveMobEffect(VanishManager vanish) {
-        super(net.minecraft.server.Packet42RemoveMobEffect.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet42RemoveMobEffect) ((MCCraftPacket) packet).getPacket()).a);
     }
 

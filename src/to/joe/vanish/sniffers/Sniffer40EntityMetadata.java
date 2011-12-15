@@ -11,11 +11,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer40EntityMetadata extends Sniffer {
 
     public Sniffer40EntityMetadata(VanishManager vanish) {
-        super(net.minecraft.server.Packet40EntityMetadata.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet40EntityMetadata) ((MCCraftPacket) packet).getPacket()).a);
     }
 

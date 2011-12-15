@@ -11,11 +11,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer18ArmAnimation extends Sniffer {
 
     public Sniffer18ArmAnimation(VanishManager vanish) {
-        super(net.minecraft.server.Packet18ArmAnimation.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet18ArmAnimation) ((MCCraftPacket) packet).getPacket()).a);
     }
 

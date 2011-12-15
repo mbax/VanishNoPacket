@@ -12,11 +12,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer20NamedEntitySpawn extends Sniffer {
 
     public Sniffer20NamedEntitySpawn(VanishManager vanish) {
-        super(net.minecraft.server.Packet20NamedEntitySpawn.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
         final Packet20NamedEntitySpawn packet20 = (Packet20NamedEntitySpawn) ((MCCraftPacket) packet).getPacket();
         final String name = packet20.b;
         if (this.vanish.getPlugin().colorationEnabled() && this.vanish.isVanished(name)) {

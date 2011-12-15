@@ -11,11 +11,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer17EntityLocationAction extends Sniffer {
 
     public Sniffer17EntityLocationAction(VanishManager vanish) {
-        super(net.minecraft.server.Packet17EntityLocationAction.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException{
         return !this.vanish.shouldHide(player, ((Packet17EntityLocationAction) ((MCCraftPacket) packet).getPacket()).a);
     }
 

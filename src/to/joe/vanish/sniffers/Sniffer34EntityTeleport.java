@@ -11,11 +11,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer34EntityTeleport extends Sniffer {
 
     public Sniffer34EntityTeleport(VanishManager vanish) {
-        super(net.minecraft.server.Packet34EntityTeleport.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet34EntityTeleport) ((MCCraftPacket) packet).getPacket()).a);
     }
 

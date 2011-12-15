@@ -1,11 +1,12 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.8.6
+version: 1.8.7
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap,JSONAPI]
 author: mbaxter
 description: Vanish by filtering packets using Spout
+dev-url: http://dev.bukkit.org/server-mods/vanish/
 commands:
   vanish:
     description: poof

@@ -11,11 +11,11 @@ import to.joe.vanish.VanishManager;
 public class Sniffer201PlayerInfo extends Sniffer {
 
     public Sniffer201PlayerInfo(VanishManager vanish) {
-        super(net.minecraft.server.Packet201PlayerInfo.class, vanish);
+        super(vanish);
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) {
+    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
         final Packet201PlayerInfo packit = ((Packet201PlayerInfo) ((MCCraftPacket) packet).getPacket());
         return !this.vanish.shouldHide(player, packit.a, packit.b);
     }

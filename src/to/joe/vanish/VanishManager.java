@@ -177,13 +177,8 @@ public class VanishManager {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public boolean sanityCheck(Class c1, Class c2) {
-        final boolean status = c1 == c2;
-        if (!status && !(c1 == Hat.class)) {
-            this.plugin.getServer().getLogger().log(Level.SEVERE, "Spout sent a MAJOR MISTAKE. Report this bug to SpoutDev. Sent packet " + c1 + " to a listener for " + c2);
-        }
-        return status;
+    public void sanityCheck(Exception e) {
+        this.plugin.getServer().getLogger().log(Level.SEVERE, "MAJOR ERROR. REPORT ASAP. ",e);
     }
 
     /**
