@@ -88,12 +88,20 @@ public class VanishPlugin extends JavaPlugin {
     private Logger log;
 
     private boolean enableColoration;
+    private boolean vanishOnJoin;
 
     /**
      * @return whether or not the hacky packet user coloration is enabled
      */
     public boolean colorationEnabled() {
         return this.enableColoration;
+    }
+
+    /**
+     * @return whether or not to vanish players on join
+     */
+    public boolean joinVanished() {
+        return this.vanishOnJoin;
     }
 
     /**
@@ -214,6 +222,7 @@ public class VanishPlugin extends JavaPlugin {
         config.options().copyDefaults(true);
 
         this.enableColoration = config.getBoolean("enableColoration", false);
+        this.vanishOnJoin     = config.getBoolean("vanishOnJoin", true);
 
         this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
 

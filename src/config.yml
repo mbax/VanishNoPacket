@@ -6,6 +6,7 @@ hooks:
     essentials: false
     dynmap: false
     JSONAPI: false
+vanishOnJoin: true
 enableColoration: false
 spoutcraft:
     enable: false
