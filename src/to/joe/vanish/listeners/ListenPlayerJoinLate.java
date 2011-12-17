@@ -17,7 +17,8 @@ public class ListenPlayerJoinLate extends PlayerListener {
 
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (VanishPerms.silentJoin(event.getPlayer())) {
+        if (this.plugin.joinVanished() &&
+                VanishPerms.silentJoin(event.getPlayer())) {
             this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
             event.setJoinMessage(null);
             String add = "";

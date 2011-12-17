@@ -16,7 +16,8 @@ public class ListenPlayerJoinEarly extends PlayerListener {
 
     @Override
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (VanishPerms.silentJoin(event.getPlayer())) {
+        if (this.plugin.joinVanished() &&
+                VanishPerms.silentJoin(event.getPlayer())) {
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer());
             this.plugin.hooksVanish(event.getPlayer());
         }
