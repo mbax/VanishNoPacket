@@ -74,7 +74,7 @@ public class VanishPlugin extends JavaPlugin {
 
     private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
-    private final ListenPlayerMessagesSent listenPlayerCommandPreProcess = new ListenPlayerMessagesSent(this);
+    private final ListenPlayerMessagesSent listenPlayerMessagesSent = new ListenPlayerMessagesSent(this);
     private final ListenServer listenServer = new ListenServer(this);
     private final ListenSpout listenSpout = new ListenSpout(this);
 
@@ -251,7 +251,7 @@ public class VanishPlugin extends JavaPlugin {
             this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
         }
 
-        this.listenPlayerCommandPreProcess.setPermTestEnabled(config.getBoolean("permtest.enable", false));
+        this.listenPlayerMessagesSent.setPermTestEnabled(config.getBoolean("permtest.enable", false));
 
         this.saveConfig();
 
@@ -259,7 +259,8 @@ public class VanishPlugin extends JavaPlugin {
 
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, this.listenPlayerCommandPreProcess, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, this.listenPlayerMessagesSent, Priority.Lowest, this);
+        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, this.listenPlayerMessagesSent, Priority.Lowest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.listenPlayer, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);

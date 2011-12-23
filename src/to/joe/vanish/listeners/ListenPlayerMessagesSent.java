@@ -27,7 +27,7 @@ public class ListenPlayerMessagesSent extends PlayerListener {
 
     @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (event.getMessage().toLowerCase().startsWith("/me") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
+        if (event.getMessage().toLowerCase().startsWith("/me ") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }
         if (this.permTestEnabled) {
