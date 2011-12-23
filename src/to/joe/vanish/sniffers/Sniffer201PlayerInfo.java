@@ -15,7 +15,7 @@ public class Sniffer201PlayerInfo extends Sniffer {
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
+    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
         final Packet201PlayerInfo packit = ((Packet201PlayerInfo) ((MCCraftPacket) packet).getPacket());
         return !this.vanish.shouldHide(player, packit.a, packit.b);
     }

@@ -15,7 +15,7 @@ public class Sniffer41MobEffect extends Sniffer {
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
+    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet41MobEffect) ((MCCraftPacket) packet).getPacket()).a);
     }
 

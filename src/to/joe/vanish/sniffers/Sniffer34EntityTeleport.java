@@ -15,7 +15,7 @@ public class Sniffer34EntityTeleport extends Sniffer {
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
+    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet34EntityTeleport) ((MCCraftPacket) packet).getPacket()).a);
     }
 

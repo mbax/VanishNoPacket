@@ -74,7 +74,7 @@ public class VanishPlugin extends JavaPlugin {
 
     private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
-    private final ListenPlayerCommandPreProcess listenPlayerCommandPreProcess = new ListenPlayerCommandPreProcess(this);
+    private final ListenPlayerMessagesSent listenPlayerCommandPreProcess = new ListenPlayerMessagesSent(this);
     private final ListenServer listenServer = new ListenServer(this);
     private final ListenSpout listenSpout = new ListenSpout(this);
 
@@ -251,7 +251,7 @@ public class VanishPlugin extends JavaPlugin {
             this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
         }
 
-        this.listenPlayerCommandPreProcess.setEnabled(config.getBoolean("permtest.enable", false));
+        this.listenPlayerCommandPreProcess.setPermTestEnabled(config.getBoolean("permtest.enable", false));
 
         this.saveConfig();
 

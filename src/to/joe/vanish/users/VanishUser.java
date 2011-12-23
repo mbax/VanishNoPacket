@@ -9,6 +9,7 @@ public class VanishUser {
     private boolean preventIncomingDamage;
     private boolean preventOutgoingDamage;
     private boolean noInteract;
+    private boolean noChat;
 
     public VanishUser(Player player) {
         this.seeAll = player.hasPermission("vanish.see");
@@ -17,6 +18,11 @@ public class VanishUser {
         this.preventIncomingDamage = player.hasPermission("vanish.preventincomingdamage");
         this.preventOutgoingDamage = player.hasPermission("vanish.preventoutgoingdamage");
         this.noInteract = player.hasPermission("vanish.nointeract");
+        this.noChat = player.hasPermission("vanish.nochat");
+    }
+
+    public boolean getNoChat() {
+        return this.noChat;
     }
 
     public boolean getNoFollow() {
@@ -46,6 +52,11 @@ public class VanishUser {
     public boolean toggleIncomingDamage() {
         this.preventIncomingDamage = !this.preventIncomingDamage;
         return this.preventIncomingDamage;
+    }
+
+    public boolean toggleNoChat() {
+        this.noChat = !this.noChat;
+        return this.noChat;
     }
 
     public boolean toggleNoFollow() {

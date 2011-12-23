@@ -33,7 +33,7 @@ public class VanishSpoutCraft {
         SpoutPlayer player;
 
         public StatusBar(SpoutPlayer player) {
-            this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20);
+            this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20).setHeight(10).setWidth(40);
             this.box = (GenericGradient) new GenericGradient().setTopColor(VanishSpoutCraft.this.boxColor).setBottomColor(VanishSpoutCraft.this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
             this.player = player;
         }

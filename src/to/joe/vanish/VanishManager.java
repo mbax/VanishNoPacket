@@ -178,7 +178,7 @@ public class VanishManager {
     }
 
     public void sanityCheck(Exception e) {
-        this.plugin.getServer().getLogger().log(Level.SEVERE, "MAJOR ERROR. REPORT ASAP. ",e);
+        this.plugin.getServer().getLogger().log(Level.SEVERE, "[VANISH] A flaw has been caught. Please report this (it wont break things) :) . ", e);
     }
 
     /**

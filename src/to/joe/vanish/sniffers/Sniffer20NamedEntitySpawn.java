@@ -16,7 +16,7 @@ public class Sniffer20NamedEntitySpawn extends Sniffer {
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
+    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
         final Packet20NamedEntitySpawn packet20 = (Packet20NamedEntitySpawn) ((MCCraftPacket) packet).getPacket();
         final String name = packet20.b;
         if (this.vanish.getPlugin().colorationEnabled() && this.vanish.isVanished(name)) {

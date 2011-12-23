@@ -30,6 +30,10 @@ public class VanishCommand implements CommandExecutor {
                 this.toggle(player, "nointeract");
                 return true;
             }
+            if (label.equals("nc")) {
+                this.toggle(player, "nochat");
+                return true;
+            }
             if ((args.length == 0)) {
                 if (VanishPerms.canVanish((Player) sender)) {
                     this.plugin.getManager().toggleVanish(player);
@@ -61,6 +65,9 @@ public class VanishCommand implements CommandExecutor {
                     }
                     if (VanishPerms.canToggleDamageOut(player)) {
                         this.comma(toggleList, this.colorize(VanishPerms.blockOutgoingDamage(player)) + "damage-out" + ChatColor.DARK_AQUA);
+                    }
+                    if (VanishPerms.canToggleNoChat(player)) {
+                        this.comma(toggleList, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
                     }
                     if (toggleList.length() > 0) {
                         toggleList.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
@@ -128,6 +135,9 @@ public class VanishCommand implements CommandExecutor {
         } else if (toggle.equalsIgnoreCase("nointeract") && VanishPerms.canToggleNoInteract(player)) {
             status = VanishPerms.toggleNoInteract(player);
             message.append("no interact");
+        } else if (toggle.equalsIgnoreCase("nochat") && VanishPerms.canToggleNoChat(player)) {
+            status = VanishPerms.toggleNoChat(player);
+            message.append("no chat");
         }
         if (message.length() > 0) {
             message.insert(0, ChatColor.DARK_AQUA + "Status: ");

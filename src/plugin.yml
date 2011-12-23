@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: to.joe.vanish.VanishPlugin
-version: 1.8.7
+version: 1.8.8
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap,JSONAPI]
@@ -11,7 +11,7 @@ commands:
   vanish:
     description: poof
     usage: /vanish
-    aliases: [v,np,nf,ni]
+    aliases: [v,np,nf,ni,nc]
 permissions:
   vanish.vanish:
     default: op
@@ -36,6 +36,9 @@ permissions:
   vanish.nointeract:
     default: false
     description: If true player cannot press buttons, break or place blocks, open doors, activate pressure pads etc
+  vanish.nochat:
+    default: false
+    description: No chatting while vanished
   vanish.preventincomingdamage:
     default: false
     description: Prevent being harmed by things around you while vanished
@@ -66,6 +69,9 @@ permissions:
   vanish.toggle.nointeract:
     default: false
     description: Toggle interaction ability (doors, pressurepads, buttons, breaking or placing blocks, etc)
+  vanish.toggle.nochat:
+    default: false
+    description: Toggle ability to chat
   vanish.toggle.damageout:
     default: false
     description: Toggle outgoing damage
@@ -87,6 +93,7 @@ permissions:
       vanish.toggle.nofollow: true
       vanish.toggle.damage: true
       vanish.toggle.nointeract: true
+      vanish.toggle.nochat: true
   vanish.fakeannounce:
     default: false
     description: Fake joining/leaving
@@ -133,6 +140,7 @@ permissions:
     default: false
     children:
       vanish.standard: true
+      vanish.nochat: true
       vanish.silentjoin: true
       vanish.silentquit: true
       vanish.toggle.all: true

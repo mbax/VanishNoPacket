@@ -15,7 +15,7 @@ public class Sniffer29DestroyEntity extends Sniffer {
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
+    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
         final Packet29DestroyEntity packit = ((Packet29DestroyEntity) ((MCCraftPacket) packet).getPacket());
         if (packit instanceof VanishManager.Hat) {
             ((MCCraftPacket) packet).setPacket(new Packet29DestroyEntity(packit.a), 29);

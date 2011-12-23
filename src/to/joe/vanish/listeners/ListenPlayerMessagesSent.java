@@ -2,24 +2,35 @@ package to.joe.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerListener;
 
 import to.joe.vanish.VanishPerms;
 import to.joe.vanish.VanishPlugin;
 
-public class ListenPlayerCommandPreProcess extends PlayerListener {
+public class ListenPlayerMessagesSent extends PlayerListener {
 
     private final VanishPlugin plugin;
-    private boolean enabled = false;
+    private boolean permTestEnabled = false;
 
-    public ListenPlayerCommandPreProcess(VanishPlugin instance) {
+    public ListenPlayerMessagesSent(VanishPlugin instance) {
         this.plugin = instance;
     }
 
     @Override
+    public void onPlayerChat(PlayerChatEvent event) {
+        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (this.enabled) {
+        if (event.getMessage().toLowerCase().startsWith("/me") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+        if (this.permTestEnabled) {
             final String[] split = event.getMessage().split(" ");
             if ((split.length > 1) && split[0].equalsIgnoreCase("/permtest")) {
                 final boolean selfTest = VanishPerms.permTestSelf(event.getPlayer());
@@ -63,7 +74,7 @@ public class ListenPlayerCommandPreProcess extends PlayerListener {
         }
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setPermTestEnabled(boolean enabled) {
+        this.permTestEnabled = enabled;
     }
 }

@@ -15,7 +15,7 @@ public class Sniffer38EntityStatus extends Sniffer {
     }
 
     @Override
-    public boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException {
+    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
         return !this.vanish.shouldHide(player, ((Packet38EntityStatus) ((MCCraftPacket) packet).getPacket()).a);
     }
 

@@ -21,6 +21,10 @@ public class VanishPerms {
         return player.hasPermission("vanish.fakeannounce");
     }
 
+    public static boolean canNotChat(Player player) {
+        return VanishPerms.getUser(player).getNoChat();
+    }
+
     public static boolean canNotFollow(Player player) {
         return VanishPerms.getUser(player).getNoFollow();
     }
@@ -59,6 +63,10 @@ public class VanishPerms {
 
     public static boolean canToggleDamageOut(Player player) {
         return player.hasPermission("vanish.toggle.damageout");
+    }
+
+    public static boolean canToggleNoChat(Player player) {
+        return player.hasPermission("vanish.toggle.nochat");
     }
 
     public static boolean canToggleNoFollow(Player player) {
@@ -103,6 +111,10 @@ public class VanishPerms {
 
     public static boolean toggleDamageOut(Player player) {
         return VanishPerms.getUser(player).toggleOutgoingDamage();
+    }
+
+    public static boolean toggleNoChat(Player player) {
+        return VanishPerms.getUser(player).toggleNoChat();
     }
 
     public static boolean toggleNoFollow(Player player) {

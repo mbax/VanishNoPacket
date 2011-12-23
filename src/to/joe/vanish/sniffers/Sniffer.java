@@ -17,13 +17,13 @@ public abstract class Sniffer implements PacketListener {
     @Override
     public boolean checkPacket(Player player, MCPacket packet) {
         try {
-            return this.checkPacket2(player, packet);
-        } catch (ClassCastException e) {
+            return this.checkPakkit(player, packet);
+        } catch (final ClassCastException e) {
             this.vanish.sanityCheck(e);
         }
         return true;
     }
 
-    public abstract boolean checkPacket2(Player player, MCPacket packet) throws ClassCastException;
+    public abstract boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException;
 
 }
