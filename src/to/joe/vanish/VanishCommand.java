@@ -76,7 +76,9 @@ public class VanishCommand implements CommandExecutor {
                             toggleList.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
                         }
                     }
-                    player.sendMessage(toggleList.toString());
+                    if(toggleList.length()>0){
+                        player.sendMessage(toggleList.toString());
+                    }
                 } else {
                     this.toggle(player, args[1]);
                 }
