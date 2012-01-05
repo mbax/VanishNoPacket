@@ -221,7 +221,7 @@ public class VanishPlugin extends JavaPlugin {
         this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
 
         //Post-load stuff
-        this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
+        this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
                 VanishPlugin.this.jsonapiHook.onPluginEnable(VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false));
@@ -235,7 +235,7 @@ public class VanishPlugin extends JavaPlugin {
 
         this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("spoutcraft.enable", false));
 
-        this.manager.startup(this.getConfig().getString("fakeannounce.join", "%p joined the game."), this.getConfig().getString("fakeannounce.quit", "%p left the game."), this.getConfig().getBoolean("fakeannounce.automaticforsilentjoin", false));
+        this.manager.startup(this.getConfig().getString("fakeannounce.join", "%p joined the game."), this.getConfig().getString("fakeannounce.quit", "%p left the game."), this.getConfig().getBoolean("fakeannounce.automaticforsilentjoin", false), this.getConfig().getBoolean("enableTabControl", true));
 
         boolean updateCheck = this.getConfig().getBoolean("updates.check", true);
         if (firstTimeStarting) {

@@ -81,6 +81,8 @@ public class VanishManager {
 
     private VanishAnnounceManipulator manipulator;
 
+    private boolean tabControl;
+
     public VanishManager(VanishPlugin plugin) {
         this.plugin = plugin;
     }
@@ -233,7 +235,7 @@ public class VanishManager {
      * Smack that vanish list. Smack it hard.
      * But really, don't call this.
      */
-    public void startup(String fakejoin, String fakequit, boolean delayedJoinTracking) {
+    public void startup(String fakejoin, String fakequit, boolean delayedJoinTracking, boolean tabControl) {
         SpoutManager.getPacketManager().addListener(5, this.sniffer5);
         SpoutManager.getPacketManager().addListener(17, this.sniffer17);
         SpoutManager.getPacketManager().addListener(18, this.sniffer18);
@@ -258,6 +260,7 @@ public class VanishManager {
         this.safeList29 = new HashMap<Integer, Integer>();
         this.safeList201 = new HashMap<String, Integer>();
         this.sleepIgnored = new HashMap<String, Boolean>();
+        this.tabControl=tabControl;
     }
 
     /**
@@ -336,10 +339,12 @@ public class VanishManager {
         final CraftPlayer craftPlayer = ((CraftPlayer) obliviousPlayer);
         final int eid = craftPlayer.getEntityId();
         this.safelist29Mod(eid, 1);
-        this.safelist201Mod(vanishingPlayer.getName(), 1);
+
         craftPlayer.getHandle().netServerHandler.sendPacket(new Hat(((CraftPlayer) vanishingPlayer).getEntityId()));
-        //craftPlayer.getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
-        craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
+        if(this.tabControl){
+            craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
+            this.safelist201Mod(vanishingPlayer.getName(), 1);
+        }
     }
 
     private double getDistance(Player player1, Player player2) {
@@ -422,7 +427,9 @@ public class VanishManager {
 
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
         ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));
-        ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
+        if(this.tabControl){
+            ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
+        }
     }
 
 }

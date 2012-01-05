@@ -13,6 +13,9 @@ commands:
     usage: /vanish
     aliases: [v,np,nf,ni,nc]
 permissions:
+  vanish.currentlyVanished:
+    default: false
+    description: Do not manually play with this. 
   vanish.vanish:
     default: op
     description: |

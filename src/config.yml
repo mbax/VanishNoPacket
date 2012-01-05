@@ -15,6 +15,7 @@ hooks:
     dynmap: false
     JSONAPI: false
 enableColoration: false
+enableTabControl: true
 spoutcraft:
     enable: false
 updates:

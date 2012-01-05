@@ -108,7 +108,7 @@ public class VanishSpoutCraft {
 
     public void playerQuit(Player player) {
         final String name = player.getName();
-        this.plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, new Runnable() {
+        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
             @Override
             public void run() {
                 VanishSpoutCraft.this.bars.remove(name);
