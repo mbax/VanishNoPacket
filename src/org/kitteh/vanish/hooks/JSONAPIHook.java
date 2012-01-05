@@ -5,7 +5,6 @@ import org.kitteh.vanish.VanishPlugin;
 
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
 
-
 public class JSONAPIHook {
     private final VanishPlugin plugin;
     private boolean enabled;

@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-
 public class ListenEntity extends EntityListener {
 
     private final VanishPlugin plugin;

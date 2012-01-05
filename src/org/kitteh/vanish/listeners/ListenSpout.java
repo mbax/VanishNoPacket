@@ -4,7 +4,6 @@ import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.event.spout.SpoutListener;
 import org.kitteh.vanish.VanishPlugin;
 
-
 public class ListenSpout extends SpoutListener {
 
     private final VanishPlugin plugin;
@@ -15,6 +14,6 @@ public class ListenSpout extends SpoutListener {
 
     @Override
     public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-        this.plugin.playerHasSpout(event.getPlayer());
+        this.plugin.hooksSpoutAuth(event.getPlayer());
     }
 }

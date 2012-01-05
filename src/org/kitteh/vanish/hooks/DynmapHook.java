@@ -5,7 +5,6 @@ import org.bukkit.plugin.Plugin;
 import org.dynmap.DynmapPlugin;
 import org.kitteh.vanish.VanishPlugin;
 
-
 public class DynmapHook {
     private final VanishPlugin plugin;
 

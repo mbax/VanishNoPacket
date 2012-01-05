@@ -6,7 +6,6 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.event.server.ServerListener;
 import org.kitteh.vanish.VanishPlugin;
 
-
 public class ListenServer extends ServerListener {
 
     private final VanishPlugin plugin;

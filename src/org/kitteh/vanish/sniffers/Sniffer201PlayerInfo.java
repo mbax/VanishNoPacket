@@ -1,12 +1,10 @@
 package org.kitteh.vanish.sniffers;
 
+import net.minecraft.server.Packet;
 import net.minecraft.server.Packet201PlayerInfo;
 
 import org.bukkit.entity.Player;
-import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.standard.MCPacket;
 import org.kitteh.vanish.VanishManager;
-
 
 public class Sniffer201PlayerInfo extends Sniffer {
 
@@ -15,8 +13,8 @@ public class Sniffer201PlayerInfo extends Sniffer {
     }
 
     @Override
-    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
-        final Packet201PlayerInfo packit = ((Packet201PlayerInfo) ((MCCraftPacket) packet).getPacket());
+    public boolean checkPakkit(Player player, Packet packet) throws ClassCastException {
+        final Packet201PlayerInfo packit = ((Packet201PlayerInfo) packet);
         return !this.vanish.shouldHide(player, packit.a, packit.b);
     }
 

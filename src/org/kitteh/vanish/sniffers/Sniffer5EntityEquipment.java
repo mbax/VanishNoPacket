@@ -1,12 +1,10 @@
 package org.kitteh.vanish.sniffers;
 
+import net.minecraft.server.Packet;
 import net.minecraft.server.Packet5EntityEquipment;
 
 import org.bukkit.entity.Player;
-import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.standard.MCPacket;
 import org.kitteh.vanish.VanishManager;
-
 
 public class Sniffer5EntityEquipment extends Sniffer {
 
@@ -15,8 +13,8 @@ public class Sniffer5EntityEquipment extends Sniffer {
     }
 
     @Override
-    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
-        return !this.vanish.shouldHide(player, ((Packet5EntityEquipment) ((MCCraftPacket) packet).getPacket()).a);
+    public boolean checkPakkit(Player player, Packet packet) throws ClassCastException {
+        return !this.vanish.shouldHide(player, ((Packet5EntityEquipment) packet).a);
     }
 
 }

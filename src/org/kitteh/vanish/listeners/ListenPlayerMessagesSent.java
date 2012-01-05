@@ -8,7 +8,6 @@ import org.bukkit.event.player.PlayerListener;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-
 public class ListenPlayerMessagesSent extends PlayerListener {
 
     private final VanishPlugin plugin;

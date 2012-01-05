@@ -1,13 +1,11 @@
 package org.kitteh.vanish.sniffers;
 
+import net.minecraft.server.Packet;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.standard.MCPacket;
 import org.kitteh.vanish.VanishManager;
-
 
 public class Sniffer20NamedEntitySpawn extends Sniffer {
 
@@ -16,8 +14,8 @@ public class Sniffer20NamedEntitySpawn extends Sniffer {
     }
 
     @Override
-    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
-        final Packet20NamedEntitySpawn packet20 = (Packet20NamedEntitySpawn) ((MCCraftPacket) packet).getPacket();
+    public boolean checkPakkit(Player player, Packet packet) throws ClassCastException {
+        final Packet20NamedEntitySpawn packet20 = (Packet20NamedEntitySpawn) packet;
         final String name = packet20.b;
         if (this.vanish.getPlugin().colorationEnabled() && this.vanish.isVanished(name)) {
             packet20.b = ChatColor.DARK_AQUA + name;

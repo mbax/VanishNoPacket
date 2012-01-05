@@ -1,12 +1,10 @@
 package org.kitteh.vanish.sniffers;
 
+import net.minecraft.server.Packet;
 import net.minecraft.server.Packet29DestroyEntity;
 
 import org.bukkit.entity.Player;
-import org.getspout.spout.packet.standard.MCCraftPacket;
-import org.getspout.spoutapi.packet.standard.MCPacket;
 import org.kitteh.vanish.VanishManager;
-
 
 public class Sniffer29DestroyEntity extends Sniffer {
 
@@ -15,10 +13,9 @@ public class Sniffer29DestroyEntity extends Sniffer {
     }
 
     @Override
-    public boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException {
-        final Packet29DestroyEntity packit = ((Packet29DestroyEntity) ((MCCraftPacket) packet).getPacket());
+    public boolean checkPakkit(Player player, Packet packet) throws ClassCastException {
+        final Packet29DestroyEntity packit = ((Packet29DestroyEntity) packet);
         if (packit instanceof VanishManager.Hat) {
-            ((MCCraftPacket) packet).setPacket(new Packet29DestroyEntity(packit.a), 29);
             return true;
         }
         return !this.vanish.shouldHide(player, packit.a);

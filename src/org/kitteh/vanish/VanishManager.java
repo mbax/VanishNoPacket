@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.getspout.spoutapi.SpoutManager;
 import org.kitteh.vanish.sniffers.*;
 
-
 /**
  * It's the vanishing manager!
  * 
@@ -87,31 +86,6 @@ public class VanishManager {
     }
 
     /**
-     * Only call this when disabling the plugin
-     */
-    public void disable() {
-        SpoutManager.getPacketManager().removeListener(5, this.sniffer5);
-        SpoutManager.getPacketManager().removeListener(17, this.sniffer17);
-        SpoutManager.getPacketManager().removeListener(18, this.sniffer18);
-        SpoutManager.getPacketManager().removeListener(19, this.sniffer19);
-        SpoutManager.getPacketManager().removeListener(20, this.sniffer20);
-        SpoutManager.getPacketManager().removeListener(28, this.sniffer28);
-        SpoutManager.getPacketManager().removeListener(29, this.sniffer29);
-        SpoutManager.getPacketManager().removeListener(30, this.sniffer30);
-        SpoutManager.getPacketManager().removeListener(31, this.sniffer31);
-        SpoutManager.getPacketManager().removeListener(32, this.sniffer32);
-        SpoutManager.getPacketManager().removeListener(33, this.sniffer33);
-        SpoutManager.getPacketManager().removeListener(34, this.sniffer34);
-        SpoutManager.getPacketManager().removeListener(38, this.sniffer38);
-        SpoutManager.getPacketManager().removeListener(39, this.sniffer39);
-        SpoutManager.getPacketManager().removeListener(40, this.sniffer40);
-        SpoutManager.getPacketManager().removeListener(41, this.sniffer41);
-        SpoutManager.getPacketManager().removeListener(42, this.sniffer42);
-        SpoutManager.getPacketManager().removeListener(201, this.sniffer201);
-        this.revealAll();
-    }
-
-    /**
      * @return the Announce Manipulator
      */
     public VanishAnnounceManipulator getAnnounceManipulator() {
@@ -152,6 +126,31 @@ public class VanishManager {
      */
     public int numVanished() {
         return this.listOfEntityIDs.size();
+    }
+
+    /**
+     * Only call this when disabling the plugin
+     */
+    public void onPluginDisable() {
+        SpoutManager.getPacketManager().removeListener(5, this.sniffer5);
+        SpoutManager.getPacketManager().removeListener(17, this.sniffer17);
+        SpoutManager.getPacketManager().removeListener(18, this.sniffer18);
+        SpoutManager.getPacketManager().removeListener(19, this.sniffer19);
+        SpoutManager.getPacketManager().removeListener(20, this.sniffer20);
+        SpoutManager.getPacketManager().removeListener(28, this.sniffer28);
+        SpoutManager.getPacketManager().removeListener(29, this.sniffer29);
+        SpoutManager.getPacketManager().removeListener(30, this.sniffer30);
+        SpoutManager.getPacketManager().removeListener(31, this.sniffer31);
+        SpoutManager.getPacketManager().removeListener(32, this.sniffer32);
+        SpoutManager.getPacketManager().removeListener(33, this.sniffer33);
+        SpoutManager.getPacketManager().removeListener(34, this.sniffer34);
+        SpoutManager.getPacketManager().removeListener(38, this.sniffer38);
+        SpoutManager.getPacketManager().removeListener(39, this.sniffer39);
+        SpoutManager.getPacketManager().removeListener(40, this.sniffer40);
+        SpoutManager.getPacketManager().removeListener(41, this.sniffer41);
+        SpoutManager.getPacketManager().removeListener(42, this.sniffer42);
+        SpoutManager.getPacketManager().removeListener(201, this.sniffer201);
+        this.revealAll();
     }
 
     public void playerQuit(Player player) {
@@ -285,7 +284,7 @@ public class VanishManager {
         }
         final String message = base + messageBit;
         togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
-        this.plugin.messageUpdate(message, togglingPlayer);
+        this.plugin.messageStatusUpdate(message, togglingPlayer);
     }
 
     /**

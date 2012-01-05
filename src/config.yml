@@ -3,8 +3,8 @@
 #   A fine choice of invisibility for the discerning server administrator.
 #   http://www.kitteh.org
 #
-#
-#  Below is a list of settings with some description
+#  See documentation for details:
+#  http://dev.bukkit.org/server-mods/vanish/pages/configuration/
 #
 fakeannounce:
     automaticforsilentjoin: false

@@ -5,14 +5,11 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
 import org.kitteh.vanish.hooks.DynmapHook;
@@ -20,7 +17,7 @@ import org.kitteh.vanish.hooks.EssentialsHook;
 import org.kitteh.vanish.hooks.JSONAPIHook;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
-
+import org.kitteh.vanish.util.DefaultConfig;
 
 public class VanishPlugin extends JavaPlugin {
 
@@ -35,17 +32,17 @@ public class VanishPlugin extends JavaPlugin {
         @Override
         public void run() {
             try {
-                final String address = "http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + this.plugin.selfDescription.getVersion() + "&port=" + this.plugin.getServer().getPort();
+                final String address = "http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + this.plugin.getDescription().getVersion() + "&port=" + this.plugin.getServer().getPort();
                 final URL url = new URL(address.replace(" ", "%20"));
                 final URLConnection connection = url.openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);
-                connection.setRequestProperty("User-agent", "VanishNoPacket " + this.plugin.selfDescription.getVersion());
+                connection.setRequestProperty("User-agent", "VanishNoPacket " + this.plugin.getDescription().getVersion());
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String version;
                 if ((version = bufferedReader.readLine()) != null) {
                     this.plugin.latestVersion = version;
-                    if (!this.plugin.selfDescription.getVersion().equals(version)) {
+                    if (!this.plugin.getDescription().getVersion().equals(version)) {
                         this.plugin.log("Found a different version available: " + version);
                         this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
                         this.plugin.versionDiff = true;
@@ -84,9 +81,6 @@ public class VanishPlugin extends JavaPlugin {
 
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
     private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
-    private PluginDescriptionFile selfDescription;
-
-    private Logger log;
 
     private boolean enableColoration;
 
@@ -101,7 +95,7 @@ public class VanishPlugin extends JavaPlugin {
      * @return version of VanishNoPacket in use
      */
     public String getCurrentVersion() {
-        return this.selfDescription.getVersion();
+        return this.getDescription().getVersion();
     }
 
     /**
@@ -109,7 +103,7 @@ public class VanishPlugin extends JavaPlugin {
      * 
      * @return The latest found version of VanishNoPacket
      */
-    public String getLatestVersion() {
+    public String getLatestKnownVersion() {
         return this.latestVersion;
     }
 
@@ -121,12 +115,28 @@ public class VanishPlugin extends JavaPlugin {
         return this.manager;
     }
 
+    /**
+     * No touchy. Call hooks for when a player has quit
+     * 
+     * @param player
+     */
     public void hooksQuit(Player player) {
         this.hooksUnvanish(player);
         this.spoutCraft.playerQuit(player);
     }
 
     /**
+     * No touchy.
+     * Called when a player's spoutcraft client authenticates
+     * 
+     * @param player
+     */
+    public void hooksSpoutAuth(SpoutPlayer player) {
+        this.spoutCraft.playerHasSpout(player);
+    }
+
+    /**
+     * No touchy. Call hooks for when a player has unvanished
      * 
      * @param player
      *            The un-vanishing user
@@ -138,6 +148,8 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
+     * No touchy. Call hooks for when player has vanished
+     * 
      * @param player
      *            The vanishing player
      */
@@ -148,22 +160,12 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Ah the things I do for APIs
-     * 
-     * @param player
-     * @return if player is vanished
-     */
-    public boolean isVanished(String player) {
-        return this.getManager().isVanished(player);
-    }
-
-    /**
-     * Logs at level INFO prefixed with [VANISH]
+     * Logs at level INFO prefixed with [Vanish]
      * 
      * @param message
      */
     public void log(String message) {
-        this.log.info("[VANISH] " + message);
+        this.getServer().getLogger().info("[Vanish] " + message);
     }
 
     /**
@@ -171,8 +173,8 @@ public class VanishPlugin extends JavaPlugin {
      * 
      * @param message
      */
-    public void messageUpdate(String message) {
-        this.messageUpdate(message, null);
+    public void messageStatusUpdate(String message) {
+        this.messageStatusUpdate(message, null);
     }
 
     /**
@@ -182,7 +184,7 @@ public class VanishPlugin extends JavaPlugin {
      * @param avoid
      *            Player to not send the message to
      */
-    public void messageUpdate(String message, Player avoid) {
+    public void messageStatusUpdate(String message, Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
             if ((player != null) && !player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
                 player.sendMessage(message);
@@ -193,39 +195,36 @@ public class VanishPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         VanishNoPacket.setInstance(null);
-        this.spoutCraft.disablePlugin();
+        this.spoutCraft.onPluginDisable();
         this.essentialsHook.onPluginDisable();
         this.dynmapHook.onPluginDisable();
-        this.manager.disable();
+        this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
-        this.log("Version " + this.selfDescription.getVersion() + " disabled.");
+        this.log("Version " + this.getDescription().getVersion() + " disabled.");
     }
 
     @Override
     public void onEnable() {
 
-        this.log = Logger.getLogger("Minecraft");
-        this.selfDescription = this.getDescription();
-
         final File check = new File("plugins/VanishNoPacket/config.yml");
-        boolean firstTime = false;
+        boolean firstTimeStarting = false;
         if (!check.exists()) {
-            firstTime = true;
+            firstTimeStarting = true;
+            DefaultConfig.set("config.yml");
+            this.reloadConfig();
         }
-        final FileConfiguration config = this.getConfig();
-        config.options().copyDefaults(true);
 
-        this.enableColoration = config.getBoolean("enableColoration", false);
+        this.enableColoration = this.getConfig().getBoolean("enableColoration", false);
 
-        this.essentialsHook.onPluginEnable(config.getBoolean("hooks.essentials", false));
+        this.essentialsHook.onPluginEnable(this.getConfig().getBoolean("hooks.essentials", false));
 
-        this.dynmapHook.onPluginEnable(config.getBoolean("hooks.dynmap", false));
+        this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
 
         //Post-load stuff
         this.getServer().getScheduler().scheduleAsyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
-                VanishPlugin.this.jsonapiHook.onPluginEnable(config.getBoolean("hooks.JSONAPI", false));
+                VanishPlugin.this.jsonapiHook.onPluginEnable(VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false));
                 for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
                     if ((player != null) && VanishPerms.canVanish(player)) {
                         player.sendMessage(ChatColor.DARK_AQUA + "[VANISH] You have been forced visible by a reload.");
@@ -234,12 +233,12 @@ public class VanishPlugin extends JavaPlugin {
             }
         }, 1);
 
-        this.spoutCraft.onPluginEnable(config.getBoolean("spoutcraft.enable", false));
+        this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("spoutcraft.enable", false));
 
-        this.manager.startup(config.getString("fakeannounce.join", "%p joined the game."), config.getString("fakeannounce.quit", "%p left the game."), config.getBoolean("fakeannounce.automaticforsilentjoin", false));
+        this.manager.startup(this.getConfig().getString("fakeannounce.join", "%p joined the game."), this.getConfig().getString("fakeannounce.quit", "%p left the game."), this.getConfig().getBoolean("fakeannounce.automaticforsilentjoin", false));
 
-        boolean updateCheck = config.getBoolean("updates.check", true);
-        if (firstTime) {
+        boolean updateCheck = this.getConfig().getBoolean("updates.check", true);
+        if (firstTimeStarting) {
             updateCheck = false;
             this.log("This is your first time (or you wiped your config).");
             this.log("In future startups, VanishNoPacket will send usage data");
@@ -247,15 +246,13 @@ public class VanishPlugin extends JavaPlugin {
             this.log("The setting can be disabled in the config file.");
         }
 
-        this.latestVersion = this.selfDescription.getVersion();
+        this.latestVersion = this.getDescription().getVersion();
 
         if (updateCheck) {
             this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
         }
 
-        this.listenPlayerMessagesSent.setPermTestEnabled(config.getBoolean("permtest.enable", false));
-
-        this.saveConfig();
+        this.listenPlayerMessagesSent.setPermTestEnabled(this.getConfig().getBoolean("permtest.enable", false));
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 
@@ -273,16 +270,7 @@ public class VanishPlugin extends JavaPlugin {
 
         VanishNoPacket.setInstance(this);
 
-        this.log("Version " + this.selfDescription.getVersion() + " enabled.");
-    }
-
-    /**
-     * Called when a player's spoutcraft client authenticates
-     * 
-     * @param player
-     */
-    public void playerHasSpout(SpoutPlayer player) {
-        this.spoutCraft.playerHasSpout(player);
+        this.log("Version " + this.getDescription().getVersion() + " enabled.");
     }
 
     /**

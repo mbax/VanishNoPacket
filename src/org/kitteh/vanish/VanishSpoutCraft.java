@@ -70,7 +70,7 @@ public class VanishSpoutCraft {
         this.bars = new HashMap<String, StatusBar>();
     }
 
-    public void disablePlugin() {
+    public void onPluginDisable() {
         if (!this.enabled) {
             return;
         }
@@ -93,7 +93,7 @@ public class VanishSpoutCraft {
             return;
         }
         for (final SpoutPlayer p : SpoutManager.getOnlinePlayers()) {
-            if (this.plugin.isVanished(p.getName())) {
+            if (this.plugin.getManager().isVanished(p.getName())) {
                 PlayerData data = this.playerDataMap.get(p.getName());
                 if (data == null) {
                     data = this.initPlayer(p);
@@ -101,7 +101,7 @@ public class VanishSpoutCraft {
                 this.playerUpdate(p, data, newPlayer);
             }
         }
-        if (this.plugin.isVanished(newPlayer.getName())) {
+        if (this.plugin.getManager().isVanished(newPlayer.getName())) {
             this.vanish(newPlayer);
         }
     }

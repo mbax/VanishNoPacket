@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.users.VanishUser;
 
-
 public class VanishPerms {
     static HashMap<String, VanishUser> users = new HashMap<String, VanishUser>();
 

@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishManager;
 import org.kitteh.vanish.VanishPlugin;
 
-
 /**
  * Static party!
  * This is where you can grab stuff easily
@@ -12,15 +11,6 @@ import org.kitteh.vanish.VanishPlugin;
 public class VanishNoPacket {
 
     private static VanishPlugin instance;
-
-    /**
-     * If you aren't VanishNoPacket itself, you shouldn't be here.
-     * 
-     * @param instance
-     */
-    public static void setInstance(VanishPlugin instance) {
-        VanishNoPacket.instance = instance;
-    }
 
     /**
      * DO NOT STORE THE MANAGER.
@@ -31,6 +21,17 @@ public class VanishNoPacket {
     public static VanishManager getManager() throws VanishNotLoadedException {
         VanishNoPacket.check();
         return VanishNoPacket.instance.getManager();
+    }
+
+    /**
+     * DO NOT STORE THE PLUGIN.
+     * 
+     * @return the VNP plugin itself, if you like it that way
+     * @throws VanishNotLoadedException
+     */
+    public static VanishPlugin getPlugin() throws VanishNotLoadedException {
+        VanishNoPacket.check();
+        return VanishNoPacket.instance;
     }
 
     /**
@@ -58,15 +59,12 @@ public class VanishNoPacket {
     }
 
     /**
-     * Loud toggle. Announces to player, and to those with appropriate perms
+     * If you aren't VanishNoPacket itself, you shouldn't be here.
      * 
-     * @param player
-     *            vanishing
-     * @throws VanishNotLoadedException
+     * @param instance
      */
-    public static void toggleVanishWithAnnounce(Player player) throws VanishNotLoadedException {
-        VanishNoPacket.check();
-        VanishNoPacket.instance.getManager().toggleVanish(player);
+    public static void setInstance(VanishPlugin instance) {
+        VanishNoPacket.instance = instance;
     }
 
     /**
@@ -79,6 +77,18 @@ public class VanishNoPacket {
     public static void toggleVanishSilent(Player player) throws VanishNotLoadedException {
         VanishNoPacket.check();
         VanishNoPacket.instance.getManager().toggleVanishQuiet(player);
+    }
+
+    /**
+     * Loud toggle. Announces to player, and to those with appropriate perms
+     * 
+     * @param player
+     *            vanishing
+     * @throws VanishNotLoadedException
+     */
+    public static void toggleVanishWithAnnounce(Player player) throws VanishNotLoadedException {
+        VanishNoPacket.check();
+        VanishNoPacket.instance.getManager().toggleVanish(player);
     }
 
     private static void check() throws VanishNotLoadedException {

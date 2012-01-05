@@ -1,10 +1,12 @@
 package org.kitteh.vanish.sniffers;
 
+import net.minecraft.server.Packet;
+
 import org.bukkit.entity.Player;
+import org.getspout.spout.packet.standard.MCCraftPacket;
 import org.getspout.spoutapi.packet.listener.PacketListener;
 import org.getspout.spoutapi.packet.standard.MCPacket;
 import org.kitteh.vanish.VanishManager;
-
 
 public abstract class Sniffer implements PacketListener {
 
@@ -17,13 +19,13 @@ public abstract class Sniffer implements PacketListener {
     @Override
     public boolean checkPacket(Player player, MCPacket packet) {
         try {
-            return this.checkPakkit(player, packet);
+            return this.checkPakkit(player, ((MCCraftPacket) packet).getPacket());
         } catch (final ClassCastException e) {
             this.vanish.sanityCheck(e);
         }
         return true;
     }
 
-    public abstract boolean checkPakkit(Player player, MCPacket packet) throws ClassCastException;
+    public abstract boolean checkPakkit(Player player, Packet packet) throws ClassCastException;
 
 }

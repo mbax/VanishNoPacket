@@ -6,7 +6,6 @@ import org.kitteh.vanish.VanishPlugin;
 
 import com.earth2me.essentials.IEssentials;
 
-
 public class EssentialsHook {
     private final VanishPlugin plugin;
 
