@@ -1,4 +1,4 @@
-package to.joe.vanish.staticaccess;
+package org.kitteh.vanish.staticaccess;
 
 public class VanishNotLoadedException extends Exception {
 

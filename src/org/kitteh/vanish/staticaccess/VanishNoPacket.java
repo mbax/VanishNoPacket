@@ -1,4 +1,4 @@
-package to.joe.vanish.staticaccess;
+package org.kitteh.vanish.staticaccess;
 
 import org.bukkit.entity.Player;
 

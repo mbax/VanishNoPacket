@@ -15,12 +15,12 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
+import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
 import to.joe.vanish.hooks.JSONAPIHook;
 import to.joe.vanish.listeners.*;
-import to.joe.vanish.staticaccess.VanishNoPacket;
 
 public class VanishPlugin extends JavaPlugin {
 
