@@ -55,11 +55,6 @@ public class VanishManager {
 
     private final VanishPlugin plugin;
 
-    private final Object syncEID = new Object();
-    private final Object syncNames = new Object();
-    private final Object syncSafeList29 = new Object();
-    private final Object syncSafeList201 = new Object();
-
     private final Sniffer5EntityEquipment sniffer5 = new Sniffer5EntityEquipment(this);
     private final Sniffer17EntityLocationAction sniffer17 = new Sniffer17EntityLocationAction(this);
     private final Sniffer18ArmAnimation sniffer18 = new Sniffer18ArmAnimation(this);
@@ -160,6 +155,7 @@ public class VanishManager {
     }
 
     public void playerQuit(Player player) {
+        VanishPerms.userQuit(player);
         this.removeVanished(player.getName(), ((CraftPlayer) player).getEntityId());
         this.plugin.getManager().safelist29Mod(((CraftPlayer) player).getEntityId(), this.plugin.getServer().getOnlinePlayers().length);
     }
@@ -333,12 +329,8 @@ public class VanishManager {
     }
 
     private void addVanished(String name, int id) {
-        synchronized (this.syncEID) {
-            this.listOfEntityIDs.add(id);
-        }
-        synchronized (this.syncNames) {
-            this.listOfPlayerNames.add(name);
-        }
+        this.listOfEntityIDs.add(id);
+        this.listOfPlayerNames.add(name);
     }
 
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
@@ -369,9 +361,7 @@ public class VanishManager {
     }
 
     private boolean isVanished(int id) {
-        synchronized (this.syncEID) {
-            return this.listOfEntityIDs.contains(id);
-        }
+        return this.listOfEntityIDs.contains(id);
     }
 
     private boolean onSafeList201(String name) {
@@ -383,12 +373,8 @@ public class VanishManager {
     }
 
     private void removeVanished(String name, int id) {
-        synchronized (this.syncEID) {
-            this.listOfEntityIDs.remove(Integer.valueOf(id));
-        }
-        synchronized (this.syncNames) {
-            this.listOfPlayerNames.remove(name);
-        }
+        this.listOfEntityIDs.remove(Integer.valueOf(id));
+        this.listOfPlayerNames.remove(name);
     }
 
     private void revealAll() {
@@ -403,28 +389,24 @@ public class VanishManager {
     }
 
     private void safelist201Mod(String name, Integer diff) {
-        synchronized (this.syncSafeList201) {
-            if (this.safeList201.containsKey(name)) {
-                diff += this.safeList201.get(name);
-            }
-            if (diff == 0) {
-                this.safeList201.remove(name);
-            } else {
-                this.safeList201.put(name, diff);
-            }
+        if (this.safeList201.containsKey(name)) {
+            diff += this.safeList201.get(name);
+        }
+        if (diff == 0) {
+            this.safeList201.remove(name);
+        } else {
+            this.safeList201.put(name, diff);
         }
     }
 
     private void safelist29Mod(Integer eid, Integer diff) {
-        synchronized (this.syncSafeList29) {
-            if (this.safeList29.containsKey(eid)) {
-                diff += this.safeList29.get(eid);
-            }
-            if (diff == 0) {
-                this.safeList29.remove(eid);
-            } else {
-                this.safeList29.put(eid, diff);
-            }
+        if (this.safeList29.containsKey(eid)) {
+            diff += this.safeList29.get(eid);
+        }
+        if (diff == 0) {
+            this.safeList29.remove(eid);
+        } else {
+            this.safeList29.put(eid, diff);
         }
     }
 

@@ -20,6 +20,7 @@ import to.joe.vanish.hooks.DynmapHook;
 import to.joe.vanish.hooks.EssentialsHook;
 import to.joe.vanish.hooks.JSONAPIHook;
 import to.joe.vanish.listeners.*;
+import to.joe.vanish.staticaccess.VanishNoPacket;
 
 public class VanishPlugin extends JavaPlugin {
 
@@ -191,6 +192,7 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        VanishNoPacket.setInstance(null);
         this.spoutCraft.disablePlugin();
         this.essentialsHook.onPluginDisable();
         this.dynmapHook.onPluginDisable();
@@ -268,6 +270,8 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.SERVER_LIST_PING, this.listenServer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, this.listenSpout, Priority.Normal, this);
+
+        VanishNoPacket.setInstance(this);
 
         this.log("Version " + this.selfDescription.getVersion() + " enabled.");
     }

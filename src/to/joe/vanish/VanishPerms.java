@@ -133,6 +133,10 @@ public class VanishPerms {
         return VanishPerms.getUser(player).toggleSeeAll();
     }
 
+    public static void userQuit(Player player) {
+        VanishPerms.users.remove(player.getName());
+    }
+
     private static VanishUser getUser(Player player) {
         VanishUser user = VanishPerms.users.get(player.getName());
         if (user == null) {
