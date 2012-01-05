@@ -1,3 +1,11 @@
+#
+# VanishNoPacket
+#   A fine choice of invisibility for the discerning server administrator.
+#   http://www.kitteh.org
+#
+#
+#  Below is a list of settings with some description
+#
 fakeannounce:
     automaticforsilentjoin: false
     join: '%p joined the game.'

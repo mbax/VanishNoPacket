@@ -1,9 +1,9 @@
 package org.kitteh.vanish.staticaccess;
 
 import org.bukkit.entity.Player;
+import org.kitteh.vanish.VanishManager;
+import org.kitteh.vanish.VanishPlugin;
 
-import to.joe.vanish.VanishManager;
-import to.joe.vanish.VanishPlugin;
 
 /**
  * Static party!

@@ -1,6 +1,6 @@
 name: VanishNoPacket
-main: to.joe.vanish.VanishPlugin
-version: 1.8.9
+main: org.kitteh.vanish.VanishPlugin
+version: 2.0
 website: http://forums.joe.to
 depend: [Spout]
 softdepend: [Essentials,dynmap,JSONAPI]
