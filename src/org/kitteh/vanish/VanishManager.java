@@ -260,7 +260,7 @@ public class VanishManager {
         this.safeList29 = new HashMap<Integer, Integer>();
         this.safeList201 = new HashMap<String, Integer>();
         this.sleepIgnored = new HashMap<String, Boolean>();
-        this.tabControl=tabControl;
+        this.tabControl = tabControl;
     }
 
     /**
@@ -341,7 +341,7 @@ public class VanishManager {
         this.safelist29Mod(eid, 1);
 
         craftPlayer.getHandle().netServerHandler.sendPacket(new Hat(((CraftPlayer) vanishingPlayer).getEntityId()));
-        if(this.tabControl){
+        if (this.tabControl) {
             craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
             this.safelist201Mod(vanishingPlayer.getName(), 1);
         }
@@ -427,7 +427,7 @@ public class VanishManager {
 
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
         ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));
-        if(this.tabControl){
+        if (this.tabControl) {
             ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
         }
     }

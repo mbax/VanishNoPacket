@@ -19,20 +19,16 @@ public class VanishCommand implements CommandExecutor {
         if ((sender instanceof Player)) {
             final Player player = (Player) sender;
             if (label.equals("np")) {
-                this.toggle(player, "nopickup");
-                return true;
+                return this.toggle(player, "nopickup");
             }
             if (label.equals("nf")) {
-                this.toggle(player, "nofollow");
-                return true;
+                return this.toggle(player, "nofollow");
             }
             if (label.equals("ni")) {
-                this.toggle(player, "nointeract");
-                return true;
+                return this.toggle(player, "nointeract");
             }
             if (label.equals("nc")) {
-                this.toggle(player, "nochat");
-                return true;
+                return this.toggle(player, "nochat");
             }
             if ((args.length == 0)) {
                 if (VanishPerms.canVanish((Player) sender)) {
@@ -46,38 +42,38 @@ public class VanishCommand implements CommandExecutor {
                 }
             } else if (args[0].equalsIgnoreCase("toggle") || args[0].equalsIgnoreCase("t")) {
                 if (args.length == 1) {
-                    final StringBuilder toggleList = new StringBuilder();
+                    final StringBuilder toggleReply = new StringBuilder();
                     if (VanishPerms.canToggleSee(player)) {
-                        toggleList.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
+                        toggleReply.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
                         this.plugin.getManager().resetSeeing(player);
                     }
                     if (VanishPerms.canToggleNoPickup(player)) {
-                        this.comma(toggleList, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
+                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleNoFollow(player)) {
-                        this.comma(toggleList, this.colorize(VanishPerms.canNotFollow(player)) + "nofollow" + ChatColor.DARK_AQUA);
+                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotFollow(player)) + "nofollow" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleNoInteract(player)) {
-                        this.comma(toggleList, this.colorize(VanishPerms.canNotInteract(player)) + "nointeract" + ChatColor.DARK_AQUA);
+                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotInteract(player)) + "nointeract" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleDamageIn(player)) {
-                        this.comma(toggleList, this.colorize(VanishPerms.blockIncomingDamage(player)) + "damage-in" + ChatColor.DARK_AQUA);
+                        this.appendList(toggleReply, this.colorize(VanishPerms.blockIncomingDamage(player)) + "damage-in" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleDamageOut(player)) {
-                        this.comma(toggleList, this.colorize(VanishPerms.blockOutgoingDamage(player)) + "damage-out" + ChatColor.DARK_AQUA);
+                        this.appendList(toggleReply, this.colorize(VanishPerms.blockOutgoingDamage(player)) + "damage-out" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleNoChat(player)) {
-                        this.comma(toggleList, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
+                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
                     }
-                    if (toggleList.length() > 0) {
-                        toggleList.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
+                    if (toggleReply.length() > 0) {
+                        toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                     } else {
                         if (VanishPerms.canVanish((Player) sender)) {
-                            toggleList.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
+                            toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
                         }
                     }
-                    if (toggleList.length() > 0) {
-                        player.sendMessage(toggleList.toString());
+                    if (toggleReply.length() > 0) {
+                        player.sendMessage(toggleReply.toString());
                     }
                 } else {
                     this.toggle(player, args[1]);
@@ -101,6 +97,13 @@ public class VanishCommand implements CommandExecutor {
         return true;
     }
 
+    private void appendList(StringBuilder builder, String string) {
+        if (builder.length() > 0) {
+            builder.append(", ");
+        }
+        builder.append(string);
+    }
+
     private String colorize(boolean has) {
         if (has) {
             return ChatColor.GREEN.toString();
@@ -109,14 +112,7 @@ public class VanishCommand implements CommandExecutor {
         }
     }
 
-    private void comma(StringBuilder builder, String string) {
-        if (builder.length() > 0) {
-            builder.append(", ");
-        }
-        builder.append(string);
-    }
-
-    private void toggle(Player player, String toggle) {
+    private boolean toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
         boolean status = false;;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
@@ -153,5 +149,6 @@ public class VanishCommand implements CommandExecutor {
         } else if (VanishPerms.canVanish(player)) {
             player.sendMessage(ChatColor.DARK_AQUA + "You can't toggle that!");
         }
+        return true;
     }
 }
