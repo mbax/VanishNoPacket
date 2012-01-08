@@ -14,11 +14,7 @@ public class Sniffer29DestroyEntity extends Sniffer {
 
     @Override
     public boolean checkPakkit(Player player, Packet packet) throws ClassCastException {
-        final Packet29DestroyEntity packit = ((Packet29DestroyEntity) packet);
-        if (packit instanceof VanishManager.Hat) {
-            return true;
-        }
-        return !this.vanish.shouldHide(player, packit.a);
+        return !this.vanish.shouldHide(player, ((Packet29DestroyEntity) packet).a);
     }
 
 }

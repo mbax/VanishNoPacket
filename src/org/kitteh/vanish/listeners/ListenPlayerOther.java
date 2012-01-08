@@ -10,11 +10,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenPlayer extends PlayerListener {
+public class ListenPlayerOther extends PlayerListener {
 
     private final VanishPlugin plugin;
 
-    public ListenPlayer(VanishPlugin instance) {
+    public ListenPlayerOther(VanishPlugin instance) {
         this.plugin = instance;
     }
 

@@ -8,12 +8,12 @@ import org.bukkit.event.player.PlayerListener;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenPlayerMessagesSent extends PlayerListener {
+public class ListenPlayerMessages extends PlayerListener {
 
     private final VanishPlugin plugin;
     private boolean permTestEnabled = false;
 
-    public ListenPlayerMessagesSent(VanishPlugin instance) {
+    public ListenPlayerMessages(VanishPlugin instance) {
         this.plugin = instance;
     }
 

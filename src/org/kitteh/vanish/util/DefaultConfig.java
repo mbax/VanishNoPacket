@@ -9,6 +9,9 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
+/**
+ * I'll remove this on next Bukkit RB
+ */
 public class DefaultConfig {
     public static void set(String name) {
         try {

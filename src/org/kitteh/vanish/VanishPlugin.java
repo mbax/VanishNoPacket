@@ -68,11 +68,11 @@ public class VanishPlugin extends JavaPlugin {
     private final VanishManager manager = new VanishManager(this);
     private final ListenEntity listenEntity = new ListenEntity(this);
 
-    private final ListenPlayer listenPlayer = new ListenPlayer(this);
+    private final ListenPlayerOther listenPlayer = new ListenPlayerOther(this);
 
     private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
     private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
-    private final ListenPlayerMessagesSent listenPlayerMessagesSent = new ListenPlayerMessagesSent(this);
+    private final ListenPlayerMessages listenPlayerMessagesSent = new ListenPlayerMessages(this);
     private final ListenServer listenServer = new ListenServer(this);
     private final ListenSpout listenSpout = new ListenSpout(this);
 

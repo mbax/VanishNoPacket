@@ -3,9 +3,10 @@ package org.kitteh.vanish;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.logging.Level;
 
+import net.minecraft.server.NetworkManager;
 import net.minecraft.server.Packet201PlayerInfo;
 import net.minecraft.server.Packet20NamedEntitySpawn;
 import net.minecraft.server.Packet29DestroyEntity;
@@ -24,33 +25,6 @@ import org.kitteh.vanish.sniffers.*;
  * 
  */
 public class VanishManager {
-
-    public class Hat extends Packet29DestroyEntity {
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        public Hat(int eid) {
-            super(eid);
-            Field field;
-            try {
-                field = Hat.class.getSuperclass().getSuperclass().getDeclaredField("a");
-            } catch (final NoSuchFieldException e) {
-                return;
-            } catch (final SecurityException e) {
-                return;
-            }
-            field.setAccessible(true);
-            Map<Class, Integer> map;
-            try {
-                map = (Map<Class, Integer>) field.get(this);
-            } catch (final Exception e) {
-                return;
-            }
-            map.put(Hat.class, 29);
-            try {
-                field.set(this, map);
-            } catch (final Exception e) {
-            }
-        }
-    }
 
     private final VanishPlugin plugin;
 
@@ -73,15 +47,17 @@ public class VanishManager {
     private final Sniffer42RemoveMobEffect sniffer42 = new Sniffer42RemoveMobEffect(this);
     private final Sniffer201PlayerInfo sniffer201 = new Sniffer201PlayerInfo(this);
 
-    private ArrayList<Integer> listOfEntityIDs;
-    private ArrayList<String> listOfPlayerNames;
-    private HashMap<Integer, Integer> safeList29;
-    private HashMap<String, Boolean> sleepIgnored;//temporary is the plan
-    private HashMap<String, Integer> safeList201;
+    private ArrayList<Integer> listOfVanishedEntityIDs;
+    private ArrayList<String> listOfVanishedPlayerNames;
+    private HashMap<Integer, Integer> safeListPacket29;
+    private HashMap<String, Boolean> sleepIgnored;
+    private HashMap<String, Integer> safeListPacket201;
+    
+    private Field packetQueueListField;
 
-    private VanishAnnounceManipulator manipulator;
+    private VanishAnnounceManipulator announceManipulator;
 
-    private boolean tabControl;
+    private boolean tabControlEnabled;
 
     public VanishManager(VanishPlugin plugin) {
         this.plugin = plugin;
@@ -91,7 +67,7 @@ public class VanishManager {
      * @return the Announce Manipulator
      */
     public VanishAnnounceManipulator getAnnounceManipulator() {
-        return this.manipulator;
+        return this.announceManipulator;
     }
 
     /**
@@ -108,7 +84,7 @@ public class VanishManager {
      * @return true if vanished
      */
     public boolean isVanished(Player player) {
-        return this.listOfPlayerNames.contains(player.getName());
+        return this.listOfVanishedPlayerNames.contains(player.getName());
     }
 
     /**
@@ -127,7 +103,7 @@ public class VanishManager {
      * @return the number of players currently vanished
      */
     public int numVanished() {
-        return this.listOfEntityIDs.size();
+        return this.listOfVanishedEntityIDs.size();
     }
 
     /**
@@ -254,13 +230,21 @@ public class VanishManager {
         SpoutManager.getPacketManager().addListener(41, this.sniffer41);
         SpoutManager.getPacketManager().addListener(42, this.sniffer42);
         SpoutManager.getPacketManager().addListener(201, this.sniffer201);
-        this.manipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit, delayedJoinTracking);
-        this.listOfEntityIDs = new ArrayList<Integer>();
-        this.listOfPlayerNames = new ArrayList<String>();
-        this.safeList29 = new HashMap<Integer, Integer>();
-        this.safeList201 = new HashMap<String, Integer>();
+        this.announceManipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit, delayedJoinTracking);
+        this.listOfVanishedEntityIDs = new ArrayList<Integer>();
+        this.listOfVanishedPlayerNames = new ArrayList<String>();
+        this.safeListPacket29 = new HashMap<Integer, Integer>();
+        this.safeListPacket201 = new HashMap<String, Integer>();
         this.sleepIgnored = new HashMap<String, Boolean>();
-        this.tabControl = tabControl;
+        this.tabControlEnabled = tabControl;
+        
+        try {
+            this.packetQueueListField = NetworkManager.class.getDeclaredField("highPriorityQueue");
+        } catch (final Exception e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE,"[Vanish] Could not hook into the system. Check for a VanishNoPacket update",e);
+            this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
+        }
+        this.packetQueueListField.setAccessible(true);
     }
 
     /**
@@ -283,7 +267,7 @@ public class VanishManager {
         } else {
             this.plugin.hooksUnvanish(togglingPlayer);
             messageBit = "become visible.";
-            this.manipulator.vanishToggled(togglingPlayer);
+            this.announceManipulator.vanishToggled(togglingPlayer);
         }
         final String message = base + messageBit;
         togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
@@ -331,17 +315,21 @@ public class VanishManager {
     }
 
     private void addVanished(String name, int id) {
-        this.listOfEntityIDs.add(id);
-        this.listOfPlayerNames.add(name);
+        this.listOfVanishedEntityIDs.add(id);
+        this.listOfVanishedPlayerNames.add(name);
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
         final CraftPlayer craftPlayer = ((CraftPlayer) obliviousPlayer);
         final int eid = craftPlayer.getEntityId();
         this.safelist29Mod(eid, 1);
-
-        craftPlayer.getHandle().netServerHandler.sendPacket(new Hat(((CraftPlayer) vanishingPlayer).getEntityId()));
-        if (this.tabControl) {
+        try {
+            ((List)this.packetQueueListField.get(craftPlayer.getHandle().netServerHandler.networkManager)).add(0,new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));;
+        } catch (Exception e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE,"[Vanish] Encountered a serious error",e);
+        }
+        if (this.tabControlEnabled) {
             craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
             this.safelist201Mod(vanishingPlayer.getName(), 1);
         }
@@ -365,20 +353,20 @@ public class VanishManager {
     }
 
     private boolean isVanished(int id) {
-        return this.listOfEntityIDs.contains(id);
+        return this.listOfVanishedEntityIDs.contains(id);
     }
 
     private boolean onSafeList201(String name) {
-        return this.safeList201.containsKey(name);
+        return this.safeListPacket201.containsKey(name);
     }
 
     private boolean onSafeList29(Integer eid) {
-        return this.safeList29.containsKey(eid);
+        return this.safeListPacket29.containsKey(eid);
     }
 
     private void removeVanished(String name, int id) {
-        this.listOfEntityIDs.remove(Integer.valueOf(id));
-        this.listOfPlayerNames.remove(name);
+        this.listOfVanishedEntityIDs.remove(Integer.valueOf(id));
+        this.listOfVanishedPlayerNames.remove(name);
     }
 
     private void revealAll() {
@@ -393,24 +381,24 @@ public class VanishManager {
     }
 
     private void safelist201Mod(String name, Integer diff) {
-        if (this.safeList201.containsKey(name)) {
-            diff += this.safeList201.get(name);
+        if (this.safeListPacket201.containsKey(name)) {
+            diff += this.safeListPacket201.get(name);
         }
         if (diff == 0) {
-            this.safeList201.remove(name);
+            this.safeListPacket201.remove(name);
         } else {
-            this.safeList201.put(name, diff);
+            this.safeListPacket201.put(name, diff);
         }
     }
 
     private void safelist29Mod(Integer eid, Integer diff) {
-        if (this.safeList29.containsKey(eid)) {
-            diff += this.safeList29.get(eid);
+        if (this.safeListPacket29.containsKey(eid)) {
+            diff += this.safeListPacket29.get(eid);
         }
         if (diff == 0) {
-            this.safeList29.remove(eid);
+            this.safeListPacket29.remove(eid);
         } else {
-            this.safeList29.put(eid, diff);
+            this.safeListPacket29.put(eid, diff);
         }
     }
 
@@ -425,9 +413,14 @@ public class VanishManager {
         }
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
-        ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));
-        if (this.tabControl) {
+        try {
+            ((List)this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager)).add(0,new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));;
+        } catch (Exception e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE,"[Vanish] Encountered a serious error",e);
+        }
+        if (this.tabControlEnabled) {
             ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
         }
     }
