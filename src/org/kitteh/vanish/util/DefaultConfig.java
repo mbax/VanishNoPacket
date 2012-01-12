@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 /**
- * I'll remove this on next Bukkit RB
+ * I'll remove this on next Bukkit RB, lol forced upgrades
  */
 public class DefaultConfig {
     public static void set(String name) {
@@ -18,6 +18,7 @@ public class DefaultConfig {
             final File target = new File(VanishNoPacket.getPlugin().getDataFolder(), name);
             final InputStream source = VanishNoPacket.getPlugin().getResource(name);
             if (source == null) {
+                Bukkit.getServer().getLogger().log(Level.SEVERE, "Could not find default config " + name);
                 return;
             }
             if (!VanishNoPacket.getPlugin().getDataFolder().exists()) {
