@@ -122,6 +122,6 @@ public class VanishAnnounceManipulator {
     }
 
     private String injectPlayerInformation(String message, Player player) {
-        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName());
+        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", this.plugin.getBPerms().getPrefix(player)).replace("%us", this.plugin.getBPerms().getSuffix(player));
     }
 }

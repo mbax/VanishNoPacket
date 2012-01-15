@@ -52,7 +52,7 @@ public class VanishManager {
     private HashMap<Integer, Integer> safeListPacket29;
     private HashMap<String, Boolean> sleepIgnored;
     private HashMap<String, Integer> safeListPacket201;
-    
+
     private Field packetQueueListField;
 
     private VanishAnnounceManipulator announceManipulator;
@@ -237,11 +237,11 @@ public class VanishManager {
         this.safeListPacket201 = new HashMap<String, Integer>();
         this.sleepIgnored = new HashMap<String, Boolean>();
         this.tabControlEnabled = tabControl;
-        
+
         try {
             this.packetQueueListField = NetworkManager.class.getDeclaredField("highPriorityQueue");
         } catch (final Exception e) {
-            this.plugin.getServer().getLogger().log(Level.SEVERE,"[Vanish] Could not hook into the system. Check for a VanishNoPacket update",e);
+            this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Could not hook into the system. Check for a VanishNoPacket update", e);
             this.plugin.getServer().getPluginManager().disablePlugin(this.plugin);
         }
         this.packetQueueListField.setAccessible(true);
@@ -325,9 +325,9 @@ public class VanishManager {
         final int eid = craftPlayer.getEntityId();
         this.safelist29Mod(eid, 1);
         try {
-            ((List)this.packetQueueListField.get(craftPlayer.getHandle().netServerHandler.networkManager)).add(0,new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));;
-        } catch (Exception e) {
-            this.plugin.getServer().getLogger().log(Level.SEVERE,"[Vanish] Encountered a serious error",e);
+            ((List) this.packetQueueListField.get(craftPlayer.getHandle().netServerHandler.networkManager)).add(0, new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));;
+        } catch (final Exception e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Encountered a serious error", e);
         }
         if (this.tabControlEnabled) {
             craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
@@ -416,9 +416,9 @@ public class VanishManager {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
         try {
-            ((List)this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager)).add(0,new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));;
-        } catch (Exception e) {
-            this.plugin.getServer().getLogger().log(Level.SEVERE,"[Vanish] Encountered a serious error",e);
+            ((List) this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager)).add(0, new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));;
+        } catch (final Exception e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Encountered a serious error", e);
         }
         if (this.tabControlEnabled) {
             ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));

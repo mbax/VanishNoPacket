@@ -12,6 +12,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
+import org.kitteh.vanish.hooks.BPermissionsHook;
 import org.kitteh.vanish.hooks.DynmapHook;
 import org.kitteh.vanish.hooks.EssentialsHook;
 import org.kitteh.vanish.hooks.JSONAPIHook;
@@ -78,9 +79,9 @@ public class VanishPlugin extends JavaPlugin {
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
-
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
     private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
+    private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
 
     private boolean enableColoration;
 
@@ -220,6 +221,8 @@ public class VanishPlugin extends JavaPlugin {
 
         this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
 
+        this.bPermissionsHook.onPluginEnable();
+
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
@@ -271,6 +274,10 @@ public class VanishPlugin extends JavaPlugin {
         VanishNoPacket.setInstance(this);
 
         this.log("Version " + this.getDescription().getVersion() + " enabled.");
+    }
+
+    public BPermissionsHook getBPerms() {
+        return this.bPermissionsHook;
     }
 
     /**

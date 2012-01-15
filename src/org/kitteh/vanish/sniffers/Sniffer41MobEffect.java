@@ -15,8 +15,8 @@ public class Sniffer41MobEffect extends Sniffer {
 
     @Override
     public boolean checkPakkit(Player player, Packet packet) throws ClassCastException {
-        int targetID=((Packet41MobEffect) packet).a;
-        if(((CraftPlayer)player).getEntityId()==targetID){
+        final int targetID = ((Packet41MobEffect) packet).a;
+        if (((CraftPlayer) player).getEntityId() == targetID) {
             return true;
         }
         return !this.vanish.shouldHide(player, targetID);
