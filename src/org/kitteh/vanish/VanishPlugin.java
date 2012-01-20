@@ -92,6 +92,10 @@ public class VanishPlugin extends JavaPlugin {
         return this.enableColoration;
     }
 
+    public BPermissionsHook getBPerms() {
+        return this.bPermissionsHook;
+    }
+
     /**
      * @return version of VanishNoPacket in use
      */
@@ -274,10 +278,6 @@ public class VanishPlugin extends JavaPlugin {
         VanishNoPacket.setInstance(this);
 
         this.log("Version " + this.getDescription().getVersion() + " enabled.");
-    }
-
-    public BPermissionsHook getBPerms() {
-        return this.bPermissionsHook;
     }
 
     /**

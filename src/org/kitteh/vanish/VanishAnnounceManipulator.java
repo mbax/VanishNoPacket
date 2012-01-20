@@ -13,8 +13,7 @@ import org.bukkit.entity.Player;
  * particularly stupid.
  */
 public class VanishAnnounceManipulator {
-    private ArrayList<String> delayedAnnouncePlayerList;
-    private final Object syncDelayedAnnouncePlayerList = new Object();
+    private final ArrayList<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
     private final String fakeJoinMessage;
     private final String fakeQuitMessage;
@@ -36,9 +35,7 @@ public class VanishAnnounceManipulator {
         this.fakeQuitMessage = fakeQuitMessage.replace("&&", "§");
         this.delayedJoinTrackingEnabled = delayedJoinTrackingEnabled;
         this.playerOnlineStatus = new HashMap<String, Boolean>();
-        synchronized (this.syncDelayedAnnouncePlayerList) {
-            this.delayedAnnouncePlayerList = new ArrayList<String>();
-        }
+        this.delayedAnnouncePlayerList = new ArrayList<String>();
     }
 
     public void addToDelayedAnnounce(String player) {
@@ -46,9 +43,7 @@ public class VanishAnnounceManipulator {
         if (!this.delayedJoinTrackingEnabled) {
             return;
         }
-        synchronized (this.syncDelayedAnnouncePlayerList) {
-            this.delayedAnnouncePlayerList.add(player);
-        }
+        this.delayedAnnouncePlayerList.add(player);
     }
 
     /**
@@ -57,9 +52,7 @@ public class VanishAnnounceManipulator {
      * @param player
      */
     public void dropDelayedAnnounce(String player) {
-        synchronized (this.syncDelayedAnnouncePlayerList) {
-            this.delayedAnnouncePlayerList.remove(player);
-        }
+        this.delayedAnnouncePlayerList.remove(player);
     }
 
     /**

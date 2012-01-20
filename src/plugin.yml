@@ -3,7 +3,7 @@ main: org.kitteh.vanish.VanishPlugin
 version: 2.0
 website: http://forums.joe.to
 depend: [Spout]
-softdepend: [Essentials,dynmap,JSONAPI]
+softdepend: [Essentials,dynmap,JSONAPI,bPermissions]
 author: mbaxter
 description: Vanish by filtering packets using Spout
 dev-url: http://dev.bukkit.org/server-mods/vanish/
@@ -15,7 +15,7 @@ commands:
 permissions:
   vanish.currentlyVanished:
     default: false
-    description: Do not manually play with this. 
+    description: Do not manually play with this. Do not.
   vanish.vanish:
     default: op
     description: |
