@@ -211,6 +211,8 @@ public class VanishPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        VanishNoPacket.setInstance(this);
+
         final File check = new File("plugins/VanishNoPacket/config.yml");
         boolean firstTimeStarting = false;
         if (!check.exists()) {
@@ -274,8 +276,6 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.SERVER_LIST_PING, this.listenServer, Priority.Normal, this);
         this.getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, this.listenSpout, Priority.Normal, this);
-
-        VanishNoPacket.setInstance(this);
 
         this.log("Version " + this.getDescription().getVersion() + " enabled.");
     }
