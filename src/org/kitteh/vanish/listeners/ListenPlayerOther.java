@@ -2,15 +2,17 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenPlayerOther extends PlayerListener {
+public class ListenPlayerOther implements Listener {
 
     private final VanishPlugin plugin;
 
@@ -18,7 +20,7 @@ public class ListenPlayerOther extends PlayerListener {
         this.plugin = instance;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
@@ -31,14 +33,14 @@ public class ListenPlayerOther extends PlayerListener {
         }
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotPickUp(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
-    @Override
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         this.plugin.getManager().playerQuit(player);

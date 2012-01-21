@@ -2,14 +2,15 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenEntity extends EntityListener {
+public class ListenEntity implements Listener {
 
     private final VanishPlugin plugin;
 
@@ -17,15 +18,7 @@ public class ListenEntity extends EntityListener {
         this.plugin = instance;
     }
 
-    public void message(String message) {
-        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if (player != null) {
-                player.sendMessage(message);
-            }
-        }
-    }
-
-    @Override
+    @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         final Entity smacked = event.getEntity();
         if (smacked instanceof Player) {
@@ -46,7 +39,7 @@ public class ListenEntity extends EntityListener {
         }
     }
 
-    @Override
+    @EventHandler
     public void onEntityTarget(EntityTargetEvent event) {
         if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
             event.setCancelled(true);

@@ -2,11 +2,12 @@ package org.kitteh.vanish.listeners;
 
 import java.lang.reflect.Field;
 
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.event.server.ServerListener;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenServer extends ServerListener {
+public class ListenServer implements Listener {
 
     private final VanishPlugin plugin;
     private Field count;
@@ -21,7 +22,7 @@ public class ListenServer extends ServerListener {
         }
     }
 
-    @Override
+    @EventHandler
     public void onServerListPing(ServerListPingEvent event) {
         try {
             this.count.setInt(event, (this.count.getInt(event) - this.plugin.getManager().numVanished()));

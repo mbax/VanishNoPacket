@@ -2,29 +2,32 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenPlayerMessages extends PlayerListener {
+public class ListenPlayerMessages implements Listener {
 
     private final VanishPlugin plugin;
     private boolean permTestEnabled = false;
 
-    public ListenPlayerMessages(VanishPlugin instance) {
+    public ListenPlayerMessages(boolean permTest, VanishPlugin instance) {
+        this.permTestEnabled = permTest;
         this.plugin = instance;
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(PlayerChatEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
-    @Override
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if (event.getMessage().toLowerCase().startsWith("/me ") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
@@ -73,7 +76,4 @@ public class ListenPlayerMessages extends PlayerListener {
         }
     }
 
-    public void setPermTestEnabled(boolean enabled) {
-        this.permTestEnabled = enabled;
-    }
 }

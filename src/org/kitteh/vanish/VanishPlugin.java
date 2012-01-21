@@ -8,8 +8,6 @@ import java.net.URLConnection;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
 import org.kitteh.vanish.hooks.BPermissionsHook;
@@ -67,15 +65,6 @@ public class VanishPlugin extends JavaPlugin {
     private boolean versionDiff = false;
 
     private final VanishManager manager = new VanishManager(this);
-    private final ListenEntity listenEntity = new ListenEntity(this);
-
-    private final ListenPlayerOther listenPlayer = new ListenPlayerOther(this);
-
-    private final ListenPlayerJoinEarly listenPlayerJoinEarly = new ListenPlayerJoinEarly(this);
-    private final ListenPlayerJoinLate listenPlayerJoinLate = new ListenPlayerJoinLate(this);
-    private final ListenPlayerMessages listenPlayerMessagesSent = new ListenPlayerMessages(this);
-    private final ListenServer listenServer = new ListenServer(this);
-    private final ListenSpout listenSpout = new ListenSpout(this);
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
@@ -261,21 +250,14 @@ public class VanishPlugin extends JavaPlugin {
             this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
         }
 
-        this.listenPlayerMessagesSent.setPermTestEnabled(this.getConfig().getBoolean("permtest.enable", false));
-
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 
-        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_TARGET, this.listenEntity, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, this.listenEntity, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, this.listenPlayerMessagesSent, Priority.Lowest, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, this.listenPlayerMessagesSent, Priority.Lowest, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, this.listenPlayer, Priority.Highest, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinLate, Priority.Highest, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, this.listenPlayerJoinEarly, Priority.Low, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.listenPlayer, Priority.Highest, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, this.listenPlayer, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.SERVER_LIST_PING, this.listenServer, Priority.Normal, this);
-        this.getServer().getPluginManager().registerEvent(Event.Type.CUSTOM_EVENT, this.listenSpout, Priority.Normal, this);
+        this.getServer().getPluginManager().registerEvents(new ListenEntity(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this.getConfig().getBoolean("permtest.enable", false), this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenSpout(this), this);
 
         this.log("Version " + this.getDescription().getVersion() + " enabled.");
     }
