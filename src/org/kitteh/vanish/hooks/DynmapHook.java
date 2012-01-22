@@ -2,13 +2,13 @@ package org.kitteh.vanish.hooks;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.dynmap.DynmapPlugin;
+import org.dynmap.DynmapAPI;
 import org.kitteh.vanish.VanishPlugin;
 
 public class DynmapHook {
     private final VanishPlugin plugin;
 
-    private DynmapPlugin dynmap;
+    private DynmapAPI dynmap;
     private boolean enabled;
 
     public DynmapHook(VanishPlugin plugin) {
@@ -35,20 +35,20 @@ public class DynmapHook {
 
     public void unvanish(Player player) {
         if (this.enabled && (this.dynmap != null) && !player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
-            this.dynmap.playerList.show(player.getName());
+            this.dynmap.setPlayerVisiblity(player, true);
         }
     }
 
     public void vanish(Player player) {
         if (this.enabled && (this.dynmap != null)) {
-            this.dynmap.playerList.hide(player.getName());
+            this.dynmap.setPlayerVisiblity(player, false);
         }
     }
 
     private void grabDynmap() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("dynmap");
         if (grab != null) {
-            this.dynmap = ((DynmapPlugin) grab);
+            this.dynmap = ((DynmapAPI) grab);
             this.plugin.log("Now hooking into Dynmap");
         } else {
             this.plugin.log("You wanted Dynmap support. I could not find Dynmap.");

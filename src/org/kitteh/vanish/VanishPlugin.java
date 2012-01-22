@@ -109,6 +109,12 @@ public class VanishPlugin extends JavaPlugin {
         return this.manager;
     }
 
+    public void hooksJoin(Player player) {
+        if (player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
+            this.dynmapHook.vanish(player);
+        }
+    }
+
     /**
      * No touchy. Call hooks for when a player has quit
      * 

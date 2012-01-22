@@ -22,6 +22,7 @@ public class ListenPlayerJoin implements Listener {
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer());
             this.plugin.hooksVanish(event.getPlayer());
         }
+        this.plugin.hooksJoin(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
