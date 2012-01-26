@@ -274,10 +274,14 @@ public class VanishPlugin extends JavaPlugin {
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
-    
-    private void reloadPermTest(){
-        this.reloadConfig();
-        this.permTestEnabled=this.getConfig().getBoolean("permtest.enable", false);
+
+    public boolean permTestEnabled() {
+        return this.permTestEnabled;
+    }
+
+    public void reload() {
+        VanishPerms.userReload();
+        this.reloadPermTest();
     }
 
     /**
@@ -289,12 +293,8 @@ public class VanishPlugin extends JavaPlugin {
         return this.versionDiff;
     }
 
-    public void reload() {
-        VanishPerms.userReload();
-        this.reloadPermTest();
-    }
-
-    public boolean permTestEnabled() {
-        return this.permTestEnabled;
+    private void reloadPermTest() {
+        this.reloadConfig();
+        this.permTestEnabled = this.getConfig().getBoolean("permtest.enable", false);
     }
 }

@@ -16,10 +16,10 @@ public class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(args.length>0 && args[0].equalsIgnoreCase("reload") && VanishPerms.canReload(sender)){
-            plugin.reload();
-            sender.sendMessage(ChatColor.DARK_AQUA+"[Vanish] Users reloaded");
-            sender.sendMessage(ChatColor.DARK_AQUA+"[Vanish] PermTest enabled: "+plugin.permTestEnabled());
+        if ((args.length > 0) && args[0].equalsIgnoreCase("reload") && VanishPerms.canReload(sender)) {
+            this.plugin.reload();
+            sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Users reloaded");
+            sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] PermTest enabled: " + this.plugin.permTestEnabled());
             return true;
         }
         if ((sender instanceof Player)) {

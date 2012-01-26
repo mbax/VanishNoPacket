@@ -45,6 +45,10 @@ public class VanishPerms {
         return player.hasPermission("vanish.adminalerts");
     }
 
+    public static boolean canReload(CommandSender sender) {
+        return sender.hasPermission("vanish.reload");
+    }
+
     public static boolean canSeeAll(Player player) {
         return VanishPerms.getUser(player).getSeeAll();
     }
@@ -133,12 +137,12 @@ public class VanishPerms {
         return VanishPerms.getUser(player).toggleSeeAll();
     }
 
-    public static void userReload(){
-        VanishPerms.users.clear();
-    }
-    
     public static void userQuit(Player player) {
         VanishPerms.users.remove(player.getName());
+    }
+
+    public static void userReload() {
+        VanishPerms.users.clear();
     }
 
     private static VanishUser getUser(Player player) {
@@ -148,9 +152,5 @@ public class VanishPerms {
             VanishPerms.users.put(player.getName(), user);
         }
         return user;
-    }
-
-    public static boolean canReload(CommandSender sender) {
-        return sender.hasPermission("vanish.reload");
     }
 }
