@@ -13,10 +13,8 @@ import org.kitteh.vanish.VanishPlugin;
 public class ListenPlayerMessages implements Listener {
 
     private final VanishPlugin plugin;
-    private boolean permTestEnabled = false;
 
-    public ListenPlayerMessages(boolean permTest, VanishPlugin instance) {
-        this.permTestEnabled = permTest;
+    public ListenPlayerMessages(VanishPlugin instance) {
         this.plugin = instance;
     }
 
@@ -32,7 +30,7 @@ public class ListenPlayerMessages implements Listener {
         if (event.getMessage().toLowerCase().startsWith("/me ") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }
-        if (this.permTestEnabled) {
+        if (this.plugin.permTestEnabled()) {
             final String[] split = event.getMessage().split(" ");
             if ((split.length > 1) && split[0].equalsIgnoreCase("/permtest")) {
                 final boolean selfTest = VanishPerms.permTestSelf(event.getPlayer());

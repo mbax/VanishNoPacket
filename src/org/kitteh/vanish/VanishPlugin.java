@@ -74,6 +74,8 @@ public class VanishPlugin extends JavaPlugin {
 
     private boolean enableColoration;
 
+    private boolean permTestEnabled;
+
     /**
      * @return whether or not the hacky packet user coloration is enabled
      */
@@ -260,7 +262,7 @@ public class VanishPlugin extends JavaPlugin {
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
 
         this.getServer().getPluginManager().registerEvents(new ListenEntity(this), this);
-        this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this.getConfig().getBoolean("permtest.enable", false), this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
@@ -272,6 +274,11 @@ public class VanishPlugin extends JavaPlugin {
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
+    
+    private void reloadPermTest(){
+        this.reloadConfig();
+        this.permTestEnabled=this.getConfig().getBoolean("permtest.enable", false);
+    }
 
     /**
      * Will always be false if update checks are disabled
@@ -280,5 +287,14 @@ public class VanishPlugin extends JavaPlugin {
      */
     public boolean versionDifference() {
         return this.versionDiff;
+    }
+
+    public void reload() {
+        VanishPerms.userReload();
+        this.reloadPermTest();
+    }
+
+    public boolean permTestEnabled() {
+        return this.permTestEnabled;
     }
 }

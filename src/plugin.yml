@@ -124,6 +124,9 @@ permissions:
   vanish.spout.status:
     default: false
     description: See a status bar if vanished in spoutcraft
+  vanish.reload:
+    default: op
+    description: Reloads some VNP systems
   vanish.standard:
     description: Can vanish, see vanished, no pickup when vanished
     default: false

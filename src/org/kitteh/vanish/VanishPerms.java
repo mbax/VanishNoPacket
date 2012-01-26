@@ -2,6 +2,7 @@ package org.kitteh.vanish;
 
 import java.util.HashMap;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.users.VanishUser;
 
@@ -132,6 +133,10 @@ public class VanishPerms {
         return VanishPerms.getUser(player).toggleSeeAll();
     }
 
+    public static void userReload(){
+        VanishPerms.users.clear();
+    }
+    
     public static void userQuit(Player player) {
         VanishPerms.users.remove(player.getName());
     }
@@ -143,5 +148,9 @@ public class VanishPerms {
             VanishPerms.users.put(player.getName(), user);
         }
         return user;
+    }
+
+    public static boolean canReload(CommandSender sender) {
+        return sender.hasPermission("vanish.reload");
     }
 }
