@@ -60,7 +60,7 @@ public class ListenPlayerMessages implements Listener {
                     }
                     message.append("Player " + ChatColor.AQUA + target.getName() + ChatColor.DARK_AQUA);
                     permission = split[2];
-                    if (!event.getPlayer().hasPermission(permission)) {
+                    if (!target.hasPermission(permission)) {
                         message.append(" does not have ");
                     } else {
                         message.append(" has ");
