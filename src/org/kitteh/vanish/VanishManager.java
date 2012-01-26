@@ -430,22 +430,28 @@ public class VanishManager {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
         Debuggle.log("Revealing " + revealPlayer.getName() + " from " + nowAwarePlayer.getName() + " via packets");
+        final List packetQueue;
         try {
-            final List packetQueue = ((List) this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager));
-            int where = 0;
-            if (packetQueue.size() > 0) {
-                where = 1;
-            }
-            final Packet20NamedEntitySpawn packet = new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle());
-            if (this.plugin.colorationEnabled() && this.isVanished(revealPlayer)) {
-                packet.b = ChatColor.DARK_AQUA + revealPlayer.getName();
-                if (packet.b.length() > 15) {
-                    packet.b = packet.b.substring(0, 15);
-                }
-            }
-            packetQueue.add(where, packet);;
+            packetQueue = ((List) this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager));
         } catch (final Exception e) {
             this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Encountered a serious error", e);
+            return;
+        }
+        final Packet20NamedEntitySpawn packet = new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle());
+        if (this.plugin.colorationEnabled() && this.isVanished(revealPlayer)) {
+            packet.b = ChatColor.DARK_AQUA + revealPlayer.getName();
+            if (packet.b.length() > 15) {
+                packet.b = packet.b.substring(0, 15);
+            }
+        }
+        int where = 0;
+        if (packetQueue.size() > 0) {
+            where = 1;
+        }
+        try {
+            packetQueue.add(where, packet);
+        } catch (final Exception e) {
+            packetQueue.add(0, packet);
         }
         if (this.tabControlEnabled) {
             ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
