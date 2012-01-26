@@ -165,7 +165,7 @@ public class VanishPlugin extends JavaPlugin {
      * @param message
      */
     public void log(String message) {
-        this.getServer().getLogger().info("[Vanish] " + message);
+        this.getLogger().info(message);
     }
 
     /**
@@ -201,7 +201,7 @@ public class VanishPlugin extends JavaPlugin {
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
         Debuggle.nah();
-        this.log("Version " + this.getDescription().getVersion() + " disabled.");
+        this.log("v" + this.getDescription().getVersion() + " unloaded.");
     }
 
     @Override
@@ -270,7 +270,7 @@ public class VanishPlugin extends JavaPlugin {
             Debuggle.itsGoTime();
         }
 
-        this.log("Version " + this.getDescription().getVersion() + " enabled.");
+        this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
 
     /**

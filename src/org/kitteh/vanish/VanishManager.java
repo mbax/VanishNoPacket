@@ -155,7 +155,7 @@ public class VanishManager {
     }
 
     public void sanityCheck(Exception e) {
-        this.plugin.getServer().getLogger().log(Level.SEVERE, "[VANISH] A flaw has been caught. Please report this (it wont break things) :) . ", e);
+        this.plugin.getServer().getLogger().log(Level.SEVERE, "[VANISH] A flaw has been caught. Please report this (it wont break things) to http://github.com/mbax/VanishNoPacket :) . ", e);
     }
 
     /**
@@ -305,6 +305,9 @@ public class VanishManager {
         }
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
+            if (vanishingPlayer.equals(otherPlayer)) {
+                continue;
+            }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
             if ((this.getDistance(vanishingPlayer, otherPlayer) > 512) || (otherPlayer.equals(vanishingPlayer))) {
                 Debuggle.log("Too far. Doing nothing about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
