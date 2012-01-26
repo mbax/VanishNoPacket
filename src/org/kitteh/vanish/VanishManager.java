@@ -215,7 +215,7 @@ public class VanishManager {
      * Smack that vanish list. Smack it hard.
      * But really, don't call this.
      */
-    public void startup(String fakejoin, String fakequit, boolean delayedJoinTracking, boolean tabControl) {
+    public void startup(boolean tabControl) {
         SpoutManager.getPacketManager().addListener(5, this.sniffer5);
         SpoutManager.getPacketManager().addListener(17, this.sniffer17);
         SpoutManager.getPacketManager().addListener(18, this.sniffer18);
@@ -234,7 +234,7 @@ public class VanishManager {
         SpoutManager.getPacketManager().addListener(41, this.sniffer41);
         SpoutManager.getPacketManager().addListener(42, this.sniffer42);
         SpoutManager.getPacketManager().addListener(201, this.sniffer201);
-        this.announceManipulator = new VanishAnnounceManipulator(this.plugin, fakejoin, fakequit, delayedJoinTracking);
+        this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
         this.listOfVanishedEntityIDs = new ArrayList<Integer>();
         this.listOfVanishedPlayerNames = new ArrayList<String>();
         this.safeListPacket29 = new HashMap<Integer, Integer>();
@@ -339,7 +339,7 @@ public class VanishManager {
         final int eid = craftPlayer.getEntityId();
         this.safelist29Mod(eid, 1);
         try {
-            ((List) this.packetQueueListField.get(craftPlayer.getHandle().netServerHandler.networkManager)).add(0, new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));;
+            ((List) this.packetQueueListField.get(craftPlayer.getHandle().netServerHandler.networkManager)).add(0, new Packet29DestroyEntity(((CraftPlayer) vanishingPlayer).getEntityId()));
         } catch (final Exception e) {
             this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Encountered a serious error", e);
         }
@@ -438,7 +438,7 @@ public class VanishManager {
             return;
         }
         final Packet20NamedEntitySpawn packet = new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle());
-        if (this.plugin.colorationEnabled() && this.isVanished(revealPlayer)) {
+        if (Settings.enableColoration() && this.isVanished(revealPlayer)) {
             packet.b = ChatColor.DARK_AQUA + revealPlayer.getName();
             if (packet.b.length() > 15) {
                 packet.b = packet.b.substring(0, 15);

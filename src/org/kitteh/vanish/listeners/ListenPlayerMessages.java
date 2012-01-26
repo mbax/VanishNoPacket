@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
@@ -30,7 +31,7 @@ public class ListenPlayerMessages implements Listener {
         if (event.getMessage().toLowerCase().startsWith("/me ") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }
-        if (this.plugin.permTestEnabled()) {
+        if (Settings.enablePermTest()) {
             final String[] split = event.getMessage().split(" ");
             if ((split.length > 1) && split[0].equalsIgnoreCase("/permtest")) {
                 final boolean selfTest = VanishPerms.permTestSelf(event.getPlayer());

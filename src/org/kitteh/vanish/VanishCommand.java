@@ -19,7 +19,7 @@ public class VanishCommand implements CommandExecutor {
         if ((args.length > 0) && args[0].equalsIgnoreCase("reload") && VanishPerms.canReload(sender)) {
             this.plugin.reload();
             sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Users reloaded");
-            sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] PermTest enabled: " + this.plugin.permTestEnabled());
+            sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Some settings refreshed");
             return true;
         }
         if ((sender instanceof Player)) {
@@ -120,7 +120,7 @@ public class VanishCommand implements CommandExecutor {
 
     private boolean toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
-        boolean status = false;;
+        boolean status = false;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
             status = VanishPerms.toggleSeeAll(player);
             message.append("see all");

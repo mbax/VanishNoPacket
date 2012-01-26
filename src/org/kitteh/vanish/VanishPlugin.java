@@ -72,17 +72,6 @@ public class VanishPlugin extends JavaPlugin {
     private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
     private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
 
-    private boolean enableColoration;
-
-    private boolean permTestEnabled;
-
-    /**
-     * @return whether or not the hacky packet user coloration is enabled
-     */
-    public boolean colorationEnabled() {
-        return this.enableColoration;
-    }
-
     public BPermissionsHook getBPerms() {
         return this.bPermissionsHook;
     }
@@ -219,7 +208,7 @@ public class VanishPlugin extends JavaPlugin {
             this.reloadConfig();
         }
 
-        this.enableColoration = this.getConfig().getBoolean("enableColoration", false);
+        Settings.freshStart(this.getConfig());
 
         this.essentialsHook.onPluginEnable(this.getConfig().getBoolean("hooks.essentials", false));
 
@@ -242,7 +231,7 @@ public class VanishPlugin extends JavaPlugin {
 
         this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("spoutcraft.enable", false));
 
-        this.manager.startup(this.getConfig().getString("fakeannounce.join", "%p joined the game."), this.getConfig().getString("fakeannounce.quit", "%p left the game."), this.getConfig().getBoolean("fakeannounce.automaticforsilentjoin", false), this.getConfig().getBoolean("enableTabControl", true));
+        this.manager.startup(this.getConfig().getBoolean("enableTabControl", true));
 
         boolean updateCheck = this.getConfig().getBoolean("updates.check", true);
         if (firstTimeStarting) {
@@ -268,20 +257,13 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenSpout(this), this);
 
-        if (this.getConfig().getBoolean("debug", false)) {
-            Debuggle.itsGoTime();
-        }
-
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
 
-    public boolean permTestEnabled() {
-        return this.permTestEnabled;
-    }
-
     public void reload() {
+        this.reloadConfig();
+        Settings.freshStart(this.getConfig());
         VanishPerms.userReload();
-        this.reloadPermTest();
     }
 
     /**
@@ -293,8 +275,4 @@ public class VanishPlugin extends JavaPlugin {
         return this.versionDiff;
     }
 
-    private void reloadPermTest() {
-        this.reloadConfig();
-        this.permTestEnabled = this.getConfig().getBoolean("permtest.enable", false);
-    }
 }
