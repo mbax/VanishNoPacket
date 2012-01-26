@@ -200,6 +200,7 @@ public class VanishPlugin extends JavaPlugin {
         this.dynmapHook.onPluginDisable();
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
+        Debuggle.nah();
         this.log("Version " + this.getDescription().getVersion() + " disabled.");
     }
 
@@ -264,6 +265,10 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenSpout(this), this);
+
+        if (this.getConfig().getBoolean("debug", false)) {
+            Debuggle.itsGoTime();
+        }
 
         this.log("Version " + this.getDescription().getVersion() + " enabled.");
     }

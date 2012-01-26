@@ -94,8 +94,10 @@ public class VanishManager {
     public boolean isVanished(String playerName) {
         final Player player = this.plugin.getServer().getPlayer(playerName);
         if (player != null) {
+            Debuggle.log("Testing vanished status of " + player.getName() + ": " + this.isVanished(player));
             return this.isVanished(player);
         }
+        Debuggle.log("Testing vanished status of " + playerName + ": null");
         return false;
     }
 
@@ -132,6 +134,7 @@ public class VanishManager {
     }
 
     public void playerQuit(Player player) {
+        Debuggle.log("Quitting: " + player.getName());
         VanishPerms.userQuit(player);
         this.removeVanished(player.getName(), ((CraftPlayer) player).getEntityId());
         this.plugin.getManager().safelist29Mod(((CraftPlayer) player).getEntityId(), this.plugin.getServer().getOnlinePlayers().length);
@@ -143,6 +146,7 @@ public class VanishManager {
      * @param player
      */
     public void resetSeeing(Player player) {
+        Debuggle.log("Resetting visibility on " + player.getName());
         if (VanishPerms.canSeeAll(player)) {
             this.showVanished(player);
         } else {
@@ -261,10 +265,12 @@ public class VanishManager {
         String messageBit;
         final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
         if (this.isVanished(togglingPlayer)) {
+            Debuggle.log("LoudVanishToggle Vanishing " + togglingPlayer.getName());
             this.plugin.hooksVanish(togglingPlayer);
             messageBit = "vanished. Poof.";
 
         } else {
+            Debuggle.log("LoudVanishToggle Revealing " + togglingPlayer.getName());
             this.plugin.hooksUnvanish(togglingPlayer);
             messageBit = "become visible.";
             this.announceManipulator.vanishToggled(togglingPlayer);
@@ -285,11 +291,13 @@ public class VanishManager {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
+            Debuggle.log("It's invisible time! " + vanishingPlayer.getName());
             this.sleepIgnored.put(vanishingPlayerName, vanishingPlayer.isSleepingIgnored());
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.addVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
+            Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             vanishingPlayer.setSleepingIgnored(this.sleepIgnored.remove(vanishingPlayerName));
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName, ((CraftPlayer) vanishingPlayer).getEntityId());
@@ -297,7 +305,9 @@ public class VanishManager {
         }
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
+            Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
             if ((this.getDistance(vanishingPlayer, otherPlayer) > 512) || (otherPlayer.equals(vanishingPlayer))) {
+                Debuggle.log("Too far. Doing nothing about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
                 continue;
             }
             if (vanishing) {
@@ -321,6 +331,7 @@ public class VanishManager {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
+        Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + obliviousPlayer.getName() + " via packets");
         final CraftPlayer craftPlayer = ((CraftPlayer) obliviousPlayer);
         final int eid = craftPlayer.getEntityId();
         this.safelist29Mod(eid, 1);
@@ -415,8 +426,21 @@ public class VanishManager {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
+        Debuggle.log("Revealing " + revealPlayer.getName() + " from " + nowAwarePlayer.getName() + " via packets");
         try {
-            ((List) this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager)).add(0, new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle()));;
+            final List packetQueue = ((List) this.packetQueueListField.get(((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.networkManager));
+            int where = 0;
+            if (packetQueue.size() > 0) {
+                where = 1;
+            }
+            final Packet20NamedEntitySpawn packet = new Packet20NamedEntitySpawn(((CraftPlayer) revealPlayer).getHandle());
+            if (this.plugin.colorationEnabled() && this.isVanished(revealPlayer)) {
+                packet.b = ChatColor.DARK_AQUA + revealPlayer.getName();
+                if (packet.b.length() > 15) {
+                    packet.b = packet.b.substring(0, 15);
+                }
+            }
+            packetQueue.add(where, packet);;
         } catch (final Exception e) {
             this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Encountered a serious error", e);
         }
