@@ -154,3 +154,4 @@ permissions:
       vanish.hooks.essentials.hide: true
       vanish.permtest.all: true
       vanish.spout.status: true
+      vanish.reload: true
