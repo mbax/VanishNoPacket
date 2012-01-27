@@ -344,7 +344,7 @@ public class VanishManager {
             this.plugin.getServer().getLogger().log(Level.SEVERE, "[Vanish] Encountered a serious error", e);
         }
         if (this.tabControlEnabled) {
-            craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getName(), false, 0));
+            craftPlayer.getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(vanishingPlayer.getPlayerListName(), false, 0));
             this.safelist201Mod(vanishingPlayer.getName(), 1);
         }
     }
@@ -454,7 +454,7 @@ public class VanishManager {
             packetQueue.add(0, packet);
         }
         if (this.tabControlEnabled) {
-            ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getName(), true, 1));
+            ((CraftPlayer) nowAwarePlayer).getHandle().netServerHandler.sendPacket(new Packet201PlayerInfo(revealPlayer.getPlayerListName(), true, 1));
         }
     }
 
