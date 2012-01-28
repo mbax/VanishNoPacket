@@ -25,8 +25,8 @@ permissions:
     default: op
     description: Allows player to see vanished players
   vanish.statusupdates:
-    description: Informed about players changing status
     default: op
+    description: Informed about players changing status
   vanish.nopickup:
     default: false
     description: If true player can pick up items when vanished
@@ -137,8 +137,8 @@ permissions:
     default: op
     description: Reloads some VNP systems
   vanish.standard:
-    description: Can vanish, see vanished, no pickup when vanished
     default: false
+    description: Can vanish, see vanished, no pickup when vanished
     children:
       vanish.see: true
       vanish.vanish: true
@@ -151,8 +151,8 @@ permissions:
       vanish.statusupdates: true
       vanish.adminalerts: true
   vanish.*:
+    default: false    
     description: Oh god everything.
-    default: false
     children:
       vanish.standard: true
       vanish.nochat: true
