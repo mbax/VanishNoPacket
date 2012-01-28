@@ -93,16 +93,20 @@ public class VanishPerms {
         return player.hasPermission("vanish.vanish");
     }
 
+    public static boolean joinVanished(Player player) {
+        return player.hasPermission("vanish.joinvanished");
+    }
+
+    public static boolean joinWithoutAnnounce(Player player) {
+        return player.hasPermission("vanish.joinwithoutannounce");
+    }
+
     public static boolean permTestOther(Player player) {
         return player.hasPermission("vanish.permtest.other");
     }
 
     public static boolean permTestSelf(Player player) {
         return player.hasPermission("vanish.permtest.self");
-    }
-
-    public static boolean silentJoin(Player player) {
-        return player.hasPermission("vanish.silentjoin");
     }
 
     public static boolean silentQuit(Player player) {

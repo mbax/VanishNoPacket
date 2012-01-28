@@ -54,9 +54,18 @@ permissions:
     children:
       vanish.preventoutgoingdamage: true
       vanish.preventincomingdamage: true
+  vanish.joinwithoutannounce:
+    default: false
+    description: Join without announcing it
+  vanish.joinvanished:
+    default: false
+    description: Join vanished
   vanish.silentjoin:
     default: false
     description: Join silently. Announce on toggling vanish off
+    children:
+      vanish.joinwithoutannounce: true
+      vanish.joinvanished: true
   vanish.silentquit:
     default: false
     description: ALWAYS quit silently. 
