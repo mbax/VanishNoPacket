@@ -263,7 +263,6 @@ public class VanishPlugin extends JavaPlugin {
     public void reload() {
         this.reloadConfig();
         Settings.freshStart(this.getConfig());
-        VanishPerms.userReload();
     }
 
     /**

@@ -145,10 +145,6 @@ public class VanishPerms {
         VanishPerms.users.remove(player.getName());
     }
 
-    public static void userReload() {
-        VanishPerms.users.clear();
-    }
-
     private static VanishUser getUser(Player player) {
         VanishUser user = VanishPerms.users.get(player.getName());
         if (user == null) {
