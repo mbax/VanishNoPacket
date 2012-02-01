@@ -11,13 +11,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class SpoutCraftHook {
+public class SpoutCraftHook implements Listener {
 
     private class PlayerData {
         public String skin, cloak, title;
@@ -60,7 +63,7 @@ public class SpoutCraftHook {
 
     private HashMap<String, PlayerData> playerDataMap;
 
-    private final Color boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
+    private Color boxColor;
 
     private HashMap<String, StatusBar> bars;
 
@@ -86,6 +89,8 @@ public class SpoutCraftHook {
                 this.enabled = false;
                 this.plugin.getLogger().info("SpoutCraft not running but you wanted SpoutCraft features.");
             }
+            this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+            this.boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
             this.cloaks = new HashMap<String, String>();
             this.skins = new HashMap<String, String>();
             this.titles = new HashMap<String, String>();
@@ -93,9 +98,11 @@ public class SpoutCraftHook {
             this.init();
         }
     }
-
-    public void playerHasSpout(SpoutPlayer newPlayer) {
-        if (!this.enabled || !VanishPerms.canSeeAll(newPlayer)) {
+    
+    @EventHandler
+    public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
+        final SpoutPlayer newPlayer=event.getPlayer();
+        if (!VanishPerms.canSeeAll(newPlayer)) {
             return;
         }
         for (final SpoutPlayer p : SpoutManager.getOnlinePlayers()) {

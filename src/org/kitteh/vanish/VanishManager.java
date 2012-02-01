@@ -92,8 +92,10 @@ public class VanishManager {
         Debuggle.log("Resetting visibility on " + player.getName());
         if (VanishPerms.canSeeAll(player)) {
             this.showVanished(player);
+            Debuggle.log("Showing all to " + player.getName());
         } else {
             this.hideVanished(player);
+            Debuggle.log("Hiding all to " + player.getName());
         }
     }
 
@@ -205,7 +207,7 @@ public class VanishManager {
     private void showVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
             if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer)) {
-                player.hidePlayer(otherPlayer);
+                player.showPlayer(otherPlayer);
             }
         }
     }

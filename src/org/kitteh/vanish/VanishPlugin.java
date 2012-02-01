@@ -9,7 +9,6 @@ import java.net.URLConnection;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spoutapi.player.SpoutPlayer;
 import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
@@ -111,16 +110,6 @@ public class VanishPlugin extends JavaPlugin {
     public void hooksQuit(Player player) {
         this.hooksUnvanish(player);
         this.spoutCraft.playerQuit(player);
-    }
-
-    /**
-     * No touchy.
-     * Called when a player's spoutcraft client authenticates
-     * 
-     * @param player
-     */
-    public void hooksSpoutAuth(SpoutPlayer player) {
-        this.spoutCraft.playerHasSpout(player);
     }
 
     /**
@@ -252,7 +241,6 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
-        this.getServer().getPluginManager().registerEvents(new ListenSpout(this), this);
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
