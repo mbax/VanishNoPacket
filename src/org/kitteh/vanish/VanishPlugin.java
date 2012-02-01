@@ -10,10 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
-import org.kitteh.vanish.hooks.BPermissionsHook;
-import org.kitteh.vanish.hooks.DynmapHook;
-import org.kitteh.vanish.hooks.EssentialsHook;
-import org.kitteh.vanish.hooks.JSONAPIHook;
+import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 import org.kitteh.vanish.util.DefaultConfig;
@@ -69,7 +66,7 @@ public class VanishPlugin extends JavaPlugin {
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
-    private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
+    private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
     private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
 
     public BPermissionsHook getBPerms() {
