@@ -200,7 +200,13 @@ public class VanishManager {
      * @param status
      * @return
      */
-    public boolean shouldHide(Player player, String name, boolean status) {
+    public boolean shouldHide(Player player, String tablistname, boolean status) {
+        String name = "";
+        for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
+            if ((plr != null) && plr.getPlayerListName().equals(tablistname)) {
+                name = plr.getName();
+            }
+        }
         if (!status && this.onSafeList201(name)) {
             this.safelist201Mod(name, -1);
             return false;
