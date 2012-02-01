@@ -1,10 +1,10 @@
 name: VanishNoPacket
 main: org.kitteh.vanish.VanishPlugin
 version: 2.5bleeding
-website: http://forums.joe.to
+website: http://kitteh.org
 softdepend: [Essentials,dynmap,JSONAPI,bPermissions,Spout]
 author: mbaxter
-description: Vanish by filtering packets using Spout
+description: Vanish for the distinguished individual
 dev-url: http://dev.bukkit.org/server-mods/vanish/
 commands:
   vanish:
