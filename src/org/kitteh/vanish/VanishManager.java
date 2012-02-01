@@ -1,21 +1,9 @@
 package org.kitteh.vanish;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-
-import net.minecraft.server.NetworkManager;
-import net.minecraft.server.Packet201PlayerInfo;
-import net.minecraft.server.Packet20NamedEntitySpawn;
-import net.minecraft.server.Packet29DestroyEntity;
-
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.getspout.spoutapi.SpoutManager;
 
 /**
  * It's the vanishing manager!
@@ -109,7 +97,6 @@ public class VanishManager {
         }
     }
 
-
     /**
      * Smack that vanish list. Smack it hard.
      * But really, don't call this.
@@ -119,6 +106,7 @@ public class VanishManager {
         this.listOfVanishedPlayerNames = new ArrayList<String>();
         this.sleepIgnored = new HashMap<String, Boolean>();
     }
+
     /**
      * Toggle a player's visibility
      * Called when a player calls /vanish
@@ -177,13 +165,12 @@ public class VanishManager {
                 continue;
             }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
-            if (vanishing && !VanishPerms.canSeeAll(otherPlayer)) {
-                    this.destroyEntity(vanishingPlayer, otherPlayer);
-            } else 
-                if (!VanishPerms.canSeeAll(otherPlayer)) {
-                    this.undestroyEntity(vanishingPlayer, otherPlayer);
-                }
-            
+            if (vanishing && !VanishPerms.canSeeAll(otherPlayer) && otherPlayer.canSee(vanishingPlayer)) {
+                otherPlayer.hidePlayer(vanishingPlayer);
+            } else if (!otherPlayer.canSee(vanishingPlayer)) {
+                otherPlayer.showPlayer(vanishingPlayer);
+            }
+
         }
     }
 
@@ -191,16 +178,10 @@ public class VanishManager {
         this.listOfVanishedPlayerNames.add(name);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void destroyEntity(Player vanishingPlayer, Player obliviousPlayer) {
-        Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + obliviousPlayer.getName());
-        obliviousPlayer.hidePlayer(vanishingPlayer);
-    }
-
     private void hideVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if (this.isVanished(otherPlayer)) {
-                this.destroyEntity(otherPlayer, player);
+            if (this.isVanished(otherPlayer) && player.canSee(otherPlayer)) {
+                player.hidePlayer(otherPlayer);
             }
         }
     }
@@ -213,7 +194,7 @@ public class VanishManager {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
                 if ((player != null) && (player2 != null) && !player.equals(player2)) {
-                    if(!player.canSee(player2)){
+                    if (!player.canSee(player2)) {
                         player.showPlayer(player2);
                     }
                 }
@@ -223,16 +204,10 @@ public class VanishManager {
 
     private void showVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if (this.isVanished(otherPlayer)) {
-                this.undestroyEntity(otherPlayer, player);
+            if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer)) {
+                player.hidePlayer(otherPlayer);
             }
         }
-    }
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void undestroyEntity(Player revealPlayer, Player nowAwarePlayer) {
-        Debuggle.log("Revealing " + revealPlayer.getName() + " from " + nowAwarePlayer.getName());
-        nowAwarePlayer.showPlayer(revealPlayer);
     }
 
 }
