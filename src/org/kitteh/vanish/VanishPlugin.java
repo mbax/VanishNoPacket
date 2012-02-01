@@ -226,9 +226,9 @@ public class VanishPlugin extends JavaPlugin {
             }
         }, 1);
 
-        this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("spoutcraft.enable", false));
+        this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("hooks.spoutcraft", false));
 
-        this.manager.startup(this.getConfig().getBoolean("enableTabControl", true));
+        this.manager.startup();
 
         boolean updateCheck = this.getConfig().getBoolean("updates.check", true);
         if (firstTimeStarting) {

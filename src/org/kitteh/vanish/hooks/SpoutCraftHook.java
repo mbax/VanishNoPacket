@@ -82,6 +82,10 @@ public class SpoutCraftHook {
     public void onPluginEnable(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
+            if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
+                this.enabled = false;
+                this.plugin.getLogger().info("SpoutCraft not running but you wanted SpoutCraft features.");
+            }
             this.cloaks = new HashMap<String, String>();
             this.skins = new HashMap<String, String>();
             this.titles = new HashMap<String, String>();
@@ -109,6 +113,9 @@ public class SpoutCraftHook {
     }
 
     public void playerQuit(Player player) {
+        if (!this.enabled) {
+            return;
+        }
         final String name = player.getName();
         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
             @Override

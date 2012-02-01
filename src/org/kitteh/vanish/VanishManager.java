@@ -101,7 +101,7 @@ public class VanishManager {
      * Smack that vanish list. Smack it hard.
      * But really, don't call this.
      */
-    public void startup(boolean tabControl) {
+    public void startup() {
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
         this.listOfVanishedPlayerNames = new ArrayList<String>();
         this.sleepIgnored = new HashMap<String, Boolean>();
