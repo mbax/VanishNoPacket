@@ -2,11 +2,14 @@ package org.kitteh.vanish;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+
 public class Debuggle {
     private final Logger logger;
     private static Debuggle instance = null;
 
     public static void itsGoTime() {
+        Bukkit.getLogger().info("[VanishNoPacket] Debug enabled. Disable in config.yml");
         Debuggle.instance = new Debuggle();
     }
 

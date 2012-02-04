@@ -22,4 +22,4 @@ updates:
     check: true
 permtest:
     enable: false
-debug: true
+debug: false
