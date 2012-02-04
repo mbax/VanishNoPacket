@@ -9,11 +9,7 @@ import java.net.URLConnection;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.getspout.spoutapi.player.SpoutPlayer;
-import org.kitteh.vanish.hooks.BPermissionsHook;
-import org.kitteh.vanish.hooks.DynmapHook;
-import org.kitteh.vanish.hooks.EssentialsHook;
-import org.kitteh.vanish.hooks.JSONAPIHook;
+import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 import org.kitteh.vanish.util.DefaultConfig;
@@ -69,7 +65,7 @@ public class VanishPlugin extends JavaPlugin {
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
-    private final VanishSpoutCraft spoutCraft = new VanishSpoutCraft(this);
+    private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
     private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
 
     public BPermissionsHook getBPerms() {
@@ -114,16 +110,6 @@ public class VanishPlugin extends JavaPlugin {
     public void hooksQuit(Player player) {
         this.hooksUnvanish(player);
         this.spoutCraft.playerQuit(player);
-    }
-
-    /**
-     * No touchy.
-     * Called when a player's spoutcraft client authenticates
-     * 
-     * @param player
-     */
-    public void hooksSpoutAuth(SpoutPlayer player) {
-        this.spoutCraft.playerHasSpout(player);
     }
 
     /**
@@ -229,9 +215,9 @@ public class VanishPlugin extends JavaPlugin {
             }
         }, 1);
 
-        this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("spoutcraft.enable", false));
+        this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("hooks.spoutcraft", false));
 
-        this.manager.startup(this.getConfig().getBoolean("enableTabControl", true));
+        this.manager.startup();
 
         boolean updateCheck = this.getConfig().getBoolean("updates.check", true);
         if (firstTimeStarting) {
@@ -255,7 +241,6 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
-        this.getServer().getPluginManager().registerEvents(new ListenSpout(this), this);
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }

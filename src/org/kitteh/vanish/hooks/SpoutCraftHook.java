@@ -1,4 +1,4 @@
-package org.kitteh.vanish;
+package org.kitteh.vanish.hooks;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,11 +11,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
+import org.kitteh.vanish.VanishPerms;
+import org.kitteh.vanish.VanishPlugin;
 
-public class VanishSpoutCraft {
+public class SpoutCraftHook implements Listener {
 
     private class PlayerData {
         public String skin, cloak, title;
@@ -34,12 +39,12 @@ public class VanishSpoutCraft {
 
         public StatusBar(SpoutPlayer player) {
             this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20).setHeight(10).setWidth(40);
-            this.box = (GenericGradient) new GenericGradient().setTopColor(VanishSpoutCraft.this.boxColor).setBottomColor(VanishSpoutCraft.this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
+            this.box = (GenericGradient) new GenericGradient().setTopColor(SpoutCraftHook.this.boxColor).setBottomColor(SpoutCraftHook.this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
             this.player = player;
         }
 
         public void assign() {
-            this.player.getMainScreen().attachWidget(VanishSpoutCraft.this.plugin, this.box).attachWidget(VanishSpoutCraft.this.plugin, this.label);
+            this.player.getMainScreen().attachWidget(SpoutCraftHook.this.plugin, this.box).attachWidget(SpoutCraftHook.this.plugin, this.label);
         }
 
         public void remove() {
@@ -51,23 +56,19 @@ public class VanishSpoutCraft {
 
     private final VanishPlugin plugin;
 
-    private final HashMap<String, String> cloaks;
-    private final HashMap<String, String> skins;
+    private HashMap<String, String> cloaks;
+    private HashMap<String, String> skins;
 
-    private final HashMap<String, String> titles;
+    private HashMap<String, String> titles;
 
     private HashMap<String, PlayerData> playerDataMap;
 
-    private final Color boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
+    private Color boxColor;
 
-    private final HashMap<String, StatusBar> bars;
+    private HashMap<String, StatusBar> bars;
 
-    public VanishSpoutCraft(VanishPlugin plugin) {
+    public SpoutCraftHook(VanishPlugin plugin) {
         this.plugin = plugin;
-        this.cloaks = new HashMap<String, String>();
-        this.skins = new HashMap<String, String>();
-        this.titles = new HashMap<String, String>();
-        this.bars = new HashMap<String, StatusBar>();
     }
 
     public void onPluginDisable() {
@@ -84,12 +85,24 @@ public class VanishSpoutCraft {
     public void onPluginEnable(boolean enabled) {
         this.enabled = enabled;
         if (enabled) {
+            if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
+                this.enabled = false;
+                this.plugin.getLogger().info("SpoutCraft not running but you wanted SpoutCraft features.");
+            }
+            this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+            this.boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
+            this.cloaks = new HashMap<String, String>();
+            this.skins = new HashMap<String, String>();
+            this.titles = new HashMap<String, String>();
+            this.bars = new HashMap<String, StatusBar>();
             this.init();
         }
     }
-
-    public void playerHasSpout(SpoutPlayer newPlayer) {
-        if (!this.enabled || !VanishPerms.canSeeAll(newPlayer)) {
+    
+    @EventHandler
+    public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
+        final SpoutPlayer newPlayer=event.getPlayer();
+        if (!VanishPerms.canSeeAll(newPlayer)) {
             return;
         }
         for (final SpoutPlayer p : SpoutManager.getOnlinePlayers()) {
@@ -107,11 +120,14 @@ public class VanishSpoutCraft {
     }
 
     public void playerQuit(Player player) {
+        if (!this.enabled) {
+            return;
+        }
         final String name = player.getName();
         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
             @Override
             public void run() {
-                VanishSpoutCraft.this.bars.remove(name);
+                SpoutCraftHook.this.bars.remove(name);
             }
         }, 1);
     }

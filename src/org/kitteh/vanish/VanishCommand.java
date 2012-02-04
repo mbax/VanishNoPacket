@@ -123,6 +123,7 @@ public class VanishCommand implements CommandExecutor {
         boolean status = false;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
             status = VanishPerms.toggleSeeAll(player);
+            this.plugin.getManager().resetSeeing(player);
             message.append("see all");
         } else if (toggle.equalsIgnoreCase("nopickup") && VanishPerms.canToggleNoPickup(player)) {
             status = VanishPerms.toggleNoPickup(player);
