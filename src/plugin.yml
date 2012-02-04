@@ -1,15 +1,8 @@
 name: VanishNoPacket
 main: org.kitteh.vanish.VanishPlugin
-<<<<<<< HEAD
-version: 2.4.1
-website: http://forums.joe.to
-depend: [Spout]
-softdepend: [Essentials,dynmap,JSONAPI,bPermissions]
-=======
-version: 2.5bleeding
+version: 2.5
 website: http://kitteh.org
 softdepend: [Essentials,dynmap,JSONAPI,bPermissions,Spout]
->>>>>>> bleeding
 author: mbaxter
 description: Vanish for the distinguished individual
 dev-url: http://dev.bukkit.org/server-mods/vanish/
