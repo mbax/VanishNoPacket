@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.listeners.*;
+import org.kitteh.vanish.metrics.MetricsOverlord;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
-import org.kitteh.vanish.util.DefaultConfig;
 
 public class VanishPlugin extends JavaPlugin {
 
@@ -190,11 +190,12 @@ public class VanishPlugin extends JavaPlugin {
         boolean firstTimeStarting = false;
         if (!check.exists()) {
             firstTimeStarting = true;
-            DefaultConfig.set("config.yml");
+            Settings.deployDefaultConfig("config.yml");
             this.reloadConfig();
         }
 
-        Settings.freshStart(this.getConfig());
+        Settings.freshStart(this);
+        MetricsOverlord.init(this);
 
         this.essentialsHook.onPluginEnable(this.getConfig().getBoolean("hooks.essentials", false));
 
@@ -235,7 +236,6 @@ public class VanishPlugin extends JavaPlugin {
         }
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
-
         this.getServer().getPluginManager().registerEvents(new ListenEntity(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
@@ -247,7 +247,7 @@ public class VanishPlugin extends JavaPlugin {
 
     public void reload() {
         this.reloadConfig();
-        Settings.freshStart(this.getConfig());
+        Settings.freshStart(this);
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
  * Controller of announcing joins and quits that aren't their most honest.
@@ -61,6 +62,7 @@ public class VanishAnnounceManipulator {
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.fakeJoin(), player));
         this.plugin.log(player.getName() + " faked joining");
+        MetricsOverlord.fakejoin.increment();
         this.playerOnlineStatus.put(player.getName(), true);
     }
 
@@ -76,6 +78,7 @@ public class VanishAnnounceManipulator {
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.fakeQuit(), player));
         this.plugin.log(player.getName() + " faked quitting");
+        MetricsOverlord.fakequit.increment();
         this.playerOnlineStatus.put(player.getName(), false);
     }
 

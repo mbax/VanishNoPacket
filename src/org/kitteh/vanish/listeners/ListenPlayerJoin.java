@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public class ListenPlayerJoin implements Listener {
 
@@ -32,6 +33,7 @@ public class ListenPlayerJoin implements Listener {
             if (VanishPerms.canVanish(event.getPlayer())) {
                 add = " To appear: /vanish";
             }
+            MetricsOverlord.joininvis.increment();
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined vanished." + add);
             this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined vanished");
         }

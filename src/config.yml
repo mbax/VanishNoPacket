@@ -14,12 +14,13 @@ hooks:
     essentials: false
     dynmap: false
     JSONAPI: false
+    spoutcraft: false
 enableColoration: false
 enableTabControl: true
-spoutcraft:
-    enable: false
 updates:
     check: true
 permtest:
     enable: false
 debug: false
+configVersionDoNotTouch: 
+    SeriouslyThisWillEraseYourConfig: 1

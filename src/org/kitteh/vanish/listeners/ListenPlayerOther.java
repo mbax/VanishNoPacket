@@ -1,5 +1,6 @@
 package org.kitteh.vanish.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public class ListenPlayerOther implements Listener {
 
@@ -47,6 +49,8 @@ public class ListenPlayerOther implements Listener {
         this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().wasPlayerMarkedOnline(player.getName()) || VanishPerms.silentQuit(player)) {
+            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit vanished");
+            MetricsOverlord.quitinvis.increment();
             event.setQuitMessage(null);
         }
     }

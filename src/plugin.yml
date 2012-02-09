@@ -1,10 +1,10 @@
 name: VanishNoPacket
 main: org.kitteh.vanish.VanishPlugin
-version: 2.5
+version: 3.0
 website: http://kitteh.org
 softdepend: [Essentials,dynmap,JSONAPI,bPermissions,Spout]
 author: mbaxter
-description: Vanish for the distinguished individual
+description: Vanish for the distinguished admin
 dev-url: http://dev.bukkit.org/server-mods/vanish/
 commands:
   vanish:

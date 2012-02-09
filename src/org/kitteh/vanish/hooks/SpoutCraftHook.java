@@ -88,6 +88,7 @@ public class SpoutCraftHook implements Listener {
             if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
                 this.enabled = false;
                 this.plugin.getLogger().info("SpoutCraft not running but you wanted SpoutCraft features.");
+                return;
             }
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
             this.boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
@@ -95,13 +96,38 @@ public class SpoutCraftHook implements Listener {
             this.skins = new HashMap<String, String>();
             this.titles = new HashMap<String, String>();
             this.bars = new HashMap<String, StatusBar>();
-            this.init();
+            this.playerDataMap = new HashMap<String, PlayerData>();
+            final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
+            final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
+            config.options().copyDefaults(true);
+            final InputStream stream = this.plugin.getResource("spoutcraft.yml");
+            if (stream == null) {
+                this.plugin.log("Defaults for spoutcraft.yml not loaded");
+                this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
+                this.enabled = false;
+                return;
+            }
+            config.setDefaults(YamlConfiguration.loadConfiguration(stream));
+            try {
+                config.save(confFile);
+            } catch (final IOException e) {
+                this.plugin.getServer().getLogger().log(Level.SEVERE, "Could not save spoutcraft.yml", e);
+            }
+            for (final String skinGroup : config.getConfigurationSection("skins").getKeys(false)) {
+                this.skins.put(skinGroup, config.getString("skins." + skinGroup));
+            }
+            for (final String cloakGroup : config.getConfigurationSection("cloaks").getKeys(false)) {
+                this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
+            }
+            for (final String titleGroup : config.getConfigurationSection("titles").getKeys(false)) {
+                this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", "§"));
+            }
         }
     }
-    
+
     @EventHandler
     public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
-        final SpoutPlayer newPlayer=event.getPlayer();
+        final SpoutPlayer newPlayer = event.getPlayer();
         if (!VanishPerms.canSeeAll(newPlayer)) {
             return;
         }
@@ -177,35 +203,6 @@ public class SpoutCraftHook implements Listener {
             this.bars.put(player.getName(), bar);
         }
         return bar;
-    }
-
-    private void init() {
-        this.playerDataMap = new HashMap<String, PlayerData>();
-        final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
-        final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
-        config.options().copyDefaults(true);
-        final InputStream stream = this.plugin.getResource("spoutcraft.yml");
-        if (stream == null) {
-            this.plugin.log("Defaults for spoutcraft.yml not loaded");
-            this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
-            this.enabled = false;
-            return;
-        }
-        config.setDefaults(YamlConfiguration.loadConfiguration(stream));
-        try {
-            config.save(confFile);
-        } catch (final IOException e) {
-            this.plugin.getServer().getLogger().log(Level.SEVERE, "Could not save spoutcraft.yml", e);
-        }
-        for (final String skinGroup : config.getConfigurationSection("skins").getKeys(false)) {
-            this.skins.put(skinGroup, config.getString("skins." + skinGroup));
-        }
-        for (final String cloakGroup : config.getConfigurationSection("cloaks").getKeys(false)) {
-            this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
-        }
-        for (final String titleGroup : config.getConfigurationSection("titles").getKeys(false)) {
-            this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", "§"));
-        }
     }
 
     private PlayerData initPlayer(Player player) {

@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public class VanishCommand implements CommandExecutor {
 
@@ -16,6 +17,7 @@ public class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        MetricsOverlord.command.increment();
         if ((args.length > 0) && args[0].equalsIgnoreCase("reload") && VanishPerms.canReload(sender)) {
             this.plugin.reload();
             sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Users reloaded");
@@ -120,6 +122,7 @@ public class VanishCommand implements CommandExecutor {
 
     private boolean toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
+        MetricsOverlord.toggle.increment();
         boolean status = false;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
             status = VanishPerms.toggleSeeAll(player);

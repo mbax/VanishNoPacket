@@ -2,8 +2,10 @@ package org.kitteh.vanish;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
  * It's the vanishing manager!
@@ -153,12 +155,14 @@ public class VanishManager {
             this.sleepIgnored.put(vanishingPlayerName, vanishingPlayer.isSleepingIgnored());
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.addVanished(vanishingPlayerName);
+            MetricsOverlord.vanish.increment();
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             vanishingPlayer.setSleepingIgnored(this.sleepIgnored.remove(vanishingPlayerName));
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName);
+            MetricsOverlord.unvanish.increment();
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
