@@ -21,7 +21,7 @@ public class ListenPlayerOther implements Listener {
     }
 
     @EventHandler
-    public void onBucketFill(PlayerBucketFillEvent event){
+    public void onBucketFill(PlayerBucketFillEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
@@ -59,7 +59,7 @@ public class ListenPlayerOther implements Listener {
             event.setQuitMessage(null);
         }
     }
-    
+
     @EventHandler
     public void onShear(PlayerShearEntityEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
