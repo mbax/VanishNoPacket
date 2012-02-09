@@ -35,7 +35,7 @@ public class VanishAnnounceManipulator {
 
     public void addToDelayedAnnounce(String player) {
         this.playerOnlineStatus.put(player, false);
-        if (!Settings.autoFakeJoinSilent()) {
+        if (!Settings.getAutoFakeJoinSilent()) {
             return;
         }
         this.delayedAnnouncePlayerList.add(player);
@@ -60,7 +60,7 @@ public class VanishAnnounceManipulator {
         if (this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName())) {
             return;
         }
-        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.fakeJoin(), player));
+        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
         this.plugin.log(player.getName() + " faked joining");
         MetricsOverlord.fakejoin.increment();
         this.playerOnlineStatus.put(player.getName(), true);
@@ -76,7 +76,7 @@ public class VanishAnnounceManipulator {
         if (this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName())) {
             return;
         }
-        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.fakeQuit(), player));
+        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
         this.plugin.log(player.getName() + " faked quitting");
         MetricsOverlord.fakequit.increment();
         this.playerOnlineStatus.put(player.getName(), false);
@@ -90,7 +90,7 @@ public class VanishAnnounceManipulator {
      * @param player
      */
     public void vanishToggled(Player player) {
-        if (!Settings.autoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
+        if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
             return;
         }
         this.fakeJoin(player);

@@ -15,12 +15,10 @@ hooks:
     dynmap: false
     JSONAPI: false
     spoutcraft: false
-enableColoration: false
-enableTabControl: true
-updates:
-    check: true
-permtest:
-    enable: false
+checkupdates: true
+permissionsupdates:
+    checkonworldchange: false
+permtest: false
 debug: false
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 1
+    SeriouslyThisWillEraseYourConfig: 2

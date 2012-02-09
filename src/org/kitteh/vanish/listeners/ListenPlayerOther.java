@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
+import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.metrics.MetricsOverlord;
@@ -64,6 +65,13 @@ public class ListenPlayerOther implements Listener {
     public void onShear(PlayerShearEntityEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        if (Settings.getWorldChangeCheck()) {
+            this.plugin.getManager().playerRefresh(event.getPlayer());
         }
     }
 }

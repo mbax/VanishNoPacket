@@ -11,20 +11,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 public class Settings {
-    private static boolean enableColoration;
     private static boolean enablePermTest;
     private static String fakeQuit;
     private static String fakeJoin;
     private static boolean autoFakeJoinSilent;
+    private static boolean worldChangeCheck;
 
     /**
      * Tracking the config. Don't touch this.
      */
-    private static final int confVersion = 1;
-
-    public static boolean autoFakeJoinSilent() {
-        return Settings.autoFakeJoinSilent;
-    }
+    private static final int confVersion = 2;
 
     public static void deployDefaultConfig(String name) {
         try {
@@ -52,24 +48,9 @@ public class Settings {
         }
     }
 
-    public static boolean enableColoration() {
-        return Settings.enableColoration;
-    }
-
-    public static boolean enablePermTest() {
-        return Settings.enablePermTest;
-    }
-
-    public static String fakeJoin() {
-        return Settings.fakeJoin;
-    }
-
-    public static String fakeQuit() {
-        return Settings.fakeQuit;
-    }
-
     public static void freshStart(VanishPlugin plugin) {
         final FileConfiguration config = plugin.getConfig();
+        config.options().copyDefaults(true);
         final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
         if (ver != Settings.confVersion) {
             Bukkit.getLogger().info("[VanishNoPacket] Attempting to update your configuration. Check to make sure it's ok");
@@ -78,18 +59,48 @@ public class Settings {
                 config.set("spoutcraft.enable", null);
                 config.set("spoutcraft", null);
             }
+            if (ver == 1) {
+                final boolean permtest = config.getBoolean("permtest.enable", false);
+                config.set("permtest.enable", null);
+                config.set("permtest", permtest);
+                config.set("enableColoration", null);
+                config.set("enableTabControl", null);
+                final boolean updates = config.getBoolean("updates.check", true);
+                config.set("updates.check", null);
+                config.set("checkupdates", updates);
+            }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
         }
-        Settings.enableColoration = config.getBoolean("enableColoration", false);
-        Settings.enablePermTest = config.getBoolean("permtest.enable", false);
+        Settings.enablePermTest = config.getBoolean("permtest", false);
         Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", "§");
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", "§");
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
+        Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
         if (config.getBoolean("debug", false)) {
             Debuggle.itsGoTime();
         } else {
             Debuggle.nah();
         }
+    }
+
+    public static boolean getAutoFakeJoinSilent() {
+        return Settings.autoFakeJoinSilent;
+    }
+
+    public static boolean getEnablePermTest() {
+        return Settings.enablePermTest;
+    }
+
+    public static String getFakeJoin() {
+        return Settings.fakeJoin;
+    }
+
+    public static String getFakeQuit() {
+        return Settings.fakeQuit;
+    }
+
+    public static boolean getWorldChangeCheck() {
+        return Settings.worldChangeCheck;
     }
 }

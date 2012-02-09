@@ -31,7 +31,7 @@ public class ListenPlayerMessages implements Listener {
         if (event.getMessage().toLowerCase().startsWith("/me ") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }
-        if (Settings.enablePermTest()) {
+        if (Settings.getEnablePermTest()) {
             final String[] split = event.getMessage().split(" ");
             if ((split.length > 1) && split[0].equalsIgnoreCase("/permtest")) {
                 final boolean selfTest = VanishPerms.permTestSelf(event.getPlayer());

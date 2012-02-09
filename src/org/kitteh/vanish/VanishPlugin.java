@@ -220,7 +220,7 @@ public class VanishPlugin extends JavaPlugin {
 
         this.manager.startup();
 
-        boolean updateCheck = this.getConfig().getBoolean("updates.check", true);
+        boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);
         if (firstTimeStarting) {
             updateCheck = false;
             this.log("This is your first time (or you wiped your config).");

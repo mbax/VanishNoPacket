@@ -92,6 +92,18 @@ public class VanishManager {
     }
 
     /**
+     * Reset the player's info
+     * 
+     * @param player
+     */
+    public void playerRefresh(Player player) {
+        this.resetSeeing(player);
+        if (this.isVanished(player) && !VanishPerms.canVanish(player)) {
+            this.toggleVanish(player);
+        }
+    }
+
+    /**
      * Force a refresh of who a player can or can't see.
      * 
      * @param player
