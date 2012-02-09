@@ -57,7 +57,7 @@ public class VanishAnnounceManipulator {
      * @param player
      */
     public void fakeJoin(Player player) {
-        if (this.playerOnlineStatus.containsKey(player) && this.playerOnlineStatus.get(player)) {
+        if (this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName())) {
             return;
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.fakeJoin(), player));
@@ -73,7 +73,7 @@ public class VanishAnnounceManipulator {
      * @param player
      */
     public void fakeQuit(Player player) {
-        if (this.playerOnlineStatus.containsKey(player) && !this.playerOnlineStatus.get(player.getName())) {
+        if (this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName())) {
             return;
         }
         this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.fakeQuit(), player));
@@ -90,7 +90,7 @@ public class VanishAnnounceManipulator {
      * @param player
      */
     public void vanishToggled(Player player) {
-        if (!Settings.autoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player)) {
+        if (!Settings.autoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
             return;
         }
         this.fakeJoin(player);
