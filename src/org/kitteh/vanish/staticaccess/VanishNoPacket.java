@@ -2,6 +2,7 @@ package org.kitteh.vanish.staticaccess;
 
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishManager;
+import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
 /**
@@ -11,6 +12,19 @@ import org.kitteh.vanish.VanishPlugin;
 public class VanishNoPacket {
 
     private static VanishPlugin instance;
+
+    /**
+     * Query if player looking can see player uncertain
+     * 
+     * @param looking
+     * @param uncertain
+     * @return true if can see
+     * @throws VanishNotLoadedException
+     */
+    public static boolean canSee(Player looking, Player uncertain) throws VanishNotLoadedException {
+        VanishNoPacket.check();
+        return !(VanishNoPacket.instance.getManager().isVanished(uncertain) && !VanishPerms.canSeeAll(looking));
+    }
 
     /**
      * DO NOT STORE THE MANAGER.
