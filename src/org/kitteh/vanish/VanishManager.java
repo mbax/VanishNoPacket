@@ -1,6 +1,8 @@
 package org.kitteh.vanish;
 
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.HashMap;
 
 import net.minecraft.server.MobEffect;
@@ -23,8 +25,8 @@ public class VanishManager {
 
     private final VanishPlugin plugin;
 
-    private ArrayList<String> listOfVanishedPlayerNames;
-    private HashMap<String, Boolean> sleepIgnored;
+    private Set<String> vanishedPlayerNames;
+    private Map<String, Boolean> sleepIgnored;
 
     private VanishAnnounceManipulator announceManipulator;
 
@@ -53,7 +55,7 @@ public class VanishManager {
      * @return true if vanished
      */
     public boolean isVanished(Player player) {
-        return this.listOfVanishedPlayerNames.contains(player.getName());
+        return this.vanishedPlayerNames.contains(player.getName());
     }
 
     /**
@@ -74,7 +76,7 @@ public class VanishManager {
      * @return the number of players currently vanished
      */
     public int numVanished() {
-        return this.listOfVanishedPlayerNames.size();
+        return this.vanishedPlayerNames.size();
     }
 
     /**
@@ -124,7 +126,7 @@ public class VanishManager {
      */
     public void startup() {
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
-        this.listOfVanishedPlayerNames = new ArrayList<String>();
+        this.vanishedPlayerNames = new HashSet<String>();
         this.sleepIgnored = new HashMap<String, Boolean>();
     }
 
@@ -202,7 +204,7 @@ public class VanishManager {
     }
 
     private void addVanished(String name) {
-        this.listOfVanishedPlayerNames.add(name);
+        this.vanishedPlayerNames.add(name);
     }
 
     private void hideVanished(Player player) {
@@ -214,7 +216,7 @@ public class VanishManager {
     }
 
     private void removeVanished(String name) {
-        this.listOfVanishedPlayerNames.remove(name);
+        this.vanishedPlayerNames.remove(name);
     }
 
     private void revealAll() {
