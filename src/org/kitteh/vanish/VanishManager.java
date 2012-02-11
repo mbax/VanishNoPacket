@@ -23,7 +23,6 @@ public class VanishManager {
 
     private final VanishPlugin plugin;
 
-    private ArrayList<Integer> listOfVanishedEntityIDs;
     private ArrayList<String> listOfVanishedPlayerNames;
     private HashMap<String, Boolean> sleepIgnored;
 
@@ -75,7 +74,7 @@ public class VanishManager {
      * @return the number of players currently vanished
      */
     public int numVanished() {
-        return this.listOfVanishedEntityIDs.size();
+        return this.listOfVanishedPlayerNames.size();
     }
 
     /**
