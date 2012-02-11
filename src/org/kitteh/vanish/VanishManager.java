@@ -195,8 +195,10 @@ public class VanishManager {
             }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
             if (vanishing && !VanishPerms.canSeeAll(otherPlayer) && otherPlayer.canSee(vanishingPlayer)) {
+                Debuggle.log("Hiding "+vanishingPlayer.getName()+" from "+otherPlayer.getName());
                 otherPlayer.hidePlayer(vanishingPlayer);
             } else if (!otherPlayer.canSee(vanishingPlayer)) {
+                Debuggle.log("Showing "+vanishingPlayer.getName()+" to "+otherPlayer.getName());
                 otherPlayer.showPlayer(vanishingPlayer);
             }
 
