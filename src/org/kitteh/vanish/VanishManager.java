@@ -88,6 +88,7 @@ public class VanishManager {
 
     public void playerQuit(Player player) {
         Debuggle.log("Quitting: " + player.getName());
+        this.resetSleepingIgnored(player);
         VanishPerms.userQuit(player);
         this.removeVanished(player.getName());
     }
@@ -117,6 +118,31 @@ public class VanishManager {
         } else {
             this.hideVanished(player);
             Debuggle.log("Hiding all to " + player.getName());
+        }
+    }
+
+    /**
+     * Set SleepingIgnored to true for a player, and save the old
+     * value.
+     *
+     * @param player
+     */
+    public void setSleepingIgnored(Player player) {
+        // Don't override the old value if there is one.
+        if (!this.sleepIgnored.containsKey(player.getName())) {
+            this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
+        }
+        player.setSleepingIgnored(true);
+    }
+
+    /**
+     * Reset SleepingIgnored to its old value for a player.
+     *
+     * @param player
+     */
+    public void resetSleepingIgnored(Player player) {
+        if (this.sleepIgnored.containsKey(player.getName())) {
+            player.setSleepingIgnored(this.sleepIgnored.remove(player.getName()));
         }
     }
 
@@ -171,7 +197,7 @@ public class VanishManager {
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
             Debuggle.log("It's invisible time! " + vanishingPlayer.getName());
-            this.sleepIgnored.put(vanishingPlayerName, vanishingPlayer.isSleepingIgnored());
+            this.setSleepingIgnored(vanishingPlayer);
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.addVanished(vanishingPlayerName);
             final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
@@ -180,7 +206,7 @@ public class VanishManager {
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
-            vanishingPlayer.setSleepingIgnored(this.sleepIgnored.remove(vanishingPlayerName));
+            this.resetSleepingIgnored(vanishingPlayer);
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName);
             final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
