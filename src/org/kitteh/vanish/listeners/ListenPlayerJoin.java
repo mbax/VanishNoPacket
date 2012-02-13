@@ -17,8 +17,15 @@ public class ListenPlayerJoin implements Listener {
         this.plugin = instance;
     }
 
+    /**
+     * Handle setting who the player can see and setting invisibility if needed
+     * here.
+     * 
+     * @param event
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoinEarly(PlayerJoinEvent event) {
+        this.plugin.getManager().resetSeeing(event.getPlayer());
         if (VanishPerms.joinVanished(event.getPlayer())) {
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer());
             this.plugin.hooksVanish(event.getPlayer());
@@ -26,6 +33,11 @@ public class ListenPlayerJoin implements Listener {
         this.plugin.hooksJoin(event.getPlayer());
     }
 
+    /**
+     * Handle any messages to the player here
+     * 
+     * @param event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
         if (VanishPerms.joinVanished(event.getPlayer())) {
@@ -45,6 +57,5 @@ public class ListenPlayerJoin implements Listener {
             event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] This is version " + ChatColor.DARK_AQUA + this.plugin.getCurrentVersion() + ChatColor.AQUA + ", latest is " + ChatColor.DARK_AQUA + this.plugin.getLatestKnownVersion());
             event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] Check " + ChatColor.DARK_AQUA + "http://dev.bukkit.org/server-mods/vanish/");
         }
-        this.plugin.getManager().resetSeeing(event.getPlayer());
     }
 }
