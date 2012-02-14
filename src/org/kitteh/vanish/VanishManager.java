@@ -122,28 +122,27 @@ public class VanishManager {
     }
 
     /**
-     * Set SleepingIgnored to true for a player, and save the old
-     * value.
-     *
-     * @param player
-     */
-    public void setSleepingIgnored(Player player) {
-        // Don't override the old value if there is one.
-        if (!this.sleepIgnored.containsKey(player.getName())) {
-            this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
-        }
-        player.setSleepingIgnored(true);
-    }
-
-    /**
      * Reset SleepingIgnored to its old value for a player.
-     *
+     * 
      * @param player
      */
     public void resetSleepingIgnored(Player player) {
         if (this.sleepIgnored.containsKey(player.getName())) {
             player.setSleepingIgnored(this.sleepIgnored.remove(player.getName()));
         }
+    }
+
+    /**
+     * Set SleepingIgnored to true for a player, and save the old
+     * value.
+     * 
+     * @param player
+     */
+    public void setSleepingIgnored(Player player) {
+        if (!this.sleepIgnored.containsKey(player.getName())) {
+            this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
+        }
+        player.setSleepingIgnored(true);
     }
 
     /**
