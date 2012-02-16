@@ -201,8 +201,6 @@ public class VanishPlugin extends JavaPlugin {
 
         this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
 
-        this.bPermissionsHook.onPluginEnable();
-
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override

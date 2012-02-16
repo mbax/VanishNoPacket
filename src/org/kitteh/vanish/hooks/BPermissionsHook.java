@@ -3,22 +3,21 @@ package org.kitteh.vanish.hooks;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishPlugin;
 
-import de.bananaco.permissions.Permissions;
-import de.bananaco.permissions.info.InfoReader;
+import de.bananaco.bpermissions.api.ApiLayer;
+import de.bananaco.bpermissions.api.util.CalculableType;
 
 public class BPermissionsHook {
 
     private final VanishPlugin plugin;
-    private InfoReader bPerms = null;
 
     public BPermissionsHook(VanishPlugin plugin) {
         this.plugin = plugin;
     }
 
     public String getPrefix(Player player) {
-        if (this.bPerms != null) {
+        if (this.bPermsEnabled()) {
             try {
-                return this.bPerms.getPrefix(player);
+                return this.getValue(player, "prefix");
             } catch (final Exception e) {
                 return "";
             }
@@ -28,9 +27,9 @@ public class BPermissionsHook {
     }
 
     public String getSuffix(Player player) {
-        if (this.bPerms != null) {
+        if (this.bPermsEnabled()) {
             try {
-                return this.bPerms.getSuffix(player);
+                return this.getValue(player, "suffix");
             } catch (final Exception e) {
                 return "";
             }
@@ -39,19 +38,12 @@ public class BPermissionsHook {
         }
     }
 
-    public void onPluginEnable() {
-        if (this.plugin.getServer().getPluginManager().isPluginEnabled("bPermissions")) {
-            this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        BPermissionsHook.this.bPerms = Permissions.getInfoReader();
-                    } catch (final Exception e) {
-                        BPermissionsHook.this.bPerms = null;
-                    }
-                }
-            });
-        }
+    private boolean bPermsEnabled() {
+        return this.plugin.getServer().getPluginManager().isPluginEnabled("bPermissions");
+    }
+
+    private String getValue(Player player, String key) {
+        return ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), key);
     }
 
 }
