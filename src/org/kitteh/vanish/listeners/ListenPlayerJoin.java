@@ -27,6 +27,7 @@ public class ListenPlayerJoin implements Listener {
     public void onPlayerJoinEarly(PlayerJoinEvent event) {
         this.plugin.getManager().resetSeeing(event.getPlayer());
         if (VanishPerms.joinVanished(event.getPlayer())) {
+            MetricsOverlord.joininvis.increment();
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer());
             this.plugin.hooksVanish(event.getPlayer());
         }
@@ -45,7 +46,6 @@ public class ListenPlayerJoin implements Listener {
             if (VanishPerms.canVanish(event.getPlayer())) {
                 add = " To appear: /vanish";
             }
-            MetricsOverlord.joininvis.increment();
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined vanished." + add);
             this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined vanished");
         }
