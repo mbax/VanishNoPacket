@@ -1,6 +1,6 @@
 name: VanishNoPacket
 main: org.kitteh.vanish.VanishPlugin
-version: 3.2
+version: 3.3
 website: http://kitteh.org
 softdepend: [Essentials,dynmap,JSONAPI,bPermissions,Spout]
 author: mbaxter

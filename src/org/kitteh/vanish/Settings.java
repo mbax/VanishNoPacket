@@ -20,7 +20,7 @@ public class Settings {
     /**
      * Tracking the config. Don't touch this.
      */
-    private static final int confVersion = 2;
+    private static final int confVersion = 3;
 
     public static void deployDefaultConfig(String name) {
         try {
