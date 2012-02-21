@@ -59,7 +59,7 @@ public class Settings {
                 config.set("spoutcraft.enable", null);
                 config.set("spoutcraft", null);
             }
-            if (ver <= 1 || config.contains("permtest.enable")) {
+            if ((ver <= 1) || config.contains("permtest.enable")) {
                 final boolean permtest = config.getBoolean("permtest.enable", false);
                 config.set("permtest.enable", null);
                 config.set("permtest", permtest);

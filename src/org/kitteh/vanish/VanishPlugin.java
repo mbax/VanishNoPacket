@@ -238,7 +238,6 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
-        this.getServer().getPluginManager().registerEvents(new ListenServer(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
