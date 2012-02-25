@@ -35,7 +35,7 @@ public class MinequeryHook {
     }
 
     public void unvanish(Player player) {
-        if (this.enabled && (this.minequery != null) && !player.hasPermission("vanish.hooks.minequery.alwayshidden")) {
+        if (this.enabled && (this.minequery != null)) {
             this.minequery.setPlayerVisiblity(player, false);
         }
     }
