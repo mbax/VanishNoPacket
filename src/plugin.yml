@@ -2,7 +2,7 @@ name: VanishNoPacket
 main: org.kitteh.vanish.VanishPlugin
 version: 3.3
 website: http://kitteh.org
-softdepend: [Essentials,dynmap,JSONAPI,bPermissions,Spout]
+softdepend: [Essentials,dynmap,JSONAPI,bPermissions,Spout,Minequery]
 author: mbaxter
 description: Vanish for the distinguished admin
 dev-url: http://dev.bukkit.org/server-mods/vanish/
