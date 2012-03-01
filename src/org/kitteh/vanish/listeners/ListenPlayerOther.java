@@ -1,7 +1,12 @@
 package org.kitteh.vanish.listeners;
 
+import net.minecraft.server.MobEffect;
+import net.minecraft.server.MobEffectList;
+import net.minecraft.server.Packet41MobEffect;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -72,6 +77,10 @@ public class ListenPlayerOther implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent event) {
         if (Settings.getWorldChangeCheck()) {
             this.plugin.getManager().playerRefresh(event.getPlayer());
+        }
+        if(this.plugin.getManager().isVanished(event.getPlayer())){
+            final CraftPlayer cplr = ((CraftPlayer) event.getPlayer());
+            cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
         }
     }
 }
