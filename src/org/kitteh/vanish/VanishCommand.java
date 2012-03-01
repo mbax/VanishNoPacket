@@ -23,6 +23,22 @@ public class VanishCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Users reloaded");
             sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Some settings refreshed");
             return true;
+        } else if ((args.length > 0) && args[0].equalsIgnoreCase("list") && VanishPerms.canList(sender)) {
+            final StringBuilder list = new StringBuilder();
+            for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+                if ((player != null) && this.plugin.getManager().isVanished(player)) {
+                    if (list.length() > 0) {
+                        list.append(ChatColor.DARK_AQUA);
+                        list.append(',');
+                    }
+                    list.append(ChatColor.AQUA);
+                    list.append(player.getName());
+                }
+            }
+            list.insert(0, "Vanished: ");
+            list.insert(0, ChatColor.DARK_AQUA);
+            sender.sendMessage(list.toString());
+            return true;
         }
         if ((sender instanceof Player)) {
             final Player player = (Player) sender;

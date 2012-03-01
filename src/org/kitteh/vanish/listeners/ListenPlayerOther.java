@@ -78,7 +78,7 @@ public class ListenPlayerOther implements Listener {
         if (Settings.getWorldChangeCheck()) {
             this.plugin.getManager().playerRefresh(event.getPlayer());
         }
-        if(this.plugin.getManager().isVanished(event.getPlayer())){
+        if (this.plugin.getManager().isVanished(event.getPlayer())) {
             final CraftPlayer cplr = ((CraftPlayer) event.getPlayer());
             cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
         }

@@ -26,6 +26,9 @@ permissions:
   vanish.statusupdates:
     default: op
     description: Informed about players changing status
+  vanish.list:
+    default: op
+    description: Acquire a list of vanished users
   vanish.nopickup:
     default: false
     description: If true player can pick up items when vanished
@@ -141,6 +144,7 @@ permissions:
     children:
       vanish.see: true
       vanish.vanish: true
+      vanish.list: true
       vanish.nopickup: true
       vanish.nofollow: true
       vanish.notrample: true

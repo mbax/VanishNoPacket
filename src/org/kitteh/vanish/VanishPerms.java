@@ -21,6 +21,10 @@ public class VanishPerms {
         return player.hasPermission("vanish.fakeannounce");
     }
 
+    public static boolean canList(CommandSender sender) {
+        return sender.hasPermission("vanish.list");
+    }
+
     public static boolean canNotChat(Player player) {
         return VanishPerms.getUser(player).getNoChat();
     }
