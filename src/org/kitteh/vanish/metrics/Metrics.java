@@ -1,4 +1,5 @@
 package org.kitteh.vanish.metrics;
+
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.
  *
@@ -27,370 +28,19 @@ package org.kitteh.vanish.metrics;
  * either expressed or implied, of anybody else.
  */
 
+import java.io.*;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 public class Metrics {
-
-    /**
-     * The current revision number
-     */
-    private final static int REVISION = 5;
-
-    /**
-     * The base url of the metrics domain
-     */
-    private static final String BASE_URL = "http://metrics.griefcraft.com";
-
-    /**
-     * The url used to report a server's status
-     */
-    private static final String REPORT_URL = "/report/%s";
-
-    /**
-     * The file where guid and opt out is stored in
-     */
-    private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
-
-    /**
-     * The separator to use for custom data. This MUST NOT change unless you are hosting your own
-     * version of metrics and want to change it.
-     */
-    private static final String CUSTOM_DATA_SEPARATOR = "~~";
-
-    /**
-     * Interval of time to ping (in minutes)
-     */
-    private final static int PING_INTERVAL = 10;
-
-    /**
-     * A map of all of the graphs for each plugin
-     */
-    private Map<Plugin, Set<Graph>> graphs = Collections.synchronizedMap(new HashMap<Plugin, Set<Graph>>());
-
-    /**
-     * A convenient map of the default Graph objects (used by addCustomData mainly)
-     */
-    private Map<Plugin, Graph> defaultGraphs = Collections.synchronizedMap(new HashMap<Plugin, Graph>());
-
-    /**
-     * The plugin configuration file
-     */
-    private final YamlConfiguration configuration;
-
-    /**
-     * Unique server id
-     */
-    private String guid;
-
-    public Metrics() throws IOException {
-        // load the config
-        File file = new File(CONFIG_FILE);
-        configuration = YamlConfiguration.loadConfiguration(file);
-
-        // add some defaults
-        configuration.addDefault("opt-out", false);
-        configuration.addDefault("guid", UUID.randomUUID().toString());
-
-        // Do we need to create the file?
-        if (configuration.get("guid", null) == null) {
-            configuration.options().header("http://metrics.griefcraft.com").copyDefaults(true);
-            configuration.save(file);
-        }
-
-        // Load the guid then
-        guid = configuration.getString("guid");
-    }
-
-    /**
-     * Construct and create a Graph that can be used to separate specific plotters to their own graphs
-     * on the metrics website. Plotters can be added to the graph object returned.
-     *
-     * @param plugin
-     * @param type
-     * @param name
-     * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
-     */
-    public Graph createGraph(Plugin plugin, Graph.Type type, String name) {
-        if (plugin == null || type == null || name == null) {
-            throw new IllegalArgumentException("All arguments must not be null");
-        }
-
-        // Construct the graph object
-        Graph graph = new Graph(type, name);
-
-        // Get the graphs for the plugin
-        Set<Graph> graphs = getOrCreateGraphs(plugin);
-
-        // Now we can add our graph
-        graphs.add(graph);
-
-        // and return back
-        return graph;
-    }
-
-    /**
-     * Adds a custom data plotter for a given plugin
-     *
-     * @param plugin
-     * @param plotter
-     */
-    public void addCustomData(Plugin plugin, Plotter plotter) {
-        // The default graph for the plugin
-        Graph graph = getOrCreateDefaultGraph(plugin);
-
-        // Add the plotter to the graph o/
-        graph.addPlotter(plotter);
-
-        // Ensure the default graph is included in the submitted graphs
-        getOrCreateGraphs(plugin).add(graph);
-    }
-
-    /**
-     * Begin measuring a plugin
-     *
-     * @param plugin
-     */
-    public void beginMeasuringPlugin(final Plugin plugin) {
-        // Did we opt out?
-        if (configuration.getBoolean("opt-out", false)) {
-            return;
-        }
-
-        // Begin hitting the server with glorious data
-        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
-            private boolean firstPost = true;
-
-            public void run() {
-                try {
-                    // We use the inverse of firstPost because if it is the first time we are posting,
-                    // it is not a interval ping, so it evaluates to FALSE
-                    // Each time thereafter it will evaluate to TRUE, i.e PING!
-                    postPlugin(plugin, !firstPost);
-
-                    // After the first post we set firstPost to false
-                    // Each post thereafter will be a ping
-                    firstPost = false;
-                } catch (IOException e) {
-                    System.out.println("[Metrics] " + e.getMessage());
-                }
-            }
-        }, 0, PING_INTERVAL * 1200);
-    }
-
-    /**
-     * Generic method that posts a plugin to the metrics website
-     *
-     * @param plugin
-     */
-    private void postPlugin(Plugin plugin, boolean isPing) throws IOException {
-        // The plugin's description file containg all of the plugin data such as name, version, author, etc
-        PluginDescriptionFile description = plugin.getDescription();
-
-        // The author string, created with description.getAuthors()
-        // Authors are separated by a comma
-        String authors = "";
-
-        // Add each author to the string
-        for (String author : description.getAuthors()) {
-            authors += author + ", ";
-        }
-
-        // If there were any authors at all, we need to remove the last 2 characters
-        // the last 2 characters are the last comma and space
-        if (!authors.isEmpty()) {
-            authors = authors.substring(0, authors.length() - 2);
-        }
-
-        // Construct the post data
-        String data = encode("guid") + '=' + encode(guid)
-                + encodeDataPair("authors", authors)
-                + encodeDataPair("version", description.getVersion())
-                + encodeDataPair("server", Bukkit.getVersion())
-                + encodeDataPair("players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length))
-                + encodeDataPair("revision", String.valueOf(REVISION));
-
-        // If we're pinging, append it
-        if (isPing) {
-            data += encodeDataPair("ping", "true");
-        }
-
-        // Add any custom data available for the plugin
-        Set<Graph> graphs = getOrCreateGraphs(plugin);
-
-        // Acquire a lock on the graphs, which lets us make the assumption we also lock everything
-        // inside of the graph (e.g plotters)
-        synchronized(graphs) {
-            Iterator<Graph> iter = graphs.iterator();
-
-            while (iter.hasNext()) {
-                Graph graph = iter.next();
-
-                // Because we have a lock on the graphs set already, it is reasonable to assume
-                // that our lock transcends down to the individual plotters in the graphs also.
-                // Because our methods are private, no one but us can reasonably access this list
-                // without reflection so this is a safe assumption without adding more code.
-                for (Plotter plotter : graph.getPlotters()) {
-                    // The key name to send to the metrics server
-                    // The format is C-GRAPHNAME-PLOTTERNAME where separator - is defined at the top
-                    // Legacy (R4) submitters use the format Custom%s, or CustomPLOTTERNAME
-                    String key = String.format("C%s%s%s%s", CUSTOM_DATA_SEPARATOR, graph.getName(), CUSTOM_DATA_SEPARATOR, plotter.getColumnName());
-
-                    // The value to send, which for the foreseeable future is just the string
-                    // value of plotter.getValue()
-                    String value = Integer.toString(plotter.getValue());
-
-                    // Add it to the http post data :)
-                    data += encodeDataPair(key, value);
-                }
-            }
-        }
-
-        // Create the url
-        URL url = new URL(BASE_URL + String.format(REPORT_URL, plugin.getDescription().getName()));
-
-        // Connect to the website
-        URLConnection connection;
-
-        // Mineshafter creates a socks proxy, so we can safely bypass it
-        // It does not reroute POST requests so we need to go around it
-        if (isMineshafterPresent()) {
-            connection = url.openConnection(Proxy.NO_PROXY);
-        } else {
-            connection = url.openConnection();
-        }
-
-        connection.setDoOutput(true);
-
-        // Write the data
-        OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-        writer.write(data);
-        writer.flush();
-
-        // Now read the response
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String response = reader.readLine();
-
-        // close resources
-        writer.close();
-        reader.close();
-
-        if (response.startsWith("ERR")) {
-            throw new IOException(response); //Throw the exception
-        } else {
-            // Is this the first update this hour?
-            if (response.contains("OK This is your first update this hour")) {
-                synchronized (graphs) {
-                    Iterator<Graph> iter = graphs.iterator();
-
-                    while (iter.hasNext()) {
-                        Graph graph = iter.next();
-
-                        for (Plotter plotter : graph.getPlotters()) {
-                            plotter.reset();
-                        }
-                    }
-                }
-            }
-        }
-        //if (response.startsWith("OK")) - We should get "OK" followed by an optional description if everything goes right
-    }
-
-    /**
-     * Get or create the Set of graphs for a specific plugin
-     *
-     * @param plugin
-     * @return
-     */
-    private Set<Graph> getOrCreateGraphs(Plugin plugin) {
-        Set<Graph> theGraphs = graphs.get(plugin);
-
-        // Create the Set if it does not already exist
-        if (theGraphs == null) {
-            theGraphs = Collections.synchronizedSet(new HashSet<Graph>());
-            graphs.put(plugin, theGraphs);
-        }
-
-        return theGraphs;
-    }
-
-    /**
-     * Get the default graph for a plugin and if it does not exist, create one
-     *
-     * @param plugin
-     * @return
-     */
-    private Graph getOrCreateDefaultGraph(Plugin plugin) {
-        Graph graph = defaultGraphs.get(plugin);
-
-        // Not yet created :(
-        if (graph == null) {
-            graph = new Graph(Graph.Type.Line, "Default");
-            defaultGraphs.put(plugin, graph);
-        }
-
-        return graph;
-    }
-
-    /**
-     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
-     *
-     * @return
-     */
-    private boolean isMineshafterPresent() {
-        try {
-            Class.forName("mineshafter.MineServer");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Encode a key/value data pair to be used in a HTTP post request. This INCLUDES a & so the first
-     * key/value pair MUST be included manually, e.g:
-     * <p>
-     *     String httpData = encode("guid") + "=" + encode("1234") + encodeDataPair("authors") + "..";
-     * </p>
-     *
-     * @param key
-     * @param value
-     * @return
-     */
-    private static String encodeDataPair(String key, String value) throws UnsupportedEncodingException {
-        return "&" + encode(key) + "=" + encode(value);
-    }
-
-    /**
-     * Encode text as UTF-8
-     *
-     * @param text
-     * @return
-     */
-    private static String encode(String text) throws UnsupportedEncodingException {
-        return URLEncoder.encode(text, "UTF-8");
-    }
 
     /**
      * Represents a custom graph on the website
@@ -449,43 +99,12 @@ public class Metrics {
         }
 
         /**
-         * Gets the graph's name
-         *
-         * @return
-         */
-        public String getName() {
-            return name;
-        }
-
-        /**
          * Add a plotter to the graph, which will be used to plot entries
-         *
+         * 
          * @param plotter
          */
         public void addPlotter(Plotter plotter) {
-            plotters.add(plotter);
-        }
-
-        /**
-         * Remove a plotter from the graph
-         *
-         * @param plotter
-         */
-        public void removePlotter(Plotter plotter) {
-            plotters.remove(plotter);
-        }
-
-        /**
-         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
-         * @return
-         */
-        public Set<Plotter> getPlotters() {
-            return Collections.unmodifiableSet(plotters);
-        }
-
-        @Override
-        public int hashCode() {
-            return (type.hashCode() * 17) ^ name.hashCode();
+            this.plotters.add(plotter);
         }
 
         @Override
@@ -494,8 +113,40 @@ public class Metrics {
                 return false;
             }
 
-            Graph graph = (Graph) object;
-            return graph.type == type && graph.name.equals(name);
+            final Graph graph = (Graph) object;
+            return (graph.type == this.type) && graph.name.equals(this.name);
+        }
+
+        /**
+         * Gets the graph's name
+         * 
+         * @return
+         */
+        public String getName() {
+            return this.name;
+        }
+
+        /**
+         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
+         * 
+         * @return
+         */
+        public Set<Plotter> getPlotters() {
+            return Collections.unmodifiableSet(this.plotters);
+        }
+
+        @Override
+        public int hashCode() {
+            return (this.type.hashCode() * 17) ^ this.name.hashCode();
+        }
+
+        /**
+         * Remove a plotter from the graph
+         * 
+         * @param plotter
+         */
+        public void removePlotter(Plotter plotter) {
+            this.plotters.remove(plotter);
         }
 
     }
@@ -519,38 +170,11 @@ public class Metrics {
 
         /**
          * Construct a plotter with a specific plot name
-         *
+         * 
          * @param name
          */
         public Plotter(String name) {
             this.name = name;
-        }
-
-        /**
-         * Get the current value for the plotted point
-         *
-         * @return
-         */
-        public abstract int getValue();
-
-        /**
-         * Get the column name for the plotted point
-         *
-         * @return the plotted point's column name
-         */
-        public String getColumnName() {
-            return name;
-        }
-
-        /**
-         * Called after the website graphs have been updated
-         */
-        public void reset() {
-        }
-
-        @Override
-        public int hashCode() {
-            return getColumnName().hashCode() + getValue();
         }
 
         @Override
@@ -559,10 +183,372 @@ public class Metrics {
                 return false;
             }
 
-            Plotter plotter = (Plotter) object;
-            return plotter.name.equals(name) && plotter.getValue() == getValue();
+            final Plotter plotter = (Plotter) object;
+            return plotter.name.equals(this.name) && (plotter.getValue() == this.getValue());
         }
 
+        /**
+         * Get the column name for the plotted point
+         * 
+         * @return the plotted point's column name
+         */
+        public String getColumnName() {
+            return this.name;
+        }
+
+        /**
+         * Get the current value for the plotted point
+         * 
+         * @return
+         */
+        public abstract int getValue();
+
+        @Override
+        public int hashCode() {
+            return this.getColumnName().hashCode() + this.getValue();
+        }
+
+        /**
+         * Called after the website graphs have been updated
+         */
+        public void reset() {
+        }
+
+    }
+
+    /**
+     * The current revision number
+     */
+    private final static int REVISION = 5;
+
+    /**
+     * The base url of the metrics domain
+     */
+    private static final String BASE_URL = "http://metrics.griefcraft.com";
+
+    /**
+     * The url used to report a server's status
+     */
+    private static final String REPORT_URL = "/report/%s";
+
+    /**
+     * The file where guid and opt out is stored in
+     */
+    private static final String CONFIG_FILE = "plugins/PluginMetrics/config.yml";
+
+    /**
+     * The separator to use for custom data. This MUST NOT change unless you are hosting your own
+     * version of metrics and want to change it.
+     */
+    private static final String CUSTOM_DATA_SEPARATOR = "~~";
+
+    /**
+     * Interval of time to ping (in minutes)
+     */
+    private final static int PING_INTERVAL = 10;
+
+    /**
+     * Encode text as UTF-8
+     * 
+     * @param text
+     * @return
+     */
+    private static String encode(String text) throws UnsupportedEncodingException {
+        return URLEncoder.encode(text, "UTF-8");
+    }
+
+    /**
+     * Encode a key/value data pair to be used in a HTTP post request. This INCLUDES a & so the first
+     * key/value pair MUST be included manually, e.g:
+     * <p>
+     * String httpData = encode("guid") + "=" + encode("1234") + encodeDataPair("authors") + "..";
+     * </p>
+     * 
+     * @param key
+     * @param value
+     * @return
+     */
+    private static String encodeDataPair(String key, String value) throws UnsupportedEncodingException {
+        return "&" + Metrics.encode(key) + "=" + Metrics.encode(value);
+    }
+
+    /**
+     * A map of all of the graphs for each plugin
+     */
+    private final Map<Plugin, Set<Graph>> graphs = Collections.synchronizedMap(new HashMap<Plugin, Set<Graph>>());
+
+    /**
+     * A convenient map of the default Graph objects (used by addCustomData mainly)
+     */
+    private final Map<Plugin, Graph> defaultGraphs = Collections.synchronizedMap(new HashMap<Plugin, Graph>());
+
+    /**
+     * The plugin configuration file
+     */
+    private final YamlConfiguration configuration;
+
+    /**
+     * Unique server id
+     */
+    private final String guid;
+
+    public Metrics() throws IOException {
+        // load the config
+        final File file = new File(Metrics.CONFIG_FILE);
+        this.configuration = YamlConfiguration.loadConfiguration(file);
+
+        // add some defaults
+        this.configuration.addDefault("opt-out", false);
+        this.configuration.addDefault("guid", UUID.randomUUID().toString());
+
+        // Do we need to create the file?
+        if (this.configuration.get("guid", null) == null) {
+            this.configuration.options().header("http://metrics.griefcraft.com").copyDefaults(true);
+            this.configuration.save(file);
+        }
+
+        // Load the guid then
+        this.guid = this.configuration.getString("guid");
+    }
+
+    /**
+     * Adds a custom data plotter for a given plugin
+     * 
+     * @param plugin
+     * @param plotter
+     */
+    public void addCustomData(Plugin plugin, Plotter plotter) {
+        // The default graph for the plugin
+        final Graph graph = this.getOrCreateDefaultGraph(plugin);
+
+        // Add the plotter to the graph o/
+        graph.addPlotter(plotter);
+
+        // Ensure the default graph is included in the submitted graphs
+        this.getOrCreateGraphs(plugin).add(graph);
+    }
+
+    /**
+     * Begin measuring a plugin
+     * 
+     * @param plugin
+     */
+    public void beginMeasuringPlugin(final Plugin plugin) {
+        // Did we opt out?
+        if (this.configuration.getBoolean("opt-out", false)) {
+            return;
+        }
+
+        // Begin hitting the server with glorious data
+        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
+            private boolean firstPost = true;
+
+            @Override
+            public void run() {
+                try {
+                    // We use the inverse of firstPost because if it is the first time we are posting,
+                    // it is not a interval ping, so it evaluates to FALSE
+                    // Each time thereafter it will evaluate to TRUE, i.e PING!
+                    Metrics.this.postPlugin(plugin, !this.firstPost);
+
+                    // After the first post we set firstPost to false
+                    // Each post thereafter will be a ping
+                    this.firstPost = false;
+                } catch (final IOException e) {
+                    System.out.println("[Metrics] " + e.getMessage());
+                }
+            }
+        }, 0, Metrics.PING_INTERVAL * 1200);
+    }
+
+    /**
+     * Construct and create a Graph that can be used to separate specific plotters to their own graphs
+     * on the metrics website. Plotters can be added to the graph object returned.
+     * 
+     * @param plugin
+     * @param type
+     * @param name
+     * @return Graph object created. Will never return NULL under normal circumstances unless bad parameters are given
+     */
+    public Graph createGraph(Plugin plugin, Graph.Type type, String name) {
+        if ((plugin == null) || (type == null) || (name == null)) {
+            throw new IllegalArgumentException("All arguments must not be null");
+        }
+
+        // Construct the graph object
+        final Graph graph = new Graph(type, name);
+
+        // Get the graphs for the plugin
+        final Set<Graph> graphs = this.getOrCreateGraphs(plugin);
+
+        // Now we can add our graph
+        graphs.add(graph);
+
+        // and return back
+        return graph;
+    }
+
+    /**
+     * Get the default graph for a plugin and if it does not exist, create one
+     * 
+     * @param plugin
+     * @return
+     */
+    private Graph getOrCreateDefaultGraph(Plugin plugin) {
+        Graph graph = this.defaultGraphs.get(plugin);
+
+        // Not yet created :(
+        if (graph == null) {
+            graph = new Graph(Graph.Type.Line, "Default");
+            this.defaultGraphs.put(plugin, graph);
+        }
+
+        return graph;
+    }
+
+    /**
+     * Get or create the Set of graphs for a specific plugin
+     * 
+     * @param plugin
+     * @return
+     */
+    private Set<Graph> getOrCreateGraphs(Plugin plugin) {
+        Set<Graph> theGraphs = this.graphs.get(plugin);
+
+        // Create the Set if it does not already exist
+        if (theGraphs == null) {
+            theGraphs = Collections.synchronizedSet(new HashSet<Graph>());
+            this.graphs.put(plugin, theGraphs);
+        }
+
+        return theGraphs;
+    }
+
+    /**
+     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
+     * 
+     * @return
+     */
+    private boolean isMineshafterPresent() {
+        try {
+            Class.forName("mineshafter.MineServer");
+            return true;
+        } catch (final Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Generic method that posts a plugin to the metrics website
+     * 
+     * @param plugin
+     */
+    private void postPlugin(Plugin plugin, boolean isPing) throws IOException {
+        // The plugin's description file containg all of the plugin data such as name, version, author, etc
+        final PluginDescriptionFile description = plugin.getDescription();
+
+        // The author string, created with description.getAuthors()
+        // Authors are separated by a comma
+        String authors = "";
+
+        // Add each author to the string
+        for (final String author : description.getAuthors()) {
+            authors += author + ", ";
+        }
+
+        // If there were any authors at all, we need to remove the last 2 characters
+        // the last 2 characters are the last comma and space
+        if (!authors.isEmpty()) {
+            authors = authors.substring(0, authors.length() - 2);
+        }
+
+        // Construct the post data
+        String data = Metrics.encode("guid") + '=' + Metrics.encode(this.guid) + Metrics.encodeDataPair("authors", authors) + Metrics.encodeDataPair("version", description.getVersion()) + Metrics.encodeDataPair("server", Bukkit.getVersion()) + Metrics.encodeDataPair("players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length)) + Metrics.encodeDataPair("revision", String.valueOf(Metrics.REVISION));
+
+        // If we're pinging, append it
+        if (isPing) {
+            data += Metrics.encodeDataPair("ping", "true");
+        }
+
+        // Add any custom data available for the plugin
+        final Set<Graph> graphs = this.getOrCreateGraphs(plugin);
+
+        // Acquire a lock on the graphs, which lets us make the assumption we also lock everything
+        // inside of the graph (e.g plotters)
+        synchronized (graphs) {
+            final Iterator<Graph> iter = graphs.iterator();
+
+            while (iter.hasNext()) {
+                final Graph graph = iter.next();
+
+                // Because we have a lock on the graphs set already, it is reasonable to assume
+                // that our lock transcends down to the individual plotters in the graphs also.
+                // Because our methods are private, no one but us can reasonably access this list
+                // without reflection so this is a safe assumption without adding more code.
+                for (final Plotter plotter : graph.getPlotters()) {
+                    // The key name to send to the metrics server
+                    // The format is C-GRAPHNAME-PLOTTERNAME where separator - is defined at the top
+                    // Legacy (R4) submitters use the format Custom%s, or CustomPLOTTERNAME
+                    final String key = String.format("C%s%s%s%s", Metrics.CUSTOM_DATA_SEPARATOR, graph.getName(), Metrics.CUSTOM_DATA_SEPARATOR, plotter.getColumnName());
+
+                    // The value to send, which for the foreseeable future is just the string
+                    // value of plotter.getValue()
+                    final String value = Integer.toString(plotter.getValue());
+
+                    // Add it to the http post data :)
+                    data += Metrics.encodeDataPair(key, value);
+                }
+            }
+        }
+
+        // Create the url
+        final URL url = new URL(Metrics.BASE_URL + String.format(Metrics.REPORT_URL, plugin.getDescription().getName()));
+
+        // Connect to the website
+        URLConnection connection;
+
+        // Mineshafter creates a socks proxy, so we can safely bypass it
+        // It does not reroute POST requests so we need to go around it
+        if (this.isMineshafterPresent()) {
+            connection = url.openConnection(Proxy.NO_PROXY);
+        } else {
+            connection = url.openConnection();
+        }
+
+        connection.setDoOutput(true);
+
+        // Write the data
+        final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+        writer.write(data);
+        writer.flush();
+
+        // Now read the response
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final String response = reader.readLine();
+
+        // close resources
+        writer.close();
+        reader.close();
+
+        if (response.startsWith("ERR")) {
+            throw new IOException(response); //Throw the exception
+        } else {
+            // Is this the first update this hour?
+            if (response.contains("OK This is your first update this hour")) {
+                synchronized (graphs) {
+                    final Iterator<Graph> iter = graphs.iterator();
+
+                    while (iter.hasNext()) {
+                        final Graph graph = iter.next();
+
+                        for (final Plotter plotter : graph.getPlotters()) {
+                            plotter.reset();
+                        }
+                    }
+                }
+            }
+        }
+        //if (response.startsWith("OK")) - We should get "OK" followed by an optional description if everything goes right
     }
 
 }
