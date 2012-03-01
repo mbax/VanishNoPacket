@@ -87,7 +87,7 @@ public class SpoutCraftHook implements Listener {
         if (enabled) {
             if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
                 this.enabled = false;
-                this.plugin.getLogger().info("SpoutCraft not running but you wanted SpoutCraft features.");
+                this.plugin.log("SpoutCraft not running but you wanted SpoutCraft features.");
                 return;
             }
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);

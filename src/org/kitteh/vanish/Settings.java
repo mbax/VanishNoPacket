@@ -53,7 +53,7 @@ public class Settings {
         config.options().copyDefaults(true);
         final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
         if (ver != Settings.confVersion) {
-            Bukkit.getLogger().info("[VanishNoPacket] Attempting to update your configuration. Check to make sure it's ok");
+            plugin.log("Attempting to update your configuration. Check to make sure it's ok");
             if (ver < 1) {
                 config.set("hooks.spoutcraft", config.getBoolean("spoutcraft.enable", true));
                 config.set("spoutcraft.enable", null);

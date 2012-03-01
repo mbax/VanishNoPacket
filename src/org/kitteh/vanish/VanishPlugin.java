@@ -225,6 +225,8 @@ public class VanishPlugin extends JavaPlugin {
             this.log("In future startups, VanishNoPacket will send usage data");
             this.log("and check for updated versions. If you hate useful info,");
             this.log("The setting can be disabled in the config file.");
+            this.log("Note that this plugin also utilizes PluginMetrics with usage tracking");
+            this.log("If you do not want usage tracking (paranoid) disable in that config");
         }
 
         this.latestVersion = this.getDescription().getVersion();
