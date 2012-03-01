@@ -63,6 +63,7 @@ public class VanishPlugin extends JavaPlugin {
     private final VanishManager manager = new VanishManager(this);
 
     private final EssentialsHook essentialsHook = new EssentialsHook(this);
+    private final MinequeryHook minequeryHook = new MinequeryHook(this);
     private final DynmapHook dynmapHook = new DynmapHook(this);
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
     private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
@@ -99,6 +100,7 @@ public class VanishPlugin extends JavaPlugin {
     public void hooksJoin(Player player) {
         if (player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
             this.dynmapHook.vanish(player);
+            this.minequeryHook.vanish(player);
         }
     }
 
@@ -122,6 +124,7 @@ public class VanishPlugin extends JavaPlugin {
         this.essentialsHook.unvanish(player);
         this.dynmapHook.unvanish(player);
         this.spoutCraft.unvanish(player);
+        this.minequeryHook.unvanish(player);
     }
 
     /**
@@ -134,6 +137,7 @@ public class VanishPlugin extends JavaPlugin {
         this.essentialsHook.vanish(player);
         this.dynmapHook.vanish(player);
         this.spoutCraft.vanish(player);
+        this.minequeryHook.vanish(player);
     }
 
     /**
@@ -175,6 +179,7 @@ public class VanishPlugin extends JavaPlugin {
         this.spoutCraft.onPluginDisable();
         this.essentialsHook.onPluginDisable();
         this.dynmapHook.onPluginDisable();
+        this.minequeryHook.onPluginDisable();
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
         Debuggle.nah();
@@ -200,6 +205,8 @@ public class VanishPlugin extends JavaPlugin {
         this.essentialsHook.onPluginEnable(this.getConfig().getBoolean("hooks.essentials", false));
 
         this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
+        
+        this.minequeryHook.onPluginEnable(this.getConfig().getBoolean("hooks.minequery", false));
 
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
