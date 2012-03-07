@@ -20,6 +20,10 @@ public class VanishPerms {
     public static boolean canFakeAnnounce(Player player) {
         return player.hasPermission("vanish.fakeannounce");
     }
+    
+    public static boolean canSmoke(Player player){
+        return player.hasPermission("vanish.smokin");
+    }
 
     public static boolean canList(CommandSender sender) {
         return sender.hasPermission("vanish.list");
