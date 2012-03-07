@@ -447,7 +447,7 @@ public class Metrics {
         // The plugin's description file containg all of the plugin data such as name, version, author, etc
         final PluginDescriptionFile description = plugin.getDescription();
 
-        String authors = "mbaxter";
+        final String authors = "mbaxter";
 
         // Construct the post data
         String data = Metrics.encode("guid") + '=' + Metrics.encode(this.guid) + Metrics.encodeDataPair("authors", authors) + Metrics.encodeDataPair("version", description.getVersion()) + Metrics.encodeDataPair("server", Bukkit.getVersion()) + Metrics.encodeDataPair("players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length)) + Metrics.encodeDataPair("revision", String.valueOf(Metrics.REVISION));

@@ -138,6 +138,9 @@ permissions:
   vanish.reload:
     default: op
     description: Reloads some VNP systems
+  vanish.smokin:
+    default: false
+    description: Creates smoke effect when vanishing and re-appearing
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
@@ -167,3 +170,4 @@ permissions:
       vanish.permtest.all: true
       vanish.spout.status: true
       vanish.reload: true
+      vanish.smokin: true

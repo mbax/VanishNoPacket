@@ -3,6 +3,7 @@ package org.kitteh.vanish;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.server.MobEffect;
@@ -11,6 +12,8 @@ import net.minecraft.server.Packet41MobEffect;
 import net.minecraft.server.Packet42RemoveMobEffect;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
@@ -30,6 +33,8 @@ public class VanishManager {
     private Map<String, Boolean> sleepIgnored;
 
     private VanishAnnounceManipulator announceManipulator;
+
+    private final Random random = new Random();
 
     public VanishManager(VanishPlugin plugin) {
         this.plugin = plugin;
@@ -195,12 +200,15 @@ public class VanishManager {
     public void toggleVanishQuiet(Player vanishingPlayer) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
+        final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
         if (vanishing) {
             Debuggle.log("It's invisible time! " + vanishingPlayer.getName());
             this.setSleepingIgnored(vanishingPlayer);
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.addVanished(vanishingPlayerName);
-            final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
+            if (VanishPerms.canSmoke(vanishingPlayer)) {
+                this.smokeScreenEffect(vanishingPlayer.getLocation());
+            }
             cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.vanish.increment();
             this.plugin.log(vanishingPlayerName + " disappeared.");
@@ -209,7 +217,10 @@ public class VanishManager {
             this.resetSleepingIgnored(vanishingPlayer);
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName);
-            final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
+
+            if (VanishPerms.canSmoke(vanishingPlayer)) {
+                this.smokeScreenEffect(vanishingPlayer.getLocation());
+            }
             cplr.getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.unvanish.increment();
             this.plugin.log(vanishingPlayerName + " reappeared.");
@@ -265,6 +276,12 @@ public class VanishManager {
             if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer)) {
                 player.showPlayer(otherPlayer);
             }
+        }
+    }
+
+    private void smokeScreenEffect(Location location) {
+        for (int i = 0; i < 10; i++) {
+            location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
         }
     }
 
