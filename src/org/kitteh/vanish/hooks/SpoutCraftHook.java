@@ -120,7 +120,7 @@ public class SpoutCraftHook implements Listener {
                 this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
             }
             for (final String titleGroup : config.getConfigurationSection("titles").getKeys(false)) {
-                this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", "§"));
+                this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", String.valueOf(ChatColor.COLOR_CHAR)));
             }
         }
     }

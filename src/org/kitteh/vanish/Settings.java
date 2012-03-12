@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
@@ -73,8 +74,8 @@ public class Settings {
             plugin.saveConfig();
         }
         Settings.enablePermTest = config.getBoolean("permtest", false);
-        Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", "§");
-        Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", "§");
+        Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
+        Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
         if (config.getBoolean("debug", false)) {
