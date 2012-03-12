@@ -65,6 +65,19 @@ public class VanishAnnounceManipulator {
         MetricsOverlord.fakejoin.increment();
         this.playerOnlineStatus.put(player.getName(), true);
     }
+    
+    /**
+     * Call a forced fake quit for the player.
+     * Fires regardless of wether the server previously said they were online
+     * 
+     * @param player
+     */
+    public void forceFakeQuit(Player player){
+        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
+        this.plugin.log(player.getName() + " faked quitting");
+        MetricsOverlord.fakequit.increment();
+        this.playerOnlineStatus.put(player.getName(), false);
+    }
 
     /**
      * Call a fake quit for the player.
