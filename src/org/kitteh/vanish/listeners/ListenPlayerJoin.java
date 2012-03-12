@@ -11,6 +11,8 @@ import org.kitteh.vanish.VanishCheck;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.metrics.MetricsOverlord;
+import org.kitteh.vanish.Settings;
+
 
 public class ListenPlayerJoin implements Listener {
 
@@ -30,7 +32,7 @@ public class ListenPlayerJoin implements Listener {
     public void onPlayerJoinEarly(PlayerJoinEvent event) {
         event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(this.plugin.getManager(), event.getPlayer().getName())));
         this.plugin.getManager().resetSeeing(event.getPlayer());
-        if (VanishPerms.joinVanished(event.getPlayer())) {
+        if (Settings.getEnableJoinVanished() && VanishPerms.joinVanished(event.getPlayer())) {
             MetricsOverlord.joininvis.increment();
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer());
             this.plugin.hooksVanish(event.getPlayer());
@@ -45,7 +47,7 @@ public class ListenPlayerJoin implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
-        if (VanishPerms.joinVanished(event.getPlayer())) {
+        if (Settings.getEnableJoinVanished() && VanishPerms.joinVanished(event.getPlayer())) {
             String add = "";
             if (VanishPerms.canVanish(event.getPlayer())) {
                 add = " To appear: /vanish";

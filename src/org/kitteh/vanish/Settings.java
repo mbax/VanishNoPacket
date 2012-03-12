@@ -16,6 +16,7 @@ public class Settings {
     private static String fakeJoin;
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
+    private static boolean enableJoinVanished;
 
     /**
      * Tracking the config. Don't touch this.
@@ -73,10 +74,11 @@ public class Settings {
             plugin.saveConfig();
         }
         Settings.enablePermTest = config.getBoolean("permtest", false);
-        Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", "§");
-        Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", "§");
+        Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", "ï¿½");
+        Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", "ï¿½");
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
+        Settings.enableJoinVanished = config.getBoolean("enablejoinvanished", false);
         if (config.getBoolean("debug", false)) {
             Debuggle.itsGoTime();
         } else {
@@ -102,5 +104,9 @@ public class Settings {
 
     public static boolean getWorldChangeCheck() {
         return Settings.worldChangeCheck;
+    }
+    
+    public static boolean getEnableJoinVanished() {
+        return Settings.enableJoinVanished;
     }
 }
