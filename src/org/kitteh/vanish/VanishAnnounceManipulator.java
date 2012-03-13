@@ -22,8 +22,7 @@ public class VanishAnnounceManipulator {
      * @param plugin
      *            The running instance of the plugin
      * @param fakeJoinMessage
-     *            The message to display. && for color, %p for player.getName(),
-     *            %d for player.getDisplayName()
+     *            The message to display. && for color, %p for player.getName(), %d for player.getDisplayName()
      * @param fakeQuitMessage
      * @param delayedJoinTrackingEnabled
      */
@@ -56,14 +55,13 @@ public class VanishAnnounceManipulator {
      * 
      * @param player
      */
-    public void fakeJoin(Player player) {
-        if (this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName())) {
-            return;
+    public void fakeJoin(Player player, boolean force) {
+        if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
+            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
+            this.plugin.log(player.getName() + " faked joining");
+            MetricsOverlord.fakejoin.increment();
+            this.playerOnlineStatus.put(player.getName(), true);
         }
-        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
-        this.plugin.log(player.getName() + " faked joining");
-        MetricsOverlord.fakejoin.increment();
-        this.playerOnlineStatus.put(player.getName(), true);
     }
 
     /**
@@ -72,14 +70,14 @@ public class VanishAnnounceManipulator {
      * 
      * @param player
      */
-    public void fakeQuit(Player player) {
-        if (this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName())) {
-            return;
+    public void fakeQuit(Player player, boolean force) {
+        if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
+
+            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
+            this.plugin.log(player.getName() + " faked quitting");
+            MetricsOverlord.fakequit.increment();
+            this.playerOnlineStatus.put(player.getName(), false);
         }
-        this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
-        this.plugin.log(player.getName() + " faked quitting");
-        MetricsOverlord.fakequit.increment();
-        this.playerOnlineStatus.put(player.getName(), false);
     }
 
     /**
@@ -93,7 +91,7 @@ public class VanishAnnounceManipulator {
         if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
             return;
         }
-        this.fakeJoin(player);
+        this.fakeJoin(player, false);
         this.dropDelayedAnnounce(player.getName());
     }
 

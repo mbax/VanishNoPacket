@@ -108,14 +108,22 @@ public class VanishCommand implements CommandExecutor {
                 } else {
                     player.sendMessage(ChatColor.RED + "Already invisible :)");
                 }
-                this.plugin.getManager().getAnnounceManipulator().fakeQuit(player);
+                boolean forced = false;
+                if ((args.length > 1) && (args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("force"))) {
+                    forced = true;
+                }
+                this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, forced);
             } else if ((args[0].equalsIgnoreCase("fakejoin") || args[0].equalsIgnoreCase("fj")) && VanishPerms.canFakeAnnounce(player)) {
                 if (this.plugin.getManager().isVanished(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 } else {
                     player.sendMessage(ChatColor.RED + "Already visible :)");
                 }
-                this.plugin.getManager().getAnnounceManipulator().fakeJoin(player);
+                boolean forced = false;
+                if ((args.length > 1) && (args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("force"))) {
+                    forced = true;
+                }
+                this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, forced);
             }
         }
         return true;
