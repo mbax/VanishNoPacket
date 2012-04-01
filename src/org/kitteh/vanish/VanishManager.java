@@ -1,10 +1,6 @@
 package org.kitteh.vanish;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import net.minecraft.server.MobEffect;
 import net.minecraft.server.MobEffectList;
