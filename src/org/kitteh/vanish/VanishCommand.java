@@ -55,10 +55,24 @@ public class VanishCommand implements CommandExecutor {
                 return this.toggle(player, "nochat");
             }
             if ((args.length == 0)) {
-                if (VanishPerms.canVanish((Player) sender)) {
+                if (VanishPerms.canVanish(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 }
-            } else if (args[0].equalsIgnoreCase("check") && VanishPerms.canVanish((Player) sender)) {
+            } else if (args[0].equalsIgnoreCase("on") && VanishPerms.canVanish(player)) {
+                if (!this.plugin.getManager().isVanished(player)) {
+                    this.plugin.getManager().toggleVanish(player);
+                    if ((args.length > 1) && args[1].equalsIgnoreCase("fake")) {
+                        this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, false);
+                    }
+                }
+            } else if (args[0].equalsIgnoreCase("off") && VanishPerms.canVanish(player)) {
+                if (this.plugin.getManager().isVanished(player)) {
+                    this.plugin.getManager().toggleVanish(player);
+                    if ((args.length > 1) && args[1].equalsIgnoreCase("fake")) {
+                        this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, false);
+                    }
+                }
+            } else if (args[0].equalsIgnoreCase("check") && VanishPerms.canVanish(player)) {
                 if (this.plugin.getManager().isVanished(player)) {
                     player.sendMessage(ChatColor.DARK_AQUA + "You are invisible.");
                 } else {
@@ -92,7 +106,7 @@ public class VanishCommand implements CommandExecutor {
                     if (toggleReply.length() > 0) {
                         toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                     } else {
-                        if (VanishPerms.canVanish((Player) sender)) {
+                        if (VanishPerms.canVanish(player)) {
                             toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
                         }
                     }
