@@ -71,6 +71,12 @@ permissions:
   vanish.silentquit:
     default: false
     description: ALWAYS quit silently. 
+  vanish.silentchests:
+    default: false
+    description: Allows user to read chests silently while vanished
+  vanish.toggle.silentchests:
+    default: false
+    description: Toggle ability to read chests silently
   vanish.toggle.see:
     default: false
     description: Toggle seeing other vanished players
@@ -102,6 +108,7 @@ permissions:
     default: false
     description: Allows user to toggle all their settings ingame
     children:
+      vanish.toggle.silentchests: true
       vanish.toggle.see: true
       vanish.toggle.nopickup: true
       vanish.toggle.nofollow: true
@@ -156,6 +163,7 @@ permissions:
       vanish.preventdamage: true
       vanish.statusupdates: true
       vanish.adminalerts: true
+      vanish.silentchests: true
   vanish.*:
     default: false    
     description: Oh god everything.

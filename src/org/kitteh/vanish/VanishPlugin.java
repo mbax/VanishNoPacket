@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -56,6 +57,8 @@ public class VanishPlugin extends JavaPlugin {
 
     }
 
+    private final HashSet<String> haveInventoriesOpen = new HashSet<String>();
+
     private String latestVersion = null;
 
     private boolean versionDiff = false;
@@ -67,6 +70,24 @@ public class VanishPlugin extends JavaPlugin {
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
     private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
     private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
+
+    public void chestFakeClose(String name) {
+        synchronized (this.haveInventoriesOpen) {
+            this.haveInventoriesOpen.remove(name);
+        }
+    }
+
+    public boolean chestFakeInUse(String name) {
+        synchronized (this.haveInventoriesOpen) {
+            return this.haveInventoriesOpen.contains(name);
+        }
+    }
+
+    public void chestFakeOpen(String name) {
+        synchronized (this.haveInventoriesOpen) {
+            this.haveInventoriesOpen.add(name);
+        }
+    }
 
     public BPermissionsHook getBPerms() {
         return this.bPermissionsHook;
@@ -241,6 +262,7 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }

@@ -10,6 +10,7 @@ public class VanishUser {
     private boolean preventOutgoingDamage;
     private boolean noInteract;
     private boolean noChat;
+    private boolean silentChestReads;
 
     public VanishUser(Player player) {
         this.seeAll = player.hasPermission("vanish.see");
@@ -19,6 +20,7 @@ public class VanishUser {
         this.preventOutgoingDamage = player.hasPermission("vanish.preventoutgoingdamage");
         this.noInteract = player.hasPermission("vanish.nointeract");
         this.noChat = player.hasPermission("vanish.nochat");
+        this.silentChestReads = player.hasPermission("vanish.silentchests");
     }
 
     public boolean getNoChat() {
@@ -43,6 +45,10 @@ public class VanishUser {
 
     public boolean getPreventOutgoingDamage() {
         return this.preventOutgoingDamage;
+    }
+
+    public boolean getReadChestsSilently() {
+        return this.silentChestReads;
     }
 
     public boolean getSeeAll() {
@@ -82,6 +88,11 @@ public class VanishUser {
     public boolean toggleSeeAll() {
         this.seeAll = !this.seeAll;
         return this.seeAll;
+    }
+
+    public boolean toggleSilentChestReads() {
+        this.silentChestReads = !this.silentChestReads;
+        return this.silentChestReads;
     }
 
 }

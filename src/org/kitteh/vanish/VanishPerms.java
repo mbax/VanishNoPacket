@@ -45,6 +45,10 @@ public class VanishPerms {
         return player.hasPermission("vanish.notrample");
     }
 
+    public static boolean canReadChestsSilently(Player player) {
+        return VanishPerms.getUser(player).getReadChestsSilently();
+    }
+
     public static boolean canReceiveAdminAlerts(Player player) {
         return player.hasPermission("vanish.adminalerts");
     }
@@ -97,6 +101,10 @@ public class VanishPerms {
         return player.hasPermission("vanish.toggle.see");
     }
 
+    public static boolean canToggleSilentChestReads(Player player) {
+        return player.hasPermission("vanish.toggle.silentchests");
+    }
+
     public static boolean canVanish(Player player) {
         return player.hasPermission("vanish.vanish");
     }
@@ -147,6 +155,10 @@ public class VanishPerms {
 
     public static boolean toggleSeeAll(Player player) {
         return VanishPerms.getUser(player).toggleSeeAll();
+    }
+
+    public static boolean toggleSilentChestReads(Player player) {
+        return VanishPerms.getUser(player).toggleSilentChestReads();
     }
 
     public static void userQuit(Player player) {
