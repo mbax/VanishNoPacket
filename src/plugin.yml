@@ -141,6 +141,9 @@ permissions:
   vanish.smokin:
     default: false
     description: Creates smoke effect when vanishing and re-appearing
+  vanish.readchests:
+    default: false
+    descriptions: Allows user to read chests silently while vanished
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
@@ -171,3 +174,4 @@ permissions:
       vanish.spout.status: true
       vanish.reload: true
       vanish.smokin: true
+      vanish.readchests: true

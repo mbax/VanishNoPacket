@@ -6,6 +6,7 @@ import net.minecraft.server.Packet41MobEffect;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
@@ -44,6 +46,16 @@ public class ListenPlayerOther implements Listener {
                 event.setCancelled(true);
             }
         }
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock().getType() == Material.CHEST)) {
+            if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canStealthilyReadChests(event.getPlayer())){
+                event.setCancelled(true);
+                Chest chest = (Chest) event.getClickedBlock().getState();
+                Inventory i = plugin.getServer().createInventory(event.getPlayer(), chest.getInventory().getSize());
+                i.setContents(chest.getInventory().getContents());
+                event.getPlayer().openInventory(i);
+                plugin.haveInventoriesOpen.add(event.getPlayer().getName());
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -66,6 +78,7 @@ public class ListenPlayerOther implements Listener {
             MetricsOverlord.quitinvis.increment();
             event.setQuitMessage(null);
         }
+        plugin.haveInventoriesOpen.remove(event.getPlayer().getName());
     }
 
     @EventHandler

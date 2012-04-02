@@ -100,6 +100,10 @@ public class VanishPerms {
     public static boolean canVanish(Player player) {
         return player.hasPermission("vanish.vanish");
     }
+    
+    public static boolean canStealthilyReadChests(Player player) {
+        return player.hasPermission("vanish.readchests");
+    }
 
     public static boolean joinVanished(Player player) {
         return player.hasPermission("vanish.joinvanished");
