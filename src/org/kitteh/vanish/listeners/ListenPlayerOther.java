@@ -47,7 +47,7 @@ public class ListenPlayerOther implements Listener {
             }
         }
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock().getType() == Material.CHEST)) {
-            if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canStealthilyReadChests(event.getPlayer())){
+            if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())){
                 event.setCancelled(true);
                 Chest chest = (Chest) event.getClickedBlock().getState();
                 Inventory i = plugin.getServer().createInventory(event.getPlayer(), chest.getInventory().getSize());

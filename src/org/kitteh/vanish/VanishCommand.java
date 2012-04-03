@@ -103,6 +103,9 @@ public class VanishCommand implements CommandExecutor {
                     if (VanishPerms.canToggleNoChat(player)) {
                         this.appendList(toggleReply, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
                     }
+                    if (VanishPerms.canToggleSilentChestReads(player)) {
+                        this.appendList(toggleReply, this.colorize(VanishPerms.canReadChestsSilently(player)) + "readchests" + ChatColor.DARK_AQUA);
+                    }
                     if (toggleReply.length() > 0) {
                         toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                     } else {
@@ -184,6 +187,9 @@ public class VanishCommand implements CommandExecutor {
         } else if (toggle.equalsIgnoreCase("nochat") && VanishPerms.canToggleNoChat(player)) {
             status = VanishPerms.toggleNoChat(player);
             message.append("no chat");
+        } else if (toggle.equalsIgnoreCase("readchests") && VanishPerms.canToggleSilentChestReads(player)){
+            status = VanishPerms.toggleSilentChestReads(player);
+            message.append("silent chest reads");
         }
         if (message.length() > 0) {
             message.insert(0, ChatColor.DARK_AQUA + "Status: ");

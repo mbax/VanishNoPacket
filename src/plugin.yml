@@ -71,6 +71,12 @@ permissions:
   vanish.silentquit:
     default: false
     description: ALWAYS quit silently. 
+  vanish.readchests:
+    default: false
+    description: Allows user to read chests silently while vanished
+  vanish.toggle.readchests:
+    default: false
+    description: Toggle ability to read chests silently
   vanish.toggle.see:
     default: false
     description: Toggle seeing other vanished players
@@ -102,6 +108,7 @@ permissions:
     default: false
     description: Allows user to toggle all their settings ingame
     children:
+      vanish.toggle.readchests: true
       vanish.toggle.see: true
       vanish.toggle.nopickup: true
       vanish.toggle.nofollow: true
@@ -141,9 +148,6 @@ permissions:
   vanish.smokin:
     default: false
     description: Creates smoke effect when vanishing and re-appearing
-  vanish.readchests:
-    default: false
-    descriptions: Allows user to read chests silently while vanished
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
