@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -55,6 +56,8 @@ public class VanishPlugin extends JavaPlugin {
         }
 
     }
+    
+    public ArrayList<String> haveInventoriesOpen = new ArrayList<String>();
 
     private String latestVersion = null;
 
@@ -241,6 +244,7 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerOther(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
+        this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
 
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
