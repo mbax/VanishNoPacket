@@ -12,7 +12,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 import org.kitteh.vanish.metrics.MetricsOverlord;
@@ -202,7 +202,7 @@ public class VanishManager {
         if (vanishing) {
             Debuggle.log("It's invisible time! " + vanishingPlayer.getName());
             this.setSleepingIgnored(vanishingPlayer);
-            for (final LivingEntity entity : vanishingPlayer.getWorld().getLivingEntities()) {
+            for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
                 if (entity instanceof Creature) {
                     final Creature creature = ((Creature) entity);
                     if (creature.getTarget().equals(vanishingPlayer)) {
