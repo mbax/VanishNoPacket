@@ -489,7 +489,7 @@ public class Metrics {
         }
 
         // Create the url
-        final URL url = new URL(Metrics.BASE_URL + String.format(Metrics.REPORT_URL, plugin.getDescription().getName()));
+        final URL url = new URL(Metrics.BASE_URL + String.format(Metrics.REPORT_URL, "VanishNoPacket"));
 
         // Connect to the website
         URLConnection connection;
