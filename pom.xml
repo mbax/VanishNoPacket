@@ -68,6 +68,7 @@
       <version>2.9.1</version>
       <type>jar</type>
     </dependency>
+ <!-- JSONAPI seems to have no repo so you have to locally install this -->
     <dependency>
       <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
       <artifactId>JSONAPI</artifactId>
