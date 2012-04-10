@@ -206,7 +206,7 @@ public class VanishManager {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
                     if (entity != null && entity instanceof Creature) {
                         final Creature creature = ((Creature) entity);
-                        if (creature != null && creature.getTarget().equals(vanishingPlayer)) {
+                        if (creature != null && creature.getTarget()!=null && creature.getTarget().equals(vanishingPlayer)) {
                             creature.setTarget(null);
                         }
                     }
