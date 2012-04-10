@@ -21,4 +21,4 @@ permissionsupdates:
 permtest: false
 debug: false
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 2
+    SeriouslyThisWillEraseYourConfig: 3
