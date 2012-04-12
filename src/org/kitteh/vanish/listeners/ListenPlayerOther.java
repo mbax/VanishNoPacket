@@ -37,15 +37,6 @@ public class ListenPlayerOther implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
-            event.setCancelled(true);
-            return;
-        }
-        if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock().getType() == Material.SOIL)) {
-            if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotTrample(event.getPlayer())) {
-                event.setCancelled(true);
-            }
-        }
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock().getType() == Material.CHEST)) {
             if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
                 event.setCancelled(true);
@@ -54,6 +45,16 @@ public class ListenPlayerOther implements Listener {
                 i.setContents(chest.getInventory().getContents());
                 event.getPlayer().openInventory(i);
                 this.plugin.chestFakeOpen(event.getPlayer().getName());
+                return;
+            }
+        }
+        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
+            event.setCancelled(true);
+            return;
+        }
+        if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock().getType() == Material.SOIL)) {
+            if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotTrample(event.getPlayer())) {
+                event.setCancelled(true);
             }
         }
     }
