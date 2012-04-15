@@ -2,10 +2,12 @@ package org.kitteh.vanish;
 
 import java.util.*;
 
+import net.minecraft.server.Block;
 import net.minecraft.server.MobEffect;
 import net.minecraft.server.MobEffectList;
 import net.minecraft.server.Packet41MobEffect;
 import net.minecraft.server.Packet42RemoveMobEffect;
+import net.minecraft.server.Packet60Explosion;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -217,6 +219,9 @@ public class VanishManager {
             if (VanishPerms.canSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
             }
+            if(VanishPerms.canExplode(vanishingPlayer)){
+                this.explosionEffect(vanishingPlayer);
+            }
             cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.vanish.increment();
             this.plugin.log(vanishingPlayerName + " disappeared.");
@@ -225,9 +230,11 @@ public class VanishManager {
             this.resetSleepingIgnored(vanishingPlayer);
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName);
-
             if (VanishPerms.canSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
+            }
+            if(VanishPerms.canExplode(vanishingPlayer)){
+                this.explosionEffect(vanishingPlayer);
             }
             cplr.getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.unvanish.increment();
@@ -291,6 +298,12 @@ public class VanishManager {
         for (int i = 0; i < 10; i++) {
             location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
         }
+    }
+    
+    private void explosionEffect(Player player) {
+        Location loc = player.getLocation();
+        final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 10, new HashSet<Block>());
+        ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(boom);
     }
 
 }
