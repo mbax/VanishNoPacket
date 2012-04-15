@@ -76,6 +76,10 @@ public class VanishPerms {
     public static boolean canSmoke(Player player) {
         return player.hasPermission("vanish.smokin");
     }
+    
+    public static boolean canExplode(Player player) {
+        return player.hasPermission("vanish.explode");
+    }
 
     public static boolean canToggleDamageIn(Player player) {
         return player.hasPermission("vanish.toggle.damagein");
