@@ -6,9 +6,11 @@ import org.kitteh.vanish.VanishPlugin;
 
 import com.earth2me.essentials.IEssentials;
 
+@SuppressWarnings("deprecation")
 public class EssentialsHook {
     private final VanishPlugin plugin;
 
+    
     private IEssentials essentials;
     private boolean enabled;
 
@@ -48,7 +50,7 @@ public class EssentialsHook {
 
     private void grabEssentials() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("Essentials");
-        if (grab != null) {
+        if (grab != null && grab.getDescription().getVersion().startsWith("2")) {
             this.essentials = ((IEssentials) grab);
             this.plugin.log("Now hooking into Essentials");
         } else {
