@@ -155,6 +155,9 @@ permissions:
   vanish.smokin:
     default: false
     description: Creates smoke effect when vanishing and re-appearing
+  vanish.explode:
+    default: false
+    description: Creates explison effect when vanishing and re-appearing
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
@@ -187,3 +190,4 @@ permissions:
       vanish.spout.status: true
       vanish.reload: true
       vanish.smokin: true
+      vanish.explode: true
