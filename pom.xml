@@ -73,7 +73,8 @@
       <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
       <artifactId>JSONAPI</artifactId>
       <version>bleeding</version>
-      <type>jar</type>
+      <!-- <type>jar</type> -->
+      <!-- JSONAPI MAKES NO SENSE -->
     </dependency>
   </dependencies>
   
