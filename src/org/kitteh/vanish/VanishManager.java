@@ -257,7 +257,7 @@ public class VanishManager {
 
     private void hideVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if (this.isVanished(otherPlayer) && player.canSee(otherPlayer)) {
+            if (!player.equals(otherPlayer) && this.isVanished(otherPlayer) && player.canSee(otherPlayer)) {
                 player.hidePlayer(otherPlayer);
             }
         }
