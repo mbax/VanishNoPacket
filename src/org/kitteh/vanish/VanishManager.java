@@ -303,7 +303,13 @@ public class VanishManager {
     private void explosionEffect(Player player) {
         Location loc = player.getLocation();
         final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 10, new HashSet<Block>());
-        ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(boom);
+        for(Player plr : plugin.getServer().getOnlinePlayers()){
+            if(plr.getLocation().getWorld().equals(loc.getWorld())){
+                if(plr.getLocation().distance(loc) < 256){
+                    ((CraftPlayer) plr).getHandle().netServerHandler.sendPacket(boom);
+                }
+            }
+        }
     }
 
 }
