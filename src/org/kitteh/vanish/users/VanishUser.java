@@ -9,6 +9,7 @@ public class VanishUser {
     private boolean preventIncomingDamage;
     private boolean preventOutgoingDamage;
     private boolean noInteract;
+    private boolean noHunger;
     private boolean noChat;
     private boolean silentChestReads;
 
@@ -19,6 +20,7 @@ public class VanishUser {
         this.preventIncomingDamage = player.hasPermission("vanish.preventincomingdamage");
         this.preventOutgoingDamage = player.hasPermission("vanish.preventoutgoingdamage");
         this.noInteract = player.hasPermission("vanish.nointeract");
+        this.noHunger = player.hasPermission("vanish.nohunger");
         this.noChat = player.hasPermission("vanish.nochat");
         this.silentChestReads = player.hasPermission("vanish.silentchests");
     }
@@ -29,6 +31,10 @@ public class VanishUser {
 
     public boolean getNoFollow() {
         return this.noFollow;
+    }
+    
+    public boolean getNoHunger() {
+        return this.noHunger;
     }
 
     public boolean getNoInteract() {
@@ -68,6 +74,11 @@ public class VanishUser {
     public boolean toggleNoFollow() {
         this.noFollow = !this.noFollow;
         return this.noFollow;
+    }
+    
+    public boolean toggleNoHunger() {
+        this.noHunger = !this.noHunger;
+        return this.noHunger;
     }
 
     public boolean toggleNoInteract() {

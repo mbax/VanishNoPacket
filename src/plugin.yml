@@ -10,7 +10,7 @@ commands:
   vanish:
     description: poof
     usage: /vanish
-    aliases: [v,np,nf,ni,nc]
+    aliases: [v,np,nf,ni,nc,nh]
 permissions:
   vanish.currentlyVanished:
     default: false
@@ -44,6 +44,9 @@ permissions:
   vanish.nochat:
     default: false
     description: No chatting while vanished
+  vanish.nohunger:
+    default: false
+    description: Nom nom nom. If true, doesn't lose food level when vanished
   vanish.preventincomingdamage:
     default: false
     description: Prevent being harmed by things around you while vanished
@@ -92,6 +95,9 @@ permissions:
   vanish.toggle.nochat:
     default: false
     description: Toggle ability to chat
+  vanish.toggle.nohunger:
+    default: false
+    description: Toggle ability to not lose hunger
   vanish.toggle.damageout:
     default: false
     description: Toggle outgoing damage
@@ -115,6 +121,7 @@ permissions:
       vanish.toggle.damage: true
       vanish.toggle.nointeract: true
       vanish.toggle.nochat: true
+      vanish.toggle.nohunger: true
   vanish.fakeannounce:
     default: false
     description: Fake joining/leaving
@@ -159,6 +166,7 @@ permissions:
       vanish.nofollow: true
       vanish.notrample: true
       vanish.nointeract: true
+      vanish.nohunger: true
       vanish.fakeannounce: true
       vanish.preventdamage: true
       vanish.statusupdates: true

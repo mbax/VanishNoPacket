@@ -48,6 +48,9 @@ public class VanishCommand implements CommandExecutor {
             if (label.equals("nf")) {
                 return this.toggle(player, "nofollow");
             }
+            if (label.equals("nh")) {
+                return this.toggle(player, "nohunger");
+            }
             if (label.equals("ni")) {
                 return this.toggle(player, "nointeract");
             }
@@ -102,6 +105,9 @@ public class VanishCommand implements CommandExecutor {
                     }
                     if (VanishPerms.canToggleNoChat(player)) {
                         this.appendList(toggleReply, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
+                    }
+                    if (VanishPerms.canToggleNoHunger(player)) {
+                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotHunger(player)) + "nohunger" + ChatColor.DARK_AQUA);
                     }
                     if (VanishPerms.canToggleSilentChestReads(player)) {
                         this.appendList(toggleReply, this.colorize(VanishPerms.canReadChestsSilently(player)) + "chests" + ChatColor.DARK_AQUA);
@@ -187,7 +193,10 @@ public class VanishCommand implements CommandExecutor {
         } else if (toggle.equalsIgnoreCase("nochat") && VanishPerms.canToggleNoChat(player)) {
             status = VanishPerms.toggleNoChat(player);
             message.append("no chat");
-        } else if (toggle.equalsIgnoreCase("chests") && VanishPerms.canToggleSilentChestReads(player)) {
+        } else if (toggle.equalsIgnoreCase("nohunger") && VanishPerms.canToggleNoHunger(player)) { 
+            status = VanishPerms.toggleNoHunger(player);
+            message.append("no hunger");
+        }else if (toggle.equalsIgnoreCase("chests") && VanishPerms.canToggleSilentChestReads(player)) {
             status = VanishPerms.toggleSilentChestReads(player);
             message.append("silent chest reads");
         }

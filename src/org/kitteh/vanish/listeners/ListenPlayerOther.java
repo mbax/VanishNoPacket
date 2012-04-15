@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.kitteh.vanish.Settings;
@@ -32,6 +33,16 @@ public class ListenPlayerOther implements Listener {
     public void onBucketFill(PlayerBucketFillEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler
+    public void onFoodChange(FoodLevelChangeEvent event) {
+        if(event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
+                event.setCancelled(true);
+            }
         }
     }
 
