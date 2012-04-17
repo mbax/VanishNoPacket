@@ -18,7 +18,7 @@ public class JSONAPIHook {
         if (this.enabled) {
             final JSONAPI plug = this.grabJSONAPI();
             if (plug != null) {
-                plug.registerMethod("{" + "   \"name\": \"isVanished\"," + "   \"desc\": \"Checks if named player is vanished\"," + "   \"call\": \"Plugins.VanishNoPacket.getManager().isVanished(0)\"," + "   \"returns\": [\"boolean\", \"True if player is invisible. False if offline or visible.\"]," + "   \"args\": [" + "       [\"String\", \"Player's name\"]" + "   ]" + "}");
+                plug.registerMethod("{   \"name\": \"isVanished\",   \"desc\": \"Checks if named player is vanished\",   \"call\": \"Plugins.VanishNoPacket.getManager().isVanished(0)\",  \"returns\": [\"boolean\", \"True if player is invisible. False if offline or visible.\"],   \"args\": [       [\"String\", \"Player's name\"]   ]}");
             }
         }
     }
