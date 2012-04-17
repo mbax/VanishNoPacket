@@ -50,7 +50,7 @@ public class EssentialsHook {
 
     private void grabEssentials() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("Essentials");
-        if (grab != null && grab.getDescription().getVersion().startsWith("2")) {
+        if (grab != null) {
             this.essentials = ((IEssentials) grab);
             this.plugin.log("Now hooking into Essentials");
         } else {
