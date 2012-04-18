@@ -224,7 +224,7 @@ public class Metrics {
     /**
      * The base url of the metrics domain
      */
-    private static final String BASE_URL = "http://metrics.griefcraft.com";
+    private static final String BASE_URL = "http://mcstats.org";
 
     /**
      * The url used to report a server's status
@@ -303,7 +303,7 @@ public class Metrics {
 
         // Do we need to create the file?
         if (this.configuration.get("guid", null) == null) {
-            this.configuration.options().header("http://metrics.griefcraft.com").copyDefaults(true);
+            this.configuration.options().header("http://mcstats.org").copyDefaults(true);
             this.configuration.save(file);
         }
 
