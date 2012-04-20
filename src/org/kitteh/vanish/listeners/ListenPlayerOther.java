@@ -56,6 +56,7 @@ public class ListenPlayerOther implements Listener {
                 i.setContents(chest.getInventory().getContents());
                 event.getPlayer().openInventory(i);
                 this.plugin.chestFakeOpen(event.getPlayer().getName());
+                event.getPlayer().sendMessage(ChatColor.AQUA+"[VNP] Opening chest silently. Can not edit.");
                 return;
             }
         }
