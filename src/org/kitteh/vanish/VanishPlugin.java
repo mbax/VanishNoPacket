@@ -39,8 +39,8 @@ public class VanishPlugin extends JavaPlugin {
                 if ((version = bufferedReader.readLine()) != null) {
                     this.plugin.latestVersion = version;
                     if (!this.plugin.getDescription().getVersion().equals(version)) {
-                        this.plugin.log("Found a different version available: " + version);
-                        this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
+                        this.plugin.log(Messages.getString("VanishPlugin.DifferentVersion") + version);
+                        this.plugin.log(Messages.getString("VanishPlugin.CheckDBO"));
                         this.plugin.versionDiff = true;
                     }
                     bufferedReader.close();
@@ -52,7 +52,7 @@ public class VanishPlugin extends JavaPlugin {
                 }
             } catch (final Exception e) {
             }
-            this.plugin.log("Error: Could not check if plugin was up to date. Will try later");
+            this.plugin.log(Messages.getString("VanishPlugin.UnableToCheckUpToDateError"));
         }
 
     }
@@ -199,7 +199,7 @@ public class VanishPlugin extends JavaPlugin {
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
         Debuggle.nah();
-        this.log("v" + this.getDescription().getVersion() + " unloaded.");
+        this.log("v" + this.getDescription().getVersion() + Messages.getString("VanishPlugin.unloaded"));
     }
 
     @Override
@@ -222,14 +222,14 @@ public class VanishPlugin extends JavaPlugin {
 
         this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
 
-        //Post-load stuff
+        // Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
                 VanishPlugin.this.jsonapiHook.onPluginEnable(VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false));
                 for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
                     if ((player != null) && VanishPerms.canVanish(player)) {
-                        player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
+                        player.sendMessage(ChatColor.DARK_AQUA + Messages.getString("VanishPlugin.ForcedVisibleByReload"));
                     }
                 }
             }
@@ -242,12 +242,12 @@ public class VanishPlugin extends JavaPlugin {
         boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);
         if (firstTimeStarting) {
             updateCheck = false;
-            this.log("This is your first time (or you wiped your config).");
-            this.log("In future startups, VanishNoPacket will send usage data");
-            this.log("and check for updated versions. If you hate useful info,");
-            this.log("The setting can be disabled in the config file.");
-            this.log("Note that this plugin also utilizes PluginMetrics with usage tracking");
-            this.log("If you do not want usage tracking (paranoid) disable in that config");
+            this.log(Messages.getString("VanishPlugin.FirstTimeOrWipedConfig"));
+            this.log(Messages.getString("VanishPlugin.FutureStartupsSendData"));
+            this.log(Messages.getString("VanishPlugin.CheckUpdateHateUsefulInfo"));
+            this.log(Messages.getString("VanishPlugin.SettingCanDisable"));
+            this.log(Messages.getString("VanishPlugin.PluginTrackingUtilization"));
+            this.log(Messages.getString("VanishPlugin.NoUsageTracking"));
         }
 
         this.latestVersion = this.getDescription().getVersion();

@@ -28,7 +28,7 @@ public class Settings {
             final File target = new File(VanishNoPacket.getPlugin().getDataFolder(), name);
             final InputStream source = VanishNoPacket.getPlugin().getResource(name);
             if (source == null) {
-                Bukkit.getServer().getLogger().log(Level.SEVERE, "Could not find default config " + name);
+                Bukkit.getServer().getLogger().log(Level.SEVERE, Messages.getString("Settings.CouldntFindDefault") + name);
                 return;
             }
             if (!VanishNoPacket.getPlugin().getDataFolder().exists()) {
@@ -45,7 +45,7 @@ public class Settings {
             }
             source.close();
         } catch (final Exception ex) {
-            Bukkit.getServer().getLogger().log(Level.SEVERE, "Could not save default config to " + name, ex);
+            Bukkit.getServer().getLogger().log(Level.SEVERE, Messages.getString("Settings.CouldntSaveDefault") + name, ex);
         }
     }
 
@@ -54,7 +54,7 @@ public class Settings {
         config.options().copyDefaults(true);
         final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
         if (ver != Settings.confVersion) {
-            plugin.log("Attempting to update your configuration. Check to make sure it's ok");
+            plugin.log(Messages.getString("Settings.AttmeptingConfigUpdate"));
             if (ver < 1) {
                 config.set("hooks.spoutcraft", config.getBoolean("spoutcraft.enable", true));
                 config.set("spoutcraft.enable", null);

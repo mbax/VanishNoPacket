@@ -17,6 +17,7 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
+import org.kitteh.vanish.Messages;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
@@ -38,7 +39,7 @@ public class SpoutCraftHook implements Listener {
         SpoutPlayer player;
 
         public StatusBar(SpoutPlayer player) {
-            this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20).setHeight(10).setWidth(40);
+            this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + Messages.getString("SpoutCraftHook.Invisible")).setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20).setHeight(10).setWidth(40);
             this.box = (GenericGradient) new GenericGradient().setTopColor(SpoutCraftHook.this.boxColor).setBottomColor(SpoutCraftHook.this.boxColor).setX(18).setY(-22).setHeight(12).setWidth(45).setAnchor(WidgetAnchor.BOTTOM_LEFT).setPriority(RenderPriority.High);
             this.player = player;
         }
@@ -87,7 +88,7 @@ public class SpoutCraftHook implements Listener {
         if (enabled) {
             if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
                 this.enabled = false;
-                this.plugin.log("SpoutCraft not running but you wanted SpoutCraft features.");
+                this.plugin.log(Messages.getString("SpoutCraftHook.NoSpoutCraft"));
                 return;
             }
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
@@ -102,8 +103,8 @@ public class SpoutCraftHook implements Listener {
             config.options().copyDefaults(true);
             final InputStream stream = this.plugin.getResource("spoutcraft.yml");
             if (stream == null) {
-                this.plugin.log("Defaults for spoutcraft.yml not loaded");
-                this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
+                this.plugin.log(Messages.getString("SpoutCraftHook.DefaultsNotLoaded"));
+                this.plugin.log(Messages.getString("SpoutCraftHook.ReloadNotSupported"));
                 this.enabled = false;
                 return;
             }
@@ -111,7 +112,7 @@ public class SpoutCraftHook implements Listener {
             try {
                 config.save(confFile);
             } catch (final IOException e) {
-                this.plugin.getServer().getLogger().log(Level.SEVERE, "Could not save spoutcraft.yml", e);
+                this.plugin.getServer().getLogger().log(Level.SEVERE, Messages.getString("SpoutCraftHook.CouldNotSaveConfig"), e);
             }
             for (final String skinGroup : config.getConfigurationSection("skins").getKeys(false)) {
                 this.skins.put(skinGroup, config.getString("skins." + skinGroup));

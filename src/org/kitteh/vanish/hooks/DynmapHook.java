@@ -3,6 +3,7 @@ package org.kitteh.vanish.hooks;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.dynmap.DynmapAPI;
+import org.kitteh.vanish.Messages;
 import org.kitteh.vanish.VanishPlugin;
 
 public class DynmapHook {
@@ -49,9 +50,9 @@ public class DynmapHook {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("dynmap");
         if (grab != null) {
             this.dynmap = ((DynmapAPI) grab);
-            this.plugin.log("Now hooking into Dynmap");
+            this.plugin.log(Messages.getString("DynmapHook.HookingIntoDynmap"));
         } else {
-            this.plugin.log("You wanted Dynmap support. I could not find Dynmap.");
+            this.plugin.log(Messages.getString("DynmapHook.CantFindDynmap"));
             this.dynmap = null;
             this.enabled = false;
         }

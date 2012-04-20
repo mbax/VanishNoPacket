@@ -16,6 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
+import org.kitteh.vanish.Messages;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
@@ -35,10 +36,10 @@ public class ListenPlayerOther implements Listener {
             event.setCancelled(true);
         }
     }
-    
+
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent event) {
-        if(event.getEntity() instanceof Player) {
+        if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
                 event.setCancelled(true);
@@ -56,7 +57,7 @@ public class ListenPlayerOther implements Listener {
                 i.setContents(chest.getInventory().getContents());
                 event.getPlayer().openInventory(i);
                 this.plugin.chestFakeOpen(event.getPlayer().getName());
-                event.getPlayer().sendMessage(ChatColor.AQUA+"[VNP] Opening chest silently. Can not edit.");
+                event.getPlayer().sendMessage(ChatColor.AQUA + "[VNP]" + Messages.getString("ListenPlayerOther.OpeningChestSilently"));
                 return;
             }
         }
@@ -82,7 +83,7 @@ public class ListenPlayerOther implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         if (this.plugin.getManager().isVanished(player)) {
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit vanished");
+            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + Messages.getString("ListenPlayerOther.QuitVanished"));
         }
         this.plugin.getManager().playerQuit(player);
         this.plugin.hooksQuit(player);

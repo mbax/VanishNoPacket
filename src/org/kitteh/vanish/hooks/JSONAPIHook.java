@@ -1,6 +1,7 @@
 package org.kitteh.vanish.hooks;
 
 import org.bukkit.plugin.Plugin;
+import org.kitteh.vanish.Messages;
 import org.kitteh.vanish.VanishPlugin;
 
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
@@ -28,9 +29,9 @@ public class JSONAPIHook {
         final JSONAPI toReturn;
         if (grab != null) {
             toReturn = ((JSONAPI) grab);
-            this.plugin.log("Now hooking into JSONAPI");
+            this.plugin.log(Messages.getString("JSONAPIHook.HookingIntoJSONAPI"));
         } else {
-            this.plugin.log("You wanted JSONAPI support. I could not find JSONAPI.");
+            this.plugin.log(Messages.getString("JSONAPIHook.CantFindJSONAPI"));
             toReturn = null;
             this.enabled = false;
         }

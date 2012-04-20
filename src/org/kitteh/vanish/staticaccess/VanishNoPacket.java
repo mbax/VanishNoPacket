@@ -6,7 +6,7 @@ import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
 /**
- * Static party!
+ * Static party! 
  * This is where you can grab stuff easily
  */
 public class VanishNoPacket {

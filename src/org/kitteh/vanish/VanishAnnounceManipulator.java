@@ -8,10 +8,9 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
- * Controller of announcing joins and quits that aren't their most honest.
- * Note that delayed announce methods can be called without checking
- * to see if it's enabled first. The methods confirm before doing anything
- * particularly stupid.
+ * Controller of announcing joins and quits that aren't their most honest. 
+ * Note that delayed announce methods can be called without checking to see if it's enabled first. 
+ * The methods confirm before doing anything particularly stupid.
  */
 public class VanishAnnounceManipulator {
     private final ArrayList<String> delayedAnnouncePlayerList;
@@ -50,7 +49,7 @@ public class VanishAnnounceManipulator {
     }
 
     /**
-     * Call a fake join announce for the player.
+     * Call a fake join announce for the player. 
      * Only fires if the server previously was saying they were offline
      * 
      * @param player
@@ -58,14 +57,14 @@ public class VanishAnnounceManipulator {
     public void fakeJoin(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
-            this.plugin.log(player.getName() + " faked joining");
+            this.plugin.log(player.getName() + Messages.getString("VanishAnnounceManipulator.fakedJoining"));
             MetricsOverlord.fakejoin.increment();
             this.playerOnlineStatus.put(player.getName(), true);
         }
     }
 
     /**
-     * Call a fake quit for the player.
+     * Call a fake quit for the player. 
      * Only fires if the server previously was saying they were online
      * 
      * @param player
@@ -74,15 +73,15 @@ public class VanishAnnounceManipulator {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
 
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
-            this.plugin.log(player.getName() + " faked quitting");
+            this.plugin.log(player.getName() + Messages.getString("VanishAnnounceManipulator.fakedQuitting"));
             MetricsOverlord.fakequit.increment();
             this.playerOnlineStatus.put(player.getName(), false);
         }
     }
 
     /**
-     * Called when a player's vanish status has been toggled
-     * If the player has a queued up join announce from a silentjoin,
+     * Called when a player's vanish status has been toggled 
+     * If the player has a queued up join announce from a silentjoin, 
      * it will fire at this time.
      * 
      * @param player
@@ -110,6 +109,6 @@ public class VanishAnnounceManipulator {
     }
 
     private String injectPlayerInformation(String message, Player player) {
-        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", this.plugin.getBPerms().getPrefix(player)).replace("%us", this.plugin.getBPerms().getSuffix(player));
+        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", this.plugin.getBPerms().getPrefix(player)).replace("%us", this.plugin.getBPerms().getSuffix(player)); //$NON-NLS-3$ //$NON-NLS-4$
     }
 }

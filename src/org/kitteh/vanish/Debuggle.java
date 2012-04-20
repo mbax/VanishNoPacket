@@ -9,7 +9,7 @@ public class Debuggle {
     private static Debuggle instance = null;
 
     public static void itsGoTime() {
-        Bukkit.getLogger().info("[VanishNoPacket] Debug enabled. Disable in config.yml");
+        Bukkit.getLogger().info("[VanishNoPacket] " + Messages.getString("Debuggle.DebugEnabled"));
         Debuggle.instance = new Debuggle();
     }
 
