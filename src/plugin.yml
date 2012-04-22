@@ -158,6 +158,9 @@ permissions:
   vanish.explode:
     default: false
     description: Creates explosion effect when vanishing and re-appearing
+  vanish.lightningbarrage:
+    default: false
+    description: Creates a lightning barrage around a player when vanishing and re-appearning
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
@@ -191,3 +194,4 @@ permissions:
       vanish.reload: true
       vanish.smokin: true
       vanish.explode: true
+      vanish.lightningbarrage: true

@@ -80,6 +80,10 @@ public class VanishPerms {
     public static boolean canExplode(Player player) {
         return player.hasPermission("vanish.explode");
     }
+    
+    public static boolean hatedByZeus(Player player) {
+        return player.hasPermission("vanish.lightningbarrage");
+    }
 
     public static boolean canToggleDamageIn(Player player) {
         return player.hasPermission("vanish.toggle.damagein");
