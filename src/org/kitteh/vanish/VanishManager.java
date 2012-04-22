@@ -222,6 +222,9 @@ public class VanishManager {
             if (VanishPerms.canExplode(vanishingPlayer)) {
                 this.explosionEffect(vanishingPlayer);
             }
+            if (VanishPerms.hatedByZeus(vanishingPlayer)) {
+                this.lightningBarrage(vanishingPlayer.getLocation());
+            }
             cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.vanish.increment();
             this.plugin.log(vanishingPlayerName + " disappeared.");
@@ -235,6 +238,9 @@ public class VanishManager {
             }
             if (VanishPerms.canExplode(vanishingPlayer)) {
                 this.explosionEffect(vanishingPlayer);
+            }
+            if (VanishPerms.hatedByZeus(vanishingPlayer)) {
+                this.lightningBarrage(vanishingPlayer.getLocation());
             }
             cplr.getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.unvanish.increment();
@@ -317,6 +323,29 @@ public class VanishManager {
                 }
             }
         }
+    }
+    
+    private void lightningBarrage(Location location) {
+        final int x = location.getBlockX();
+        final double y = location.getBlockY();
+        final int z = location.getBlockZ();
+        for (int i = 0; i < 30; i++) {
+            double xToStrike;
+            double zToStrike;
+            if (this.random.nextBoolean()) {
+                xToStrike = x + this.random.nextInt(6);
+            } else {
+                xToStrike = x - this.random.nextInt(6);
+            }
+            if (this.random.nextBoolean()) {
+                zToStrike = z + this.random.nextInt(6);
+            } else {
+                zToStrike = z - this.random.nextInt(6);
+            }
+            final Location toStrike = new Location(location.getWorld(), xToStrike, y, zToStrike);
+            location.getWorld().strikeLightningEffect(toStrike);
+        }
+
     }
 
 }
