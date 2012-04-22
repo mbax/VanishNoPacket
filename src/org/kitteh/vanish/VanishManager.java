@@ -206,9 +206,9 @@ public class VanishManager {
             this.setSleepingIgnored(vanishingPlayer);
             if (VanishPerms.canNotFollow(vanishingPlayer)) {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
-                    if (entity != null && entity instanceof Creature) {
+                    if ((entity != null) && (entity instanceof Creature)) {
                         final Creature creature = ((Creature) entity);
-                        if (creature != null && creature.getTarget()!=null && creature.getTarget().equals(vanishingPlayer)) {
+                        if ((creature != null) && (creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
                             creature.setTarget(null);
                         }
                     }
@@ -219,7 +219,7 @@ public class VanishManager {
             if (VanishPerms.canSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
             }
-            if(VanishPerms.canExplode(vanishingPlayer)){
+            if (VanishPerms.canExplode(vanishingPlayer)) {
                 this.explosionEffect(vanishingPlayer);
             }
             cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
@@ -233,7 +233,7 @@ public class VanishManager {
             if (VanishPerms.canSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
             }
-            if(VanishPerms.canExplode(vanishingPlayer)){
+            if (VanishPerms.canExplode(vanishingPlayer)) {
                 this.explosionEffect(vanishingPlayer);
             }
             cplr.getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
@@ -247,9 +247,9 @@ public class VanishManager {
                 continue;
             }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
-            if(vanishing){
-                if(!VanishPerms.canSeeAll(otherPlayer)) {
-                    if(otherPlayer.canSee(vanishingPlayer)){
+            if (vanishing) {
+                if (!VanishPerms.canSeeAll(otherPlayer)) {
+                    if (otherPlayer.canSee(vanishingPlayer)) {
                         Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + otherPlayer.getName());
                         otherPlayer.hidePlayer(vanishingPlayer);
                     }
@@ -258,7 +258,10 @@ public class VanishManager {
                     otherPlayer.showPlayer(vanishingPlayer);
                 }
             } else {
-                if(!otherPlayer.canSee(vanishingPlayer)){
+                if (VanishPerms.canSeeAll(otherPlayer)) {
+                    otherPlayer.hidePlayer(vanishingPlayer);
+                }
+                if (!otherPlayer.canSee(vanishingPlayer)) {
                     Debuggle.log("Showing " + vanishingPlayer.getName() + " to " + otherPlayer.getName());
                     otherPlayer.showPlayer(vanishingPlayer);
                 }
@@ -303,13 +306,13 @@ public class VanishManager {
             location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
         }
     }
-    
+
     private void explosionEffect(Player player) {
-        Location loc = player.getLocation();
+        final Location loc = player.getLocation();
         final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 10, new HashSet<Block>());
-        for(Player plr : plugin.getServer().getOnlinePlayers()){
-            if(plr.getLocation().getWorld().equals(loc.getWorld())){
-                if(plr.getLocation().distance(loc) < 256){
+        for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
+            if (plr.getLocation().getWorld().equals(loc.getWorld())) {
+                if (plr.getLocation().distance(loc) < 256) {
                     ((CraftPlayer) plr).getHandle().netServerHandler.sendPacket(boom);
                 }
             }
