@@ -215,7 +215,7 @@ public class VanishManager {
                 }
             }
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
-            this.addVanished(vanishingPlayerName);
+            this.vanishedPlayerNames.add(vanishingPlayerName);
             if (VanishPerms.canSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
             }
@@ -247,19 +247,23 @@ public class VanishManager {
                 continue;
             }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
-            if (vanishing && !VanishPerms.canSeeAll(otherPlayer) && otherPlayer.canSee(vanishingPlayer)) {
-                Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + otherPlayer.getName());
-                otherPlayer.hidePlayer(vanishingPlayer);
-            } else if ((!vanishing || VanishPerms.canSeeAll(otherPlayer)) && !otherPlayer.canSee(vanishingPlayer)) {
-                Debuggle.log("Showing " + vanishingPlayer.getName() + " to " + otherPlayer.getName());
-                otherPlayer.showPlayer(vanishingPlayer);
+            if(vanishing){
+                if(!VanishPerms.canSeeAll(otherPlayer)) {
+                    if(otherPlayer.canSee(vanishingPlayer)){
+                        Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + otherPlayer.getName());
+                        otherPlayer.hidePlayer(vanishingPlayer);
+                    }
+                } else {
+                    otherPlayer.hidePlayer(vanishingPlayer);
+                    otherPlayer.showPlayer(vanishingPlayer);
+                }
+            } else {
+                if(!otherPlayer.canSee(vanishingPlayer)){
+                    Debuggle.log("Showing " + vanishingPlayer.getName() + " to " + otherPlayer.getName());
+                    otherPlayer.showPlayer(vanishingPlayer);
+                }
             }
-
         }
-    }
-
-    private void addVanished(String name) {
-        this.vanishedPlayerNames.add(name);
     }
 
     private void hideVanished(Player player) {
