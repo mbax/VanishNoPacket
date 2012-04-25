@@ -38,7 +38,7 @@ public class ListenPlayerOther implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDrop(PlayerDropItemEvent event) {
-        if (VanishPerms.canNotInteract(event.getPlayer())) {
+        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
