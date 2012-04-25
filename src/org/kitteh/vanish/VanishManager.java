@@ -266,12 +266,47 @@ public class VanishManager {
         }
     }
 
+    private void explosionEffect(Player player) {
+        final Location loc = player.getLocation();
+        final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 10, new HashSet<Block>());
+        for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
+            if (plr.getLocation().getWorld().equals(loc.getWorld())) {
+                if (plr.getLocation().distance(loc) < 256) {
+                    ((CraftPlayer) plr).getHandle().netServerHandler.sendPacket(boom);
+                }
+            }
+        }
+    }
+
     private void hideVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
             if (!player.equals(otherPlayer) && this.isVanished(otherPlayer) && player.canSee(otherPlayer)) {
                 player.hidePlayer(otherPlayer);
             }
         }
+    }
+
+    private void lightningBarrage(Location location) {
+        final int x = location.getBlockX();
+        final double y = location.getBlockY();
+        final int z = location.getBlockZ();
+        for (int i = 0; i < 30; i++) {
+            double xToStrike;
+            double zToStrike;
+            if (this.random.nextBoolean()) {
+                xToStrike = x + this.random.nextInt(6);
+            } else {
+                xToStrike = x - this.random.nextInt(6);
+            }
+            if (this.random.nextBoolean()) {
+                zToStrike = z + this.random.nextInt(6);
+            } else {
+                zToStrike = z - this.random.nextInt(6);
+            }
+            final Location toStrike = new Location(location.getWorld(), xToStrike, y, zToStrike);
+            location.getWorld().strikeLightningEffect(toStrike);
+        }
+
     }
 
     private void removeVanished(String name) {
@@ -302,41 +337,6 @@ public class VanishManager {
         for (int i = 0; i < 10; i++) {
             location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
         }
-    }
-
-    private void explosionEffect(Player player) {
-        final Location loc = player.getLocation();
-        final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 10, new HashSet<Block>());
-        for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
-            if (plr.getLocation().getWorld().equals(loc.getWorld())) {
-                if (plr.getLocation().distance(loc) < 256) {
-                    ((CraftPlayer) plr).getHandle().netServerHandler.sendPacket(boom);
-                }
-            }
-        }
-    }
-    
-    private void lightningBarrage(Location location) {
-        final int x = location.getBlockX();
-        final double y = location.getBlockY();
-        final int z = location.getBlockZ();
-        for (int i = 0; i < 30; i++) {
-            double xToStrike;
-            double zToStrike;
-            if (this.random.nextBoolean()) {
-                xToStrike = x + this.random.nextInt(6);
-            } else {
-                xToStrike = x - this.random.nextInt(6);
-            }
-            if (this.random.nextBoolean()) {
-                zToStrike = z + this.random.nextInt(6);
-            } else {
-                zToStrike = z - this.random.nextInt(6);
-            }
-            final Location toStrike = new Location(location.getWorld(), xToStrike, y, zToStrike);
-            location.getWorld().strikeLightningEffect(toStrike);
-        }
-
     }
 
 }

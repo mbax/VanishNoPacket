@@ -193,10 +193,10 @@ public class VanishCommand implements CommandExecutor {
         } else if (toggle.equalsIgnoreCase("nochat") && VanishPerms.canToggleNoChat(player)) {
             status = VanishPerms.toggleNoChat(player);
             message.append("no chat");
-        } else if (toggle.equalsIgnoreCase("nohunger") && VanishPerms.canToggleNoHunger(player)) { 
+        } else if (toggle.equalsIgnoreCase("nohunger") && VanishPerms.canToggleNoHunger(player)) {
             status = VanishPerms.toggleNoHunger(player);
             message.append("no hunger");
-        }else if (toggle.equalsIgnoreCase("chests") && VanishPerms.canToggleSilentChestReads(player)) {
+        } else if (toggle.equalsIgnoreCase("chests") && VanishPerms.canToggleSilentChestReads(player)) {
             status = VanishPerms.toggleSilentChestReads(player);
             message.append("silent chest reads");
         }

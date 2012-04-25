@@ -32,7 +32,7 @@ public class VanishUser {
     public boolean getNoFollow() {
         return this.noFollow;
     }
-    
+
     public boolean getNoHunger() {
         return this.noHunger;
     }
@@ -75,7 +75,7 @@ public class VanishUser {
         this.noFollow = !this.noFollow;
         return this.noFollow;
     }
-    
+
     public boolean toggleNoHunger() {
         this.noHunger = !this.noHunger;
         return this.noHunger;

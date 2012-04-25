@@ -10,7 +10,6 @@ import com.earth2me.essentials.IEssentials;
 public class EssentialsHook {
     private final VanishPlugin plugin;
 
-    
     private IEssentials essentials;
     private boolean enabled;
 

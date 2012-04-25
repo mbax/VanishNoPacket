@@ -35,11 +35,18 @@ public class ListenPlayerOther implements Listener {
             event.setCancelled(true);
         }
     }
-    
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDrop(PlayerDropItemEvent event) {
+        if (VanishPerms.canNotInteract(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+    }
+
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent event) {
-        if(event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
+        if (event.getEntity() instanceof Player) {
+            final Player player = (Player) event.getEntity();
             if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
                 event.setCancelled(true);
             }
@@ -56,7 +63,7 @@ public class ListenPlayerOther implements Listener {
                 i.setContents(chest.getInventory().getContents());
                 event.getPlayer().openInventory(i);
                 this.plugin.chestFakeOpen(event.getPlayer().getName());
-                event.getPlayer().sendMessage(ChatColor.AQUA+"[VNP] Opening chest silently. Can not edit.");
+                event.getPlayer().sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
                 return;
             }
         }

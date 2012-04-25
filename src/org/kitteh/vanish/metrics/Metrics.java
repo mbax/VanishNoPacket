@@ -478,17 +478,17 @@ public class Metrics {
 
         // Connect to the website
         URLConnection connection = null;
-        try{
+        try {
             connection = url.openConnection();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             //Meh!
         }
-        
-        if(connection == null) {
+
+        if (connection == null) {
             // Boggle
             return;
         }
-        
+
         connection.setDoOutput(true);
 
         // Write the data
