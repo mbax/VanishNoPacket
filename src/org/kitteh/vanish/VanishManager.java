@@ -216,15 +216,6 @@ public class VanishManager {
             }
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", true);
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            if (VanishPerms.canSmoke(vanishingPlayer)) {
-                this.smokeScreenEffect(vanishingPlayer.getLocation());
-            }
-            if (VanishPerms.canExplode(vanishingPlayer)) {
-                this.explosionEffect(vanishingPlayer);
-            }
-            if (VanishPerms.hatedByZeus(vanishingPlayer)) {
-                this.lightningBarrage(vanishingPlayer.getLocation());
-            }
             cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.vanish.increment();
             this.plugin.log(vanishingPlayerName + " disappeared.");
@@ -233,18 +224,18 @@ public class VanishManager {
             this.resetSleepingIgnored(vanishingPlayer);
             vanishingPlayer.addAttachment(this.plugin, "vanish.currentlyVanished", false);
             this.removeVanished(vanishingPlayerName);
-            if (VanishPerms.canSmoke(vanishingPlayer)) {
-                this.smokeScreenEffect(vanishingPlayer.getLocation());
-            }
-            if (VanishPerms.canExplode(vanishingPlayer)) {
-                this.explosionEffect(vanishingPlayer);
-            }
-            if (VanishPerms.hatedByZeus(vanishingPlayer)) {
-                this.lightningBarrage(vanishingPlayer.getLocation());
-            }
             cplr.getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.unvanish.increment();
             this.plugin.log(vanishingPlayerName + " reappeared.");
+        }
+        if (VanishPerms.canSmoke(vanishingPlayer)) {
+            this.smokeScreenEffect(vanishingPlayer.getLocation());
+        }
+        if (VanishPerms.canExplode(vanishingPlayer)) {
+            this.explosionEffect(vanishingPlayer);
+        }
+        if (VanishPerms.hatedByZeus(vanishingPlayer)) {
+            this.lightningBarrage(vanishingPlayer.getLocation());
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayerName, vanishing));
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
