@@ -29,7 +29,6 @@ package org.kitteh.vanish.metrics;
  */
 
 import java.io.*;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -355,7 +354,7 @@ public class Metrics {
                     // Each post thereafter will be a ping
                     this.firstPost = false;
                 } catch (final IOException e) {
-                    System.out.println("[Metrics] " + e.getMessage());
+                    //System.out.println("[Metrics] " + e.getMessage());
                 }
             }
         }, 0, Metrics.PING_INTERVAL * 1200);
@@ -425,20 +424,6 @@ public class Metrics {
     }
 
     /**
-     * Check if mineshafter is present. If it is, we need to bypass it to send POST requests
-     * 
-     * @return
-     */
-    private boolean isMineshafterPresent() {
-        try {
-            Class.forName("mineshafter.MineServer");
-            return true;
-        } catch (final Exception e) {
-            return false;
-        }
-    }
-
-    /**
      * Generic method that posts a plugin to the metrics website
      * 
      * @param plugin
@@ -492,16 +477,18 @@ public class Metrics {
         final URL url = new URL(Metrics.BASE_URL + String.format(Metrics.REPORT_URL, "VanishNoPacket"));
 
         // Connect to the website
-        URLConnection connection;
-
-        // Mineshafter creates a socks proxy, so we can safely bypass it
-        // It does not reroute POST requests so we need to go around it
-        if (this.isMineshafterPresent()) {
-            connection = url.openConnection(Proxy.NO_PROXY);
-        } else {
+        URLConnection connection = null;
+        try{
             connection = url.openConnection();
+        } catch (Exception e) {
+            //Meh!
         }
-
+        
+        if(connection == null) {
+            // Boggle
+            return;
+        }
+        
         connection.setDoOutput(true);
 
         // Write the data
