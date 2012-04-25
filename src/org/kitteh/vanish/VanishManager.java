@@ -92,6 +92,25 @@ public class VanishManager {
         this.revealAll();
     }
 
+    public void playerJoin(Player player) {
+        boolean vanished = this.isVanished(player);
+        boolean canseeall = VanishPerms.canSeeAll(player);
+        for (Player plr : this.getPlugin().getServer().getOnlinePlayers()) {
+            if (plr != null && !plr.equals(player)) {
+                if (!this.isVanished(plr) || canseeall) {
+                    player.showPlayer(plr);
+                } else {
+                    player.hidePlayer(plr);
+                }
+                if (vanished && !VanishPerms.canSeeAll(plr)) {
+                    plr.hidePlayer(player);
+                } else {
+                    plr.showPlayer(player);
+                }
+            }
+        }
+    }
+
     public void playerQuit(Player player) {
         Debuggle.log("Quitting: " + player.getName());
         this.resetSleepingIgnored(player);
