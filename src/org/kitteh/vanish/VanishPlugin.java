@@ -71,29 +71,55 @@ public class VanishPlugin extends JavaPlugin {
     private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
     private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
 
+    /**
+     * Inform VNP that the user has closed their fake chest
+     * 
+     * @param name
+     *            user's name
+     */
     public void chestFakeClose(String name) {
         synchronized (this.haveInventoriesOpen) {
             this.haveInventoriesOpen.remove(name);
         }
     }
 
+    /**
+     * Query if a user is currently using a fake chest
+     * 
+     * @param name
+     *            user's name
+     * @return true if currently using a fake chest
+     */
     public boolean chestFakeInUse(String name) {
         synchronized (this.haveInventoriesOpen) {
             return this.haveInventoriesOpen.contains(name);
         }
     }
 
+    /**
+     * Inform VNP that the user has opened their fake chest
+     * 
+     * @param name
+     *            user's name
+     */
     public void chestFakeOpen(String name) {
         synchronized (this.haveInventoriesOpen) {
             this.haveInventoriesOpen.add(name);
         }
     }
 
+    /**
+     * Acquire the bPermissions hook
+     * 
+     * @return the bPerms hook
+     */
     public BPermissionsHook getBPerms() {
         return this.bPermissionsHook;
     }
 
     /**
+     * Version string of VNP
+     * 
      * @return version of VanishNoPacket in use
      */
     public String getCurrentVersion() {
@@ -117,6 +143,13 @@ public class VanishPlugin extends JavaPlugin {
         return this.manager;
     }
 
+    /**
+     * Indicate a player has just joined the server.
+     * Internal use only please
+     * 
+     * @param player
+     *            player who has joined the server
+     */
     public void hooksJoin(Player player) {
         if (player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
             this.dynmapHook.vanish(player);
@@ -124,9 +157,11 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * No touchy. Call hooks for when a player has quit
+     * Indicate a player has left the server
+     * Internal use only please
      * 
      * @param player
+     *            player who has left the server
      */
     public void hooksQuit(Player player) {
         this.hooksUnvanish(player);
@@ -267,6 +302,9 @@ public class VanishPlugin extends JavaPlugin {
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
 
+    /**
+     * Reload the VNP config
+     */
     public void reload() {
         this.reloadConfig();
         Settings.freshStart(this);
