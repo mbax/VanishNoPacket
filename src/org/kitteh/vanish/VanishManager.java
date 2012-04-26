@@ -212,11 +212,24 @@ public class VanishManager {
     /**
      * Handle vanishing or unvanishing for a player
      * Does not say anything.
+     * Will call effects
      * Called by toggleVanish(Player)
      * 
      * @param vanishingPlayer
      */
     public void toggleVanishQuiet(Player vanishingPlayer) {
+        this.toggleVanishQuiet(vanishingPlayer, true);
+    }
+
+    /**
+     * Handle vanishing or unvanishing for a player
+     * Does not say anything.
+     * 
+     * @param vanishingPlayer
+     * @param effects
+     *            if true, do effects
+     */
+    public void toggleVanishQuiet(Player vanishingPlayer, boolean effects) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
@@ -247,13 +260,13 @@ public class VanishManager {
             MetricsOverlord.unvanish.increment();
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
-        if (VanishPerms.canSmoke(vanishingPlayer)) {
+        if (VanishPerms.canSmoke(vanishingPlayer) && effects) {
             this.smokeScreenEffect(vanishingPlayer.getLocation());
         }
-        if (VanishPerms.canExplode(vanishingPlayer)) {
+        if (VanishPerms.canExplode(vanishingPlayer) && effects) {
             this.explosionEffect(vanishingPlayer);
         }
-        if (VanishPerms.hatedByZeus(vanishingPlayer)) {
+        if (VanishPerms.hatedByZeus(vanishingPlayer) && effects) {
             this.lightningBarrage(vanishingPlayer.getLocation());
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayerName, vanishing));
