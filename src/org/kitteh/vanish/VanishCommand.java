@@ -18,114 +18,166 @@ public class VanishCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         MetricsOverlord.command.increment();
-        if ((args.length > 0) && args[0].equalsIgnoreCase("reload") && VanishPerms.canReload(sender)) {
-            this.plugin.reload();
-            sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Users reloaded");
-            sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Some settings refreshed");
-            return true;
-        } else if ((args.length > 0) && args[0].equalsIgnoreCase("list") && VanishPerms.canList(sender)) {
-            final StringBuilder list = new StringBuilder();
-            for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-                if ((player != null) && this.plugin.getManager().isVanished(player)) {
-                    if (list.length() > 0) {
-                        list.append(ChatColor.DARK_AQUA);
-                        list.append(',');
-                    }
-                    list.append(ChatColor.AQUA);
-                    list.append(player.getName());
+        // First, the short aliases
+        if (label.length() == 2) {
+            if (sender instanceof Player) {
+                if (label.equals("np")) {
+                    this.toggle((Player) sender, "nopickup");
+                }
+                if (label.equals("nf")) {
+                    this.toggle((Player) sender, "nofollow");
+                }
+                if (label.equals("nh")) {
+                    this.toggle((Player) sender, "nohunger");
+                }
+                if (label.equals("ni")) {
+                    this.toggle((Player) sender, "nointeract");
+                }
+                if (label.equals("nc")) {
+                    this.toggle((Player) sender, "nochat");
                 }
             }
-            list.insert(0, "Vanished: ");
-            list.insert(0, ChatColor.DARK_AQUA);
-            sender.sendMessage(list.toString());
             return true;
         }
-        if ((sender instanceof Player)) {
-            final Player player = (Player) sender;
-            if (label.equals("np")) {
-                return this.toggle(player, "nopickup");
-            }
-            if (label.equals("nf")) {
-                return this.toggle(player, "nofollow");
-            }
-            if (label.equals("nh")) {
-                return this.toggle(player, "nohunger");
-            }
-            if (label.equals("ni")) {
-                return this.toggle(player, "nointeract");
-            }
-            if (label.equals("nc")) {
-                return this.toggle(player, "nochat");
-            }
-            if ((args.length == 0)) {
-                if (VanishPerms.canVanish(player)) {
-                    this.plugin.getManager().toggleVanish(player);
+        // Plain /vanish
+        if (args.length == 0) {
+            if (sender instanceof Player) {
+                if (VanishPerms.canVanish((Player) sender)) {
+                    this.plugin.getManager().toggleVanish((Player) sender);
                 }
-            } else if (args[0].equalsIgnoreCase("on") && VanishPerms.canVanish(player)) {
-                if (!this.plugin.getManager().isVanished(player)) {
-                    this.plugin.getManager().toggleVanish(player);
-                    if ((args.length > 1) && args[1].equalsIgnoreCase("fake")) {
-                        this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, false);
-                    }
-                }
-            } else if (args[0].equalsIgnoreCase("off") && VanishPerms.canVanish(player)) {
-                if (this.plugin.getManager().isVanished(player)) {
-                    this.plugin.getManager().toggleVanish(player);
-                    if ((args.length > 1) && args[1].equalsIgnoreCase("fake")) {
-                        this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, false);
-                    }
-                }
-            } else if (args[0].equalsIgnoreCase("check") && VanishPerms.canVanish(player)) {
-                if (this.plugin.getManager().isVanished(player)) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "You are invisible.");
-                } else {
-                    player.sendMessage(ChatColor.DARK_AQUA + "You are not invisible.");
-                }
-            } else if (args[0].equalsIgnoreCase("toggle") || args[0].equalsIgnoreCase("t")) {
-                if (args.length == 1) {
-                    final StringBuilder toggleReply = new StringBuilder();
-                    if (VanishPerms.canToggleSee(player)) {
-                        toggleReply.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
-                        this.plugin.getManager().resetSeeing(player);
-                    }
-                    if (VanishPerms.canToggleNoPickup(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleNoFollow(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotFollow(player)) + "nofollow" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleNoInteract(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotInteract(player)) + "nointeract" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleDamageIn(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.blockIncomingDamage(player)) + "damage-in" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleDamageOut(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.blockOutgoingDamage(player)) + "damage-out" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleNoChat(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleNoHunger(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.canNotHunger(player)) + "nohunger" + ChatColor.DARK_AQUA);
-                    }
-                    if (VanishPerms.canToggleSilentChestReads(player)) {
-                        this.appendList(toggleReply, this.colorize(VanishPerms.canReadChestsSilently(player)) + "chests" + ChatColor.DARK_AQUA);
-                    }
-                    if (toggleReply.length() > 0) {
-                        toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
-                    } else {
-                        if (VanishPerms.canVanish(player)) {
-                            toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
+            }
+            return true;
+        }
+        // /vanish <goal> [maybe stuff here]
+        final String goal = args[0];
+        if (goal.equalsIgnoreCase("reload")) {
+            if (VanishPerms.canReload(sender)) {
+                this.plugin.reload();
+                sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Users reloaded");
+                sender.sendMessage(ChatColor.DARK_AQUA + "[Vanish] Some settings refreshed");
+            } else {
+                this.denied(sender);
+            }
+            return true;
+        }
+        if (goal.equalsIgnoreCase("list")) {
+            if (VanishPerms.canList(sender)) {
+                final StringBuilder list = new StringBuilder();
+                for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+                    if ((player != null) && this.plugin.getManager().isVanished(player)) {
+                        if (list.length() > 0) {
+                            list.append(ChatColor.DARK_AQUA);
+                            list.append(',');
                         }
+                        list.append(ChatColor.AQUA);
+                        list.append(player.getName());
                     }
-                    if (toggleReply.length() > 0) {
-                        player.sendMessage(toggleReply.toString());
-                    }
-                } else {
-                    this.toggle(player, args[1]);
                 }
-            } else if ((args[0].equalsIgnoreCase("fakequit") || args[0].equalsIgnoreCase("fq")) && VanishPerms.canFakeAnnounce(player)) {
+                list.insert(0, "Vanished: ");
+                list.insert(0, ChatColor.DARK_AQUA);
+                sender.sendMessage(list.toString());
+            } else {
+                this.denied(sender);
+            }
+            return true;
+        }
+        // Goodbye console!
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.AQUA + "Did you mean " + ChatColor.WHITE + "vanish reload" + ChatColor.AQUA + " or " + ChatColor.WHITE + "vanish list" + ChatColor.AQUA + "?");
+            return true;
+        }
+        // No more console options below this point
+        final Player player = (Player) sender;
+
+        // Check if I'm vanished
+        if (goal.equalsIgnoreCase("check")) {
+            if (this.plugin.getManager().isVanished(player)) {
+                player.sendMessage(ChatColor.DARK_AQUA + "You are invisible.");
+            } else {
+                player.sendMessage(ChatColor.DARK_AQUA + "You are not invisible.");
+            }
+            return true;
+        }
+        // Toggling
+        if (goal.equalsIgnoreCase("toggle") || goal.equalsIgnoreCase("t")) {
+            // List my toggles
+            if (args.length == 1) {
+                final StringBuilder toggleReply = new StringBuilder();
+                if (VanishPerms.canToggleSee(player)) {
+                    toggleReply.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
+                    this.plugin.getManager().resetSeeing(player);
+                }
+                if (VanishPerms.canToggleNoPickup(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleNoFollow(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canNotFollow(player)) + "nofollow" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleNoInteract(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canNotInteract(player)) + "nointeract" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleDamageIn(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.blockIncomingDamage(player)) + "damage-in" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleDamageOut(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.blockOutgoingDamage(player)) + "damage-out" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleNoChat(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canNotChat(player)) + "nochat" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleNoHunger(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canNotHunger(player)) + "nohunger" + ChatColor.DARK_AQUA);
+                }
+                if (VanishPerms.canToggleSilentChestReads(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canReadChestsSilently(player)) + "chests" + ChatColor.DARK_AQUA);
+                }
+                if (toggleReply.length() > 0) {
+                    toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
+                } else {
+                    toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
+                }
+                if (toggleReply.length() > 0) {
+                    player.sendMessage(toggleReply.toString());
+                }
+            } else {
+                // I wish to toggle something
+                this.toggle(player, args[1]);
+            }
+            return true;
+        }
+
+
+        // Below this point, user must be able to /vanish
+
+        if(!VanishPerms.canVanish(player)){
+            this.denied(sender);
+        }
+
+
+        // The non-toggles
+        if (goal.equalsIgnoreCase("on")) {
+            if (!this.plugin.getManager().isVanished(player)) {
+                this.plugin.getManager().toggleVanish(player);
+                // Fake announce as well?
+                if ((args.length > 1) && args[1].equalsIgnoreCase("fake") && VanishPerms.canFakeAnnounce(player)) {
+                    this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, false);
+                }
+            }
+            return true;
+        }
+        if (goal.equalsIgnoreCase("off")) {
+            if (this.plugin.getManager().isVanished(player)) {
+                this.plugin.getManager().toggleVanish(player);
+                // Fake announce as well?
+                if ((args.length > 1) && args[1].equalsIgnoreCase("fake") && VanishPerms.canFakeAnnounce(player)) {
+                    this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, false);
+                }
+            }
+            return true;
+        }
+        // Fake announces. Requires vanish.fakeannounce
+        if ((goal.equalsIgnoreCase("fakequit") || goal.equalsIgnoreCase("fq"))) {
+            if (VanishPerms.canFakeAnnounce(player)) {
                 if (!this.plugin.getManager().isVanished(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 } else {
@@ -136,7 +188,13 @@ public class VanishCommand implements CommandExecutor {
                     forced = true;
                 }
                 this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, forced);
-            } else if ((args[0].equalsIgnoreCase("fakejoin") || args[0].equalsIgnoreCase("fj")) && VanishPerms.canFakeAnnounce(player)) {
+            } else {
+                this.denied(sender);
+            }
+            return true;
+        }
+        if ((goal.equalsIgnoreCase("fakejoin") || goal.equalsIgnoreCase("fj"))) {
+            if (VanishPerms.canFakeAnnounce(player)) {
                 if (this.plugin.getManager().isVanished(player)) {
                     this.plugin.getManager().toggleVanish(player);
                 } else {
@@ -147,8 +205,20 @@ public class VanishCommand implements CommandExecutor {
                     forced = true;
                 }
                 this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, forced);
+            } else {
+                this.denied(sender);
             }
+            return true;
         }
+        
+        // Continue? 
+        
+        // 3
+        
+        // 2
+        
+        // 1
+        
         return true;
     }
 
@@ -167,7 +237,11 @@ public class VanishCommand implements CommandExecutor {
         }
     }
 
-    private boolean toggle(Player player, String toggle) {
+    private void denied(CommandSender sender) {
+        sender.sendMessage(ChatColor.AQUA + "[Vanish] " + ChatColor.DARK_AQUA + "Access denied.");
+    }
+
+    private void toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
         MetricsOverlord.toggle.increment();
         boolean status = false;
@@ -212,6 +286,5 @@ public class VanishCommand implements CommandExecutor {
         } else if (VanishPerms.canVanish(player)) {
             player.sendMessage(ChatColor.DARK_AQUA + "You can't toggle that!");
         }
-        return true;
     }
 }
