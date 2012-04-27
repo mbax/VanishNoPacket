@@ -12,6 +12,9 @@ public class VanishUser {
     private boolean noHunger;
     private boolean noChat;
     private boolean silentChestReads;
+    private boolean smoke;
+    private boolean explode;
+    private boolean lightning;
 
     public VanishUser(Player player) {
         this.seeAll = player.hasPermission("vanish.see");
@@ -23,6 +26,17 @@ public class VanishUser {
         this.noHunger = player.hasPermission("vanish.nohunger");
         this.noChat = player.hasPermission("vanish.nochat");
         this.silentChestReads = player.hasPermission("vanish.silentchests");
+        this.smoke = player.hasPermission("vanish.effects.smoke");
+        this.explode = player.hasPermission("vanish.effects.explode");
+        this.lightning = player.hasPermission("vanish.effects.lightning");
+    }
+
+    public boolean getExplode() {
+        return this.explode;
+    }
+
+    public boolean getLightning() {
+        return this.lightning;
     }
 
     public boolean getNoChat() {
@@ -61,9 +75,23 @@ public class VanishUser {
         return this.seeAll;
     }
 
+    public boolean getSmoke() {
+        return this.smoke;
+    }
+
+    public boolean toggleExplode() {
+        this.explode = !this.explode;
+        return this.explode;
+    }
+
     public boolean toggleIncomingDamage() {
         this.preventIncomingDamage = !this.preventIncomingDamage;
         return this.preventIncomingDamage;
+    }
+
+    public boolean toggleLightning() {
+        this.lightning = !this.lightning;
+        return this.lightning;
     }
 
     public boolean toggleNoChat() {
@@ -104,6 +132,11 @@ public class VanishUser {
     public boolean toggleSilentChestReads() {
         this.silentChestReads = !this.silentChestReads;
         return this.silentChestReads;
+    }
+
+    public boolean toggleSmoke() {
+        this.smoke = !this.smoke;
+        return this.smoke;
     }
 
 }

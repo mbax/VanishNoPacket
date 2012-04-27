@@ -266,7 +266,7 @@ public class VanishManager {
         if (VanishPerms.canExplode(vanishingPlayer) && effects) {
             this.explosionEffect(vanishingPlayer);
         }
-        if (VanishPerms.hatedByZeus(vanishingPlayer) && effects) {
+        if (VanishPerms.canLightning(vanishingPlayer) && effects) {
             this.lightningBarrage(vanishingPlayer.getLocation());
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayerName, vanishing));

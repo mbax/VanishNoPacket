@@ -152,15 +152,46 @@ permissions:
   vanish.reload:
     default: op
     description: Reloads some VNP systems
-  vanish.smokin:
+  vanish.effects.smoke:
     default: false
     description: Creates smoke effect when vanishing and re-appearing
-  vanish.explode:
+  vanish.effects.explode:
     default: false
     description: Creates explosion effect when vanishing and re-appearing
+  vanish.effects.lightning
+    default: false
+    description: Creates a lightning barrage around a player when vanishing and re-appearing
+  vanish.effects.toggle.smoke:
+    default: false
+    description: Toggle smoke on vanish toggle
+  vanish.effects.toggle.explode:
+    default: false
+    description: Toggle explode on vanish toggle
+  vanish.effects.toggle.lightning:
+    default: false
+    description: Toggle lightning on vanish toggle
+  vanish.effects.toggle.all:
+    default: false
+    description: Toggle all vanish toggle effects
+    children:
+      vanish.effects.toggle.smoke: true
+      vanish.effects.toggle.explode: true
+      vanish.effects.toggle.lightning: true
+  vanish.smokin:
+    default: false
+    description: Creates smoke effect when vanishing and re-appearing (legacy. see vanish.effects.smoke)
+    children:
+      vanish.effects.smoke: true
+  vanish.explode:
+    default: false
+    description: Creates explosion effect when vanishing and re-appearing (legacy. see vanish.effects.explode)
+    children: 
+      vanish.effects.explode: true
   vanish.lightningbarrage:
     default: false
-    description: Creates a lightning barrage around a player when vanishing and re-appearning
+    description: Creates a lightning barrage around a player when vanishing and re-appearing (legacy. see vanish.effects.lightning)
+    children:
+      vanish.effects.lightning: true
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
@@ -192,6 +223,7 @@ permissions:
       vanish.permtest.all: true
       vanish.spout.status: true
       vanish.reload: true
-      vanish.smokin: true
-      vanish.explode: true
-      vanish.lightningbarrage: true
+      vanish.effects.smoke: true
+      vanish.effects.explode: true
+      vanish.effects.lightning: true
+      vanish.effects.toggle.all: true

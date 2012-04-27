@@ -18,11 +18,15 @@ public class VanishPerms {
     }
 
     public static boolean canExplode(Player player) {
-        return player.hasPermission("vanish.explode");
+        return VanishPerms.getUser(player).getExplode();
     }
 
     public static boolean canFakeAnnounce(Player player) {
         return player.hasPermission("vanish.fakeannounce");
+    }
+
+    public static boolean canLightning(Player player) {
+        return VanishPerms.getUser(player).getLightning();
     }
 
     public static boolean canList(CommandSender sender) {
@@ -78,7 +82,7 @@ public class VanishPerms {
     }
 
     public static boolean canSmoke(Player player) {
-        return player.hasPermission("vanish.smokin");
+        return VanishPerms.getUser(player).getSmoke();
     }
 
     public static boolean canToggleDamageIn(Player player) {
@@ -87,6 +91,14 @@ public class VanishPerms {
 
     public static boolean canToggleDamageOut(Player player) {
         return player.hasPermission("vanish.toggle.damageout");
+    }
+
+    public static boolean canToggleExplode(Player player) {
+        return player.hasPermission("vanish.effects.toggle.explode");
+    }
+
+    public static boolean canToggleLightning(Player player) {
+        return player.hasPermission("vanish.effects.toggle.lightning");
     }
 
     public static boolean canToggleNoChat(Player player) {
@@ -117,12 +129,12 @@ public class VanishPerms {
         return player.hasPermission("vanish.toggle.silentchests");
     }
 
-    public static boolean canVanish(Player player) {
-        return player.hasPermission("vanish.vanish");
+    public static boolean canToggleSmoke(Player player) {
+        return player.hasPermission("vanish.effects.toggle.smoke");
     }
 
-    public static boolean hatedByZeus(Player player) {
-        return player.hasPermission("vanish.lightningbarrage");
+    public static boolean canVanish(Player player) {
+        return player.hasPermission("vanish.vanish");
     }
 
     public static boolean joinVanished(Player player) {
@@ -153,6 +165,14 @@ public class VanishPerms {
         return VanishPerms.getUser(player).toggleOutgoingDamage();
     }
 
+    public static boolean toggleExplode(Player player) {
+        return VanishPerms.getUser(player).toggleExplode();
+    }
+
+    public static boolean toggleLightning(Player player) {
+        return VanishPerms.getUser(player).toggleLightning();
+    }
+
     public static boolean toggleNoChat(Player player) {
         return VanishPerms.getUser(player).toggleNoChat();
     }
@@ -179,6 +199,10 @@ public class VanishPerms {
 
     public static boolean toggleSilentChestReads(Player player) {
         return VanishPerms.getUser(player).toggleSilentChestReads();
+    }
+
+    public static boolean toggleSmoke(Player player) {
+        return VanishPerms.getUser(player).toggleSmoke();
     }
 
     public static void userQuit(Player player) {
