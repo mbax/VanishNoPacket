@@ -32,6 +32,10 @@
       <id>essentials-repo</id>
       <url>http://ess.ementalo.com/nexus/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>kitteh-repo</id>
+      <url>http://repo.kitteh.org/content/groups/public</url>
+    </repository>
   </repositories>
   
   <dependencies>
