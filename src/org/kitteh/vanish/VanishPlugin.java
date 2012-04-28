@@ -69,6 +69,7 @@ public class VanishPlugin extends JavaPlugin {
     private final DynmapHook dynmapHook = new DynmapHook(this);
     private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
     private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
+    private final GeoIPToolsHook geoipHook = new GeoIPToolsHook(this);
     private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
 
     /**
@@ -124,6 +125,10 @@ public class VanishPlugin extends JavaPlugin {
      */
     public String getCurrentVersion() {
         return this.getDescription().getVersion();
+    }
+
+    public GeoIPToolsHook getGeoIP() {
+        return this.geoipHook;
     }
 
     /**
@@ -254,7 +259,7 @@ public class VanishPlugin extends JavaPlugin {
         MetricsOverlord.init(this);
 
         this.essentialsHook.onPluginEnable(this.getConfig().getBoolean("hooks.essentials", false));
-
+        this.geoipHook.onPluginEnable();
         this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
 
         //Post-load stuff

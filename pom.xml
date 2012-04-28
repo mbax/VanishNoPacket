@@ -10,11 +10,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <scm>
-    <connection>scm:git:git://github.com/mbax/VanishNoPacket.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/mbax/VanishNoPacket.git</developerConnection>
-    <url>s://www.github.com/mbax/VanishNoPacket</url>
-  </scm>
+
   <repositories>
     <repository>
       <id>bukkit-repo</id>
@@ -37,6 +33,7 @@
       <url>http://ess.ementalo.com/nexus/content/groups/public/</url>
     </repository>
   </repositories>
+  
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
@@ -66,6 +63,12 @@
       <groupId>com.earth2me</groupId>
       <artifactId>essentials</artifactId>
       <version>2.9.1</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>uk.org.whoami</groupId>
+      <artifactId>GeoIPTools</artifactId>
+      <version>[0.4,)</version>
       <type>jar</type>
     </dependency>
  <!-- JSONAPI seems to have no repo so you have to locally install this -->
