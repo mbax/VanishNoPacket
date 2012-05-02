@@ -15,6 +15,8 @@ public class GeoIPToolsHook {
 
     public GeoIPToolsHook(VanishPlugin plugin) {
         this.plugin = plugin;
+        this.city = null;
+        this.country = null;
     }
 
     public String getCity(Player player) {
@@ -43,9 +45,11 @@ public class GeoIPToolsHook {
 
     public void onPluginEnable() {
         final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
-        final GeoIPTools geoip = (GeoIPTools) plugin;
-        this.city = geoip.getGeoIPLookup(GeoIPLookup.CITYDATABASE);
-        this.country = geoip.getGeoIPLookup(GeoIPLookup.COUNTRYDATABASE);
+        if (plugin != null) {
+            final GeoIPTools geoip = (GeoIPTools) plugin;
+            this.city = geoip.getGeoIPLookup(GeoIPLookup.CITYDATABASE);
+            this.country = geoip.getGeoIPLookup(GeoIPLookup.COUNTRYDATABASE);
+        }
     }
 
 }

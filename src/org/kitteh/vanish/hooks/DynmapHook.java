@@ -24,9 +24,9 @@ public class DynmapHook {
         }
     }
 
-    public void onPluginEnable(boolean enableEssentials) {
-        this.enabled = enableEssentials;
-        if (enableEssentials) {
+    public void onPluginEnable(boolean enable) {
+        this.enabled = enable;
+        if (enable) {
             this.grabDynmap();
         } else {
             this.dynmap = null;
