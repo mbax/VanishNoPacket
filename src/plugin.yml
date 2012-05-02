@@ -16,18 +16,18 @@ permissions:
     default: false
     description: Do not manually play with this. Do not.
   vanish.vanish:
-    default: op
+    default: false
     description: |
       Allows player to vanish. 
       REALLY should give players with this access to vanish.see
   vanish.see:
-    default: op
+    default: false
     description: Allows player to see vanished players
   vanish.statusupdates:
-    default: op
+    default: false
     description: Informed about players changing status
   vanish.list:
-    default: op
+    default: false
     description: Acquire a list of vanished users
   vanish.nopickup:
     default: false
@@ -126,16 +126,16 @@ permissions:
     default: false
     description: Fake joining/leaving
   vanish.adminalerts:
-    default: op
+    default: false
     description: Receive alerts about updates and such
   vanish.permtest.self:
     default: true
     description: If PermTest is enabled, be able to use it on yourself
   vanish.permtest.other:
-    default: op
+    default: false
     description: If PermTest is enabled, be able to use it on others
   vanish.permtest.all:
-    default: op
+    default: false
     description: If PermTest is enabled, be able to use on self and others
     children:
       vanish.permtest.self: true
@@ -150,7 +150,7 @@ permissions:
     default: false
     description: See a status bar if vanished in spoutcraft
   vanish.reload:
-    default: op
+    default: false
     description: Reloads some VNP systems
   vanish.effects.smoke:
     default: false
@@ -177,21 +177,17 @@ permissions:
       vanish.effects.toggle.smoke: true
       vanish.effects.toggle.explode: true
       vanish.effects.toggle.lightning: true
-  vanish.smokin:
-    default: false
-    description: Creates smoke effect when vanishing and re-appearing (legacy. see vanish.effects.smoke)
+  vanish.op:
+    default: op
+    description: The permission nodes given to ops
     children:
-      vanish.effects.smoke: true
-  vanish.explode:
-    default: false
-    description: Creates explosion effect when vanishing and re-appearing (legacy. see vanish.effects.explode)
-    children: 
-      vanish.effects.explode: true
-  vanish.lightningbarrage:
-    default: false
-    description: Creates a lightning barrage around a player when vanishing and re-appearing (legacy. see vanish.effects.lightning)
-    children:
-      vanish.effects.lightning: true
+      vanish.reload: true
+      vanish.adminalerts: true
+      vanish.permtest.all: true
+      vanish.see: true
+      vanish.vanish: true
+      vanish.statusupdates: true
+      vanish.list: true
   vanish.standard:
     default: false
     description: Can vanish, see vanished, no pickup when vanished
