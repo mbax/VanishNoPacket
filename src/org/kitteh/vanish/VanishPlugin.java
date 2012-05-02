@@ -293,7 +293,11 @@ public class VanishPlugin extends JavaPlugin {
         this.latestVersion = this.getDescription().getVersion();
 
         if (updateCheck) {
-            this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
+            if (this.getDescription().getVersion().contains("SNAPSHOT")) {
+                this.log("You are using a SNAPSHOT build. Update check disabled");
+            } else {
+                this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
+            }
         }
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
