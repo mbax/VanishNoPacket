@@ -504,25 +504,20 @@ public class Metrics {
         writer.close();
         reader.close();
 
-        if (response.startsWith("ERR")) {
-            throw new IOException(response); //Throw the exception
-        } else {
-            // Is this the first update this hour?
-            if (response.contains("OK This is your first update this hour")) {
-                synchronized (graphs) {
-                    final Iterator<Graph> iter = graphs.iterator();
+        // Is this the first update this hour?
+        if (response.contains("OK This is your first update this hour")) {
+            synchronized (graphs) {
+                final Iterator<Graph> iter = graphs.iterator();
 
-                    while (iter.hasNext()) {
-                        final Graph graph = iter.next();
+                while (iter.hasNext()) {
+                    final Graph graph = iter.next();
 
-                        for (final Plotter plotter : graph.getPlotters()) {
-                            plotter.reset();
-                        }
+                    for (final Plotter plotter : graph.getPlotters()) {
+                        plotter.reset();
                     }
                 }
             }
         }
-        //if (response.startsWith("OK")) - We should get "OK" followed by an optional description if everything goes right
     }
 
 }
