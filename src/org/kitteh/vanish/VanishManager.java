@@ -269,7 +269,7 @@ public class VanishManager {
         if (VanishPerms.canLightning(vanishingPlayer) && effects) {
             this.lightningBarrage(vanishingPlayer.getLocation());
         }
-        this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayerName, vanishing));
+        this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {

@@ -1,5 +1,6 @@
 package org.kitteh.vanish.event;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -11,12 +12,14 @@ public class VanishStatusChangeEvent extends Event {
 
     private final String name;
     private final boolean vanishing;
+    private Player player;
 
     private static final HandlerList handlers = new HandlerList();
 
-    public VanishStatusChangeEvent(String name, boolean vanishing) {
-        this.name = name;
+    public VanishStatusChangeEvent(Player player, boolean vanishing) {
+        this.name = player.getName();
         this.vanishing = vanishing;
+        this.player = player;
     }
 
     @Override
@@ -29,6 +32,13 @@ public class VanishStatusChangeEvent extends Event {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * @return the player changing visibility
+     */
+    public Player getPlayer() {
+        return this.player;
     }
 
     /**
