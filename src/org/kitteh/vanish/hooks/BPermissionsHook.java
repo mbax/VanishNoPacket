@@ -6,12 +6,10 @@ import org.kitteh.vanish.VanishPlugin;
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
-public class BPermissionsHook {
-
-    private final VanishPlugin plugin;
+public class BPermissionsHook extends Hook {
 
     public BPermissionsHook(VanishPlugin plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     public String getPrefix(Player player) {

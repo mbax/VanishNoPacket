@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.hooks.*;
+import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
@@ -64,13 +65,8 @@ public class VanishPlugin extends JavaPlugin {
     private boolean versionDiff = false;
 
     private final VanishManager manager = new VanishManager(this);
-
-    private final EssentialsHook essentialsHook = new EssentialsHook(this);
-    private final DynmapHook dynmapHook = new DynmapHook(this);
-    private final JSONAPIHook jsonapiHook = new JSONAPIHook(this);
-    private final SpoutCraftHook spoutCraft = new SpoutCraftHook(this);
-    private final GeoIPToolsHook geoipHook = new GeoIPToolsHook(this);
-    private final BPermissionsHook bPermissionsHook = new BPermissionsHook(this);
+    
+    private HookManager hookManager;
 
     /**
      * Inform VNP that the user has closed their fake chest
@@ -110,15 +106,6 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Acquire the bPermissions hook
-     * 
-     * @return the bPerms hook
-     */
-    public BPermissionsHook getBPerms() {
-        return this.bPermissionsHook;
-    }
-
-    /**
      * Version string of VNP
      * 
      * @return version of VanishNoPacket in use
@@ -127,10 +114,10 @@ public class VanishPlugin extends JavaPlugin {
         return this.getDescription().getVersion();
     }
 
-    public GeoIPToolsHook getGeoIP() {
-        return this.geoipHook;
+    public HookManager getHookManager(){
+        return this.hookManager;
     }
-
+    
     /**
      * Will show this version, if update checks are disabled
      * 
@@ -156,9 +143,7 @@ public class VanishPlugin extends JavaPlugin {
      *            player who has joined the server
      */
     public void hooksJoin(Player player) {
-        if (player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
-            this.dynmapHook.vanish(player);
-        }
+        this.hookManager.onJoin(player);
     }
 
     /**
@@ -169,8 +154,8 @@ public class VanishPlugin extends JavaPlugin {
      *            player who has left the server
      */
     public void hooksQuit(Player player) {
-        this.hooksUnvanish(player);
-        this.spoutCraft.playerQuit(player);
+        this.hookManager.onQuit(player);
+        this.hookManager.onUnvanish(player);
     }
 
     /**
@@ -180,9 +165,7 @@ public class VanishPlugin extends JavaPlugin {
      *            The un-vanishing user
      */
     public void hooksUnvanish(Player player) {
-        this.essentialsHook.unvanish(player);
-        this.dynmapHook.unvanish(player);
-        this.spoutCraft.unvanish(player);
+        this.hookManager.onUnvanish(player);
     }
 
     /**
@@ -192,9 +175,7 @@ public class VanishPlugin extends JavaPlugin {
      *            The vanishing player
      */
     public void hooksVanish(Player player) {
-        this.essentialsHook.vanish(player);
-        this.dynmapHook.vanish(player);
-        this.spoutCraft.vanish(player);
+        this.hookManager.onVanish(player);
     }
 
     /**
@@ -233,9 +214,7 @@ public class VanishPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         VanishNoPacket.setInstance(null);
-        this.spoutCraft.onPluginDisable();
-        this.essentialsHook.onPluginDisable();
-        this.dynmapHook.onPluginDisable();
+        this.hookManager.onDisable();
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
         Debuggle.nah();
@@ -258,15 +237,22 @@ public class VanishPlugin extends JavaPlugin {
         Settings.freshStart(this);
         MetricsOverlord.init(this);
 
-        this.essentialsHook.onPluginEnable(this.getConfig().getBoolean("hooks.essentials", false));
-        this.geoipHook.onPluginEnable();
-        this.dynmapHook.onPluginEnable(this.getConfig().getBoolean("hooks.dynmap", false));
+        this.hookManager=new HookManager(this);
+        if(this.getConfig().getBoolean("hooks.essentials", false)){
+            hookManager.getHook(HookType.Essentials).onEnable();
+        }
+        hookManager.getHook(HookType.GeoIPTools).onEnable();
+        if(this.getConfig().getBoolean("hooks.dynmap", false)){
+            hookManager.getHook(HookType.Dynmap).onEnable();
+        }
 
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
-                VanishPlugin.this.jsonapiHook.onPluginEnable(VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false));
+                if(VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)){
+                    hookManager.getHook(HookType.JSONAPI).onEnable();
+                }
                 for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
                     if ((player != null) && VanishPerms.canVanish(player)) {
                         player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
@@ -275,7 +261,9 @@ public class VanishPlugin extends JavaPlugin {
             }
         }, 1);
 
-        this.spoutCraft.onPluginEnable(this.getConfig().getBoolean("hooks.spoutcraft", false));
+        if(this.getConfig().getBoolean("hooks.spoutcraft", false)){
+            hookManager.getHook(HookType.SpoutCraft).onEnable();
+        }
 
         this.manager.startup();
 

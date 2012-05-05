@@ -5,6 +5,9 @@ import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.kitteh.vanish.hooks.BPermissionsHook;
+import org.kitteh.vanish.hooks.GeoIPToolsHook;
+import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
@@ -110,6 +113,8 @@ public class VanishAnnounceManipulator {
     }
 
     private String injectPlayerInformation(String message, Player player) {
-        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", this.plugin.getBPerms().getPrefix(player)).replace("%us", this.plugin.getBPerms().getSuffix(player).replace("%city", this.plugin.getGeoIP().getCity(player)).replace("%country", this.plugin.getGeoIP().getCountry(player)));
+        GeoIPToolsHook geoip=(GeoIPToolsHook) plugin.getHookManager().getHook(HookType.GeoIPTools);
+        BPermissionsHook bperms=(BPermissionsHook) plugin.getHookManager().getHook(HookType.BPermissions);
+        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", bperms.getPrefix(player)).replace("%us", bperms.getSuffix(player).replace("%city", geoip.getCity(player)).replace("%country", geoip.getCountry(player)));
     }
 }

@@ -7,14 +7,13 @@ import org.kitteh.vanish.VanishPlugin;
 import uk.org.whoami.geoip.GeoIPLookup;
 import uk.org.whoami.geoip.GeoIPTools;
 
-public class GeoIPToolsHook {
+public class GeoIPToolsHook extends Hook {
 
-    private final VanishPlugin plugin;
     private GeoIPLookup city;
     private GeoIPLookup country;
 
     public GeoIPToolsHook(VanishPlugin plugin) {
-        this.plugin = plugin;
+        super(plugin);
         this.city = null;
         this.country = null;
     }
@@ -43,7 +42,14 @@ public class GeoIPToolsHook {
         }
     }
 
-    public void onPluginEnable() {
+    @Override
+    public void onDisable() {
+        this.city = null;
+        this.country = null;
+    }
+
+    @Override
+    public void onEnable() {
         final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
         if (plugin != null) {
             final GeoIPTools geoip = (GeoIPTools) plugin;

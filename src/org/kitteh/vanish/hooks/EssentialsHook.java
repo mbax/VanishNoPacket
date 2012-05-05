@@ -7,47 +7,30 @@ import org.kitteh.vanish.VanishPlugin;
 import com.earth2me.essentials.IEssentials;
 
 @SuppressWarnings("deprecation")
-public class EssentialsHook {
+public class EssentialsHook extends Hook {
     private final VanishPlugin plugin;
 
     private IEssentials essentials;
-    private boolean enabled;
+    private boolean enabled = false;
 
     public EssentialsHook(VanishPlugin plugin) {
+        super(plugin);
         this.plugin = plugin;
-        this.enabled = false;
     }
 
-    public void onPluginDisable() {
+    @Override
+    public void onDisable() {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             if ((player != null) && this.plugin.getManager().isVanished(player)) {
-                this.unvanish(player);
+                this.onUnvanish(player);
             }
         }
+        this.essentials = null;
     }
 
-    public void onPluginEnable(boolean enableEssentials) {
-        this.enabled = enableEssentials;
-        if (enableEssentials) {
-            this.grabEssentials();
-        } else {
-            this.essentials = null;
-        }
-    }
-
-    public void unvanish(Player player) {
-        if (player.hasPermission("vanish.hooks.essentials.hide")) {
-            this.setHidden(player, false);
-        }
-    }
-
-    public void vanish(Player player) {
-        if (player.hasPermission("vanish.hooks.essentials.hide")) {
-            this.setHidden(player, true);
-        }
-    }
-
-    private void grabEssentials() {
+    @Override
+    public void onEnable() {
+        this.enabled = true;
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("Essentials");
         if (grab != null) {
             this.essentials = ((IEssentials) grab);
@@ -56,6 +39,20 @@ public class EssentialsHook {
             this.plugin.log("You wanted Essentials support. I could not find Essentials.");
             this.essentials = null;
             this.enabled = false;
+        }
+    }
+
+    @Override
+    public void onUnvanish(Player player) {
+        if (player.hasPermission("vanish.hooks.essentials.hide")) {
+            this.setHidden(player, false);
+        }
+    }
+
+    @Override
+    public void onVanish(Player player) {
+        if (player.hasPermission("vanish.hooks.essentials.hide")) {
+            this.setHidden(player, true);
         }
     }
 

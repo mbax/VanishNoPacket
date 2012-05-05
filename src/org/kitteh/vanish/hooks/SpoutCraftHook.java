@@ -20,7 +20,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class SpoutCraftHook implements Listener {
+public class SpoutCraftHook extends Hook implements Listener {
 
     private class PlayerData {
         public String skin, cloak, title;
@@ -54,8 +54,6 @@ public class SpoutCraftHook implements Listener {
 
     private boolean enabled;
 
-    private final VanishPlugin plugin;
-
     private HashMap<String, String> cloaks;
     private HashMap<String, String> skins;
 
@@ -68,10 +66,11 @@ public class SpoutCraftHook implements Listener {
     private HashMap<String, StatusBar> bars;
 
     public SpoutCraftHook(VanishPlugin plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
-    public void onPluginDisable() {
+    @Override
+    public void onDisable() {
         if (!this.enabled) {
             return;
         }
@@ -80,53 +79,70 @@ public class SpoutCraftHook implements Listener {
                 player.getMainScreen().removeWidgets(this.plugin);
             }
         }
+        this.enabled = false;
     }
 
-    public void onPluginEnable(boolean enabled) {
-        this.enabled = enabled;
-        if (enabled) {
-            if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
-                this.enabled = false;
-                this.plugin.log("SpoutCraft not running but you wanted SpoutCraft features.");
-                return;
-            }
-            this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
-            this.boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
-            this.cloaks = new HashMap<String, String>();
-            this.skins = new HashMap<String, String>();
-            this.titles = new HashMap<String, String>();
-            this.bars = new HashMap<String, StatusBar>();
-            this.playerDataMap = new HashMap<String, PlayerData>();
-            final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
-            final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
-            config.options().copyDefaults(true);
-            final InputStream stream = this.plugin.getResource("spoutcraft.yml");
-            if (stream == null) {
-                this.plugin.log("Defaults for spoutcraft.yml not loaded");
-                this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
-                this.enabled = false;
-                return;
-            }
-            config.setDefaults(YamlConfiguration.loadConfiguration(stream));
-            try {
-                config.save(confFile);
-            } catch (final IOException e) {
-                this.plugin.getServer().getLogger().log(Level.SEVERE, "Could not save spoutcraft.yml", e);
-            }
-            for (final String skinGroup : config.getConfigurationSection("skins").getKeys(false)) {
-                this.skins.put(skinGroup, config.getString("skins." + skinGroup));
-            }
-            for (final String cloakGroup : config.getConfigurationSection("cloaks").getKeys(false)) {
-                this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
-            }
-            for (final String titleGroup : config.getConfigurationSection("titles").getKeys(false)) {
-                this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", String.valueOf(ChatColor.COLOR_CHAR)));
-            }
+    @Override
+    public void onEnable() {
+        this.enabled = true;
+        if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
+            this.enabled = false;
+            this.plugin.log("SpoutCraft not running but you wanted SpoutCraft features.");
+            return;
         }
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.boxColor = new Color(0.1f, 0.1f, 0.1f, 0.4f);
+        this.cloaks = new HashMap<String, String>();
+        this.skins = new HashMap<String, String>();
+        this.titles = new HashMap<String, String>();
+        this.bars = new HashMap<String, StatusBar>();
+        this.playerDataMap = new HashMap<String, PlayerData>();
+        final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
+        final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
+        config.options().copyDefaults(true);
+        final InputStream stream = this.plugin.getResource("spoutcraft.yml");
+        if (stream == null) {
+            this.plugin.log("Defaults for spoutcraft.yml not loaded");
+            this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
+            this.enabled = false;
+            return;
+        }
+        config.setDefaults(YamlConfiguration.loadConfiguration(stream));
+        try {
+            config.save(confFile);
+        } catch (final IOException e) {
+            this.plugin.getServer().getLogger().log(Level.SEVERE, "Could not save spoutcraft.yml", e);
+        }
+        for (final String skinGroup : config.getConfigurationSection("skins").getKeys(false)) {
+            this.skins.put(skinGroup, config.getString("skins." + skinGroup));
+        }
+        for (final String cloakGroup : config.getConfigurationSection("cloaks").getKeys(false)) {
+            this.cloaks.put(cloakGroup, config.getString("cloaks." + cloakGroup));
+        }
+        for (final String titleGroup : config.getConfigurationSection("titles").getKeys(false)) {
+            this.titles.put(titleGroup, config.getString("titles." + titleGroup).replace("%r", "\n").replace("&&", String.valueOf(ChatColor.COLOR_CHAR)));
+        }
+    }
+
+    @Override
+    public void onQuit(Player player) {
+        if (!this.enabled) {
+            return;
+        }
+        final String name = player.getName();
+        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
+            @Override
+            public void run() {
+                SpoutCraftHook.this.bars.remove(name);
+            }
+        }, 1);
     }
 
     @EventHandler
     public void onSpoutCraftEnable(SpoutCraftEnableEvent event) {
+        if (!this.enabled) {
+            return;
+        }
         final SpoutPlayer newPlayer = event.getPlayer();
         if (!VanishPerms.canSeeAll(newPlayer)) {
             return;
@@ -141,24 +157,12 @@ public class SpoutCraftHook implements Listener {
             }
         }
         if (this.plugin.getManager().isVanished(newPlayer.getName())) {
-            this.vanish(newPlayer);
+            this.onVanish(newPlayer);
         }
     }
 
-    public void playerQuit(Player player) {
-        if (!this.enabled) {
-            return;
-        }
-        final String name = player.getName();
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
-            @Override
-            public void run() {
-                SpoutCraftHook.this.bars.remove(name);
-            }
-        }, 1);
-    }
-
-    public void unvanish(Player revealing) {
+    @Override
+    public void onUnvanish(Player revealing) {
         if (!this.enabled) {
             return;
         }
@@ -173,7 +177,8 @@ public class SpoutCraftHook implements Listener {
         }
     }
 
-    public void vanish(Player vanishing) {
+    @Override
+    public void onVanish(Player vanishing) {
         if (!this.enabled) {
             return;
         }
