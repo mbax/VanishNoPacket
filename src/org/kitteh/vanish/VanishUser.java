@@ -1,4 +1,4 @@
-package org.kitteh.vanish.users;
+package org.kitteh.vanish;
 
 import org.bukkit.entity.Player;
 
