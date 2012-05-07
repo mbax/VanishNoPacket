@@ -322,7 +322,7 @@ public class VanishManager {
         final int x = location.getBlockX();
         final double y = location.getBlockY();
         final int z = location.getBlockZ();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < Settings.getLightningCount(); i++) {
             double xToStrike;
             double zToStrike;
             if (this.random.nextBoolean()) {

@@ -17,6 +17,7 @@ public class Settings {
     private static String fakeJoin;
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
+    private static int lightningEffectCount;
 
     /**
      * Tracking the config. Don't touch this.
@@ -78,6 +79,10 @@ public class Settings {
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
+        Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
+        if (Settings.lightningEffectCount < 1) {
+            Settings.lightningEffectCount = 1;
+        }
         if (config.getBoolean("debug", false)) {
             Debuggle.itsGoTime();
         } else {
@@ -99,6 +104,10 @@ public class Settings {
 
     public static String getFakeQuit() {
         return Settings.fakeQuit;
+    }
+
+    public static int getLightningCount() {
+        return Settings.lightningEffectCount;
     }
 
     public static boolean getWorldChangeCheck() {
