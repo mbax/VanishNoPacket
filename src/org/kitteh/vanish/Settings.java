@@ -22,7 +22,7 @@ public class Settings {
     /**
      * Tracking the config. Don't touch this.
      */
-    private static final int confVersion = 3;
+    private static final int confVersion = 4;
 
     public static void deployDefaultConfig(String name) {
         try {
@@ -70,6 +70,9 @@ public class Settings {
                 final boolean updates = config.getBoolean("updates.check", true);
                 config.set("updates.check", null);
                 config.set("checkupdates", updates);
+            }
+            if ((ver <= 3)) {
+                config.set("effects.lightning.count", 30);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
