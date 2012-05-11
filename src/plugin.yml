@@ -158,7 +158,7 @@ permissions:
   vanish.effects.explode:
     default: false
     description: Creates explosion effect when vanishing and re-appearing
-  vanish.effects.lightning
+  vanish.effects.lightning:
     default: false
     description: Creates a lightning barrage around a player when vanishing and re-appearing
   vanish.effects.toggle.smoke:

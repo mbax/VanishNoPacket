@@ -4,7 +4,7 @@
   <groupId>org.kitteh</groupId>
   <artifactId>VanishNoPacket</artifactId>
   <packaging>jar</packaging>
-  <version>3.9-SNAPSHOT</version>
+  <version>3.9</version>
   <name>VanishNoPacket</name>
   <url>http://github.com/mbax/VanishNoPacket/</url>
   <properties>
@@ -19,10 +19,6 @@
     <repository>
       <id>spout-repo</id>
       <url>http://nexus.spout.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>dynmap-repo</id>
-      <url>http://mcft.im/nexus/content/groups/public/</url>
     </repository>
     <repository>
       <id>bPermissions-repo</id>
