@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.dynmap</groupId>
       <artifactId>dynmap</artifactId>
-      <version>0.33</version>
+      <version>[0.39,)</version>
       <type>jar</type>
     </dependency>
     <dependency>
