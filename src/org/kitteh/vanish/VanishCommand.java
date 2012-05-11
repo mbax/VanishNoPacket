@@ -44,6 +44,8 @@ public class VanishCommand implements CommandExecutor {
             if (sender instanceof Player) {
                 if (VanishPerms.canVanish((Player) sender)) {
                     this.plugin.getManager().toggleVanish((Player) sender);
+                } else {
+                    this.denied(sender);
                 }
             }
             return true;
@@ -135,9 +137,7 @@ public class VanishCommand implements CommandExecutor {
                 } else {
                     toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
                 }
-                if (toggleReply.length() > 0) {
-                    player.sendMessage(toggleReply.toString());
-                }
+                player.sendMessage(toggleReply.toString());
             } else {
                 // I wish to toggle something
                 this.toggle(player, args[1]);
@@ -163,9 +163,7 @@ public class VanishCommand implements CommandExecutor {
                 } else {
                     toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle any effects");
                 }
-                if (toggleReply.length() > 0) {
-                    player.sendMessage(toggleReply.toString());
-                }
+                player.sendMessage(toggleReply.toString());
             } else {
                 // I wish to toggle something
                 this.toggle(player, args[1]);
