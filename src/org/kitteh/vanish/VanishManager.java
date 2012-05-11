@@ -93,10 +93,10 @@ public class VanishManager {
     }
 
     public void playerJoin(Player player) {
-        boolean vanished = this.isVanished(player);
-        boolean canseeall = VanishPerms.canSeeAll(player);
-        for (Player plr : this.getPlugin().getServer().getOnlinePlayers()) {
-            if (plr != null && !plr.equals(player)) {
+        final boolean vanished = this.isVanished(player);
+        final boolean canseeall = VanishPerms.canSeeAll(player);
+        for (final Player plr : this.getPlugin().getServer().getOnlinePlayers()) {
+            if ((plr != null) && !plr.equals(player)) {
                 if (!this.isVanished(plr) || canseeall) {
                     player.showPlayer(plr);
                 } else {

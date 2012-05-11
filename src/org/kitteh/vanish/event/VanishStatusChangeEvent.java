@@ -12,7 +12,7 @@ public class VanishStatusChangeEvent extends Event {
 
     private final String name;
     private final boolean vanishing;
-    private Player player;
+    private final Player player;
 
     private static final HandlerList handlers = new HandlerList();
 

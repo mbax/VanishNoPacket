@@ -65,7 +65,7 @@ public class VanishPlugin extends JavaPlugin {
     private boolean versionDiff = false;
 
     private final VanishManager manager = new VanishManager(this);
-    
+
     private HookManager hookManager;
 
     /**
@@ -114,10 +114,10 @@ public class VanishPlugin extends JavaPlugin {
         return this.getDescription().getVersion();
     }
 
-    public HookManager getHookManager(){
+    public HookManager getHookManager() {
         return this.hookManager;
     }
-    
+
     /**
      * Will show this version, if update checks are disabled
      * 
@@ -237,21 +237,21 @@ public class VanishPlugin extends JavaPlugin {
         Settings.freshStart(this);
         MetricsOverlord.init(this);
 
-        this.hookManager=new HookManager(this);
-        if(this.getConfig().getBoolean("hooks.essentials", false)){
-            hookManager.getHook(HookType.Essentials).onEnable();
+        this.hookManager = new HookManager(this);
+        if (this.getConfig().getBoolean("hooks.essentials", false)) {
+            this.hookManager.getHook(HookType.Essentials).onEnable();
         }
-        hookManager.getHook(HookType.GeoIPTools).onEnable();
-        if(this.getConfig().getBoolean("hooks.dynmap", false)){
-            hookManager.getHook(HookType.Dynmap).onEnable();
+        this.hookManager.getHook(HookType.GeoIPTools).onEnable();
+        if (this.getConfig().getBoolean("hooks.dynmap", false)) {
+            this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
 
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
             public void run() {
-                if(VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)){
-                    hookManager.getHook(HookType.JSONAPI).onEnable();
+                if (VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)) {
+                    VanishPlugin.this.hookManager.getHook(HookType.JSONAPI).onEnable();
                 }
                 for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
                     if ((player != null) && VanishPerms.canVanish(player)) {
@@ -261,8 +261,8 @@ public class VanishPlugin extends JavaPlugin {
             }
         }, 1);
 
-        if(this.getConfig().getBoolean("hooks.spoutcraft", false)){
-            hookManager.getHook(HookType.SpoutCraft).onEnable();
+        if (this.getConfig().getBoolean("hooks.spoutcraft", false)) {
+            this.hookManager.getHook(HookType.SpoutCraft).onEnable();
         }
 
         this.manager.startup();
