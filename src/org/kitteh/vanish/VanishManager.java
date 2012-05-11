@@ -260,14 +260,16 @@ public class VanishManager {
             MetricsOverlord.unvanish.increment();
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
-        if (VanishPerms.canSmoke(vanishingPlayer) && effects) {
-            this.smokeScreenEffect(vanishingPlayer.getLocation());
-        }
-        if (VanishPerms.canExplode(vanishingPlayer) && effects) {
-            this.explosionEffect(vanishingPlayer);
-        }
-        if (VanishPerms.canLightning(vanishingPlayer) && effects) {
-            this.lightningBarrage(vanishingPlayer.getLocation());
+        if (effects) {
+            if (VanishPerms.canSmoke(vanishingPlayer)) {
+                this.smokeScreenEffect(vanishingPlayer.getLocation());
+            }
+            if (VanishPerms.canExplode(vanishingPlayer)) {
+                this.explosionEffect(vanishingPlayer);
+            }
+            if (VanishPerms.canLightning(vanishingPlayer)) {
+                this.lightningBarrage(vanishingPlayer.getLocation());
+            }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
