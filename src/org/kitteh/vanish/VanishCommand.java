@@ -175,6 +175,7 @@ public class VanishCommand implements CommandExecutor {
 
         if (!VanishPerms.canVanish(player)) {
             this.denied(sender);
+            return true;
         }
 
         // The non-toggles
