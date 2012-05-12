@@ -24,4 +24,4 @@ effects:
 permtest: false
 debug: false
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 3
+    SeriouslyThisWillEraseYourConfig: 4
