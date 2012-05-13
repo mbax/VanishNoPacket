@@ -213,6 +213,13 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
+            if (player != null) {
+                if (manager.isVanished(player)){
+                    player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
+                }
+            }
+        }
         VanishNoPacket.setInstance(null);
         this.hookManager.onDisable();
         this.manager.onPluginDisable();
@@ -252,11 +259,6 @@ public class VanishPlugin extends JavaPlugin {
             public void run() {
                 if (VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)) {
                     VanishPlugin.this.hookManager.getHook(HookType.JSONAPI).onEnable();
-                }
-                for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
-                    if ((player != null) && VanishPerms.canVanish(player)) {
-                        player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
-                    }
                 }
             }
         }, 1);
