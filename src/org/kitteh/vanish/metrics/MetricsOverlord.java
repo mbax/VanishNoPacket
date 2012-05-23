@@ -26,17 +26,17 @@ public class MetricsOverlord {
         MetricsOverlord.quitinvis = new Tracker("Silent Quit");
         MetricsOverlord.joininvis = new Tracker("Silent Join");
         try {
-            MetricsOverlord.metrics = new Metrics();
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.command);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.vanish);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.unvanish);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.toggle);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.startup);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.fakejoin);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.fakequit);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.quitinvis);
-            MetricsOverlord.metrics.addCustomData(plugin, MetricsOverlord.joininvis);
-            MetricsOverlord.metrics.beginMeasuringPlugin(plugin);
+            MetricsOverlord.metrics = new Metrics(plugin);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.command);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.vanish);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.unvanish);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.toggle);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.startup);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.fakejoin);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.fakequit);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.quitinvis);
+            MetricsOverlord.metrics.addCustomData(MetricsOverlord.joininvis);
+            MetricsOverlord.metrics.start();
         } catch (final Exception e) {
         }
     }
