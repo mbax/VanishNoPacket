@@ -45,17 +45,25 @@ public class ListenPlayerJoin implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
+        StringBuilder statusUpdate = new StringBuilder();
         if (VanishPerms.joinVanished(event.getPlayer())) {
             String add = "";
             if (VanishPerms.canVanish(event.getPlayer())) {
                 add = " To appear: /vanish";
             }
             event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined vanished." + add);
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined vanished");
+            statusUpdate.append("vanished");
         }
         if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
             this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
             event.setJoinMessage(null);
+            if (statusUpdate.length() != 0) {
+                statusUpdate.append(" and ");
+            }
+            statusUpdate.append("silently");
+        }
+        if (statusUpdate.length() != 0) {
+            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
         }
         if (VanishPerms.canReceiveAdminAlerts(event.getPlayer()) && this.plugin.versionDifference()) {
             event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] This is version " + ChatColor.DARK_AQUA + this.plugin.getCurrentVersion() + ChatColor.AQUA + ", latest is " + ChatColor.DARK_AQUA + this.plugin.getLatestKnownVersion());
