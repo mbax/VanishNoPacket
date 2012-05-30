@@ -115,6 +115,6 @@ public class VanishAnnounceManipulator {
     private String injectPlayerInformation(String message, Player player) {
         final GeoIPToolsHook geoip = (GeoIPToolsHook) this.plugin.getHookManager().getHook(HookType.GeoIPTools);
         final BPermissionsHook bperms = (BPermissionsHook) this.plugin.getHookManager().getHook(HookType.BPermissions);
-        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", bperms.getPrefix(player)).replace("%us", bperms.getSuffix(player).replace("%city", geoip.getCity(player)).replace("%country", geoip.getCountry(player)));
+        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", bperms.getPrefix(player)).replace("%us", bperms.getSuffix(player)).replace("%city", geoip.getCity(player)).replace("%country", geoip.getCountry(player));
     }
 }

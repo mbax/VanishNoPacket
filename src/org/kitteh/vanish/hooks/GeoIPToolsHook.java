@@ -9,19 +9,17 @@ import uk.org.whoami.geoip.GeoIPTools;
 
 public class GeoIPToolsHook extends Hook {
 
-    private GeoIPLookup city;
-    private GeoIPLookup country;
+    private GeoIPLookup geoip;
 
     public GeoIPToolsHook(VanishPlugin plugin) {
         super(plugin);
-        this.city = null;
-        this.country = null;
+        this.geoip = null;
     }
 
     public String getCity(Player player) {
-        if (this.city != null) {
+        if (this.geoip != null) {
             try {
-                return this.city.getLocation(player.getAddress().getAddress()).city;
+                return this.geoip.getLocation(player.getAddress().getAddress()).city;
             } catch (final Exception e) {
                 return "";
             }
@@ -31,9 +29,9 @@ public class GeoIPToolsHook extends Hook {
     }
 
     public String getCountry(Player player) {
-        if (this.country != null) {
+        if (this.geoip != null) {
             try {
-                return this.country.getCountry(player.getAddress().getAddress()).getName();
+                return this.geoip.getCountry(player.getAddress().getAddress()).getName();
             } catch (final Exception e) {
                 return "";
             }
@@ -44,8 +42,7 @@ public class GeoIPToolsHook extends Hook {
 
     @Override
     public void onDisable() {
-        this.city = null;
-        this.country = null;
+        this.geoip = null;
     }
 
     @Override
@@ -53,8 +50,7 @@ public class GeoIPToolsHook extends Hook {
         final Plugin plugin = this.plugin.getServer().getPluginManager().getPlugin("GeoIPTools");
         if (plugin != null) {
             final GeoIPTools geoip = (GeoIPTools) plugin;
-            this.city = geoip.getGeoIPLookup(GeoIPLookup.CITYDATABASE);
-            this.country = geoip.getGeoIPLookup(GeoIPLookup.COUNTRYDATABASE);
+            this.geoip = geoip.getGeoIPLookup();
         }
     }
 
