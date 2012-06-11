@@ -14,6 +14,7 @@ import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.metrics.MetricsOverlord;
+import org.kitteh.vanish.sneak.SneakMonitor;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 public class VanishPlugin extends JavaPlugin {
@@ -298,6 +299,8 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
 
+        new SneakMonitor(this);
+        
         this.log("v" + this.getDescription().getVersion() + " loaded.");
     }
 
