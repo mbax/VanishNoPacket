@@ -49,7 +49,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
+//import java.util.logging.Level;
 
 /**
  * <p>
@@ -246,7 +246,7 @@ public class Metrics {
                         // Each post thereafter will be a ping
                         this.firstPost = false;
                     } catch (final IOException e) {
-                        Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
+                        //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
                     }
                 }
             }, 0, Metrics.PING_INTERVAL * 1200);
@@ -266,10 +266,10 @@ public class Metrics {
                 // Reload the metrics file
                 this.configuration.load(Metrics.CONFIG_FILE);
             } catch (final IOException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
                 return true;
             } catch (final InvalidConfigurationException ex) {
-                Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
                 return true;
             }
             return this.configuration.getBoolean("opt-out", false);
