@@ -1,6 +1,9 @@
 package org.kitteh.vanish.hooks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
@@ -26,18 +29,47 @@ public class HookManager {
         }
     }
 
-    private final HashMap<HookType, Hook> hooks;
+    private final HashMap<String, Hook> hooks;
 
     public HookManager(VanishPlugin plugin) {
-        this.hooks = new HashMap<HookType, Hook>();
+        this.hooks = new HashMap<String, Hook>();
         for (final HookType hook : HookType.values()) {
-            try {
-                this.hooks.put(hook, hook.get().getConstructor(VanishPlugin.class).newInstance(plugin));
-            } catch (final Exception e) {
-                Debuggle.log("Failed to hook " + hook);
-                e.printStackTrace();
-            }
+            registerHook(hook, plugin);
         }
+    }
+
+    public void registerHook(String name, Hook hook){
+    	this.hooks.put(name, hook);
+    }
+    
+    public Hook deregisterHook(String name){
+    	Hook ret = this.hooks.get(name);
+    	this.hooks.remove(name);
+    	return ret;
+    }
+    
+    public List<String> deregisterHook(Hook hook){
+    	List<String> ret = new ArrayList<String>();
+    	for(Map.Entry<String, Hook> i : hooks.entrySet()){
+    		if(i.getValue().equals(hook)){
+    			deregisterHook(i.getKey());
+    			ret.add(i.getKey());
+    		}
+    	}
+    	return ret;
+    }
+
+    public void registerHook(String name, Class<? extends Hook> hookClazz, VanishPlugin plugin){
+    	try {
+            registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(plugin));
+        } catch (final Exception e) {
+            Debuggle.log("Failed to hook " + name);
+            e.printStackTrace();
+        }
+    }
+
+    public void registerHook(HookType hook, VanishPlugin plugin){
+    	registerHook(hook.name(), hook.get(), plugin);
     }
 
     public Hook getHook(HookType hooktype) {
