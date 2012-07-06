@@ -233,7 +233,7 @@ public class VanishPlugin extends JavaPlugin {
 
         VanishNoPacket.setInstance(this);
 
-        final File check = new File("plugins/VanishNoPacket/config.yml");
+        final File check = new File(getDataFolder(), "config.yml");
         boolean firstTimeStarting = false;
         if (!check.exists()) {
             firstTimeStarting = true;
