@@ -45,7 +45,7 @@ public class ListenPlayerJoin implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
-        StringBuilder statusUpdate = new StringBuilder();
+        final StringBuilder statusUpdate = new StringBuilder();
         if (VanishPerms.joinVanished(event.getPlayer())) {
             String add = "";
             if (VanishPerms.canVanish(event.getPlayer())) {

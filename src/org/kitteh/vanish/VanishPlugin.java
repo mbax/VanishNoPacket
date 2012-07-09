@@ -215,7 +215,7 @@ public class VanishPlugin extends JavaPlugin {
     public void onDisable() {
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
-                if (manager.isVanished(player)){
+                if (this.manager.isVanished(player)) {
                     player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
                 }
             }
