@@ -30,50 +30,67 @@ public class HookManager {
     }
 
     private final HashMap<String, Hook> hooks;
+    private final VanishPlugin plugin;
 
     public HookManager(VanishPlugin plugin) {
         this.hooks = new HashMap<String, Hook>();
+        this.plugin = plugin;
         for (final HookType hook : HookType.values()) {
-            registerHook(hook, plugin);
+            this.registerHook(hook);
         }
     }
 
-    public void registerHook(String name, Hook hook){
-    	this.hooks.put(name, hook);
-    }
-    
-    public Hook deregisterHook(String name){
-    	Hook ret = this.hooks.get(name);
-    	this.hooks.remove(name);
-    	return ret;
-    }
-    
-    public List<String> deregisterHook(Hook hook){
-    	List<String> ret = new ArrayList<String>();
-    	for(Map.Entry<String, Hook> i : hooks.entrySet()){
-    		if(i.getValue().equals(hook)){
-    			deregisterHook(i.getKey());
-    			ret.add(i.getKey());
-    		}
-    	}
-    	return ret;
-    }
-
-    public void registerHook(String name, Class<? extends Hook> hookClazz, VanishPlugin plugin){
-    	try {
-            registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(plugin));
-        } catch (final Exception e) {
-            Debuggle.log("Failed to add hook " + name);
-            e.printStackTrace();
+    /**
+     * Deregister a hook by object
+     * 
+     * @param hook
+     *            Hook object to deregister
+     * @return a list of deregistered hook names. Empty list if nothing deregistered.
+     */
+    public List<String> deregisterHook(Hook hook) {
+        final List<String> ret = new ArrayList<String>();
+        for (final Map.Entry<String, Hook> i : this.hooks.entrySet()) {
+            if (i.getValue().equals(hook)) {
+                this.deregisterHook(i.getKey());
+                ret.add(i.getKey());
+            }
         }
+        return ret;
     }
 
-    public void registerHook(HookType hook, VanishPlugin plugin){
-    	registerHook(hook.name(), hook.get(), plugin);
+    /**
+     * Deregister a hook
+     * 
+     * @param name
+     *            Hook name to deregister
+     * @return the deregistered hook or null if no hook by the given name was registered
+     */
+    public Hook deregisterHook(String name) {
+        final Hook ret = this.hooks.get(name);
+        this.hooks.remove(name);
+        return ret;
     }
 
+    /**
+     * Get a registered hook by HookType
+     * 
+     * @param hooktype
+     *            desired hook type
+     * @return the named Hook if registered, null if no match.
+     */
     public Hook getHook(HookType hooktype) {
         return this.hooks.get(hooktype);
+    }
+
+    /**
+     * Get a named, registered Hook
+     * 
+     * @param name
+     *            Hook name
+     * @return the named Hook if registered, null if no match.
+     */
+    public Hook getHook(String name) {
+        return this.hooks.get(name);
     }
 
     public void onDisable() {
@@ -104,5 +121,39 @@ public class HookManager {
         for (final Hook hook : this.hooks.values()) {
             hook.onVanish(player);
         }
+    }
+
+    /**
+     * Register and initialize a hook
+     * 
+     * @param name
+     *            Name to register
+     * @param hookClazz
+     *            Hook class to register
+     * @param plugin
+     */
+    public void registerHook(String name, Class<? extends Hook> hookClazz) {
+        try {
+            this.registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(this.plugin));
+        } catch (final Exception e) {
+            Debuggle.log("Failed to add hook " + name);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Register an initialized hook object.
+     * 
+     * @param name
+     *            Name of the hook
+     * @param hook
+     *            Hook object
+     */
+    public void registerHook(String name, Hook hook) {
+        this.hooks.put(name, hook);
+    }
+
+    private void registerHook(HookType hook) {
+        this.registerHook(hook.name(), hook.get());
     }
 }
