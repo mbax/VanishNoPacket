@@ -63,7 +63,7 @@ public class HookManager {
     	try {
             registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(plugin));
         } catch (final Exception e) {
-            Debuggle.log("Failed to hook " + name);
+            Debuggle.log("Failed to add hook " + name);
             e.printStackTrace();
         }
     }
