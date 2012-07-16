@@ -17,7 +17,7 @@ public class ListenToYourHeart implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void badReview(PaintingBreakEvent criticism) {
         if (criticism instanceof PaintingBreakByEntityEvent) {
             final Entity critic = ((PaintingBreakByEntityEvent) criticism).getRemover();
