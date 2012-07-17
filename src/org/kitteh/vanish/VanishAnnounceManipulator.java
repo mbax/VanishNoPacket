@@ -98,21 +98,6 @@ public class VanishAnnounceManipulator {
         this.dropDelayedAnnounce(player.getName());
     }
 
-	/**
-	 * Called by VanishManager to check if player has faked offline
-	 *
-	 * @param player
-	 *
-	 * @return boolean if player has faked offline 
-	 */
-	public boolean isMarkedOffline(Player player) {
-		if(this.playerOnlineStatus.get(player) != null ){
-			return this.playerOnlineStatus.containsKey(player);
-		} else {
-			return false;
-		}
-	}
-	
     /**
      * Called when a player quits
      * 
