@@ -77,15 +77,6 @@ public class VanishManager {
         Debuggle.log("Testing vanished status of " + playerName + ": null");
         return false;
     }
-	
-	/**
-	 *@param playerName
-	 *@Returns true if player has fake quit, false if they have not
-	 */
-	public boolean isFakedQuit(String playerName) {
-		final Player player = this.plugin.getServer().getPlayer(playerName);
-		return this.announeManipulator.isMarkedOffline(player);
-	}
 
     /**
      * @return the number of players currently vanished
