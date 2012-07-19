@@ -79,7 +79,7 @@ public class HookManager {
      * @return the named Hook if registered, null if no match.
      */
     public Hook getHook(HookType hooktype) {
-        return this.hooks.get(hooktype);
+        return this.hooks.get(hooktype.name());
     }
 
     /**
