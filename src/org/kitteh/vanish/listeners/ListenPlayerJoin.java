@@ -10,7 +10,6 @@ import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.kitteh.vanish.VanishCheck;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.injector.ArrayLizt;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public class ListenPlayerJoin implements Listener {
@@ -73,13 +72,4 @@ public class ListenPlayerJoin implements Listener {
         this.plugin.getManager().playerJoin(event.getPlayer());
     }
 
-    /**
-     * Handle any evil reflection here
-     * 
-     * @param event
-     */
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoinMonitor(PlayerJoinEvent event) {
-        ArrayLizt.inject(event.getPlayer());
-    }
 }

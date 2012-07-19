@@ -75,6 +75,12 @@
       <!-- <type>jar</type> -->
       <!-- JSONAPI MAKES NO SENSE -->
     </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
+      <artifactId>tagapi</artifactId>
+      <version>LATEST</version>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 
   <distributionManagement>
