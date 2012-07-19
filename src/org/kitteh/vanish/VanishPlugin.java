@@ -243,7 +243,7 @@ public class VanishPlugin extends JavaPlugin {
         Settings.freshStart(this);
         MetricsOverlord.init(this);
 
-        if (this.getConfig().getBoolean("colornametags", true)) {
+        if (this.getConfig().getBoolean("colornametags", true) && this.getServer().getPluginManager().isPluginEnabled("TagAPI")) {
             this.getServer().getPluginManager().registerEvents(new TagAPIListener(this), this);
         }
 
