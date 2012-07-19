@@ -78,7 +78,7 @@
     <dependency>
       <groupId>org.kitteh</groupId>
       <artifactId>tagapi</artifactId>
-      <version>LATEST</version>
+      <version>latest</version>
       <type>jar</type>
     </dependency>
   </dependencies>
