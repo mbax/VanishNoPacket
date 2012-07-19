@@ -67,13 +67,11 @@
       <version>[0.4,)</version>
       <type>jar</type>
     </dependency>
- <!-- JSONAPI seems to have no repo so you have to locally install this -->
     <dependency>
       <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
       <artifactId>JSONAPI</artifactId>
       <version>bleeding</version>
-      <!-- <type>jar</type> -->
-      <!-- JSONAPI MAKES NO SENSE -->
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
