@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.hooks.HookManager.HookType;
+import org.kitteh.vanish.injector.ArrayLizt;
 import org.kitteh.vanish.listeners.*;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
@@ -218,8 +219,10 @@ public class VanishPlugin extends JavaPlugin {
                 if (this.manager.isVanished(player)) {
                     player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
                 }
+                ArrayLizt.outject(player);
             }
         }
+        ArrayLizt.disable();
         VanishNoPacket.setInstance(null);
         this.hookManager.onDisable();
         this.manager.onPluginDisable();
@@ -230,10 +233,13 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         VanishNoPacket.setInstance(this);
 
-        final File check = new File(getDataFolder(), "config.yml");
+        for (final Player player : this.getServer().getOnlinePlayers()) {
+            ArrayLizt.inject(player);
+        }
+
+        final File check = new File(this.getDataFolder(), "config.yml");
         boolean firstTimeStarting = false;
         if (!check.exists()) {
             firstTimeStarting = true;
@@ -243,6 +249,10 @@ public class VanishPlugin extends JavaPlugin {
 
         Settings.freshStart(this);
         MetricsOverlord.init(this);
+
+        if (this.getConfig().getBoolean("colornametags", true)) {
+            ArrayLizt.enable();
+        }
 
         this.hookManager = new HookManager(this);
         if (this.getConfig().getBoolean("hooks.essentials", false)) {

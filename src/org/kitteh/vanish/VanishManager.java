@@ -351,9 +351,10 @@ public class VanishManager {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
                 if ((player != null) && (player2 != null) && !player.equals(player2)) {
-                    if (!player.canSee(player2)) {
-                        player.showPlayer(player2);
+                    if (this.isVanished(player2) && player.canSee(player2)) {
+                        player.hidePlayer(player2);
                     }
+                    player.showPlayer(player2);
                 }
             }
         }

@@ -21,7 +21,9 @@ permissionsupdates:
 effects:
     lightning:
         count: 30
+colornametags: true
+
 permtest: false
 debug: false
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 4
+    SeriouslyThisWillEraseYourConfig: 5

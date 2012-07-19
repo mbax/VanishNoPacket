@@ -84,6 +84,24 @@ public class VanishAnnounceManipulator {
     }
 
     /**
+     * @param player
+     * 
+     * @return true if player is considered online, false if not (or if not on server)
+     */
+    public boolean getFakeOnlineStatus(String playerName) {
+        final Player player = this.plugin.getServer().getPlayerExact(playerName);
+        if (player == null) {
+            return false;
+        }
+        playerName = player.getName();
+        if (this.playerOnlineStatus.containsKey(playerName)) {
+            return this.playerOnlineStatus.get(playerName);
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Called when a player's vanish status has been toggled
      * If the player has a queued up join announce from a silentjoin,
      * it will fire at this time.
@@ -98,23 +116,6 @@ public class VanishAnnounceManipulator {
         this.dropDelayedAnnounce(player.getName());
     }
 
-	/**
-	 * @param player
-	 *
-	 * @return true if player is considered online, false if not (or if not on server)
-	 */
-	public boolean getFakeOnlineStatus(String playerName) {
-        final Player player = this.plugin.getServer().getPlayerExact(playerName);
-		if(player == null) {
-		    return false;
-		}
-		playerName = player.getName();
-	    if(this.playerOnlineStatus.containsKey(playerName)){
-			return this.playerOnlineStatus.get(playerName);
-		} else {
-			return false;
-		}
-	}
     /**
      * Called when a player quits
      * 

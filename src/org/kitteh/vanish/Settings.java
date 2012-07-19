@@ -22,7 +22,7 @@ public class Settings {
     /**
      * Tracking the config. Don't touch this.
      */
-    private static final int confVersion = 4;
+    private static final int confVersion = 5;
 
     public static void deployDefaultConfig(String name) {
         try {
@@ -73,6 +73,9 @@ public class Settings {
             }
             if ((ver <= 3)) {
                 config.set("effects.lightning.count", 30);
+            }
+            if ((ver <= 4)) {
+                config.set("colornametags", true);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
