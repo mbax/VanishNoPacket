@@ -4,7 +4,7 @@
   <groupId>org.kitteh</groupId>
   <artifactId>VanishNoPacket</artifactId>
   <packaging>jar</packaging>
-  <version>3.11</version>
+  <version>3.11.1-SNAPSHOT</version>
   <name>VanishNoPacket</name>
   <url>http://github.com/mbax/VanishNoPacket/</url>
   <properties>
