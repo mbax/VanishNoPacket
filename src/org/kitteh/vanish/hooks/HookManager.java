@@ -12,6 +12,7 @@ import org.kitteh.vanish.VanishPlugin;
 public class HookManager {
     public enum HookType {
         BPermissions(BPermissionsHook.class), // bperms!
+        DisguiseCraft(DisguiseCraftHook.class), // disguisecraft!
         Dynmap(DynmapHook.class), // dynmap!
         Essentials(EssentialsHook.class), // essentials! 
         GeoIPTools(GeoIPToolsHook.class), // geoiptools!
