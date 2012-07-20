@@ -249,8 +249,16 @@ public class VanishPlugin extends JavaPlugin {
         Settings.freshStart(this);
         MetricsOverlord.init(this);
 
-        if (this.getConfig().getBoolean("colornametags", true) && this.getServer().getPluginManager().isPluginEnabled("TagAPI")) {
-            this.getServer().getPluginManager().registerEvents(new TagAPIListener(this), this);
+        if (this.getConfig().getBoolean("colornametags", true)) {
+            if(this.getServer().getPluginManager().isPluginEnabled("TagAPI")){
+                this.getServer().getPluginManager().registerEvents(new TagAPIListener(this), this);
+                this.getLogger().info("Using color changing features of TagAPI.");
+            } else {
+                this.getLogger().info("Colored nametags enabled, but I couldn't find TagAPI");
+                this.getLogger().info("For awesome colored nametags on vanish, visit");
+                this.getLogger().info("http://dev.bukkit.org/server-mods/tag/ ");
+                this.getLogger().info("and download TagAPI.jar");
+            }
         }
 
         this.hookManager = new HookManager(this);
