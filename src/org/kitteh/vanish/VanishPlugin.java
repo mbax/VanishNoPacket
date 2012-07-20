@@ -7,7 +7,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashSet;
 
+import net.minecraft.server.MobEffect;
+import net.minecraft.server.MobEffectList;
+import net.minecraft.server.Packet42RemoveMobEffect;
+
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.hooks.*;
@@ -216,6 +221,7 @@ public class VanishPlugin extends JavaPlugin {
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
                 if (this.manager.isVanished(player)) {
+                    ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(((CraftPlayer) player).getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
                     player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
                 }
             }
