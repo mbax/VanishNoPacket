@@ -289,7 +289,7 @@ public class VanishPlugin extends JavaPlugin {
         this.manager.startup();
         
         for (Player player : this.getServer().getOnlinePlayers()) {
-            player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(this.getManager(), player.getName())));
+            player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(player.getName())));
         }
 
         boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);

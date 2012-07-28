@@ -28,7 +28,7 @@ public class ListenPlayerJoin implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoinEarly(PlayerJoinEvent event) {
-        event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(this.plugin.getManager(), event.getPlayer().getName())));
+        event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(event.getPlayer().getName())));
         this.plugin.getManager().resetSeeing(event.getPlayer());
         if (VanishPerms.joinVanished(event.getPlayer())) {
             MetricsOverlord.joininvis.increment();
