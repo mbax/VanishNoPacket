@@ -14,6 +14,8 @@ import net.minecraft.server.Packet42RemoveMobEffect;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.LazyMetadataValue;
+import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.hooks.HookManager.HookType;
@@ -285,6 +287,10 @@ public class VanishPlugin extends JavaPlugin {
         }
 
         this.manager.startup();
+        
+        for (Player player : this.getServer().getOnlinePlayers()) {
+            player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(this.getManager(), player.getName())));
+        }
 
         boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);
         if (firstTimeStarting) {
