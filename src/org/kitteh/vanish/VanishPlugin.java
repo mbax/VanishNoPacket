@@ -223,6 +223,7 @@ public class VanishPlugin extends JavaPlugin {
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
                 if (this.manager.isVanished(player)) {
+                    player.removeMetadata("vanished", this);
                     ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(((CraftPlayer) player).getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
                     player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
                 }
