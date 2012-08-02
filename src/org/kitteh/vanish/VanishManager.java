@@ -300,7 +300,7 @@ public class VanishManager {
 
     private void explosionEffect(Player player) {
         final Location loc = player.getLocation();
-        final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 10, new HashSet<Block>());
+        final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3, new ArrayList<Block>(), null);
         for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
             if (plr.getLocation().getWorld().equals(loc.getWorld())) {
                 if (plr.getLocation().distance(loc) < 256) {
