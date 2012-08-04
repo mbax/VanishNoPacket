@@ -1,7 +1,6 @@
 package org.kitteh.vanish;
 
 import java.util.*;
-
 import net.minecraft.server.Block;
 import net.minecraft.server.MobEffect;
 import net.minecraft.server.MobEffectList;
@@ -176,7 +175,7 @@ public class VanishManager {
      */
     public void startup() {
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
-        this.vanishedPlayerNames = new HashSet<String>();
+        this.vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
         this.sleepIgnored = new HashMap<String, Boolean>();
     }
 
