@@ -71,7 +71,7 @@ public class VanishPlugin extends JavaPlugin {
 
     private boolean versionDiff = false;
 
-    private final VanishManager manager = new VanishManager(this);
+    private VanishManager manager;
 
     private HookManager hookManager;
 
@@ -286,7 +286,7 @@ public class VanishPlugin extends JavaPlugin {
             this.hookManager.getHook(HookType.SpoutCraft).onEnable();
         }
 
-        this.manager.startup();
+        this.manager = new VanishManager(this);
         
         for (Player player : this.getServer().getOnlinePlayers()) {
             player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(player.getName())));

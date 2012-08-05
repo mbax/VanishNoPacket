@@ -26,17 +26,68 @@ import org.kitteh.vanish.metrics.MetricsOverlord;
  */
 public class VanishManager {
 
+    private class ShowPlayerEntry {
+        private final Player player;
+        private final Player target;
+
+        public ShowPlayerEntry(Player player, Player target) {
+            this.player = player;
+            this.target = target;
+        }
+
+        public Player getPlayer() {
+            return this.player;
+        }
+
+        public Player getTarget() {
+            return this.target;
+        }
+    }
+
+    private class ShowPlayerHandler implements Runnable {
+
+        HashSet<ShowPlayerEntry> entries = new HashSet<ShowPlayerEntry>();
+        HashSet<ShowPlayerEntry> next = new HashSet<ShowPlayerEntry>();
+
+        public void add(ShowPlayerEntry player) {
+            this.entries.add(player);
+        }
+
+        @Override
+        public void run() {
+            for (final ShowPlayerEntry entry : this.next) {
+                final Player player = entry.getPlayer();
+                final Player target = entry.getTarget();
+                if ((player != null) && player.isOnline() && (target != null) && target.isOnline()) {
+                    player.showPlayer(target);
+                }
+            }
+            this.next.clear();
+            this.next.addAll(this.entries);
+            this.entries.clear();
+        }
+
+    }
+
     private final VanishPlugin plugin;
 
-    private Set<String> vanishedPlayerNames;
-    private Map<String, Boolean> sleepIgnored;
+    private final Set<String> vanishedPlayerNames;
 
-    private VanishAnnounceManipulator announceManipulator;
+    private final Map<String, Boolean> sleepIgnored;
+
+    private final VanishAnnounceManipulator announceManipulator;
 
     private final Random random = new Random();
 
+    private final ShowPlayerHandler showPlayer;
+
     public VanishManager(VanishPlugin plugin) {
         this.plugin = plugin;
+        this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
+        this.vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
+        this.sleepIgnored = new HashMap<String, Boolean>();
+        this.showPlayer = new ShowPlayerHandler();
+        this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, this.showPlayer, 4, 4);
     }
 
     /**
@@ -89,25 +140,6 @@ public class VanishManager {
      */
     public void onPluginDisable() {
         this.revealAll();
-    }
-
-    public void playerJoin(Player player) {
-        final boolean vanished = this.isVanished(player);
-        final boolean canseeall = VanishPerms.canSeeAll(player);
-        for (final Player plr : this.getPlugin().getServer().getOnlinePlayers()) {
-            if ((plr != null) && !plr.equals(player)) {
-                if (!this.isVanished(plr) || canseeall) {
-                    player.showPlayer(plr);
-                } else {
-                    player.hidePlayer(plr);
-                }
-                if (vanished && !VanishPerms.canSeeAll(plr)) {
-                    plr.hidePlayer(player);
-                } else {
-                    plr.showPlayer(player);
-                }
-            }
-        }
     }
 
     public void playerQuit(Player player) {
@@ -167,16 +199,6 @@ public class VanishManager {
             this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
         }
         player.setSleepingIgnored(true);
-    }
-
-    /**
-     * Smack that vanish list. Smack it hard.
-     * But really, don't call this.
-     */
-    public void startup() {
-        this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
-        this.vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
-        this.sleepIgnored = new HashMap<String, Boolean>();
     }
 
     /**
@@ -283,7 +305,7 @@ public class VanishManager {
                     }
                 } else {
                     otherPlayer.hidePlayer(vanishingPlayer);
-                    otherPlayer.showPlayer(vanishingPlayer);
+                    this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
                 }
             } else {
                 if (VanishPerms.canSeeAll(otherPlayer)) {
@@ -291,7 +313,7 @@ public class VanishManager {
                 }
                 if (!otherPlayer.canSee(vanishingPlayer)) {
                     Debuggle.log("Showing " + vanishingPlayer.getName() + " to " + otherPlayer.getName());
-                    otherPlayer.showPlayer(vanishingPlayer);
+                    this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
                 }
             }
         }
@@ -351,7 +373,7 @@ public class VanishManager {
                     if (this.isVanished(player2) && player.canSee(player2)) {
                         player.hidePlayer(player2);
                     }
-                    player.showPlayer(player2);
+                    this.showPlayer.add(new ShowPlayerEntry(player, player2));
                 }
             }
         }
@@ -360,7 +382,7 @@ public class VanishManager {
     private void showVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
             if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer)) {
-                player.showPlayer(otherPlayer);
+                this.showPlayer.add(new ShowPlayerEntry(player, otherPlayer));
             }
         }
     }
