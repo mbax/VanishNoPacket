@@ -29,12 +29,12 @@
       <url>http://repo.kitteh.org/content/groups/public</url>
     </repository>
   </repositories>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>[1.2.5-R4.0,)</version>
+      <version>[1.3.1-R0.1-SNAPSHOT,)</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -64,7 +64,7 @@
     <dependency>
       <groupId>uk.org.whoami</groupId>
       <artifactId>GeoIPTools</artifactId>
-      <version>[0.4,)</version>
+      <version>[0.7,)</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.kitteh</groupId>
       <artifactId>tagapi</artifactId>
-      <version>[1.0-SNAPSHOT,)</version>
+      <version>[1.4,)</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -100,14 +100,12 @@
     </snapshotRepository>
   </distributionManagement>
 
-  <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
   <build>
     <directory>target</directory>
     <outputDirectory>target/classes</outputDirectory>
     <finalName>${project.artifactId}</finalName>
     <sourceDirectory>src</sourceDirectory>
     <defaultGoal>clean install</defaultGoal>
-    
     <resources>
       <resource>
         <targetPath>.</targetPath>
@@ -125,26 +123,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.1</version>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Main-Class>Main</Main-Class>
-              <Implementation-Title>VanishNoPacket</Implementation-Title>
-              <Implementation-Version>${describe}</Implementation-Version>
-              <Implementation-Vendor>mbax</Implementation-Vendor>
-            </manifestEntries>
-          </archive>
-        </configuration>
        </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
-        <inherited>true</inherited>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
       </plugin>
     </plugins>
   </build>
