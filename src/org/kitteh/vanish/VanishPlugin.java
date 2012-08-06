@@ -252,7 +252,7 @@ public class VanishPlugin extends JavaPlugin {
         MetricsOverlord.init(this);
 
         if (this.getConfig().getBoolean("colornametags", true)) {
-            if(this.getServer().getPluginManager().isPluginEnabled("TagAPI")){
+            if (this.getServer().getPluginManager().isPluginEnabled("TagAPI")) {
                 this.getServer().getPluginManager().registerEvents(new TagAPIListener(this), this);
                 this.getLogger().info("Using color changing features of TagAPI.");
             } else {
@@ -287,8 +287,8 @@ public class VanishPlugin extends JavaPlugin {
         }
 
         this.manager = new VanishManager(this);
-        
-        for (Player player : this.getServer().getOnlinePlayers()) {
+
+        for (final Player player : this.getServer().getOnlinePlayers()) {
             player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(player.getName())));
         }
 

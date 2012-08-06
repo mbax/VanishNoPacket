@@ -19,16 +19,6 @@ public class DisguiseCraftHook extends Hook implements Listener {
         super(plugin);
     }
 
-    @Override
-    public void onEnable() {
-        final Plugin disguiseCraft = this.plugin.getServer().getPluginManager().getPlugin("DisguiseCraft");
-        if (disguiseCraft != null) {
-            this.plugin.log("Now hooking into DisguiseCraft");
-            this.dcAPI = DisguiseCraft.getAPI();
-            this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
-        }
-    }
-
     @EventHandler
     public void beforeVanishChange(VanishStatusChangeEvent event) {
         if (this.dcAPI == null) {
@@ -50,6 +40,16 @@ public class DisguiseCraftHook extends Hook implements Listener {
         if (this.plugin.getManager().isVanished(player.getName())) {
             this.plugin.getManager().toggleVanishQuiet(player, false);
             player.sendMessage(ChatColor.AQUA + "You have been unvanished for toggling disguising.");
+        }
+    }
+
+    @Override
+    public void onEnable() {
+        final Plugin disguiseCraft = this.plugin.getServer().getPluginManager().getPlugin("DisguiseCraft");
+        if (disguiseCraft != null) {
+            this.plugin.log("Now hooking into DisguiseCraft");
+            this.dcAPI = DisguiseCraft.getAPI();
+            this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         }
     }
 
