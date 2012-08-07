@@ -104,9 +104,14 @@
     <directory>target</directory>
     <outputDirectory>target/classes</outputDirectory>
     <finalName>${project.artifactId}</finalName>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>target/filtered-sources/java</sourceDirectory>
     <defaultGoal>clean install</defaultGoal>
     <resources>
+      <resource>
+        <directory>src</directory>
+        <filtering>true</filtering>
+        <targetPath>../filtered-sources/java</targetPath>
+      </resource>
       <resource>
         <targetPath>.</targetPath>
         <filtering>true</filtering>

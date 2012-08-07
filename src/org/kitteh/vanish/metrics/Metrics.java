@@ -32,7 +32,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -323,13 +322,10 @@ public class Metrics {
      * Generic method that posts a plugin to the metrics website
      */
     private void postPlugin(final boolean isPing) throws IOException {
-        // The plugin's description file containg all of the plugin data such as name, version, author, etc
-        final PluginDescriptionFile description = this.plugin.getDescription();
-
         // Construct the post data
         final StringBuilder data = new StringBuilder();
         data.append(Metrics.encode("guid")).append('=').append(Metrics.encode(this.guid));
-        Metrics.encodeDataPair(data, "version", description.getVersion());
+        Metrics.encodeDataPair(data, "version", "${project.version}");
         Metrics.encodeDataPair(data, "server", Bukkit.getVersion());
         Metrics.encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
         Metrics.encodeDataPair(data, "revision", String.valueOf(Metrics.REVISION));
