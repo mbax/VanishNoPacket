@@ -27,7 +27,8 @@ public class VanishPlugin extends JavaPlugin {
 
     private class UpdateCheck implements Runnable {
 
-        VanishPlugin plugin;
+        private static final String address = "http://updates.kitteh.org/VanishNoPacket/version.php";
+        private VanishPlugin plugin;
 
         public UpdateCheck(VanishPlugin vanishPlugin) {
             this.plugin = vanishPlugin;
@@ -36,17 +37,16 @@ public class VanishPlugin extends JavaPlugin {
         @Override
         public void run() {
             try {
-                final String address = "http://updates.kitteh.org/VanishNoPacket/version.php?bukkit=" + this.plugin.getServer().getVersion() + "&version=" + this.plugin.getDescription().getVersion() + "&port=" + this.plugin.getServer().getPort();
                 final URL url = new URL(address.replace(" ", "%20"));
                 final URLConnection connection = url.openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);
-                connection.setRequestProperty("User-agent", "VanishNoPacket " + this.plugin.getDescription().getVersion());
+                connection.setRequestProperty("User-agent", "VanishNoPacket ${project.version}");
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String version;
                 if ((version = bufferedReader.readLine()) != null) {
                     this.plugin.latestVersion = version;
-                    if (!this.plugin.getDescription().getVersion().equals(version)) {
+                    if (!"${project.version}".equals(version)) {
                         this.plugin.log("Found a different version available: " + version);
                         this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
                         this.plugin.versionDiff = true;
@@ -118,7 +118,7 @@ public class VanishPlugin extends JavaPlugin {
      * @return version of VanishNoPacket in use
      */
     public String getCurrentVersion() {
-        return this.getDescription().getVersion();
+        return "${project.version}";
     }
 
     public HookManager getHookManager() {
@@ -233,7 +233,7 @@ public class VanishPlugin extends JavaPlugin {
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
         Debuggle.nah();
-        this.log("v" + this.getDescription().getVersion() + " unloaded.");
+        this.log("v${project.version} unloaded.");
     }
 
     @Override
@@ -295,19 +295,16 @@ public class VanishPlugin extends JavaPlugin {
         boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);
         if (firstTimeStarting) {
             updateCheck = false;
-            this.log("This is your first time (or you wiped your config).");
-            this.log("In future startups, VanishNoPacket will send usage data");
-            this.log("and check for updated versions. If you hate useful info,");
-            this.log("The setting can be disabled in the config file.");
+            this.log("This is your first startup (or you wiped your config).");
+            this.log("In future startups, VanishNoPacket will check for updates");
+            this.log("If you dislike it, disable 'checkupdates' in the config file");
             this.log("Note that this plugin also utilizes PluginMetrics with usage tracking");
             this.log("If you do not want usage tracking (paranoid) disable in that config");
         }
 
-        this.latestVersion = this.getDescription().getVersion();
-
         if (updateCheck) {
-            if (this.getDescription().getVersion().contains("SNAPSHOT")) {
-                this.log("You are using a SNAPSHOT build. Update check disabled");
+            if ("${project.version}".contains("SNAPSHOT") || "${project.version}".equals("${project" + ".version}")) {
+                this.log("Not a release version. Update check disabled");
             } else {
                 this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
             }
@@ -321,7 +318,7 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
 
-        this.log("v" + this.getDescription().getVersion() + " loaded.");
+        this.log("v${project.version} loaded.");
     }
 
     /**
