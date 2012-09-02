@@ -1,4 +1,5 @@
 package org.kitteh.vanish;
+// JOPHESTUS IS AWESOME :D
 
 import java.io.BufferedReader;
 import java.io.File;
