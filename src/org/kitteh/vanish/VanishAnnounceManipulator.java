@@ -97,7 +97,7 @@ public class VanishAnnounceManipulator {
         if (this.playerOnlineStatus.containsKey(playerName)) {
             return this.playerOnlineStatus.get(playerName);
         } else {
-            return false;
+            return true;
         }
     }
 
