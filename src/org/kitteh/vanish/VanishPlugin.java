@@ -299,7 +299,7 @@ public class VanishPlugin extends JavaPlugin {
             this.log("In future startups, VanishNoPacket will check for updates");
             this.log("If you dislike it, disable 'checkupdates' in the config file");
             this.log("Note that this plugin also utilizes PluginMetrics with usage tracking");
-            this.log("If you do not want usage tracking (paranoid) disable in that config");
+            this.log("If you do not want usage tracking (paranoid) disable in the config");
         }
 
         if (updateCheck) {
