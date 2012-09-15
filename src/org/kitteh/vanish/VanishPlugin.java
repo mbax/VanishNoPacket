@@ -246,6 +246,11 @@ public class VanishPlugin extends JavaPlugin {
             firstTimeStarting = true;
             Settings.deployDefaultConfig("config.yml");
             this.reloadConfig();
+            if (this.getServer().getPluginManager().isPluginEnabled("Essentials")) {
+                this.getConfig().set("hooks.essentials", true);
+                this.getLogger().info("Detected Essentials. Enabling Essentials hook.");
+                this.saveConfig();
+            }
         }
 
         Settings.freshStart(this);
@@ -264,6 +269,7 @@ public class VanishPlugin extends JavaPlugin {
         }
 
         this.hookManager = new HookManager(this);
+
         if (this.getConfig().getBoolean("hooks.essentials", false)) {
             this.hookManager.getHook(HookType.Essentials).onEnable();
         }
