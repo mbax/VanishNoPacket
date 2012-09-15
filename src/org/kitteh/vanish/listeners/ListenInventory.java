@@ -14,14 +14,14 @@ public class ListenInventory implements Listener {
         this.plugin = instance;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
         if (this.plugin.chestFakeInUse(event.getWhoClicked().getName())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
         if (this.plugin.chestFakeInUse(event.getPlayer().getName())) {
             this.plugin.chestFakeClose(event.getPlayer().getName());

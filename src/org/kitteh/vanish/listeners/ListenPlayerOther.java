@@ -29,21 +29,21 @@ public class ListenPlayerOther implements Listener {
         this.plugin = instance;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBucketFill(PlayerBucketFillEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onFoodChange(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             final Player player = (Player) event.getEntity();
@@ -78,7 +78,7 @@ public class ListenPlayerOther implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotPickUp(event.getPlayer())) {
             event.setCancelled(true);
@@ -101,14 +101,14 @@ public class ListenPlayerOther implements Listener {
         this.plugin.chestFakeClose(event.getPlayer().getName());
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onShear(PlayerShearEntityEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWorldChange(PlayerChangedWorldEvent event) {
         if (Settings.getWorldChangeCheck()) {
             this.plugin.getManager().playerRefresh(event.getPlayer());

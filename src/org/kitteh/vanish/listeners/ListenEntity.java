@@ -19,7 +19,7 @@ public class ListenEntity implements Listener {
         this.plugin = instance;
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         final Entity smacked = event.getEntity();
         if (smacked instanceof Player) {
@@ -40,14 +40,14 @@ public class ListenEntity implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityTarget(EntityTargetEvent event) {
         if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
         if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
             event.setCancelled(true);
