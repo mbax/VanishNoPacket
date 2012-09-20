@@ -13,27 +13,33 @@ public class BPermissionsHook extends Hook {
     }
 
     public String getPrefix(Player player) {
+        String result = null;
         if (this.bPermsEnabled()) {
             try {
-                return this.getValue(player, "prefix");
+                result = this.getValue(player, "prefix");
             } catch (final Exception e) {
                 return "";
             }
-        } else {
-            return "";
         }
+        if (result == null) {
+            result = "";
+        }
+        return result;
     }
 
     public String getSuffix(Player player) {
+        String result = null;
         if (this.bPermsEnabled()) {
             try {
-                return this.getValue(player, "suffix");
+                result = this.getValue(player, "suffix");
             } catch (final Exception e) {
                 return "";
             }
-        } else {
-            return "";
         }
+        if (result == null) {
+            result = "";
+        }
+        return result;
     }
 
     private boolean bPermsEnabled() {

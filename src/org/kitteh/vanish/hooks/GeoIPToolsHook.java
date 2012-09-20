@@ -17,27 +17,33 @@ public class GeoIPToolsHook extends Hook {
     }
 
     public String getCity(Player player) {
+        String result = null;
         if (this.geoip != null) {
             try {
-                return this.geoip.getLocation(player.getAddress().getAddress()).city;
+                result = this.geoip.getLocation(player.getAddress().getAddress()).city;
             } catch (final Exception e) {
                 return "";
             }
-        } else {
-            return "";
         }
+        if (result == null) {
+            result = "";
+        }
+        return result;
     }
 
     public String getCountry(Player player) {
+        String result = null;
         if (this.geoip != null) {
             try {
-                return this.geoip.getCountry(player.getAddress().getAddress()).getName();
+                result = this.geoip.getCountry(player.getAddress().getAddress()).getName();
             } catch (final Exception e) {
                 return "";
             }
-        } else {
-            return "";
         }
+        if (result == null) {
+            result = "";
+        }
+        return result;
     }
 
     @Override
