@@ -4,6 +4,7 @@ import java.util.*;
 import net.minecraft.server.Block;
 import net.minecraft.server.MobEffect;
 import net.minecraft.server.MobEffectList;
+import net.minecraft.server.Packet29DestroyEntity;
 import net.minecraft.server.Packet41MobEffect;
 import net.minecraft.server.Packet42RemoveMobEffect;
 import net.minecraft.server.Packet60Explosion;
@@ -139,7 +140,18 @@ public class VanishManager {
      * Only call this when disabling the plugin
      */
     public void onPluginDisable() {
-        this.revealAll();
+        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+            for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
+                if ((player != null) && (player2 != null) && !player.equals(player2)) {
+                    if (this.isVanished(player2) && player.canSee(player2)) {
+                        player.hidePlayer(player2);
+                        ((CraftPlayer)player).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(player2.getEntityId()));
+                        ((CraftPlayer)player).getHandle().g.remove(Integer.valueOf(player2.getEntityId()));
+                    }
+                    player.showPlayer(player2);
+                }
+            }
+        }
     }
 
     public void playerQuit(Player player) {
@@ -364,19 +376,6 @@ public class VanishManager {
 
     private void removeVanished(String name) {
         this.vanishedPlayerNames.remove(name);
-    }
-
-    private void revealAll() {
-        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-            for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
-                if ((player != null) && (player2 != null) && !player.equals(player2)) {
-                    if (this.isVanished(player2) && player.canSee(player2)) {
-                        player.hidePlayer(player2);
-                    }
-                    this.showPlayer.add(new ShowPlayerEntry(player, player2));
-                }
-            }
-        }
     }
 
     private void showVanished(Player player) {
