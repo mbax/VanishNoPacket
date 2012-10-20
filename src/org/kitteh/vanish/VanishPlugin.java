@@ -28,7 +28,7 @@ public class VanishPlugin extends JavaPlugin {
     private class UpdateCheck implements Runnable {
 
         private static final String address = "http://updates.kitteh.org/VanishNoPacket/version.php";
-        private VanishPlugin plugin;
+        private final VanishPlugin plugin;
 
         public UpdateCheck(VanishPlugin vanishPlugin) {
             this.plugin = vanishPlugin;
@@ -37,7 +37,7 @@ public class VanishPlugin extends JavaPlugin {
         @Override
         public void run() {
             try {
-                final URL url = new URL(address.replace(" ", "%20"));
+                final URL url = new URL(UpdateCheck.address.replace(" ", "%20"));
                 final URLConnection connection = url.openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);

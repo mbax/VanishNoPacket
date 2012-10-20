@@ -55,7 +55,7 @@ public class ListenPlayerOther implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
             switch (event.getClickedBlock().getType()) {
                 case CHEST:
                     event.setCancelled(true);
@@ -70,7 +70,7 @@ public class ListenPlayerOther implements Listener {
                     event.setCancelled(true);
                     event.getPlayer().openInventory(event.getPlayer().getEnderChest());
                     return;
-                    
+
             }
         }
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
