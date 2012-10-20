@@ -1,7 +1,8 @@
 package org.kitteh.vanish.metrics;
 
+import org.bukkit.plugin.PluginManager;
 import org.kitteh.vanish.VanishPlugin;
-//Note to self: bPermissions, DroxPerms, PermissionsBukkit, PermissionsEx, Privileges, SimplyPerms, zPermissions
+
 public class MetricsOverlord {
     public static Tracker command;
     public static Tracker vanish;
@@ -13,6 +14,8 @@ public class MetricsOverlord {
     public static Tracker quitinvis;
     public static Tracker joininvis;
     public static Metrics metrics;
+
+    private static final String[] permsplugins = { "DroxPerms", "GroupManager", "Permissions", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions" };
 
     public static void init(VanishPlugin plugin) {
         MetricsOverlord.command = new Tracker("Command");
@@ -36,8 +39,21 @@ public class MetricsOverlord {
             MetricsOverlord.metrics.addCustomData(MetricsOverlord.fakequit);
             MetricsOverlord.metrics.addCustomData(MetricsOverlord.quitinvis);
             MetricsOverlord.metrics.addCustomData(MetricsOverlord.joininvis);
+            MetricsOverlord.metrics.createGraph("Permissions Plugins").addPlotter(new Counter(MetricsOverlord.getPermsPlugin(plugin)));
+            MetricsOverlord.metrics.createGraph("Online Mode").addPlotter(new Counter(plugin.getServer().getOnlineMode() ? "Online" : "Offline"));
+            MetricsOverlord.metrics.createGraph("TagAPI").addPlotter(new Counter(plugin.getServer().getPluginManager().isPluginEnabled("TagAPI") ? "Yup" : "Nope"));
             MetricsOverlord.metrics.start();
         } catch (final Exception e) {
         }
+    }
+
+    private static String getPermsPlugin(VanishPlugin plugin) {
+        final PluginManager pluginManager = plugin.getServer().getPluginManager();
+        for (final String permsplugin : MetricsOverlord.permsplugins) {
+            if (pluginManager.isPluginEnabled(permsplugin)) {
+                return permsplugin;
+            }
+        }
+        return "Unknown or None";
     }
 }

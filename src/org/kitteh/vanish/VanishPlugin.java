@@ -254,7 +254,6 @@ public class VanishPlugin extends JavaPlugin {
         }
 
         Settings.freshStart(this);
-        MetricsOverlord.init(this);
 
         if (this.getConfig().getBoolean("colornametags", true)) {
             if (this.getServer().getPluginManager().isPluginEnabled("TagAPI")) {
@@ -278,6 +277,7 @@ public class VanishPlugin extends JavaPlugin {
             this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
 
+        final VanishPlugin self = this;
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
@@ -285,6 +285,7 @@ public class VanishPlugin extends JavaPlugin {
                 if (VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)) {
                     VanishPlugin.this.hookManager.getHook(HookType.JSONAPI).onEnable();
                 }
+                MetricsOverlord.init(self);
             }
         }, 1);
 
