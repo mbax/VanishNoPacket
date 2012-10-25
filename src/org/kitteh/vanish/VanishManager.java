@@ -2,11 +2,7 @@ package org.kitteh.vanish;
 
 import java.util.*;
 import net.minecraft.server.Block;
-import net.minecraft.server.MobEffect;
-import net.minecraft.server.MobEffectList;
 import net.minecraft.server.Packet29DestroyEntity;
-import net.minecraft.server.Packet41MobEffect;
-import net.minecraft.server.Packet42RemoveMobEffect;
 import net.minecraft.server.Packet60Explosion;
 
 import org.bukkit.ChatColor;
@@ -265,7 +261,6 @@ public class VanishManager {
     public void toggleVanishQuiet(Player vanishingPlayer, boolean effects) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
-        final CraftPlayer cplr = ((CraftPlayer) vanishingPlayer);
         if (vanishing) {
             Debuggle.log("It's invisible time! " + vanishingPlayer.getName());
             this.setSleepingIgnored(vanishingPlayer);
@@ -280,14 +275,12 @@ public class VanishManager {
                 }
             }
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            cplr.getHandle().netServerHandler.sendPacket(new Packet41MobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.vanish.increment();
             this.plugin.log(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
-            cplr.getHandle().netServerHandler.sendPacket(new Packet42RemoveMobEffect(cplr.getEntityId(), new MobEffect(MobEffectList.INVISIBILITY.getId(), 0, 0)));
             MetricsOverlord.unvanish.increment();
             this.plugin.log(vanishingPlayerName + " reappeared.");
         }
