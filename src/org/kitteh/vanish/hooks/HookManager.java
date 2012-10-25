@@ -17,6 +17,7 @@ public class HookManager {
         Essentials(EssentialsHook.class), // essentials! 
         GeoIPTools(GeoIPToolsHook.class), // geoiptools!
         JSONAPI(JSONAPIHook.class), // jsonapi!
+        ProtocolLib(ProtocolLibHook.class), // protocollib!
         SpoutCraft(SpoutCraftHook.class); // spoutcraft!
 
         private Class<? extends Hook> clazz;

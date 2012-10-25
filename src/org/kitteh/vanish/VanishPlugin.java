@@ -270,6 +270,7 @@ public class VanishPlugin extends JavaPlugin {
         if (this.getConfig().getBoolean("hooks.dynmap", false)) {
             this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
+        this.hookManager.getHook(HookType.ProtocolLib).onEnable();
 
         final VanishPlugin self = this;
         //Post-load stuff
