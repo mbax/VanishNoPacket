@@ -124,24 +124,6 @@ public class VanishManager {
         return this.vanishedPlayerNames.size();
     }
 
-    /**
-     * Only call this when disabling the plugin
-     */
-    void onPluginDisable() {
-        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
-            for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
-                if ((player != null) && (player2 != null) && !player.equals(player2)) {
-                    if (this.isVanished(player2) && player.canSee(player2)) {
-                        player.hidePlayer(player2);
-                        ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(player2.getEntityId()));
-                        ((CraftPlayer) player).getHandle().removeQueue.remove(Integer.valueOf(player2.getEntityId()));
-                    }
-                    player.showPlayer(player2);
-                }
-            }
-        }
-    }
-
     public void playerQuit(Player player) {
         Debuggle.log("Quitting: " + player.getName());
         this.resetSleepingIgnored(player);
@@ -175,30 +157,6 @@ public class VanishManager {
             this.hideVanished(player);
             Debuggle.log("Hiding all to " + player.getName());
         }
-    }
-
-    /**
-     * Reset SleepingIgnored to its old value for a player.
-     * 
-     * @param player
-     */
-    void resetSleepingIgnored(Player player) {
-        if (this.sleepIgnored.containsKey(player.getName())) {
-            player.setSleepingIgnored(this.sleepIgnored.remove(player.getName()));
-        }
-    }
-
-    /**
-     * Set SleepingIgnored to true for a player, and save the old
-     * value.
-     * 
-     * @param player
-     */
-    void setSleepingIgnored(Player player) {
-        if (!this.sleepIgnored.containsKey(player.getName())) {
-            this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
-        }
-        player.setSleepingIgnored(true);
     }
 
     /**
@@ -374,6 +332,48 @@ public class VanishManager {
         for (int i = 0; i < 10; i++) {
             location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
         }
+    }
+
+    /**
+     * Only call this when disabling the plugin
+     */
+    void onPluginDisable() {
+        for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+            for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
+                if ((player != null) && (player2 != null) && !player.equals(player2)) {
+                    if (this.isVanished(player2) && player.canSee(player2)) {
+                        player.hidePlayer(player2);
+                        ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(player2.getEntityId()));
+                        ((CraftPlayer) player).getHandle().removeQueue.remove(Integer.valueOf(player2.getEntityId()));
+                    }
+                    player.showPlayer(player2);
+                }
+            }
+        }
+    }
+
+    /**
+     * Reset SleepingIgnored to its old value for a player.
+     * 
+     * @param player
+     */
+    void resetSleepingIgnored(Player player) {
+        if (this.sleepIgnored.containsKey(player.getName())) {
+            player.setSleepingIgnored(this.sleepIgnored.remove(player.getName()));
+        }
+    }
+
+    /**
+     * Set SleepingIgnored to true for a player, and save the old
+     * value.
+     * 
+     * @param player
+     */
+    void setSleepingIgnored(Player player) {
+        if (!this.sleepIgnored.containsKey(player.getName())) {
+            this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
+        }
+        player.setSleepingIgnored(true);
     }
 
 }

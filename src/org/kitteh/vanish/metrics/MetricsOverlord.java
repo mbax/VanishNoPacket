@@ -17,6 +17,38 @@ public class MetricsOverlord {
 
     private static final String[] PERMS_PLUGINS = { "DroxPerms", "GroupManager", "Permissions", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions" };
 
+    public static Tracker getCommandTracker() {
+        return MetricsOverlord.command;
+    }
+
+    public static Tracker getFakejoinTracker() {
+        return MetricsOverlord.fakejoin;
+    }
+
+    public static Tracker getFakequitTracker() {
+        return MetricsOverlord.fakequit;
+    }
+
+    public static Tracker getJoinInvisTracker() {
+        return MetricsOverlord.joininvis;
+    }
+
+    public static Tracker getQuitInvisTracker() {
+        return MetricsOverlord.quitinvis;
+    }
+
+    public static Tracker getToggleTracker() {
+        return MetricsOverlord.toggle;
+    }
+
+    public static Tracker getUnvanishTracker() {
+        return MetricsOverlord.unvanish;
+    }
+
+    public static Tracker getVanishTracker() {
+        return MetricsOverlord.vanish;
+    }
+
     public static void init(VanishPlugin plugin) {
         MetricsOverlord.command = new Tracker("Command");
         MetricsOverlord.vanish = new Tracker("Vanish");
@@ -55,37 +87,5 @@ public class MetricsOverlord {
             }
         }
         return "Unknown or None";
-    }
-
-    public static Tracker getFakejoinTracker() {
-        return fakejoin;
-    }
-
-    public static Tracker getFakequitTracker() {
-        return fakequit;
-    }
-
-    public static Tracker getCommandTracker() {
-        return command;
-    }
-
-    public static Tracker getToggleTracker() {
-        return toggle;
-    }
-
-    public static Tracker getVanishTracker() {
-        return vanish;
-    }
-
-    public static Tracker getUnvanishTracker() {
-        return unvanish;
-    }
-
-    public static Tracker getJoinInvisTracker() {
-        return joininvis;
-    }
-
-    public static Tracker getQuitInvisTracker() {
-        return quitinvis;
     }
 }

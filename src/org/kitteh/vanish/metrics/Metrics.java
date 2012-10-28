@@ -67,6 +67,144 @@ import java.util.UUID;
 public class Metrics {
 
     /**
+     * Represents a custom graph on the website
+     */
+    public static class Graph {
+
+        /**
+         * The graph's name, alphanumeric and spaces only :)
+         * If it does not comply to the above when submitted, it is rejected
+         */
+        private final String name;
+
+        /**
+         * The set of plotters that are contained within this graph
+         */
+        private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
+
+        private Graph(final String name) {
+            this.name = name;
+        }
+
+        /**
+         * Add a plotter to the graph, which will be used to plot entries
+         * 
+         * @param plotter
+         */
+        public void addPlotter(final Plotter plotter) {
+            this.plotters.add(plotter);
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            if (!(object instanceof Graph)) {
+                return false;
+            }
+
+            final Graph graph = (Graph) object;
+            return graph.name.equals(this.name);
+        }
+
+        /**
+         * Gets the graph's name
+         * 
+         * @return
+         */
+        public String getName() {
+            return this.name;
+        }
+
+        /**
+         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
+         * 
+         * @return
+         */
+        public Set<Plotter> getPlotters() {
+            return Collections.unmodifiableSet(this.plotters);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.name.hashCode();
+        }
+
+        /**
+         * Remove a plotter from the graph
+         * 
+         * @param plotter
+         */
+        public void removePlotter(final Plotter plotter) {
+            this.plotters.remove(plotter);
+        }
+
+    }
+
+    /**
+     * Interface used to collect custom data for a plugin
+     */
+    public static abstract class Plotter {
+
+        /**
+         * The plot's name
+         */
+        private final String name;
+
+        /**
+         * Construct a plotter with the default plot name
+         */
+        public Plotter() {
+            this("Default");
+        }
+
+        /**
+         * Construct a plotter with a specific plot name
+         * 
+         * @param name
+         */
+        public Plotter(final String name) {
+            this.name = name;
+        }
+
+        @Override
+        public boolean equals(final Object object) {
+            if (!(object instanceof Plotter)) {
+                return false;
+            }
+
+            final Plotter plotter = (Plotter) object;
+            return plotter.name.equals(this.name) && (plotter.getValue() == this.getValue());
+        }
+
+        /**
+         * Get the column name for the plotted point
+         * 
+         * @return the plotted point's column name
+         */
+        public String getColumnName() {
+            return this.name;
+        }
+
+        /**
+         * Get the current value for the plotted point
+         * 
+         * @return
+         */
+        public abstract int getValue();
+
+        @Override
+        public int hashCode() {
+            return this.getColumnName().hashCode() + this.getValue();
+        }
+
+        /**
+         * Called after the website graphs have been updated
+         */
+        public void reset() {
+        }
+
+    }
+
+    /**
      * The current revision number
      */
     private final static int REVISION = 5;
@@ -96,6 +234,35 @@ public class Metrics {
      * Interval of time to ping (in minutes)
      */
     private static final int PING_INTERVAL = 10;
+
+    /**
+     * Encode text as UTF-8
+     * 
+     * @param text
+     * @return
+     */
+    private static String encode(final String text) throws UnsupportedEncodingException {
+        return URLEncoder.encode(text, "UTF-8");
+    }
+
+    /**
+     * <p>
+     * Encode a key/value data pair to be used in a HTTP post request. This INCLUDES a & so the first key/value pair MUST be included manually, e.g:
+     * </p>
+     * <code>
+     * StringBuffer data = new StringBuffer();
+     * data.append(encode("guid")).append('=').append(encode(guid));
+     * encodeDataPair(data, "version", description.getVersion());
+     * </code>
+     * 
+     * @param buffer
+     * @param key
+     * @param value
+     * @return
+     */
+    private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException {
+        buffer.append('&').append(Metrics.encode(key)).append('=').append(Metrics.encode(value));
+    }
 
     /**
      * The plugin this metrics submits for
@@ -163,6 +330,23 @@ public class Metrics {
     }
 
     /**
+     * Adds a custom data plotter to the default graph
+     * 
+     * @param plotter
+     */
+    public void addCustomData(final Plotter plotter) {
+        if (plotter == null) {
+            throw new IllegalArgumentException("Plotter cannot be null");
+        }
+
+        // Add the plotter to the graph o/
+        this.defaultGraph.addPlotter(plotter);
+
+        // Ensure the default graph is included in the submitted graphs
+        this.graphs.add(this.defaultGraph);
+    }
+
+    /**
      * Construct and create a Graph that can be used to separate specific plotters to their own graphs
      * on the metrics website. Plotters can be added to the graph object returned.
      * 
@@ -185,20 +369,67 @@ public class Metrics {
     }
 
     /**
-     * Adds a custom data plotter to the default graph
+     * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
      * 
-     * @param plotter
+     * @throws IOException
      */
-    public void addCustomData(final Plotter plotter) {
-        if (plotter == null) {
-            throw new IllegalArgumentException("Plotter cannot be null");
+    public void disable() throws IOException {
+        // This has to be synchronized or it can collide with the check in the task.
+        synchronized (this.optOutLock) {
+            // Check if the server owner has already set opt-out, if not, set it.
+            if (!this.isOptOut()) {
+                this.configuration.set("opt-out", true);
+                this.configuration.save(this.configurationFile);
+            }
+
+            // Disable Task, if it is running
+            if (this.taskId > 0) {
+                this.plugin.getServer().getScheduler().cancelTask(this.taskId);
+                this.taskId = -1;
+            }
         }
+    }
 
-        // Add the plotter to the graph o/
-        this.defaultGraph.addPlotter(plotter);
+    /**
+     * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
+     * 
+     * @throws IOException
+     */
+    public void enable() throws IOException {
+        // This has to be synchronized or it can collide with the check in the task.
+        synchronized (this.optOutLock) {
+            // Check if the server owner has already set opt-out, if not, set it.
+            if (this.isOptOut()) {
+                this.configuration.set("opt-out", false);
+                this.configuration.save(this.configurationFile);
+            }
 
-        // Ensure the default graph is included in the submitted graphs
-        this.graphs.add(this.defaultGraph);
+            // Enable Task, if it is not running
+            if (this.taskId < 0) {
+                this.start();
+            }
+        }
+    }
+
+    /**
+     * Has the server owner denied plugin metrics?
+     * 
+     * @return
+     */
+    public boolean isOptOut() {
+        synchronized (this.optOutLock) {
+            try {
+                // Reload the metrics file
+                this.configuration.load(Metrics.CONFIG_FILE);
+            } catch (final IOException ex) {
+                //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                return true;
+            } catch (final InvalidConfigurationException ex) {
+                //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
+                return true;
+            }
+            return this.configuration.getBoolean("opt-out", false);
+        }
     }
 
     /**
@@ -252,70 +483,6 @@ public class Metrics {
             }, 0, Metrics.PING_INTERVAL * 1200);
 
             return true;
-        }
-    }
-
-    /**
-     * Has the server owner denied plugin metrics?
-     * 
-     * @return
-     */
-    public boolean isOptOut() {
-        synchronized (this.optOutLock) {
-            try {
-                // Reload the metrics file
-                this.configuration.load(Metrics.CONFIG_FILE);
-            } catch (final IOException ex) {
-                //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
-                return true;
-            } catch (final InvalidConfigurationException ex) {
-                //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + ex.getMessage());
-                return true;
-            }
-            return this.configuration.getBoolean("opt-out", false);
-        }
-    }
-
-    /**
-     * Enables metrics for the server by setting "opt-out" to false in the config file and starting the metrics task.
-     * 
-     * @throws IOException
-     */
-    public void enable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the task.
-        synchronized (this.optOutLock) {
-            // Check if the server owner has already set opt-out, if not, set it.
-            if (this.isOptOut()) {
-                this.configuration.set("opt-out", false);
-                this.configuration.save(this.configurationFile);
-            }
-
-            // Enable Task, if it is not running
-            if (this.taskId < 0) {
-                this.start();
-            }
-        }
-    }
-
-    /**
-     * Disables metrics for the server by setting "opt-out" to true in the config file and canceling the metrics task.
-     * 
-     * @throws IOException
-     */
-    public void disable() throws IOException {
-        // This has to be synchronized or it can collide with the check in the task.
-        synchronized (this.optOutLock) {
-            // Check if the server owner has already set opt-out, if not, set it.
-            if (!this.isOptOut()) {
-                this.configuration.set("opt-out", true);
-                this.configuration.save(this.configurationFile);
-            }
-
-            // Disable Task, if it is running
-            if (this.taskId > 0) {
-                this.plugin.getServer().getScheduler().cancelTask(this.taskId);
-                this.taskId = -1;
-            }
         }
     }
 
@@ -401,173 +568,6 @@ public class Metrics {
                 }
             }
         }
-    }
-
-    /**
-     * <p>
-     * Encode a key/value data pair to be used in a HTTP post request. This INCLUDES a & so the first key/value pair MUST be included manually, e.g:
-     * </p>
-     * <code>
-     * StringBuffer data = new StringBuffer();
-     * data.append(encode("guid")).append('=').append(encode(guid));
-     * encodeDataPair(data, "version", description.getVersion());
-     * </code>
-     * 
-     * @param buffer
-     * @param key
-     * @param value
-     * @return
-     */
-    private static void encodeDataPair(final StringBuilder buffer, final String key, final String value) throws UnsupportedEncodingException {
-        buffer.append('&').append(Metrics.encode(key)).append('=').append(Metrics.encode(value));
-    }
-
-    /**
-     * Encode text as UTF-8
-     * 
-     * @param text
-     * @return
-     */
-    private static String encode(final String text) throws UnsupportedEncodingException {
-        return URLEncoder.encode(text, "UTF-8");
-    }
-
-    /**
-     * Represents a custom graph on the website
-     */
-    public static class Graph {
-
-        /**
-         * The graph's name, alphanumeric and spaces only :)
-         * If it does not comply to the above when submitted, it is rejected
-         */
-        private final String name;
-
-        /**
-         * The set of plotters that are contained within this graph
-         */
-        private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
-
-        private Graph(final String name) {
-            this.name = name;
-        }
-
-        /**
-         * Gets the graph's name
-         * 
-         * @return
-         */
-        public String getName() {
-            return this.name;
-        }
-
-        /**
-         * Add a plotter to the graph, which will be used to plot entries
-         * 
-         * @param plotter
-         */
-        public void addPlotter(final Plotter plotter) {
-            this.plotters.add(plotter);
-        }
-
-        /**
-         * Remove a plotter from the graph
-         * 
-         * @param plotter
-         */
-        public void removePlotter(final Plotter plotter) {
-            this.plotters.remove(plotter);
-        }
-
-        /**
-         * Gets an <b>unmodifiable</b> set of the plotter objects in the graph
-         * 
-         * @return
-         */
-        public Set<Plotter> getPlotters() {
-            return Collections.unmodifiableSet(this.plotters);
-        }
-
-        @Override
-        public int hashCode() {
-            return this.name.hashCode();
-        }
-
-        @Override
-        public boolean equals(final Object object) {
-            if (!(object instanceof Graph)) {
-                return false;
-            }
-
-            final Graph graph = (Graph) object;
-            return graph.name.equals(this.name);
-        }
-
-    }
-
-    /**
-     * Interface used to collect custom data for a plugin
-     */
-    public static abstract class Plotter {
-
-        /**
-         * The plot's name
-         */
-        private final String name;
-
-        /**
-         * Construct a plotter with the default plot name
-         */
-        public Plotter() {
-            this("Default");
-        }
-
-        /**
-         * Construct a plotter with a specific plot name
-         * 
-         * @param name
-         */
-        public Plotter(final String name) {
-            this.name = name;
-        }
-
-        /**
-         * Get the current value for the plotted point
-         * 
-         * @return
-         */
-        public abstract int getValue();
-
-        /**
-         * Get the column name for the plotted point
-         * 
-         * @return the plotted point's column name
-         */
-        public String getColumnName() {
-            return this.name;
-        }
-
-        /**
-         * Called after the website graphs have been updated
-         */
-        public void reset() {
-        }
-
-        @Override
-        public int hashCode() {
-            return this.getColumnName().hashCode() + this.getValue();
-        }
-
-        @Override
-        public boolean equals(final Object object) {
-            if (!(object instanceof Plotter)) {
-                return false;
-            }
-
-            final Plotter plotter = (Plotter) object;
-            return plotter.name.equals(this.name) && (plotter.getValue() == this.getValue());
-        }
-
     }
 
 }

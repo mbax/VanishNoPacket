@@ -16,6 +16,30 @@ public class Settings {
      */
     private static final int confVersion = 5;
 
+    public static boolean getAutoFakeJoinSilent() {
+        return Settings.autoFakeJoinSilent;
+    }
+
+    public static boolean getEnablePermTest() {
+        return Settings.enablePermTest;
+    }
+
+    public static String getFakeJoin() {
+        return Settings.fakeJoin;
+    }
+
+    public static String getFakeQuit() {
+        return Settings.fakeQuit;
+    }
+
+    public static int getLightningCount() {
+        return Settings.lightningEffectCount;
+    }
+
+    public static boolean getWorldChangeCheck() {
+        return Settings.worldChangeCheck;
+    }
+
     static void freshStart(VanishPlugin plugin) {
         final FileConfiguration config = plugin.getConfig();
         config.options().copyDefaults(true);
@@ -60,29 +84,5 @@ public class Settings {
         } else {
             Debuggle.nah();
         }
-    }
-
-    public static boolean getAutoFakeJoinSilent() {
-        return Settings.autoFakeJoinSilent;
-    }
-
-    public static boolean getEnablePermTest() {
-        return Settings.enablePermTest;
-    }
-
-    public static String getFakeJoin() {
-        return Settings.fakeJoin;
-    }
-
-    public static String getFakeQuit() {
-        return Settings.fakeQuit;
-    }
-
-    public static int getLightningCount() {
-        return Settings.lightningEffectCount;
-    }
-
-    public static boolean getWorldChangeCheck() {
-        return Settings.worldChangeCheck;
     }
 }

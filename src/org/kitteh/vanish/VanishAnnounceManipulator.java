@@ -53,6 +53,46 @@ public class VanishAnnounceManipulator {
     }
 
     /**
+     * Called by JSONAPI
+     * 
+     * @param player
+     * 
+     * @return true if player is considered online, false if not (or if not on server)
+     */
+    public boolean getFakeOnlineStatus(String playerName) {
+        final Player player = this.plugin.getServer().getPlayerExact(playerName);
+        if (player == null) {
+            return false;
+        }
+        playerName = player.getName();
+        if (this.playerOnlineStatus.containsKey(playerName)) {
+            return this.playerOnlineStatus.get(playerName);
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Called when a player quits
+     * 
+     * @param player
+     *            Who just quit?
+     * @return the former fake online status of the player
+     */
+    public boolean playerHasQuit(String player) {
+        if (this.playerOnlineStatus.containsKey(player)) {
+            return this.playerOnlineStatus.remove(player);
+        }
+        return true;
+    }
+
+    private String injectPlayerInformation(String message, Player player) {
+        final GeoIPToolsHook geoip = (GeoIPToolsHook) this.plugin.getHookManager().getHook(HookType.GeoIPTools);
+        final BPermissionsHook bperms = (BPermissionsHook) this.plugin.getHookManager().getHook(HookType.BPermissions);
+        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", bperms.getPrefix(player)).replace("%us", bperms.getSuffix(player)).replace("%city", geoip.getCity(player)).replace("%country", geoip.getCountry(player));
+    }
+
+    /**
      * Call a fake join announce for the player.
      * Only fires if the server previously was saying they were offline
      * 
@@ -84,26 +124,6 @@ public class VanishAnnounceManipulator {
     }
 
     /**
-     * Called by JSONAPI
-     * 
-     * @param player
-     * 
-     * @return true if player is considered online, false if not (or if not on server)
-     */
-    public boolean getFakeOnlineStatus(String playerName) {
-        final Player player = this.plugin.getServer().getPlayerExact(playerName);
-        if (player == null) {
-            return false;
-        }
-        playerName = player.getName();
-        if (this.playerOnlineStatus.containsKey(playerName)) {
-            return this.playerOnlineStatus.get(playerName);
-        } else {
-            return true;
-        }
-    }
-
-    /**
      * Called when a player's vanish status has been toggled
      * If the player has a queued up join announce from a silentjoin,
      * it will fire at this time.
@@ -116,25 +136,5 @@ public class VanishAnnounceManipulator {
         }
         this.fakeJoin(player, false);
         this.dropDelayedAnnounce(player.getName());
-    }
-
-    /**
-     * Called when a player quits
-     * 
-     * @param player
-     *            Who just quit?
-     * @return the former fake online status of the player
-     */
-    public boolean playerHasQuit(String player) {
-        if (this.playerOnlineStatus.containsKey(player)) {
-            return this.playerOnlineStatus.remove(player);
-        }
-        return true;
-    }
-
-    private String injectPlayerInformation(String message, Player player) {
-        final GeoIPToolsHook geoip = (GeoIPToolsHook) this.plugin.getHookManager().getHook(HookType.GeoIPTools);
-        final BPermissionsHook bperms = (BPermissionsHook) this.plugin.getHookManager().getHook(HookType.BPermissions);
-        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", bperms.getPrefix(player)).replace("%us", bperms.getSuffix(player)).replace("%city", geoip.getCity(player)).replace("%country", geoip.getCountry(player));
     }
 }
