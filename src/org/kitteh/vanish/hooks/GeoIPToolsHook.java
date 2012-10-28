@@ -9,11 +9,10 @@ import uk.org.whoami.geoip.GeoIPTools;
 
 public class GeoIPToolsHook extends Hook {
 
-    private GeoIPLookup geoip;
+    private GeoIPLookup geoip = null;
 
     public GeoIPToolsHook(VanishPlugin plugin) {
         super(plugin);
-        this.geoip = null;
     }
 
     public String getCity(Player player) {
