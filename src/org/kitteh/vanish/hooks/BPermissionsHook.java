@@ -18,13 +18,9 @@ public class BPermissionsHook extends Hook {
             try {
                 result = this.getValue(player, "prefix");
             } catch (final Exception e) {
-                return "";
             }
         }
-        if (result == null) {
-            result = "";
-        }
-        return result;
+        return result != null ? result : "";
     }
 
     public String getSuffix(Player player) {
@@ -33,13 +29,9 @@ public class BPermissionsHook extends Hook {
             try {
                 result = this.getValue(player, "suffix");
             } catch (final Exception e) {
-                return "";
             }
         }
-        if (result == null) {
-            result = "";
-        }
-        return result;
+        return result != null ? result : "";
     }
 
     private boolean bPermsEnabled() {

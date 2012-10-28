@@ -31,7 +31,7 @@ public class ListenPlayerJoin implements Listener {
         event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(event.getPlayer().getName())));
         this.plugin.getManager().resetSeeing(event.getPlayer());
         if (VanishPerms.joinVanished(event.getPlayer())) {
-            MetricsOverlord.joininvis.increment();
+            MetricsOverlord.getJoinInvisTracker().increment();
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer(), false);
             this.plugin.hooksVanish(event.getPlayer());
         }
@@ -47,11 +47,11 @@ public class ListenPlayerJoin implements Listener {
     public void onPlayerJoinLate(PlayerJoinEvent event) {
         final StringBuilder statusUpdate = new StringBuilder();
         if (VanishPerms.joinVanished(event.getPlayer())) {
-            String add = "";
+            String message = ChatColor.DARK_AQUA + "You have joined vanished.";
             if (VanishPerms.canVanish(event.getPlayer())) {
-                add = " To appear: /vanish";
+                message += " To appear: /vanish";
             }
-            event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "You have joined vanished." + add);
+            event.getPlayer().sendMessage(message);
             statusUpdate.append("vanished");
         }
         if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {

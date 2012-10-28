@@ -95,8 +95,8 @@ public class ListenPlayerOther implements Listener {
         this.plugin.getManager().playerQuit(player);
         this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
-        if (!this.plugin.getManager().getAnnounceManipulator().wasPlayerMarkedOnline(player.getName()) || VanishPerms.silentQuit(player)) {
-            MetricsOverlord.quitinvis.increment();
+        if (!this.plugin.getManager().getAnnounceManipulator().playerHasQuit(player.getName()) || VanishPerms.silentQuit(player)) {
+            MetricsOverlord.getQuitInvisTracker().increment();
             event.setQuitMessage(null);
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());

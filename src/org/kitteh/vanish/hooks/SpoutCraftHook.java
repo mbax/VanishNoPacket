@@ -35,7 +35,7 @@ public class SpoutCraftHook extends Hook implements Listener {
     private class StatusBar {
         private final GenericLabel label;
         private final GenericGradient box;
-        SpoutPlayer player;
+        private final SpoutPlayer player;
 
         public StatusBar(SpoutPlayer player) {
             this.label = (GenericLabel) new GenericLabel(ChatColor.DARK_AQUA + "Invisible").setAnchor(WidgetAnchor.BOTTOM_LEFT).setX(20).setY(-20).setHeight(10).setWidth(40);
@@ -87,7 +87,7 @@ public class SpoutCraftHook extends Hook implements Listener {
         this.enabled = true;
         if (!this.plugin.getServer().getPluginManager().isPluginEnabled("Spout")) {
             this.enabled = false;
-            this.plugin.log("SpoutCraft not running but you wanted SpoutCraft features.");
+            this.plugin.getLogger().info("SpoutPlugin not running but you wanted SpoutPlugin features.");
             return;
         }
         this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
@@ -102,8 +102,8 @@ public class SpoutCraftHook extends Hook implements Listener {
         config.options().copyDefaults(true);
         final InputStream stream = this.plugin.getResource("spoutcraft.yml");
         if (stream == null) {
-            this.plugin.log("Defaults for spoutcraft.yml not loaded");
-            this.plugin.log("The /reload command is not fully supported by this plugin or Spout");
+            this.plugin.getLogger().info("Defaults for spoutcraft.yml not loaded");
+            this.plugin.getLogger().info("The /reload command is not fully supported by this plugin or Spout");
             this.enabled = false;
             return;
         }

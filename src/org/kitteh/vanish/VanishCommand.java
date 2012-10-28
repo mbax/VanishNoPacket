@@ -17,7 +17,7 @@ public class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        MetricsOverlord.command.increment();
+        MetricsOverlord.getCommandTracker().increment();
         // First, the short aliases
         if (label.length() == 2) {
             if (sender instanceof Player) {
@@ -267,7 +267,7 @@ public class VanishCommand implements CommandExecutor {
 
     private void toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
-        MetricsOverlord.toggle.increment();
+        MetricsOverlord.getToggleTracker().increment();
         boolean status = false;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
             status = VanishPerms.toggleSeeAll(player);

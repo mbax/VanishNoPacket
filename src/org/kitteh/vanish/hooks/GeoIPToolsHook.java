@@ -21,13 +21,9 @@ public class GeoIPToolsHook extends Hook {
             try {
                 result = this.geoip.getLocation(player.getAddress().getAddress()).city;
             } catch (final Exception e) {
-                return "";
             }
         }
-        if (result == null) {
-            result = "";
-        }
-        return result;
+        return result != null ? result : "";
     }
 
     public String getCountry(Player player) {
@@ -36,13 +32,9 @@ public class GeoIPToolsHook extends Hook {
             try {
                 result = this.geoip.getCountry(player.getAddress().getAddress()).getName();
             } catch (final Exception e) {
-                return "";
             }
         }
-        if (result == null) {
-            result = "";
-        }
-        return result;
+        return result != null ? result : "";
     }
 
     @Override

@@ -29,7 +29,7 @@ public class VanishAnnounceManipulator {
      * @param fakeQuitMessage
      * @param delayedJoinTrackingEnabled
      */
-    public VanishAnnounceManipulator(VanishPlugin plugin) {
+    VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
         this.playerOnlineStatus = new HashMap<String, Boolean>();
         this.delayedAnnouncePlayerList = new ArrayList<String>();
@@ -58,11 +58,11 @@ public class VanishAnnounceManipulator {
      * 
      * @param player
      */
-    public void fakeJoin(Player player, boolean force) {
+    void fakeJoin(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
-            this.plugin.log(player.getName() + " faked joining");
-            MetricsOverlord.fakejoin.increment();
+            this.plugin.getLogger().info(player.getName() + " faked joining");
+            MetricsOverlord.getFakejoinTracker().increment();
             this.playerOnlineStatus.put(player.getName(), true);
         }
     }
@@ -73,17 +73,19 @@ public class VanishAnnounceManipulator {
      * 
      * @param player
      */
-    public void fakeQuit(Player player, boolean force) {
+    void fakeQuit(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
 
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
-            this.plugin.log(player.getName() + " faked quitting");
-            MetricsOverlord.fakequit.increment();
+            this.plugin.getLogger().info(player.getName() + " faked quitting");
+            MetricsOverlord.getFakequitTracker().increment();
             this.playerOnlineStatus.put(player.getName(), false);
         }
     }
 
     /**
+     * Called by JSONAPI
+     * 
      * @param player
      * 
      * @return true if player is considered online, false if not (or if not on server)
@@ -108,7 +110,7 @@ public class VanishAnnounceManipulator {
      * 
      * @param player
      */
-    public void vanishToggled(Player player) {
+    void vanishToggled(Player player) {
         if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
             return;
         }
@@ -123,7 +125,7 @@ public class VanishAnnounceManipulator {
      *            Who just quit?
      * @return the former fake online status of the player
      */
-    public boolean wasPlayerMarkedOnline(String player) {
+    public boolean playerHasQuit(String player) {
         if (this.playerOnlineStatus.containsKey(player)) {
             return this.playerOnlineStatus.remove(player);
         }

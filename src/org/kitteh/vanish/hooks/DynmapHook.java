@@ -29,9 +29,9 @@ public class DynmapHook extends Hook {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("dynmap");
         if (grab != null) {
             this.dynmap = ((DynmapAPI) grab);
-            this.plugin.log("Now hooking into Dynmap");
+            this.plugin.getLogger().info("Now hooking into Dynmap");
         } else {
-            this.plugin.log("You wanted Dynmap support. I could not find Dynmap.");
+            this.plugin.getLogger().info("You wanted Dynmap support. I could not find Dynmap.");
             this.dynmap = null;
             this.enabled = false;
         }

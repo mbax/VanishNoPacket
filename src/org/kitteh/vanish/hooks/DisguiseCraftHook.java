@@ -13,7 +13,7 @@ import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
 
 public class DisguiseCraftHook extends Hook implements Listener {
 
-    private DisguiseCraftAPI dcAPI = null;
+    private DisguiseCraftAPI disguiseCraft = null;
 
     public DisguiseCraftHook(VanishPlugin plugin) {
         super(plugin);
@@ -21,19 +21,19 @@ public class DisguiseCraftHook extends Hook implements Listener {
 
     @EventHandler
     public void beforeVanishChange(VanishStatusChangeEvent event) {
-        if (this.dcAPI == null) {
+        if (this.disguiseCraft == null) {
             return;
         }
         final Player player = event.getPlayer();
-        if (this.dcAPI.isDisguised(player)) {
-            this.dcAPI.undisguisePlayer(player);
+        if (this.disguiseCraft.isDisguised(player)) {
+            this.disguiseCraft.undisguisePlayer(player);
             player.sendMessage(ChatColor.AQUA + "You have been undisguised for toggling vanishing.");
         }
     }
 
     @EventHandler
     public void onDisguise(PlayerDisguiseEvent event) {
-        if (this.dcAPI == null) {
+        if (this.disguiseCraft == null) {
             return;
         }
         final Player player = event.getPlayer();
@@ -47,8 +47,8 @@ public class DisguiseCraftHook extends Hook implements Listener {
     public void onEnable() {
         final Plugin disguiseCraft = this.plugin.getServer().getPluginManager().getPlugin("DisguiseCraft");
         if (disguiseCraft != null) {
-            this.plugin.log("Now hooking into DisguiseCraft");
-            this.dcAPI = DisguiseCraft.getAPI();
+            this.plugin.getLogger().info("Now hooking into DisguiseCraft");
+            this.disguiseCraft = DisguiseCraft.getAPI();
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         }
     }

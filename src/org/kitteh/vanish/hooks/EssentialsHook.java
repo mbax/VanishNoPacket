@@ -11,7 +11,6 @@ public class EssentialsHook extends Hook {
     private final VanishPlugin plugin;
 
     private IEssentials essentials;
-    private boolean enabled = false;
 
     public EssentialsHook(VanishPlugin plugin) {
         super(plugin);
@@ -30,15 +29,13 @@ public class EssentialsHook extends Hook {
 
     @Override
     public void onEnable() {
-        this.enabled = true;
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("Essentials");
         if (grab != null) {
             this.essentials = ((IEssentials) grab);
-            this.plugin.log("Now hooking into Essentials");
+            this.plugin.getLogger().info("Now hooking into Essentials");
         } else {
-            this.plugin.log("You wanted Essentials support. I could not find Essentials.");
+            this.plugin.getLogger().info("You wanted Essentials support. I could not find Essentials.");
             this.essentials = null;
-            this.enabled = false;
         }
     }
 
@@ -57,7 +54,7 @@ public class EssentialsHook extends Hook {
     }
 
     private void setHidden(Player player, boolean hide) {
-        if (this.enabled && (this.essentials != null)) {
+        if (this.essentials != null) {
             this.essentials.getUser(player).setHidden(hide);
         }
     }

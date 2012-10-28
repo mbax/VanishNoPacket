@@ -22,7 +22,6 @@ public class VanishPlugin extends JavaPlugin {
 
     private class UpdateCheck implements Runnable {
 
-        private static final String address = "http://updates.kitteh.org/VanishNoPacket/version.php";
         private final VanishPlugin plugin;
 
         public UpdateCheck(VanishPlugin vanishPlugin) {
@@ -32,30 +31,26 @@ public class VanishPlugin extends JavaPlugin {
         @Override
         public void run() {
             try {
-                final URL url = new URL(UpdateCheck.address.replace(" ", "%20"));
-                final URLConnection connection = url.openConnection();
+                final URLConnection connection = new URL("http://updates.kitteh.org/VanishNoPacket/version").openConnection();
                 connection.setConnectTimeout(8000);
                 connection.setReadTimeout(15000);
-                connection.setRequestProperty("User-agent", "VanishNoPacket ${project.version}");
+                connection.setRequestProperty("User-agent", "VanishNoPacket");
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String version;
                 if ((version = bufferedReader.readLine()) != null) {
                     this.plugin.latestVersion = version;
                     if (!"${project.version}".equals(version)) {
-                        this.plugin.log("Found a different version available: " + version);
-                        this.plugin.log("Check http://dev.bukkit.org/server-mods/vanish/");
+                        this.plugin.getLogger().info("Found a different version available: " + version);
+                        this.plugin.getLogger().info("Check http://dev.bukkit.org/server-mods/vanish/");
                         this.plugin.versionDiff = true;
                     }
-                    bufferedReader.close();
-                    connection.getInputStream().close();
                     return;
-                } else {
-                    bufferedReader.close();
-                    connection.getInputStream().close();
                 }
+                bufferedReader.close();
+                connection.getInputStream().close();
             } catch (final Exception e) {
             }
-            this.plugin.log("Error: Could not check if plugin was up to date. Will try later");
+            this.plugin.getLogger().info("Error: Could not check if plugin was up to date. Will try later");
         }
 
     }
@@ -181,15 +176,6 @@ public class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Logs at level INFO prefixed with [Vanish]
-     * 
-     * @param message
-     */
-    public void log(String message) {
-        this.getLogger().info(message);
-    }
-
-    /**
      * Send a message to all players with vanish.statusupdates
      * 
      * @param message
@@ -227,7 +213,7 @@ public class VanishPlugin extends JavaPlugin {
         this.manager.onPluginDisable();
         this.getServer().getScheduler().cancelTasks(this);
         Debuggle.nah();
-        this.log("v${project.version} unloaded.");
+        this.getLogger().info("v${project.version} unloaded.");
     }
 
     @Override
@@ -238,7 +224,7 @@ public class VanishPlugin extends JavaPlugin {
         boolean firstTimeStarting = false;
         if (!check.exists()) {
             firstTimeStarting = true;
-            Settings.deployDefaultConfig("config.yml");
+            this.saveDefaultConfig();
             this.reloadConfig();
             if (this.getServer().getPluginManager().isPluginEnabled("Essentials")) {
                 this.getConfig().set("hooks.essentials", true);
@@ -299,16 +285,16 @@ public class VanishPlugin extends JavaPlugin {
         boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);
         if (firstTimeStarting) {
             updateCheck = false;
-            this.log("This is your first startup (or you wiped your config).");
-            this.log("In future startups, VanishNoPacket will check for updates");
-            this.log("If you dislike it, disable 'checkupdates' in the config file");
-            this.log("Note that this plugin also utilizes PluginMetrics with usage tracking");
-            this.log("If you do not want usage tracking (paranoid) disable in that config");
+            this.getLogger().info("This is your first startup (or you wiped your config).");
+            this.getLogger().info("In future startups, VanishNoPacket will check for updates");
+            this.getLogger().info("If you dislike it, disable 'checkupdates' in the config file");
+            this.getLogger().info("Note that this plugin also utilizes PluginMetrics with usage tracking");
+            this.getLogger().info("If you do not want usage tracking (paranoid) disable in that config");
         }
 
         if (updateCheck) {
             if ("${project.version}".contains("SNAPSHOT") || "${project.version}".equals("${project" + ".version}")) {
-                this.log("Not a release version. Update check disabled");
+                this.getLogger().info("Not a release version. Update check disabled");
             } else {
                 this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new UpdateCheck(this), 40, 432000);
             }
@@ -322,7 +308,7 @@ public class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
 
-        this.log("v${project.version} loaded.");
+        this.getLogger().info("v${project.version} loaded.");
     }
 
     /**

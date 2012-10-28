@@ -68,37 +68,29 @@ public class VanishManager {
 
     private final VanishPlugin plugin;
 
-    private final Set<String> vanishedPlayerNames;
+    private final Set<String> vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
 
-    private final Map<String, Boolean> sleepIgnored;
+    private final Map<String, Boolean> sleepIgnored = new HashMap<String, Boolean>();
 
     private final VanishAnnounceManipulator announceManipulator;
 
     private final Random random = new Random();
 
-    private final ShowPlayerHandler showPlayer;
+    private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
 
     public VanishManager(VanishPlugin plugin) {
         this.plugin = plugin;
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
-        this.vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
-        this.sleepIgnored = new HashMap<String, Boolean>();
-        this.showPlayer = new ShowPlayerHandler();
         this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, this.showPlayer, 4, 4);
     }
 
     /**
+     * Called by JSONAPI
+     * 
      * @return the Announce Manipulator
      */
     public VanishAnnounceManipulator getAnnounceManipulator() {
         return this.announceManipulator;
-    }
-
-    /**
-     * @return Daddy!
-     */
-    public VanishPlugin getPlugin() {
-        return this.plugin;
     }
 
     /**
@@ -135,7 +127,7 @@ public class VanishManager {
     /**
      * Only call this when disabling the plugin
      */
-    public void onPluginDisable() {
+    void onPluginDisable() {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
                 if ((player != null) && (player2 != null) && !player.equals(player2)) {
@@ -190,7 +182,7 @@ public class VanishManager {
      * 
      * @param player
      */
-    public void resetSleepingIgnored(Player player) {
+    void resetSleepingIgnored(Player player) {
         if (this.sleepIgnored.containsKey(player.getName())) {
             player.setSleepingIgnored(this.sleepIgnored.remove(player.getName()));
         }
@@ -202,7 +194,7 @@ public class VanishManager {
      * 
      * @param player
      */
-    public void setSleepingIgnored(Player player) {
+    void setSleepingIgnored(Player player) {
         if (!this.sleepIgnored.containsKey(player.getName())) {
             this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());
         }
@@ -275,14 +267,14 @@ public class VanishManager {
                 }
             }
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            MetricsOverlord.vanish.increment();
-            this.plugin.log(vanishingPlayerName + " disappeared.");
+            MetricsOverlord.getVanishTracker().increment();
+            this.plugin.getLogger().info(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
-            MetricsOverlord.unvanish.increment();
-            this.plugin.log(vanishingPlayerName + " reappeared.");
+            MetricsOverlord.getUnvanishTracker().increment();
+            this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
             if (VanishPerms.canSmoke(vanishingPlayer)) {
@@ -364,7 +356,6 @@ public class VanishManager {
             final Location toStrike = new Location(location.getWorld(), xToStrike, y, zToStrike);
             location.getWorld().strikeLightningEffect(toStrike);
         }
-
     }
 
     private void removeVanished(String name) {

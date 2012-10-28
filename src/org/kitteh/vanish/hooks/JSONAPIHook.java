@@ -17,9 +17,9 @@ public class JSONAPIHook extends Hook {
         if ((grab != null) && (grab instanceof JSONAPI)) {
             ((JSONAPI) grab).registerMethod("{   \"name\": \"isVanished\",   \"desc\": \"Checks if named player is vanished\",   \"call\": \"Plugins.VanishNoPacket.getManager().isVanished(0)\",  \"returns\": [\"boolean\", \"True if player is invisible. False if offline or visible.\"],   \"args\": [       [\"String\", \"Player's name\"]   ]}");
             ((JSONAPI) grab).registerMethod("{   \"name\": \"getOnlineStatus\",   \"desc\": \"Check if player is considered online\",   \"call\": \"Plugins.VanishNoPacket.getManager().getAnnounceManipulator().getFakeOnlineStatus(0)\",  \"returns\": [\"boolean\", \"True if player is considered online. False if not or player offline.\"],   \"args\": [       [\"String\", \"Player's name\"]   ]}");
-            this.plugin.log("Now hooking into JSONAPI");
+            this.plugin.getLogger().info("Now hooking into JSONAPI");
         } else {
-            this.plugin.log("You wanted JSONAPI support. I could not find JSONAPI.");
+            this.plugin.getLogger().info("You wanted JSONAPI support. I could not find JSONAPI.");
             return;
         }
     }
