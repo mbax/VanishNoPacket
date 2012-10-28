@@ -142,7 +142,7 @@ public class VanishManager {
                     if (this.isVanished(player2) && player.canSee(player2)) {
                         player.hidePlayer(player2);
                         ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(player2.getEntityId()));
-                        ((CraftPlayer) player).getHandle().g.remove(Integer.valueOf(player2.getEntityId()));
+                        ((CraftPlayer) player).getHandle().removeQueue.remove(Integer.valueOf(player2.getEntityId()));
                     }
                     player.showPlayer(player2);
                 }
