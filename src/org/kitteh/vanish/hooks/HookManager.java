@@ -37,9 +37,6 @@ public class HookManager {
     public HookManager(VanishPlugin plugin) {
         this.hooks = new HashMap<String, Hook>();
         this.plugin = plugin;
-        for (final HookType hook : HookType.values()) {
-            this.registerHook(hook);
-        }
     }
 
     /**
@@ -81,6 +78,9 @@ public class HookManager {
      * @return the named Hook if registered, null if no match.
      */
     public Hook getHook(HookType hooktype) {
+        if (!this.hooks.containsKey(hooktype.name())) {
+            this.registerHook(hooktype);
+        }
         return this.hooks.get(hooktype.name());
     }
 
