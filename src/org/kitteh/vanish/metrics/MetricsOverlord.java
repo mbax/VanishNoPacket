@@ -15,7 +15,7 @@ public class MetricsOverlord {
     private static Tracker joininvis;
     private static Metrics metrics;
 
-    private static final String[] PERMS_PLUGINS = { "DroxPerms", "GroupManager", "Permissions", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions" };
+    private static final String[] PERMS_PLUGINS = { "DroxPerms", "GroupManager", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions" };
 
     public static Tracker getCommandTracker() {
         return MetricsOverlord.command;
@@ -71,7 +71,7 @@ public class MetricsOverlord {
             MetricsOverlord.metrics.addCustomData(MetricsOverlord.fakequit);
             MetricsOverlord.metrics.addCustomData(MetricsOverlord.quitinvis);
             MetricsOverlord.metrics.addCustomData(MetricsOverlord.joininvis);
-            MetricsOverlord.metrics.createGraph("Permissions Plugins").addPlotter(new Counter(MetricsOverlord.getPermsPlugin(plugin)));
+            MetricsOverlord.metrics.createGraph("Permissions").addPlotter(new Counter(MetricsOverlord.getPermsPlugin(plugin)));
             MetricsOverlord.metrics.createGraph("Online Mode").addPlotter(new Counter(plugin.getServer().getOnlineMode() ? "Online" : "Offline"));
             MetricsOverlord.metrics.createGraph("TagAPI").addPlotter(new Counter(plugin.getServer().getPluginManager().isPluginEnabled("TagAPI") ? "Yup" : "Nope"));
             MetricsOverlord.metrics.start();
