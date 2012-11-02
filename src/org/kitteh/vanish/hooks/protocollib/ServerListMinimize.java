@@ -1,4 +1,4 @@
-package org.kitteh.vanish.hooks.plugins;
+package org.kitteh.vanish.hooks.protocollib;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -15,9 +15,9 @@ import com.comphenix.protocol.injector.GamePhase;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.reflect.StructureModifier;
 
-public class ProtocolLibHook extends Hook {
+public class ServerListMinimize extends Hook {
 
-    public ProtocolLibHook(VanishPlugin plugin) {
+    public ServerListMinimize(VanishPlugin plugin) {
         super(plugin);
     }
 
@@ -45,7 +45,7 @@ public class ProtocolLibHook extends Hook {
                             } catch (final NumberFormatException e) {
                                 return;
                             }
-                            online -= ProtocolLibHook.this.plugin.getManager().numVanished();
+                            online -= ServerListMinimize.this.plugin.getManager().numVanished();
                             final StringBuilder builder = new StringBuilder();
                             for (int x = 0; x < split.length; x++) {
                                 if (builder.length() > 0) {

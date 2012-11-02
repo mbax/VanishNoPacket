@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.plugins.*;
+import org.kitteh.vanish.hooks.protocollib.ServerListMinimize;
 
 public class HookManager {
     public enum HookType {
@@ -18,7 +19,7 @@ public class HookManager {
         Essentials(EssentialsHook.class), // essentials! 
         GeoIPTools(GeoIPToolsHook.class), // geoiptools!
         JSONAPI(JSONAPIHook.class), // jsonapi!
-        ProtocolLib(ProtocolLibHook.class), // protocollib!
+        ProtocolLib(ServerListMinimize.class), // protocollib!
         SpoutCraft(SpoutCraftHook.class); // spoutcraft!
 
         private Class<? extends Hook> clazz;
