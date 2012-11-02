@@ -1,4 +1,4 @@
-package org.kitteh.vanish.hooks;
+package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -6,6 +6,7 @@ import org.bukkit.event.*;
 import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
+import org.kitteh.vanish.hooks.Hook;
 
 import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
 import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;

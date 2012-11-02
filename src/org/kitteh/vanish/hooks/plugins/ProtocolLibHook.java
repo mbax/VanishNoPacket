@@ -1,8 +1,9 @@
-package org.kitteh.vanish.hooks;
+package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.Hook;
 
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.ProtocolLibrary;

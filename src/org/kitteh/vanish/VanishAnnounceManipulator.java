@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.kitteh.vanish.hooks.BPermissionsHook;
-import org.kitteh.vanish.hooks.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.HookManager.HookType;
+import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
+import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**

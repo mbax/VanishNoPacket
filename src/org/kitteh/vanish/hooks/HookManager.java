@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.plugins.*;
 
 public class HookManager {
     public enum HookType {

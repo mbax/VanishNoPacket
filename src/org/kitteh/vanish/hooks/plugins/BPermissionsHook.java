@@ -1,7 +1,8 @@
-package org.kitteh.vanish.hooks;
+package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.Hook;
 
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;

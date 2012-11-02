@@ -1,7 +1,8 @@
-package org.kitteh.vanish.hooks;
+package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.Hook;
 
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
 

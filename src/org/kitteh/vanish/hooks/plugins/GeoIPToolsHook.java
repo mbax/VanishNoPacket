@@ -1,8 +1,9 @@
-package org.kitteh.vanish.hooks;
+package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.Hook;
 
 import uk.org.whoami.geoip.GeoIPLookup;
 import uk.org.whoami.geoip.GeoIPTools;

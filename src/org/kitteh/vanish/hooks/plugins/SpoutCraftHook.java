@@ -1,4 +1,4 @@
-package org.kitteh.vanish.hooks;
+package org.kitteh.vanish.hooks.plugins;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,7 @@ import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.Hook;
 
 public class SpoutCraftHook extends Hook implements Listener {
 
