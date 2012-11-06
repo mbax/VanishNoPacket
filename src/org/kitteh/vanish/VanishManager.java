@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 import org.kitteh.vanish.filthycalls.NMSManager;
 import org.kitteh.vanish.metrics.MetricsOverlord;
@@ -75,10 +76,20 @@ public class VanishManager {
 
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
 
-    public VanishManager(VanishPlugin plugin) {
+    public VanishManager(final VanishPlugin plugin) {
         this.plugin = plugin;
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
         this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, this.showPlayer, 4, 4);
+        
+        this.plugin.getServer().getMessenger().registerIncomingPluginChannel(this.plugin, "vanishStatus", new PluginMessageListener() {
+            public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+                if (channel.equals("vanishStatus") && new String(message).equals("check")) {
+                    player.sendPluginMessage(plugin, "vanishStatus", isVanished(player) ? new byte[] {0x01} : new byte[] {0x00} );
+                }
+            }
+        });
+        this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, "vanishStatus");
+        
     }
 
     /**
@@ -243,6 +254,7 @@ public class VanishManager {
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
+        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] {0x01} : new byte[] {0x00} );
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {
