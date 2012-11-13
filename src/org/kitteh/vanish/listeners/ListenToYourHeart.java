@@ -4,8 +4,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.painting.PaintingBreakByEntityEvent;
-import org.bukkit.event.painting.PaintingBreakEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
@@ -18,9 +18,9 @@ public class ListenToYourHeart implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void badReview(PaintingBreakEvent criticism) {
-        if (criticism instanceof PaintingBreakByEntityEvent) {
-            final Entity critic = ((PaintingBreakByEntityEvent) criticism).getRemover();
+    public void badReview(HangingBreakEvent criticism) {
+        if (criticism instanceof HangingBreakByEntityEvent) {
+            final Entity critic = ((HangingBreakByEntityEvent) criticism).getRemover();
             if (critic instanceof Player) {
                 final Player arrogantFool = (Player) critic;
                 if (this.plugin.getManager().isVanished(arrogantFool) && VanishPerms.canNotInteract(arrogantFool)) {
