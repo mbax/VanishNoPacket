@@ -1,18 +1,15 @@
 package org.kitteh.vanish;
 
 import java.util.*;
-import net.minecraft.server.Block;
-import net.minecraft.server.Packet29DestroyEntity;
-import net.minecraft.server.Packet60Explosion;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
+import org.kitteh.vanish.filthycalls.NMSManager;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
@@ -276,11 +273,10 @@ public class VanishManager {
 
     private void explosionEffect(Player player) {
         final Location loc = player.getLocation();
-        final Packet60Explosion boom = new Packet60Explosion(loc.getX(), loc.getY(), loc.getZ(), 3, new ArrayList<Block>(), null);
         for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
             if (plr.getLocation().getWorld().equals(loc.getWorld())) {
                 if (plr.getLocation().distance(loc) < 256) {
-                    ((CraftPlayer) plr).getHandle().netServerHandler.sendPacket(boom);
+                    NMSManager.getProvider().sendExplosionPacket(plr, loc.getX(), loc.getY(), loc.getZ());
                 }
             }
         }
@@ -343,8 +339,8 @@ public class VanishManager {
                 if ((player != null) && (player2 != null) && !player.equals(player2)) {
                     if (this.isVanished(player2) && player.canSee(player2)) {
                         player.hidePlayer(player2);
-                        ((CraftPlayer) player).getHandle().netServerHandler.sendPacket(new Packet29DestroyEntity(player2.getEntityId()));
-                        ((CraftPlayer) player).getHandle().removeQueue.remove(Integer.valueOf(player2.getEntityId()));
+                        NMSManager.getProvider().sendEntityDestroy(player, player2.getEntityId());
+                        NMSManager.getProvider().removeFromRemoveQueue(player, player2.getEntityId());
                     }
                     player.showPlayer(player2);
                 }
