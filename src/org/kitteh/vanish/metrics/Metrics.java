@@ -452,7 +452,7 @@ public class Metrics {
             }
 
             // Begin hitting the server with glorious data
-            this.taskId = this.plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(this.plugin, new Runnable() {
+            this.taskId = this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, new Runnable() {
 
                 private boolean firstPost = true;
 
@@ -480,7 +480,7 @@ public class Metrics {
                         //Bukkit.getLogger().log(Level.INFO, "[Metrics] " + e.getMessage());
                     }
                 }
-            }, 0, Metrics.PING_INTERVAL * 1200);
+            }, 0, Metrics.PING_INTERVAL * 1200).getTaskId();
 
             return true;
         }
