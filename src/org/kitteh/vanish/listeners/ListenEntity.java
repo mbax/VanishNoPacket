@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
@@ -54,4 +55,13 @@ public class ListenEntity implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onVehicleDestroy(VehicleDestroyEvent event) {
+        Entity entity = event.getAttacker();
+        if (entity instanceof Player) {
+            if (VanishPerms.canNotInteract((Player) entity)) {
+                event.setCancelled(true);
+            }
+        }
+    }
 }
