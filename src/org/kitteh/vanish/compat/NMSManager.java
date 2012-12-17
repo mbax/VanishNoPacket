@@ -1,4 +1,5 @@
-package org.kitteh.vanish.filthycalls;
+package org.kitteh.vanish.compat;
+
 
 public class NMSManager {
 
@@ -14,12 +15,12 @@ public class NMSManager {
     private static NMSCallProvider needProviderPlox() {
         try {
             Class.forName("net.minecraft.server.Packet");
-            return new NMS144();
+            return new org.kitteh.vanish.compat.pre.NMSHandler();
         } catch (ClassNotFoundException e) {
         }
         try {
             Class.forName("net.minecraft.server.v1_4_5.Packet");
-            return new NMS145();
+            return new org.kitteh.vanish.compat.v1_4_5.NMSHandler();
         } catch (ClassNotFoundException e) {
         }
         return null;

@@ -9,8 +9,8 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
-import org.kitteh.vanish.filthycalls.NMSManager;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**

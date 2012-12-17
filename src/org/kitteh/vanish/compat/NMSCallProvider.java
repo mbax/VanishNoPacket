@@ -1,4 +1,4 @@
-package org.kitteh.vanish.filthycalls;
+package org.kitteh.vanish.compat;
 
 import org.bukkit.entity.Player;
 

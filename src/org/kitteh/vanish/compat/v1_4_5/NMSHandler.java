@@ -1,15 +1,16 @@
-package org.kitteh.vanish.filthycalls;
+package org.kitteh.vanish.compat.v1_4_5;
 
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 import org.bukkit.craftbukkit.v1_4_5.entity.CraftPlayer;
+import org.kitteh.vanish.compat.NMSCallProvider;
 
 import net.minecraft.server.v1_4_5.Block;
 import net.minecraft.server.v1_4_5.Packet29DestroyEntity;
 import net.minecraft.server.v1_4_5.Packet60Explosion;
 
-public class NMS145 implements NMSCallProvider {
+public class NMSHandler implements NMSCallProvider {
 
     @Override
     public void sendExplosionPacket(Player player, double x, double y, double z) {
