@@ -2,138 +2,40 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kitteh</groupId>
-  <artifactId>VanishNoPacket</artifactId>
-  <packaging>jar</packaging>
-  <version>3.13</version>
-  <name>VanishNoPacket</name>
-  <url>http://github.com/mbax/VanishNoPacket/</url>
+  <artifactId>vnp-parent</artifactId>
+  <packaging>pom</packaging>
+  <version>parent</version>
+  <name>VNP Parent Pom</name>
+  <url>http://github.com/mbax/VanishNoPacket</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <modules>
+    <module>modules/API</module>
+    <module>modules/vPre</module>
+    <module>modules/v1_4_5</module>
+    <module>modules/VanishNoPacket</module>
+  </modules>
 
   <repositories>
     <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public</url>
     </repository>
-    <repository>
-      <id>spout-repo</id>
-      <url>http://nexus.spout.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>essentials-repo</id>
-      <url>http://ess.ementalo.com/nexus/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>kitteh-repo</id>
-      <url>http://repo.kitteh.org/content/groups/public</url>
-    </repository>
   </repositories>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>craftbukkit</artifactId>
-      <version>1.4.5-R0.3-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.getspout</groupId>
-      <artifactId>spoutplugin</artifactId>
-      <version>dev-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.dynmap</groupId>
-      <artifactId>dynmap-api</artifactId>
-      <version>0.39</version>
-    </dependency>
-    <dependency>
-      <groupId>de.bananaco</groupId>
-      <artifactId>bPermissions</artifactId>
-      <version>dev-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.earth2me</groupId>
-      <artifactId>essentials</artifactId>
-      <version>2.9.1</version>
-    </dependency>
-    <dependency>
-      <groupId>uk.org.whoami</groupId>
-      <artifactId>GeoIPTools</artifactId>
-      <version>1.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
-      <artifactId>JSONAPI</artifactId>
-      <version>bleeding</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>tagapi</artifactId>
-      <version>1.7</version>
-    </dependency>
-    <dependency>
-      <groupId>pgDev</groupId>
-      <artifactId>disguisecraft</artifactId>
-      <version>2.8-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.comphenix</groupId>
-      <artifactId>ProtocolLib</artifactId>
-      <version>1.4.2</version>
-    </dependency>
-  </dependencies>
-
-  <distributionManagement>
-    <repository>
-      <id>kittehReleases</id>
-      <name>Kitteh Releases</name>
-      <url>http://repo.kitteh.org/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>kittehSnapshots</id>
-      <name>Kitteh Snapshots</name>
-      <url>http://repo.kitteh.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <build>
-    <finalName>${project.artifactId}</finalName>
-    <sourceDirectory>target/filtered-sources/java</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src</directory>
-        <filtering>true</filtering>
-        <targetPath>../filtered-sources/java</targetPath>
-      </resource>
-      <resource>
-        <targetPath>.</targetPath>
-        <filtering>true</filtering>
-        <directory>${basedir}/src</directory>
-        <includes>
-          <include>plugin.yml</include>
-          <include>config.yml</include>
-          <include>spoutcraft.yml</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.7</version>
         <configuration>
-          <excludes>
-            <exclude>net/**</exclude>
-            <exclude>org/bukkit/**</exclude>
-          </excludes>
+          <skip>true</skip>
         </configuration>
-       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
       </plugin>
     </plugins>
   </build>
-</project>
 
+</project>

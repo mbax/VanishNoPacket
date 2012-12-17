@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.hooks.*;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.*;
@@ -218,6 +219,10 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (!NMSManager.load(this)) {
+            this.setEnabled(false);
+            return;
+        }
         VanishNoPacket.setInstance(this);
 
         final File check = new File(this.getDataFolder(), "config.yml");

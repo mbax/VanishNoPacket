@@ -1,4 +1,4 @@
-package org.kitteh.vanish.compat;
+package org.kitteh.vanish.compat.api;
 
 import org.bukkit.entity.Player;
 

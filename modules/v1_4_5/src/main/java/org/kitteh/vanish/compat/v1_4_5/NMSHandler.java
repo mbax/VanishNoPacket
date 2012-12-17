@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 import org.bukkit.craftbukkit.v1_4_5.entity.CraftPlayer;
-import org.kitteh.vanish.compat.NMSCallProvider;
+import org.kitteh.vanish.compat.api.NMSCallProvider;
 
 import net.minecraft.server.v1_4_5.Block;
 import net.minecraft.server.v1_4_5.Packet29DestroyEntity;
