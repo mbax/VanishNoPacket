@@ -58,7 +58,7 @@ public class ListenEntity implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onVehicleDestroy(VehicleDestroyEvent event) {
         Entity entity = event.getAttacker();
-        if (entity instanceof Player) {
+        if (entity instanceof Player && this.plugin.getManager().isVanished((Player) event.getAttacker())) {
             if (VanishPerms.canNotInteract((Player) entity)) {
                 event.setCancelled(true);
             }
