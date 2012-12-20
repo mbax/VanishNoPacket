@@ -15,6 +15,7 @@
     <module>modules/API</module>
     <module>modules/vPre</module>
     <module>modules/v1_4_5</module>
+    <module>modules/v1_4_6</module>
     <module>modules/VanishNoPacket</module>
   </modules>
 
