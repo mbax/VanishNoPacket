@@ -50,6 +50,13 @@
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
+      <artifactId>vnp-v1_4_6</artifactId>
+      <version>v1_4_6</version>
+      <type>jar</type>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
       <artifactId>vnp-api</artifactId>
       <version>API</version>
       <type>jar</type>
