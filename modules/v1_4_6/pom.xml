@@ -4,7 +4,7 @@
   <groupId>org.kitteh</groupId>
   <artifactId>vnp-v1_4_6</artifactId>
   <packaging>jar</packaging>
-  <name>VNP for 1.4.5</name>
+  <name>VNP for 1.4.6</name>
   <version>v1_4_6</version>
 
   <properties>
