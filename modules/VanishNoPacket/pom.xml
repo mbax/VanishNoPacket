@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
 
   <name>VanishNoPacket</name>
-  <version>3.14.1</version>
+  <version>3.14.2-SNAPSHOT</version>
 
   <url>http://github.com/mbax/VanishNoPacket</url>
 
@@ -50,6 +50,13 @@
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
+      <artifactId>vnp-v1_4_6</artifactId>
+      <version>v1_4_6</version>
+      <type>jar</type>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
       <artifactId>vnp-api</artifactId>
       <version>API</version>
       <type>jar</type>
@@ -58,7 +65,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>LATEST</version>
+      <version>1.4.5-R1.0</version>
       <type>jar</type>
     </dependency>
     <dependency>

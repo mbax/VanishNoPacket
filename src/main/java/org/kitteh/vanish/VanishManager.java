@@ -5,6 +5,7 @@ import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -284,14 +285,8 @@ public class VanishManager {
     }
 
     private void explosionEffect(Player player) {
-        final Location loc = player.getLocation();
-        for (final Player plr : this.plugin.getServer().getOnlinePlayers()) {
-            if (plr.getLocation().getWorld().equals(loc.getWorld())) {
-                if (plr.getLocation().distance(loc) < 256) {
-                    NMSManager.getProvider().sendExplosionPacket(plr, loc.getX(), loc.getY(), loc.getZ());
-                }
-            }
-        }
+        NMSManager.getProvider().sendExplosionPacket(player.getLocation());
+        player.getWorld().playSound(player.getLocation(), Sound.EXPLODE, 4F, 0.7F);
     }
 
     private void hideVanished(Player player) {
@@ -352,7 +347,6 @@ public class VanishManager {
                     if (this.isVanished(player2) && player.canSee(player2)) {
                         player.hidePlayer(player2);
                         NMSManager.getProvider().sendEntityDestroy(player, player2.getEntityId());
-                        NMSManager.getProvider().removeFromRemoveQueue(player, player2.getEntityId());
                     }
                     player.showPlayer(player2);
                 }
