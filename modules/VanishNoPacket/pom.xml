@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
 
   <name>VanishNoPacket</name>
-  <version>3.14.3</version>
+  <version>3.14.4-SNAPSHOT</version>
 
   <url>http://github.com/mbax/VanishNoPacket</url>
 
