@@ -64,7 +64,9 @@ public class VanishPlugin extends JavaPlugin {
 
     private VanishManager manager;
 
-    private HookManager hookManager;
+    private HookManager hookManager = new HookManager(this);
+
+    private boolean abort;
 
     /**
      * Inform VNP that the user has closed their fake chest
@@ -202,6 +204,12 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        VanishNoPacket.setInstance(null);
+        Debuggle.nah();
+        if (abort) {
+            this.getLogger().info("v${project.version} unloaded after failure to start.");
+            return;
+        }
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
                 if (this.manager.isVanished(player)) {
@@ -209,17 +217,15 @@ public class VanishPlugin extends JavaPlugin {
                 }
             }
         }
-        VanishNoPacket.setInstance(null);
         this.hookManager.onDisable();
         this.manager.onPluginDisable();
-        this.getServer().getScheduler().cancelTasks(this);
-        Debuggle.nah();
         this.getLogger().info("v${project.version} unloaded.");
     }
 
     @Override
     public void onEnable() {
         if (!NMSManager.load(this)) {
+            abort = true;
             this.setEnabled(false);
             return;
         }
@@ -251,8 +257,6 @@ public class VanishPlugin extends JavaPlugin {
                 this.getLogger().info("and download TagAPI.jar");
             }
         }
-
-        this.hookManager = new HookManager(this);
 
         if (this.getConfig().getBoolean("hooks.essentials", false)) {
             this.hookManager.getHook(HookType.Essentials).onEnable();

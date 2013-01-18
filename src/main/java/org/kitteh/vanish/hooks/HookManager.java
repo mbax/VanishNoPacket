@@ -33,11 +33,10 @@ public class HookManager {
         }
     }
 
-    private final HashMap<String, Hook> hooks;
+    private final HashMap<String, Hook> hooks = new HashMap<String, Hook>();
     private final VanishPlugin plugin;
 
     public HookManager(VanishPlugin plugin) {
-        this.hooks = new HashMap<String, Hook>();
         this.plugin = plugin;
     }
 
