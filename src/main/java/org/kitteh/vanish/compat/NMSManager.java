@@ -11,7 +11,7 @@ public class NMSManager {
         return NMSManager.provider;
     }
 
-    public static boolean load(Plugin plugin) {
+    public static void load(Plugin plugin) {
         final String packageName = plugin.getServer().getClass().getPackage().getName();
         String cbversion = packageName.substring(packageName.lastIndexOf('.') + 1);
         if (cbversion.equals("craftbukkit")) {
@@ -27,10 +27,10 @@ public class NMSManager {
         } catch (final Exception e) {
             plugin.getLogger().severe("Could not find support for this CraftBukkit version.");
             plugin.getLogger().info("Check for updates at http://dev.bukkit.org/server-mods/vanish");
-            return false;
+            plugin.getLogger().info("Will attempt things without, might be buggy!");
+            NMSManager.provider = new FailedHandler();
+            return;
         }
         plugin.getLogger().info("Loading support for " + (cbversion.equals("pre") ? "1.4.5-pre-RB" : cbversion));
-        return true;
     }
-
 }

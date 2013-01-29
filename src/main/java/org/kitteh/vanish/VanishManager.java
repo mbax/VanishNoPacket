@@ -285,7 +285,7 @@ public class VanishManager {
     }
 
     private void explosionEffect(Player player) {
-        NMSManager.getProvider().sendExplosionPacket(player.getLocation());
+        NMSManager.getProvider().sendExplosionPacket(player.getLocation(), player);
         player.getWorld().playSound(player.getLocation(), Sound.EXPLODE, 4F, 0.7F);
     }
 

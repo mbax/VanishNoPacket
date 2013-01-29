@@ -66,8 +66,6 @@ public class VanishPlugin extends JavaPlugin {
 
     private HookManager hookManager = new HookManager(this);
 
-    private boolean abort;
-
     /**
      * Inform VNP that the user has closed their fake chest
      * 
@@ -206,10 +204,6 @@ public class VanishPlugin extends JavaPlugin {
     public void onDisable() {
         VanishNoPacket.setInstance(null);
         Debuggle.nah();
-        if (abort) {
-            this.getLogger().info("v${project.version} unloaded after failure to start.");
-            return;
-        }
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
                 if (this.manager.isVanished(player)) {
@@ -224,11 +218,7 @@ public class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!NMSManager.load(this)) {
-            abort = true;
-            this.setEnabled(false);
-            return;
-        }
+        NMSManager.load(this);
         VanishNoPacket.setInstance(this);
 
         final File check = new File(this.getDataFolder(), "config.yml");
