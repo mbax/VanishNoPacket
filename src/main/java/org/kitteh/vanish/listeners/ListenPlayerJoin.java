@@ -67,7 +67,7 @@ public class ListenPlayerJoin implements Listener {
         }
         if (VanishPerms.canReceiveAdminAlerts(event.getPlayer()) && this.plugin.versionDifference()) {
             event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] This is version " + ChatColor.DARK_AQUA + this.plugin.getCurrentVersion() + ChatColor.AQUA + ", latest is " + ChatColor.DARK_AQUA + this.plugin.getLatestKnownVersion());
-            event.getPlayer().sendMessage(ChatColor.AQUA + "[Vanish] Check " + ChatColor.DARK_AQUA + "http://dev.bukkit.org/server-mods/vanish/");
+            event.getPlayer().sendMessage(ChatColor.AQUA + "Visit " + ChatColor.DARK_AQUA + "http://www.curse.com/server-mods/minecraft/vanish");
         }
     }
 
