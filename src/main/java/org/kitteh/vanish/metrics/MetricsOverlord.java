@@ -4,15 +4,15 @@ import org.bukkit.plugin.PluginManager;
 import org.kitteh.vanish.VanishPlugin;
 
 public class MetricsOverlord {
-    private static Tracker command;
-    private static Tracker vanish;
-    private static Tracker unvanish;
-    private static Tracker toggle;
-    private static Tracker startup;
-    private static Tracker fakejoin;
-    private static Tracker fakequit;
-    private static Tracker quitinvis;
-    private static Tracker joininvis;
+    private static Tracker command = new Tracker("");
+    private static Tracker vanish = new Tracker("");
+    private static Tracker unvanish = new Tracker("");
+    private static Tracker toggle = new Tracker("");
+    private static Tracker startup = new Tracker("");
+    private static Tracker fakejoin = new Tracker("");
+    private static Tracker fakequit = new Tracker("");
+    private static Tracker quitinvis = new Tracker("");
+    private static Tracker joininvis = new Tracker("");
     private static Metrics metrics;
 
     private static final String[] PERMS_PLUGINS = { "DroxPerms", "GroupManager", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions" };
