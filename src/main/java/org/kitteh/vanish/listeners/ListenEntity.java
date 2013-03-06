@@ -2,6 +2,7 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -32,11 +33,17 @@ public class ListenEntity implements Listener {
         if (event instanceof EntityDamageByEntityEvent) {
             final EntityDamageByEntityEvent ev = (EntityDamageByEntityEvent) event;
             final Entity damager = ev.getDamager();
+            Player player = null;
             if (damager instanceof Player) {
-                final Player player = (Player) damager;
-                if (this.plugin.getManager().isVanished(player) && VanishPerms.blockOutgoingDamage(player)) {
-                    event.setCancelled(true);
+                player = (Player) damager;
+            } else if (damager instanceof Projectile) {
+                final Projectile projectile = (Projectile) damager;
+                if ((projectile.getShooter() != null) && (projectile.getShooter() instanceof Player)) {
+                    player = (Player) projectile.getShooter();
                 }
+            }
+            if ((player != null) && this.plugin.getManager().isVanished(player) && VanishPerms.blockOutgoingDamage(player)) {
+                event.setCancelled(true);
             }
         }
     }
@@ -57,8 +64,8 @@ public class ListenEntity implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onVehicleDestroy(VehicleDestroyEvent event) {
-        Entity entity = event.getAttacker();
-        if (entity instanceof Player && this.plugin.getManager().isVanished((Player) event.getAttacker())) {
+        final Entity entity = event.getAttacker();
+        if ((entity instanceof Player) && this.plugin.getManager().isVanished((Player) event.getAttacker())) {
             if (VanishPerms.canNotInteract((Player) entity)) {
                 event.setCancelled(true);
             }
