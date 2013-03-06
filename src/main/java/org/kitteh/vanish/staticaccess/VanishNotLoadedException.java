@@ -10,5 +10,4 @@ public class VanishNotLoadedException extends Exception {
     public VanishNotLoadedException() {
         super("VanishNoPacket isn't loaded!");
     }
-
 }

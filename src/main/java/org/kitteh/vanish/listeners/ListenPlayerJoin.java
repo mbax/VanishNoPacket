@@ -70,5 +70,4 @@ public class ListenPlayerJoin implements Listener {
             event.getPlayer().sendMessage(ChatColor.AQUA + "Visit " + ChatColor.DARK_AQUA + "http://www.curse.com/server-mods/minecraft/vanish");
         }
     }
-
 }

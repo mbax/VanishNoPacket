@@ -3,6 +3,7 @@ package org.kitteh.vanish;
 import org.bukkit.entity.Player;
 
 public class VanishUser {
+
     private boolean seeAll;
     private boolean noPickup;
     private boolean noFollow;
@@ -138,5 +139,4 @@ public class VanishUser {
         this.smoke = !this.smoke;
         return this.smoke;
     }
-
 }

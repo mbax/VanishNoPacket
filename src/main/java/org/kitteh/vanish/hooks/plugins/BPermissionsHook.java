@@ -42,5 +42,4 @@ public class BPermissionsHook extends Hook {
     private String getValue(Player player, String key) {
         return ApiLayer.getValue(player.getWorld().getName(), CalculableType.USER, player.getName(), key);
     }
-
 }

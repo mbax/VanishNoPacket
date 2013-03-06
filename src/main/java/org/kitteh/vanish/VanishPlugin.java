@@ -326,5 +326,4 @@ public class VanishPlugin extends JavaPlugin {
     public boolean versionDifference() {
         return this.versionDiff;
     }
-
 }

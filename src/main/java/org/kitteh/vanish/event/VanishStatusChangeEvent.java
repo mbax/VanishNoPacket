@@ -47,5 +47,4 @@ public class VanishStatusChangeEvent extends Event {
     public boolean isVanishing() {
         return this.vanishing;
     }
-
 }

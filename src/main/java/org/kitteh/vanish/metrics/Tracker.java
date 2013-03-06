@@ -30,5 +30,4 @@ public class Tracker extends Metrics.Plotter {
     public void reset() {
         this.value = this.value - this.last;
     }
-
 }

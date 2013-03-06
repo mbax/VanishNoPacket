@@ -74,5 +74,4 @@ public class ListenPlayerMessages implements Listener {
 
         }
     }
-
 }

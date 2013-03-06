@@ -58,5 +58,4 @@ public class DynmapHook extends Hook {
             this.dynmap.setPlayerVisiblity(player, false);
         }
     }
-
 }

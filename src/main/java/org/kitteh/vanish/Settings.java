@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class Settings {
+
     private static boolean enablePermTest;
     private static String fakeQuit;
     private static String fakeJoin;

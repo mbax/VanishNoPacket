@@ -12,6 +12,7 @@ import org.kitteh.vanish.hooks.plugins.*;
 import org.kitteh.vanish.hooks.protocollib.ServerListMinimize;
 
 public class HookManager {
+
     public enum HookType {
         BPermissions(BPermissionsHook.class), // bperms!
         DisguiseCraft(DisguiseCraftHook.class), // disguisecraft!

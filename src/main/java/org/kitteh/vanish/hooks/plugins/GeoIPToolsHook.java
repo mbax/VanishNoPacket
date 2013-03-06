@@ -51,5 +51,4 @@ public class GeoIPToolsHook extends Hook {
             this.geoip = geoip.getGeoIPLookup();
         }
     }
-
 }

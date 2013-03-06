@@ -26,5 +26,4 @@ public class NMSHandler implements NMSCallProvider {
     public void sendEntityDestroy(Player player, int entityId) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new Packet29DestroyEntity(entityId));
     }
-
 }

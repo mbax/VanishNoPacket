@@ -10,5 +10,4 @@ public class Counter extends Metrics.Plotter {
     public int getValue() {
         return 1;
     }
-
 }

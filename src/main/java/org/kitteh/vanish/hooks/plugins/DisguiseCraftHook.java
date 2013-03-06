@@ -53,5 +53,4 @@ public class DisguiseCraftHook extends Hook implements Listener {
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
         }
     }
-
 }

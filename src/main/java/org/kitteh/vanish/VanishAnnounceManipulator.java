@@ -17,6 +17,7 @@ import org.kitteh.vanish.metrics.MetricsOverlord;
  * particularly stupid.
  */
 public class VanishAnnounceManipulator {
+
     private final ArrayList<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
     private final HashMap<String, Boolean> playerOnlineStatus;

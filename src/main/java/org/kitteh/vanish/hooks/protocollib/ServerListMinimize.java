@@ -67,5 +67,4 @@ public class ServerListMinimize extends Hook {
             return;
         }
     }
-
 }

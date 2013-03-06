@@ -20,5 +20,4 @@ public class FailedHandler implements NMSCallProvider {
             subject.sendMessage(ChatColor.AQUA + "Your explosion was not nearly as awesome without it");
         }
     }
-
 }

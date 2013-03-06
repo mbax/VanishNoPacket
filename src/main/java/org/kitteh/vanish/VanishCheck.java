@@ -20,5 +20,4 @@ public class VanishCheck implements Callable<Object> {
             return false;
         }
     }
-
 }

@@ -8,5 +8,4 @@ public interface NMSCallProvider {
     public void sendExplosionPacket(Location loc, Player subject);
 
     public void sendEntityDestroy(Player player, int entityId);
-
 }

@@ -27,5 +27,4 @@ public class ListenInventory implements Listener {
             this.plugin.chestFakeClose(event.getPlayer().getName());
         }
     }
-
 }

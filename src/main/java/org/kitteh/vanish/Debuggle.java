@@ -3,6 +3,7 @@ package org.kitteh.vanish;
 import java.util.logging.Logger;
 
 public class Debuggle {
+
     private final Logger logger;
     private static Debuggle instance = null;
 

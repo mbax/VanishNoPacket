@@ -24,5 +24,4 @@ public class JSONAPIHook extends Hook {
             return;
         }
     }
-
 }

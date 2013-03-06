@@ -264,5 +264,4 @@ public class SpoutCraftHook extends Hook implements Listener {
             this.getStatusBar(player).remove();
         }
     }
-
 }
