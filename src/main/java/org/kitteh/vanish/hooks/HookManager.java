@@ -8,7 +8,13 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.hooks.plugins.*;
+import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
+import org.kitteh.vanish.hooks.plugins.DisguiseCraftHook;
+import org.kitteh.vanish.hooks.plugins.DynmapHook;
+import org.kitteh.vanish.hooks.plugins.EssentialsHook;
+import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
+import org.kitteh.vanish.hooks.plugins.JSONAPIHook;
+import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
 import org.kitteh.vanish.hooks.protocollib.ServerListMinimize;
 
 public class HookManager {

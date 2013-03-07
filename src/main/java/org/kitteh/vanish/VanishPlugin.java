@@ -13,9 +13,15 @@ import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.vanish.compat.NMSManager;
-import org.kitteh.vanish.hooks.*;
+import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
-import org.kitteh.vanish.listeners.*;
+import org.kitteh.vanish.listeners.ListenEntity;
+import org.kitteh.vanish.listeners.ListenInventory;
+import org.kitteh.vanish.listeners.ListenPlayerJoin;
+import org.kitteh.vanish.listeners.ListenPlayerMessages;
+import org.kitteh.vanish.listeners.ListenPlayerOther;
+import org.kitteh.vanish.listeners.ListenToYourHeart;
+import org.kitteh.vanish.listeners.TagAPIListener;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
