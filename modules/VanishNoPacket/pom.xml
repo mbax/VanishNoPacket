@@ -21,6 +21,29 @@
       <properties>
         <vnp-version>${project.version}-${buildNumber}</vnp-version>
       </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>buildnumber-maven-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <phase>validate</phase>
+                <goals>
+                  <goal>create</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <doCheck>true</doCheck>
+              <revisionOnScmFailure>no-rev</revisionOnScmFailure>
+              <scmDirectory>../../</scmDirectory>
+              <shortRevisionLength>7</shortRevisionLength>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>release</id>
@@ -244,24 +267,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.2</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <revisionOnScmFailure>no-rev</revisionOnScmFailure>
-          <scmDirectory>../../</scmDirectory>
-          <shortRevisionLength>7</shortRevisionLength>
-        </configuration>
       </plugin>
     </plugins>
   </build>
