@@ -46,7 +46,7 @@ public class VanishPlugin extends JavaPlugin {
                 String version;
                 if ((version = bufferedReader.readLine()) != null) {
                     this.plugin.latestVersion = version;
-                    if (!"${project.version}".equals(version)) {
+                    if (!"${vnp-version}".equals(version)) {
                         this.plugin.getLogger().info("Found a different version available: " + version);
                         this.plugin.getLogger().info("Check http://www.curse.com/server-mods/minecraft/vanish");
                         this.plugin.versionDiff = true;
