@@ -81,34 +81,6 @@
   <dependencies>
     <dependency>
       <groupId>org.kitteh</groupId>
-      <artifactId>vnp-vpre</artifactId>
-      <version>pre</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>vnp-v1_4_5</artifactId>
-      <version>v1_4_5</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>vnp-v1_4_6</artifactId>
-      <version>v1_4_6</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>vnp-v1_4_R1</artifactId>
-      <version>v1_4_R1</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
       <artifactId>vnp-v1_5_R1</artifactId>
       <version>v1_5_R1</version>
       <type>jar</type>
