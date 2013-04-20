@@ -2,12 +2,13 @@ package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.hooks.ChatProvider;
 import org.kitteh.vanish.hooks.Hook;
 
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
-public class BPermissionsHook extends Hook {
+public class BPermissionsHook extends Hook implements ChatProvider {
 
     public BPermissionsHook(VanishPlugin plugin) {
         super(plugin);

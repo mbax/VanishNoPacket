@@ -15,6 +15,7 @@ import org.kitteh.vanish.hooks.plugins.EssentialsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.plugins.JSONAPIHook;
 import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
+import org.kitteh.vanish.hooks.plugins.VaultHook;
 import org.kitteh.vanish.hooks.protocollib.ServerListMinimize;
 
 public class HookManager {
@@ -27,7 +28,8 @@ public class HookManager {
         GeoIPTools(GeoIPToolsHook.class), // geoiptools!
         JSONAPI(JSONAPIHook.class), // jsonapi!
         ProtocolLib(ServerListMinimize.class), // protocollib!
-        SpoutCraft(SpoutCraftHook.class); // spoutcraft!
+        SpoutCraft(SpoutCraftHook.class), // spoutcraft!
+        Vault(VaultHook.class); // vault!
 
         private Class<? extends Hook> clazz;
 

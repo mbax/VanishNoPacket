@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
+import org.kitteh.vanish.hooks.plugins.VaultHook;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 /**
@@ -90,7 +91,22 @@ public class VanishAnnounceManipulator {
     private String injectPlayerInformation(String message, Player player) {
         final GeoIPToolsHook geoip = (GeoIPToolsHook) this.plugin.getHookManager().getHook(HookType.GeoIPTools);
         final BPermissionsHook bperms = (BPermissionsHook) this.plugin.getHookManager().getHook(HookType.BPermissions);
-        return message.replace("%p", player.getName()).replace("%d", player.getDisplayName()).replace("%up", bperms.getPrefix(player)).replace("%us", bperms.getSuffix(player)).replace("%city", geoip.getCity(player)).replace("%country", geoip.getCountry(player));
+        final VaultHook vault = (VaultHook) this.plugin.getHookManager().getHook(HookType.Vault);
+        message = message.replace("%p", player.getName());
+        message = message.replace("%d", player.getDisplayName());
+        String prefix = bperms.getPrefix(player);
+        if (prefix.isEmpty()) {
+            prefix = vault.getPrefix(player);
+        }
+        message = message.replace("%up", prefix);
+        String suffix = bperms.getSuffix(player);
+        if (suffix.isEmpty()) {
+            suffix = vault.getSuffix(player);
+        }
+        message = message.replace("%us", suffix);
+        message = message.replace("%city", geoip.getCity(player));
+        message = message.replace("%country", geoip.getCountry(player));
+        return message;
     }
 
     /**
