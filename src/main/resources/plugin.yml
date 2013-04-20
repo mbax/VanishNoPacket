@@ -17,6 +17,15 @@ permissions:
     description: |
       Allows player to vanish. 
       REALLY should give players with this access to vanish.see
+    children:
+      vanish.vanish.on: true
+      vanish.vanish.off: true
+  vanish.vanish.on:
+    default: false
+    description: Can set state to vanished
+  vanish.vanish.off:
+    default: false
+    description: Can set state to unvanished from vanished
   vanish.see:
     default: false
     description: Allows player to see vanished players

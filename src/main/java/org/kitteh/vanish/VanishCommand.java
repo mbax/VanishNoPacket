@@ -171,15 +171,12 @@ public class VanishCommand implements CommandExecutor {
             return true;
         }
 
-        // Below this point, user must be able to /vanish
-
-        if (!VanishPerms.canVanish(player)) {
-            this.denied(sender);
-            return true;
-        }
-
         // The non-toggles
         if (goal.equalsIgnoreCase("on")) {
+            if (!VanishPerms.canVanishOn(player)) {
+                this.denied(sender);
+                return true;
+            }
             if (!this.plugin.getManager().isVanished(player)) {
                 this.plugin.getManager().toggleVanish(player);
                 // Fake announce as well?
@@ -190,6 +187,10 @@ public class VanishCommand implements CommandExecutor {
             return true;
         }
         if (goal.equalsIgnoreCase("off")) {
+            if (!VanishPerms.canVanishOff(player)) {
+                this.denied(sender);
+                return true;
+            }
             if (this.plugin.getManager().isVanished(player)) {
                 this.plugin.getManager().toggleVanish(player);
                 // Fake announce as well?
@@ -199,6 +200,14 @@ public class VanishCommand implements CommandExecutor {
             }
             return true;
         }
+
+        // Below this point, user must be able to /vanish
+
+        if (!VanishPerms.canVanish(player)) {
+            this.denied(sender);
+            return true;
+        }
+
         // Fake announces. Requires vanish.fakeannounce
         if ((goal.equalsIgnoreCase("fakequit") || goal.equalsIgnoreCase("fq"))) {
             if (VanishPerms.canFakeAnnounce(player)) {
