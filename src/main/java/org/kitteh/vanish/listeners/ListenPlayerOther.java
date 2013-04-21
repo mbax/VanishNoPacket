@@ -2,7 +2,15 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Beacon;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Dispenser;
+import org.bukkit.block.Dropper;
+import org.bukkit.block.Furnace;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -56,34 +64,57 @@ public class ListenPlayerOther implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
-            if(!event.getPlayer().isSneaking()) {
+            if (!player.isSneaking()) {
                 return;
             }
-            switch (event.getClickedBlock().getType()) {
+            Block block = event.getClickedBlock();
+            Inventory inventory = null;
+            BlockState blockState = block.getState();
+            switch (block.getType()) {
                 case TRAPPED_CHEST:
                 case CHEST:
-                    event.setCancelled(true);
-                    final Chest chest = (Chest) event.getClickedBlock().getState();
-                    final Inventory i = this.plugin.getServer().createInventory(event.getPlayer(), chest.getInventory().getSize());
-                    i.setContents(chest.getInventory().getContents());
-                    event.getPlayer().openInventory(i);
-                    this.plugin.chestFakeOpen(event.getPlayer().getName());
-                    event.getPlayer().sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
-                    return;
+                    final Chest chest = (Chest) blockState;
+                    inventory = this.plugin.getServer().createInventory(player, chest.getInventory().getSize());
+                    inventory.setContents(chest.getInventory().getContents());
+                    this.plugin.chestFakeOpen(player.getName());
+                    player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
+                    break;
                 case ENDER_CHEST:
-                    event.setCancelled(true);
-                    event.getPlayer().openInventory(event.getPlayer().getEnderChest());
-                    return;
-
+                    inventory = player.getEnderChest();
+                    break;
+                case DISPENSER:
+                    inventory = ((Dispenser) blockState).getInventory();
+                    break;
+                case HOPPER:
+                    inventory = ((Hopper) blockState).getInventory();
+                    break;
+                case DROPPER:
+                    inventory = ((Dropper) blockState).getInventory();
+                    break;
+                case FURNACE:
+                    inventory = ((Furnace) blockState).getInventory();
+                    break;
+                case BREWING_STAND:
+                    inventory = ((BrewingStand) blockState).getInventory();
+                    break;
+                case BEACON:
+                    inventory = ((Beacon) blockState).getInventory();
+                    break;
+            }
+            if (inventory != null) {
+                event.setCancelled(true);
+                player.openInventory(inventory);
+                return;
             }
         }
-        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
+        if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
             event.setCancelled(true);
             return;
         }
         if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock().getType() == Material.SOIL)) {
-            if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotTrample(event.getPlayer())) {
+            if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotTrample(player)) {
                 event.setCancelled(true);
             }
         }
