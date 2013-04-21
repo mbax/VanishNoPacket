@@ -96,7 +96,7 @@ public class VanishCommand implements CommandExecutor {
             if (this.plugin.getManager().isVanished(player)) {
                 player.sendMessage(ChatColor.DARK_AQUA + "You are invisible.");
             } else {
-                player.sendMessage(ChatColor.DARK_AQUA + "You are not invisible.");
+                player.sendMessage(ChatColor.DARK_AQUA + "You are visible.");
             }
             return true;
         }
