@@ -82,6 +82,10 @@ public class ListenPlayerOther implements Listener {
                     player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
                     break;
                 case ENDER_CHEST:
+                    if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
+                        event.setCancelled(true);
+                        return;
+                    }
                     inventory = player.getEnderChest();
                     break;
                 case DISPENSER:
