@@ -13,8 +13,7 @@ import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
 import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
 
-public class DisguiseCraftHook extends Hook implements Listener {
-
+public final class DisguiseCraftHook extends Hook implements Listener {
     private DisguiseCraftAPI disguiseCraft = null;
 
     public DisguiseCraftHook(VanishPlugin plugin) {

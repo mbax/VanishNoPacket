@@ -11,8 +11,7 @@ import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenPlayerMessages implements Listener {
-
+public final class ListenPlayerMessages implements Listener {
     private final VanishPlugin plugin;
 
     public ListenPlayerMessages(VanishPlugin instance) {

@@ -9,8 +9,7 @@ import org.kitteh.vanish.VanishPlugin;
  * Static party!
  * This is where you can grab stuff easily
  */
-public class VanishNoPacket {
-
+public final class VanishNoPacket {
     private static VanishPlugin instance;
 
     /**

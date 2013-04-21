@@ -2,8 +2,7 @@ package org.kitteh.vanish;
 
 import org.bukkit.entity.Player;
 
-public class VanishUser {
-
+public final class VanishUser {
     private boolean seeAll;
     private boolean noPickup;
     private boolean noFollow;

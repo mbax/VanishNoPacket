@@ -1,7 +1,6 @@
 package org.kitteh.vanish.metrics;
 
-public class Tracker extends Metrics.Plotter {
-
+public final class Tracker extends Metrics.Plotter {
     private final String name;
     private int value, last;
 

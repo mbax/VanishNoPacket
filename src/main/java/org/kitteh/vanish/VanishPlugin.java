@@ -25,10 +25,8 @@ import org.kitteh.vanish.listeners.TagAPIListener;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
-public class VanishPlugin extends JavaPlugin {
-
-    private class UpdateCheck implements Runnable {
-
+public final class VanishPlugin extends JavaPlugin {
+    private final class UpdateCheck implements Runnable {
         private final VanishPlugin plugin;
 
         public UpdateCheck(VanishPlugin vanishPlugin) {
@@ -59,7 +57,6 @@ public class VanishPlugin extends JavaPlugin {
             }
             this.plugin.getLogger().info("Error: Could not check if plugin was up to date. Will try later");
         }
-
     }
 
     private final HashSet<String> haveInventoriesOpen = new HashSet<String>();

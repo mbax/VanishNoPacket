@@ -3,8 +3,7 @@ package org.kitteh.vanish.compat;
 import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.compat.api.NMSCallProvider;
 
-public class NMSManager {
-
+public final class NMSManager {
     private static NMSCallProvider provider;
 
     public static NMSCallProvider getProvider() {

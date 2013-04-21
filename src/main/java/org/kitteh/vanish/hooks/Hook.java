@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.VanishPlugin;
 
 public abstract class Hook {
-
     protected final VanishPlugin plugin;
 
     public Hook(VanishPlugin plugin) {

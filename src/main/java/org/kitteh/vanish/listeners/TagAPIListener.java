@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.kitteh.tag.PlayerReceiveNameTagEvent;
 import org.kitteh.vanish.VanishPlugin;
 
-public class TagAPIListener implements Listener {
+public final class TagAPIListener implements Listener {
     private final VanishPlugin plugin;
 
     public TagAPIListener(VanishPlugin instance) {

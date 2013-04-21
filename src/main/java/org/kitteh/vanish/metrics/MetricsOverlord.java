@@ -3,8 +3,7 @@ package org.kitteh.vanish.metrics;
 import org.bukkit.plugin.PluginManager;
 import org.kitteh.vanish.VanishPlugin;
 
-public class MetricsOverlord {
-
+public final class MetricsOverlord {
     private static Tracker command = new Tracker("");
     private static Tracker vanish = new Tracker("");
     private static Tracker unvanish = new Tracker("");

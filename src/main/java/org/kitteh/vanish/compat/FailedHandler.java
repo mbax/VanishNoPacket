@@ -5,8 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.compat.api.NMSCallProvider;
 
-public class FailedHandler implements NMSCallProvider {
-
+public final class FailedHandler implements NMSCallProvider {
     @Override
     public void sendEntityDestroy(Player player, int entityId) {
         player.sendMessage(ChatColor.AQUA + "VanishNoPacket needs an update.");

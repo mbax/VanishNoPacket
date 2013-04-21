@@ -8,8 +8,7 @@ import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.ChatProvider;
 import org.kitteh.vanish.hooks.Hook;
 
-public class VaultHook extends Hook implements ChatProvider {
-
+public final class VaultHook extends Hook implements ChatProvider {
     private Chat chat;
 
     public VaultHook(VanishPlugin plugin) {

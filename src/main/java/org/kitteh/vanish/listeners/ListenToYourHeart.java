@@ -9,8 +9,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenToYourHeart implements Listener {
-
+public final class ListenToYourHeart implements Listener {
     private final VanishPlugin plugin;
 
     public ListenToYourHeart(VanishPlugin plugin) {

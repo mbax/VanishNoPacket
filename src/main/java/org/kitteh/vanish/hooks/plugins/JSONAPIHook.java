@@ -6,8 +6,7 @@ import org.kitteh.vanish.hooks.Hook;
 
 import com.alecgorge.minecraft.jsonapi.JSONAPI;
 
-public class JSONAPIHook extends Hook {
-
+public final class JSONAPIHook extends Hook {
     public JSONAPIHook(VanishPlugin plugin) {
         super(plugin);
     }

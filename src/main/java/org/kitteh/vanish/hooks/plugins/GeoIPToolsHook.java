@@ -8,8 +8,7 @@ import org.kitteh.vanish.hooks.Hook;
 import uk.org.whoami.geoip.GeoIPLookup;
 import uk.org.whoami.geoip.GeoIPTools;
 
-public class GeoIPToolsHook extends Hook {
-
+public final class GeoIPToolsHook extends Hook {
     private GeoIPLookup geoip = null;
 
     public GeoIPToolsHook(VanishPlugin plugin) {

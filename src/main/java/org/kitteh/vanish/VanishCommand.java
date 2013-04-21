@@ -7,8 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
-public class VanishCommand implements CommandExecutor {
-
+public final class VanishCommand implements CommandExecutor {
     private final VanishPlugin plugin;
 
     public VanishCommand(VanishPlugin plugin) {

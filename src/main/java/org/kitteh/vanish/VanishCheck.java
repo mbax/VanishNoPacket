@@ -4,8 +4,7 @@ import java.util.concurrent.Callable;
 
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
-public class VanishCheck implements Callable<Object> {
-
+public final class VanishCheck implements Callable<Object> {
     private final String name;
 
     public VanishCheck(String name) {

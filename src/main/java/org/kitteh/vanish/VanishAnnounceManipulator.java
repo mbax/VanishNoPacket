@@ -17,8 +17,7 @@ import org.kitteh.vanish.metrics.MetricsOverlord;
  * to see if it's enabled first. The methods confirm before doing anything
  * particularly stupid.
  */
-public class VanishAnnounceManipulator {
-
+public final class VanishAnnounceManipulator {
     private final ArrayList<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
     private final HashMap<String, Boolean> playerOnlineStatus;

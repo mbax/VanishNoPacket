@@ -13,8 +13,7 @@ import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenEntity implements Listener {
-
+public final class ListenEntity implements Listener {
     private final VanishPlugin plugin;
 
     public ListenEntity(VanishPlugin instance) {

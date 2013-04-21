@@ -1,7 +1,6 @@
 package org.kitteh.vanish.metrics;
 
-public class Counter extends Metrics.Plotter {
-
+public final class Counter extends Metrics.Plotter {
     public Counter(String name) {
         super(name);
     }

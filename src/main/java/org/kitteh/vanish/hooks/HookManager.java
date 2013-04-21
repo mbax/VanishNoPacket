@@ -14,12 +14,11 @@ import org.kitteh.vanish.hooks.plugins.DynmapHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
 import org.kitteh.vanish.hooks.plugins.JSONAPIHook;
+import org.kitteh.vanish.hooks.plugins.ProtocolLibHook;
 import org.kitteh.vanish.hooks.plugins.SpoutCraftHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
-import org.kitteh.vanish.hooks.protocollib.ServerListMinimize;
 
-public class HookManager {
-
+public final class HookManager {
     public enum HookType {
         BPermissions(BPermissionsHook.class), // bperms!
         DisguiseCraft(DisguiseCraftHook.class), // disguisecraft!
@@ -27,7 +26,7 @@ public class HookManager {
         Essentials(EssentialsHook.class), // essentials! 
         GeoIPTools(GeoIPToolsHook.class), // geoiptools!
         JSONAPI(JSONAPIHook.class), // jsonapi!
-        ProtocolLib(ServerListMinimize.class), // protocollib!
+        ProtocolLib(ProtocolLibHook.class), // protocollib!
         SpoutCraft(SpoutCraftHook.class), // spoutcraft!
         Vault(VaultHook.class); // vault!
 

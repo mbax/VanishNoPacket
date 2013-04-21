@@ -12,8 +12,7 @@ import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
-public class ListenPlayerJoin implements Listener {
-
+public final class ListenPlayerJoin implements Listener {
     private final VanishPlugin plugin;
 
     public ListenPlayerJoin(VanishPlugin instance) {

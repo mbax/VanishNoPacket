@@ -11,8 +11,7 @@ import org.bukkit.craftbukkit.v1_5_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.compat.api.NMSCallProvider;
 
-public class NMSHandler implements NMSCallProvider {
-
+public final class NMSHandler implements NMSCallProvider {
     @Override
     public void sendExplosionPacket(Location loc, Player subject) {
         for (final Player player : loc.getWorld().getPlayers()) {

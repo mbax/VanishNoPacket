@@ -6,8 +6,7 @@ import org.dynmap.DynmapAPI;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
-public class DynmapHook extends Hook {
-
+public final class DynmapHook extends Hook {
     private DynmapAPI dynmap;
     private boolean enabled = false;
 

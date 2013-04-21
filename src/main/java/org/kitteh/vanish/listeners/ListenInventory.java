@@ -6,8 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.kitteh.vanish.VanishPlugin;
 
-public class ListenInventory implements Listener {
-
+public final class ListenInventory implements Listener {
     private final VanishPlugin plugin;
 
     public ListenInventory(VanishPlugin instance) {

@@ -25,9 +25,8 @@ import org.kitteh.vanish.metrics.MetricsOverlord;
  * @author mbaxter
  * 
  */
-public class VanishManager {
-
-    private class ShowPlayerEntry {
+public final class VanishManager {
+    private final class ShowPlayerEntry {
         private final Player player;
         private final Player target;
 
@@ -45,8 +44,7 @@ public class VanishManager {
         }
     }
 
-    private class ShowPlayerHandler implements Runnable {
-
+    private final class ShowPlayerHandler implements Runnable {
         HashSet<ShowPlayerEntry> entries = new HashSet<ShowPlayerEntry>();
         HashSet<ShowPlayerEntry> next = new HashSet<ShowPlayerEntry>();
 
@@ -67,19 +65,13 @@ public class VanishManager {
             this.next.addAll(this.entries);
             this.entries.clear();
         }
-
     }
 
     private final VanishPlugin plugin;
-
     private final Set<String> vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
-
     private final Map<String, Boolean> sleepIgnored = new HashMap<String, Boolean>();
-
     private final VanishAnnounceManipulator announceManipulator;
-
     private final Random random = new Random();
-
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
 
     public VanishManager(final VanishPlugin plugin) {
@@ -382,5 +374,4 @@ public class VanishManager {
         }
         player.setSleepingIgnored(true);
     }
-
 }

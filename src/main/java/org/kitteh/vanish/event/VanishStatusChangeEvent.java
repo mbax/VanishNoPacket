@@ -4,8 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class VanishStatusChangeEvent extends Event {
-
+public final class VanishStatusChangeEvent extends Event {
     public static HandlerList getHandlerList() {
         return VanishStatusChangeEvent.handlers;
     }

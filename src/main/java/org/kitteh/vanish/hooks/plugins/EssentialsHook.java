@@ -8,10 +8,8 @@ import org.kitteh.vanish.hooks.Hook;
 import com.earth2me.essentials.IEssentials;
 
 @SuppressWarnings("deprecation")
-public class EssentialsHook extends Hook {
-
+public final class EssentialsHook extends Hook {
     private final VanishPlugin plugin;
-
     private IEssentials essentials;
 
     public EssentialsHook(VanishPlugin plugin) {

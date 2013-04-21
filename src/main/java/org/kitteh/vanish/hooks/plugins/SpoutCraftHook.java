@@ -25,9 +25,8 @@ import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
-public class SpoutCraftHook extends Hook implements Listener {
-
-    private class PlayerData {
+public final class SpoutCraftHook extends Hook implements Listener {
+    private final class PlayerData {
         public String skin, cloak, title;
 
         public PlayerData(String skin, String cloak, String title) {
@@ -37,7 +36,7 @@ public class SpoutCraftHook extends Hook implements Listener {
         }
     }
 
-    private class StatusBar {
+    private final class StatusBar {
         private final GenericLabel label;
         private final GenericGradient box;
         private final SpoutPlayer player;
@@ -58,16 +57,11 @@ public class SpoutCraftHook extends Hook implements Listener {
     }
 
     private boolean enabled;
-
     private HashMap<String, String> cloaks;
     private HashMap<String, String> skins;
-
     private HashMap<String, String> titles;
-
     private HashMap<String, PlayerData> playerDataMap;
-
     private Color boxColor;
-
     private HashMap<String, StatusBar> bars;
 
     public SpoutCraftHook(VanishPlugin plugin) {
