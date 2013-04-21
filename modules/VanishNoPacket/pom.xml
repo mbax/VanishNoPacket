@@ -119,8 +119,8 @@
     </dependency>
     <dependency>
       <groupId>org.dynmap</groupId>
-      <artifactId>dynmap-api</artifactId>
-      <version>0.39</version>
+      <artifactId>DynmapCoreAPI</artifactId>
+      <version>1.7</version>
       <optional>true</optional>
     </dependency>
     <dependency>

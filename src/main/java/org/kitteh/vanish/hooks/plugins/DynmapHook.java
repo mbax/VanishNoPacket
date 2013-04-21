@@ -2,12 +2,12 @@ package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.dynmap.DynmapAPI;
+import org.dynmap.DynmapCommonAPI;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
 public final class DynmapHook extends Hook {
-    private DynmapAPI dynmap;
+    private DynmapCommonAPI dynmap;
     private boolean enabled = false;
 
     public DynmapHook(VanishPlugin plugin) {
@@ -28,7 +28,7 @@ public final class DynmapHook extends Hook {
         this.enabled = true;
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("dynmap");
         if (grab != null) {
-            this.dynmap = ((DynmapAPI) grab);
+            this.dynmap = ((DynmapCommonAPI) grab);
             this.plugin.getLogger().info("Now hooking into Dynmap");
         } else {
             this.plugin.getLogger().info("You wanted Dynmap support. I could not find Dynmap.");
@@ -47,14 +47,14 @@ public final class DynmapHook extends Hook {
     @Override
     public void onUnvanish(Player player) {
         if (this.enabled && (this.dynmap != null) && !player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
-            this.dynmap.setPlayerVisiblity(player, true);
+            this.dynmap.assertPlayerInvisibility(player.getName(), false, "VanishNoPacket");
         }
     }
 
     @Override
     public void onVanish(Player player) {
         if (this.enabled && (this.dynmap != null)) {
-            this.dynmap.setPlayerVisiblity(player, false);
+            this.dynmap.assertPlayerInvisibility(player.getName(), true, "VanishNoPacket");
         }
     }
 }
