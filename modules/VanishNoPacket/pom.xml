@@ -92,6 +92,13 @@
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
+      <artifactId>vnp-v1_5_R3</artifactId>
+      <version>v1_5_R3</version>
+      <type>jar</type>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
       <artifactId>vnp-api</artifactId>
       <version>API</version>
       <type>jar</type>
