@@ -17,30 +17,37 @@ public final class VaultHook extends Hook implements ChatProvider {
 
     @Override
     public String getPrefix(Player player) {
-        this.whatsInTheVault();
-        String value = null;
-        if (this.chat != null) {
-            value = this.chat.getPlayerPrefix(player);
-        }
-        return value != null ? value : "";
+        return this.whatsInTheVault() ? this.getVaultPrefix(player) : "";
     }
 
     @Override
     public String getSuffix(Player player) {
-        this.whatsInTheVault();
-        String value = null;
-        if (this.chat != null) {
-            value = this.chat.getPlayerSuffix(player);
-        }
+        return this.whatsInTheVault() ? this.getVaultSuffix(player) : "";
+    }
+
+    private String get(String value) {
         return value != null ? value : "";
     }
 
-    private void whatsInTheVault() {
-        if (this.chat == null) {
-            final RegisteredServiceProvider<Chat> chatProvider = this.plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-            if (chatProvider != null) {
-                this.chat = chatProvider.getProvider();
-            }
+    private String getVaultPrefix(Player player) {
+        return this.get(this.chat.getPlayerSuffix(player));
+    }
+
+    private String getVaultSuffix(Player player) {
+        return this.get(this.chat.getPlayerSuffix(player));
+    }
+
+    private void loadVault() {
+        final RegisteredServiceProvider<Chat> chatProvider = this.plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            this.chat = chatProvider.getProvider();
         }
+    }
+
+    private boolean whatsInTheVault() {
+        if ((this.chat == null) && this.plugin.getServer().getPluginManager().isPluginEnabled("Vault")) {
+            this.loadVault();
+        }
+        return this.chat != null;
     }
 }
