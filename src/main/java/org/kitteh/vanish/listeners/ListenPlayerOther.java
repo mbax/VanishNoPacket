@@ -65,20 +65,17 @@ public final class ListenPlayerOther implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
-            if (!player.isSneaking()) {
-                return;
-            }
             Block block = event.getClickedBlock();
             Inventory inventory = null;
             BlockState blockState = block.getState();
+            boolean fake = false;
             switch (block.getType()) {
                 case TRAPPED_CHEST:
                 case CHEST:
                     final Chest chest = (Chest) blockState;
                     inventory = this.plugin.getServer().createInventory(player, chest.getInventory().getSize());
                     inventory.setContents(chest.getInventory().getContents());
-                    this.plugin.chestFakeOpen(player.getName());
-                    player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
+                    fake = true;
                     break;
                 case ENDER_CHEST:
                     if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
@@ -108,6 +105,13 @@ public final class ListenPlayerOther implements Listener {
             }
             if (inventory != null) {
                 event.setCancelled(true);
+                if (!player.isSneaking()) {
+                    return;
+                }
+                if (fake) {
+                    this.plugin.chestFakeOpen(player.getName());
+                    player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
+                }
                 player.openInventory(inventory);
                 return;
             }
