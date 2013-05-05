@@ -13,6 +13,7 @@ public final class VanishUser {
     private boolean noChat;
     private boolean silentChestReads;
     private boolean smoke;
+    private boolean flames;
     private boolean explode;
     private boolean lightning;
 
@@ -27,6 +28,7 @@ public final class VanishUser {
         this.noChat = player.hasPermission("vanish.nochat");
         this.silentChestReads = player.hasPermission("vanish.silentchests");
         this.smoke = player.hasPermission("vanish.effects.smoke");
+        this.flames = player.hasPermission("vanish.effects.flames");
         this.explode = player.hasPermission("vanish.effects.explode");
         this.lightning = player.hasPermission("vanish.effects.lightning");
     }
@@ -77,6 +79,10 @@ public final class VanishUser {
 
     public boolean getSmoke() {
         return this.smoke;
+    }
+    
+    public boolean getFlames() {
+        return this.flames;
     }
 
     public boolean toggleExplode() {
@@ -137,5 +143,10 @@ public final class VanishUser {
     public boolean toggleSmoke() {
         this.smoke = !this.smoke;
         return this.smoke;
+    }
+
+    public boolean toggleFlames() {
+        this.flames = !this.flames;
+        return this.flames;
     }
 }
