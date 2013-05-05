@@ -85,6 +85,10 @@ public final class VanishPerms {
     public static boolean canSmoke(Player player) {
         return VanishPerms.getUser(player).getSmoke();
     }
+    
+    public static boolean canFlames(Player player) {
+        return VanishPerms.getUser(player).getFlames();
+    }
 
     public static boolean canToggleDamageIn(Player player) {
         return player.hasPermission("vanish.toggle.damagein");
@@ -100,6 +104,10 @@ public final class VanishPerms {
 
     public static boolean canToggleLightning(Player player) {
         return player.hasPermission("vanish.effects.toggle.lightning");
+    }
+
+    public static boolean canToggleFlames(Player player) {
+        return player.hasPermission("vanish.effects.toggle.flames");
     }
 
     public static boolean canToggleNoChat(Player player) {
@@ -180,6 +188,10 @@ public final class VanishPerms {
 
     public static boolean toggleLightning(Player player) {
         return VanishPerms.getUser(player).toggleLightning();
+    }
+
+    public static boolean toggleFlames(Player player) {
+        return VanishPerms.getUser(player).toggleFlames();
     }
 
     public static boolean toggleNoChat(Player player) {

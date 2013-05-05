@@ -167,6 +167,9 @@ permissions:
   vanish.effects.lightning:
     default: false
     description: Creates a lightning barrage around a player when vanishing and re-appearing
+  vanish.effects.flames:
+    default: false
+    description: Creates a mob spawner flames effect around a player when vanishing and re-appearing
   vanish.effects.toggle.smoke:
     default: false
     description: Toggle smoke on vanish toggle
@@ -176,6 +179,9 @@ permissions:
   vanish.effects.toggle.lightning:
     default: false
     description: Toggle lightning on vanish toggle
+  vanish.effects.toggle.flames:
+    default: false
+    description: Toggle flames on vanish toggle
   vanish.effects.toggle.all:
     default: false
     description: Toggle all vanish toggle effects
@@ -183,6 +189,7 @@ permissions:
       vanish.effects.toggle.smoke: true
       vanish.effects.toggle.explode: true
       vanish.effects.toggle.lightning: true
+      vanish.effects.toggle.flames: true
   vanish.op:
     default: op
     description: The permission nodes given to ops
@@ -228,4 +235,5 @@ permissions:
       vanish.effects.smoke: true
       vanish.effects.explode: true
       vanish.effects.lightning: true
+      vanish.effects.flames: true
       vanish.effects.toggle.all: true

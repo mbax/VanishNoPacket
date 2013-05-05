@@ -157,6 +157,9 @@ public final class VanishCommand implements CommandExecutor {
                 if (VanishPerms.canToggleLightning(player)) {
                     this.appendList(toggleReply, this.colorize(VanishPerms.canLightning(player)) + "lightning" + ChatColor.DARK_AQUA);
                 }
+                if (VanishPerms.canToggleFlames(player)) {
+                    this.appendList(toggleReply, this.colorize(VanishPerms.canFlames(player)) + "flames" + ChatColor.DARK_AQUA);
+                }
                 if (toggleReply.length() > 0) {
                     toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                 } else {
@@ -314,6 +317,9 @@ public final class VanishCommand implements CommandExecutor {
         } else if (toggle.equalsIgnoreCase("lightning") && VanishPerms.canToggleLightning(player)) {
             status = VanishPerms.toggleLightning(player);
             message.append("lightning effect");
+        } else if (toggle.equalsIgnoreCase("flames") && VanishPerms.canToggleFlames(player)) {
+            status = VanishPerms.toggleFlames(player);
+            message.append("flames effect");
         }
         if (message.length() > 0) {
             message.insert(0, ChatColor.DARK_AQUA + "Status: ");

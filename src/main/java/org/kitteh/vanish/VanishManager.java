@@ -250,6 +250,9 @@ public final class VanishManager {
             if (VanishPerms.canLightning(vanishingPlayer)) {
                 this.lightningBarrage(vanishingPlayer.getLocation());
             }
+            if (VanishPerms.canFlames(vanishingPlayer)) {
+                this.mobspawnerFlamesEffect(vanishingPlayer.getLocation().add(0, 1, 0));
+            }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] {0x01} : new byte[] {0x00} );
@@ -331,6 +334,12 @@ public final class VanishManager {
     private void smokeScreenEffect(Location location) {
         for (int i = 0; i < 10; i++) {
             location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
+        }
+    }
+    
+    private void mobspawnerFlamesEffect(Location location) {
+        for (int i = 0; i < 10; i++) {
+            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, this.random.nextInt(9));
         }
     }
 
