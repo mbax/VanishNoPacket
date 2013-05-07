@@ -105,7 +105,7 @@ public final class ListenPlayerOther implements Listener {
             }
             if (inventory != null) {
                 event.setCancelled(true);
-                if (!player.isSneaking()) {
+                if (player.isSneaking()) {
                     return;
                 }
                 if (fake) {
