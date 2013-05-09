@@ -23,6 +23,10 @@ public final class ListenEntity implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         final Entity smacked = event.getEntity();
+        if (this.plugin.getManager().getBats().contains(smacked.getUniqueId())) {
+            event.setCancelled(true);
+            return;
+        }
         if (smacked instanceof Player) {
             final Player player = (Player) smacked;
             if (this.plugin.getManager().isVanished(player) && VanishPerms.blockIncomingDamage(player)) {

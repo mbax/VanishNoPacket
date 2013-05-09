@@ -6,13 +6,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.kitteh.vanish.compat.NMSManager;
@@ -70,6 +73,7 @@ public final class VanishManager {
     private final VanishPlugin plugin;
     private final Set<String> vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
     private final Map<String, Boolean> sleepIgnored = new HashMap<String, Boolean>();
+    private final Set<UUID> bats = new HashSet<UUID>();
     private final VanishAnnounceManipulator announceManipulator;
     private final Random random = new Random();
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
@@ -98,6 +102,10 @@ public final class VanishManager {
      */
     public VanishAnnounceManipulator getAnnounceManipulator() {
         return this.announceManipulator;
+    }
+
+    public Set<UUID> getBats() {
+        return this.bats;
     }
 
     /**
@@ -242,17 +250,20 @@ public final class VanishManager {
             this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
-            if (VanishPerms.canSmoke(vanishingPlayer)) {
+            if (VanishPerms.canEffectSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
             }
-            if (VanishPerms.canExplode(vanishingPlayer)) {
+            if (VanishPerms.canEffectExplode(vanishingPlayer)) {
                 this.explosionEffect(vanishingPlayer);
             }
-            if (VanishPerms.canLightning(vanishingPlayer)) {
+            if (VanishPerms.canEffectLightning(vanishingPlayer)) {
                 this.lightningBarrage(vanishingPlayer.getLocation());
             }
-            if (VanishPerms.canFlames(vanishingPlayer)) {
+            if (VanishPerms.canEffectFlames(vanishingPlayer)) {
                 this.mobspawnerFlamesEffect(vanishingPlayer.getLocation().add(0, 1, 0));
+            }
+            if (VanishPerms.canEffectBats(vanishingPlayer)) {
+                this.batsOMG(vanishingPlayer.getLocation().add(0, 1, 0));
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
@@ -283,6 +294,30 @@ public final class VanishManager {
                 }
             }
         }
+    }
+
+    private void batsBegone(World world, Set<UUID> bats) {
+        for (final Entity entity : world.getEntities()) {
+            if (bats.contains(entity.getUniqueId())) {
+                world.playEffect(entity.getLocation(), Effect.SMOKE, this.random.nextInt(9));
+                entity.remove();
+            }
+        }
+    }
+
+    private void batsOMG(final Location location) {
+        final Set<UUID> batty = new HashSet<UUID>();
+        for (int x = 0; x < 10; x++) {
+            batty.add(location.getWorld().spawnEntity(location, EntityType.BAT).getUniqueId());
+        }
+        this.bats.addAll(batty);
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, new Runnable() {
+            @Override
+            public void run() {
+                VanishManager.this.batsBegone(location.getWorld(), batty);
+                VanishManager.this.bats.removeAll(batty);
+            }
+        }, 3 * 20);
     }
 
     private void explosionEffect(Player player) {
@@ -358,6 +393,9 @@ public final class VanishManager {
                     player.showPlayer(player2);
                 }
             }
+        }
+        for (final World world : this.plugin.getServer().getWorlds()) {
+            this.batsBegone(world, this.bats);
         }
     }
 
