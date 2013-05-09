@@ -89,6 +89,12 @@
       <version>v1_5_R2</version>
       <type>jar</type>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
@@ -96,6 +102,12 @@
       <version>v1_5_R3</version>
       <type>jar</type>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
@@ -135,6 +147,12 @@
       <artifactId>bPermissions</artifactId>
       <version>dev-SNAPSHOT</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.earth2me</groupId>
@@ -147,6 +165,12 @@
       <artifactId>GeoIPTools</artifactId>
       <version>1.0</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
@@ -157,14 +181,34 @@
     <dependency>
       <groupId>org.kitteh</groupId>
       <artifactId>tagapi</artifactId>
-      <version>2.0</version>
+      <version>2.3</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>pgDev</groupId>
       <artifactId>disguisecraft</artifactId>
       <version>2.8-SNAPSHOT</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>lishid</groupId>
+          <artifactId>orebfuscator</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.getspout</groupId>
+          <artifactId>spoutplugin</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.comphenix</groupId>
