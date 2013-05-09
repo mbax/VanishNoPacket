@@ -65,9 +65,9 @@ public final class ListenPlayerOther implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
-            Block block = event.getClickedBlock();
+            final Block block = event.getClickedBlock();
             Inventory inventory = null;
-            BlockState blockState = block.getState();
+            final BlockState blockState = block.getState();
             boolean fake = false;
             switch (block.getType()) {
                 case TRAPPED_CHEST:

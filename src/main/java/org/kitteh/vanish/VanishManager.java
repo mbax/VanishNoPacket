@@ -78,16 +78,17 @@ public final class VanishManager {
         this.plugin = plugin;
         this.announceManipulator = new VanishAnnounceManipulator(this.plugin);
         this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, this.showPlayer, 4, 4);
-        
+
         this.plugin.getServer().getMessenger().registerIncomingPluginChannel(this.plugin, "vanishStatus", new PluginMessageListener() {
+            @Override
             public void onPluginMessageReceived(String channel, Player player, byte[] message) {
                 if (channel.equals("vanishStatus") && new String(message).equals("check")) {
-                    player.sendPluginMessage(plugin, "vanishStatus", isVanished(player) ? new byte[] {0x01} : new byte[] {0x00} );
+                    player.sendPluginMessage(plugin, "vanishStatus", VanishManager.this.isVanished(player) ? new byte[] { 0x01 } : new byte[] { 0x00 });
                 }
             }
         });
         this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, "vanishStatus");
-        
+
     }
 
     /**
@@ -255,7 +256,7 @@ public final class VanishManager {
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
-        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] {0x01} : new byte[] {0x00} );
+        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] { 0x01 } : new byte[] { 0x00 });
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {
@@ -319,6 +320,12 @@ public final class VanishManager {
         }
     }
 
+    private void mobspawnerFlamesEffect(Location location) {
+        for (int i = 0; i < 10; i++) {
+            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, this.random.nextInt(9));
+        }
+    }
+
     private void removeVanished(String name) {
         this.vanishedPlayerNames.remove(name);
     }
@@ -334,12 +341,6 @@ public final class VanishManager {
     private void smokeScreenEffect(Location location) {
         for (int i = 0; i < 10; i++) {
             location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
-        }
-    }
-    
-    private void mobspawnerFlamesEffect(Location location) {
-        for (int i = 0; i < 10; i++) {
-            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, this.random.nextInt(9));
         }
     }
 

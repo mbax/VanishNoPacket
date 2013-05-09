@@ -55,19 +55,19 @@ public final class ListenEntity implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
-        if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
     public void onVehicleDestroy(VehicleDestroyEvent event) {
         final Entity entity = event.getAttacker();
         if ((entity instanceof Player) && this.plugin.getManager().isVanished((Player) event.getAttacker())) {
             if (VanishPerms.canNotInteract((Player) entity)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
+        if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
+            event.setCancelled(true);
         }
     }
 }

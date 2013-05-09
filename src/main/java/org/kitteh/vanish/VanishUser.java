@@ -37,6 +37,10 @@ public final class VanishUser {
         return this.explode;
     }
 
+    public boolean getFlames() {
+        return this.flames;
+    }
+
     public boolean getLightning() {
         return this.lightning;
     }
@@ -80,14 +84,15 @@ public final class VanishUser {
     public boolean getSmoke() {
         return this.smoke;
     }
-    
-    public boolean getFlames() {
-        return this.flames;
-    }
 
     public boolean toggleExplode() {
         this.explode = !this.explode;
         return this.explode;
+    }
+
+    public boolean toggleFlames() {
+        this.flames = !this.flames;
+        return this.flames;
     }
 
     public boolean toggleIncomingDamage() {
@@ -143,10 +148,5 @@ public final class VanishUser {
     public boolean toggleSmoke() {
         this.smoke = !this.smoke;
         return this.smoke;
-    }
-
-    public boolean toggleFlames() {
-        this.flames = !this.flames;
-        return this.flames;
     }
 }

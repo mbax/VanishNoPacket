@@ -13,6 +13,7 @@ public final class BPermissionsHook extends Hook implements ChatProvider {
         super(plugin);
     }
 
+    @Override
     public String getPrefix(Player player) {
         String result = null;
         if (this.bPermsEnabled()) {
@@ -24,6 +25,7 @@ public final class BPermissionsHook extends Hook implements ChatProvider {
         return result != null ? result : "";
     }
 
+    @Override
     public String getSuffix(Player player) {
         String result = null;
         if (this.bPermsEnabled()) {

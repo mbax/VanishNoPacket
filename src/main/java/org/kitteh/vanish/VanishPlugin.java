@@ -67,7 +67,7 @@ public final class VanishPlugin extends JavaPlugin {
 
     private VanishManager manager;
 
-    private HookManager hookManager = new HookManager(this);
+    private final HookManager hookManager = new HookManager(this);
 
     /**
      * Inform VNP that the user has closed their fake chest
