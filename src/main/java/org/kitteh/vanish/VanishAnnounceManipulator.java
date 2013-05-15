@@ -2,6 +2,8 @@ package org.kitteh.vanish;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -18,9 +20,9 @@ import org.kitteh.vanish.metrics.MetricsOverlord;
  * particularly stupid.
  */
 public final class VanishAnnounceManipulator {
-    private final ArrayList<String> delayedAnnouncePlayerList;
+    private final List<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
-    private final HashMap<String, Boolean> playerOnlineStatus;
+    private final Map<String, Boolean> playerOnlineStatus;
 
     /**
      * @param plugin
@@ -131,7 +133,6 @@ public final class VanishAnnounceManipulator {
      */
     void fakeQuit(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
-
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
             MetricsOverlord.getFakequitTracker().increment();

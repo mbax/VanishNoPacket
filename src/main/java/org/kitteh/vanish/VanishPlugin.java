@@ -60,13 +60,9 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     private final HashSet<String> haveInventoriesOpen = new HashSet<String>();
-
     private String latestVersion = null;
-
     private boolean versionDiff = false;
-
     private VanishManager manager;
-
     private final HookManager hookManager = new HookManager(this);
 
     /**

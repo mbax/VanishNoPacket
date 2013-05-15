@@ -42,8 +42,8 @@ public final class VanishManager {
     }
 
     private final class ShowPlayerHandler implements Runnable {
-        HashSet<ShowPlayerEntry> entries = new HashSet<ShowPlayerEntry>();
-        HashSet<ShowPlayerEntry> next = new HashSet<ShowPlayerEntry>();
+        Set<ShowPlayerEntry> entries = new HashSet<ShowPlayerEntry>();
+        Set<ShowPlayerEntry> next = new HashSet<ShowPlayerEntry>();
 
         public void add(ShowPlayerEntry player) {
             this.entries.add(player);
@@ -179,7 +179,7 @@ public final class VanishManager {
     public void toggleVanish(Player togglingPlayer) {
         this.toggleVanishQuiet(togglingPlayer);
         final String vanishingPlayerName = togglingPlayer.getName();
-        String messageBit;
+        final String messageBit;
         final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
         if (this.isVanished(togglingPlayer)) {
             Debuggle.log("LoudVanishToggle Vanishing " + togglingPlayer.getName());
@@ -244,6 +244,7 @@ public final class VanishManager {
             this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
+            Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
             if (VanishPerms.canEffectSmoke(vanishingPlayer)) {
                 this.smokeScreenEffect(vanishingPlayer.getLocation());
             }
@@ -254,10 +255,10 @@ public final class VanishManager {
                 this.lightningBarrage(vanishingPlayer.getLocation());
             }
             if (VanishPerms.canEffectFlames(vanishingPlayer)) {
-                this.mobspawnerFlamesEffect(vanishingPlayer.getLocation().add(0, 1, 0));
+                this.mobspawnerFlamesEffect(oneUp);
             }
             if (VanishPerms.canEffectBats(vanishingPlayer)) {
-                this.batsOMG(vanishingPlayer.getLocation().add(0, 1, 0));
+                this.batsOMG(oneUp);
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
