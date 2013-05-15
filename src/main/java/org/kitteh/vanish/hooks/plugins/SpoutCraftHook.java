@@ -236,13 +236,6 @@ public final class SpoutCraftHook extends Hook implements Listener {
         return playerData;
     }
 
-    /**
-     * For player target, update spout vanishness with data.
-     * 
-     * @param vanished
-     * @param data
-     * @param target
-     */
     private void playerUpdate(SpoutPlayer vanished, PlayerData data, SpoutPlayer target) {
         if ((target != null) && target.hasPermission("vanish.see") && target.isSpoutCraftEnabled()) {
             if (data.skin != null) {

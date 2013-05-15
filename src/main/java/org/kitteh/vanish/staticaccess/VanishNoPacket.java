@@ -14,23 +14,26 @@ public final class VanishNoPacket {
     private static Thread mainThread;
 
     /**
-     * Query if player looking can see player uncertain
-     * 
-     * @param looking
-     * @param uncertain
-     * @return true if can see
-     * @throws VanishNotLoadedException
+     * Queries if a player can see another player
+     *
+     * @param looking the player who might be able to see another
+     * @param uncertain the player who may or may not be seen
+     * @return true if the looking player can see the other
+     * @throws VanishNotLoadedException is VNP isn't loaded
+     * @deprecated Use the Bukkit API
      */
+    @Deprecated
     public static boolean canSee(Player looking, Player uncertain) throws VanishNotLoadedException {
         VanishNoPacket.check();
         return !(VanishNoPacket.instance.getManager().isVanished(uncertain) && !VanishPerms.canSeeAll(looking));
     }
 
     /**
+     * Gets the VanishManager
      * DO NOT STORE THE MANAGER.
-     * 
+     *
      * @return the VNP manager itself, if you like it that way
-     * @throws VanishNotLoadedException
+     * @throws VanishNotLoadedException if VNP isn't loaded
      */
     public static VanishManager getManager() throws VanishNotLoadedException {
         VanishNoPacket.check();
@@ -38,10 +41,11 @@ public final class VanishNoPacket {
     }
 
     /**
+     * Gets the plugin
      * DO NOT STORE THE PLUGIN.
-     * 
+     *
      * @return the VNP plugin itself, if you like it that way
-     * @throws VanishNotLoadedException
+     * @throws VanishNotLoadedException if VNP isn't loaded
      */
     public static VanishPlugin getPlugin() throws VanishNotLoadedException {
         VanishNoPacket.check();
@@ -49,12 +53,11 @@ public final class VanishNoPacket {
     }
 
     /**
-     * Vanish check
-     * 
-     * @param name
-     *            player to check
+     * Gets if a player is vanished
+     *
+     * @param name player to check
      * @return true if named player is invisible
-     * @throws VanishNotLoadedException
+     * @throws VanishNotLoadedException if VNP isn't loaded
      */
     public static boolean isVanished(String name) throws VanishNotLoadedException {
         VanishNoPacket.check();
@@ -62,10 +65,10 @@ public final class VanishNoPacket {
     }
 
     /**
-     * Vanish count
-     * 
+     * Gets the number of users vanished
+     *
      * @return count of vanished players on server
-     * @throws VanishNotLoadedException
+     * @throws VanishNotLoadedException if VNP isn't loaded
      */
     public static int numVanished() throws VanishNotLoadedException {
         VanishNoPacket.check();
@@ -74,8 +77,8 @@ public final class VanishNoPacket {
 
     /**
      * If you aren't VanishNoPacket itself, you shouldn't be here.
-     * 
-     * @param instance
+     *
+     * @param instance STOP IT WHAT ARE YOU DOING
      */
     public static void setInstance(VanishPlugin instance) {
         VanishNoPacket.instance = instance;
@@ -83,11 +86,10 @@ public final class VanishNoPacket {
     }
 
     /**
-     * Quiet toggle. Player goes poof!
-     * 
-     * @param player
-     *            vanishing
-     * @throws VanishNotLoadedException
+     * Toggles a player's visibility quietly.
+     *
+     * @param player the vanishing player
+     * @throws VanishNotLoadedException if VNP isn't loaded
      */
     public static void toggleVanishSilent(Player player) throws VanishNotLoadedException {
         VanishNoPacket.check(false);
@@ -95,11 +97,11 @@ public final class VanishNoPacket {
     }
 
     /**
-     * Loud toggle. Announces to player, and to those with appropriate perms
-     * 
-     * @param player
-     *            vanishing
-     * @throws VanishNotLoadedException
+     * Toggles a player's visibility loudly.
+     * Announces to player, and to those with appropriate perms
+     *
+     * @param player the vanishing player
+     * @throws VanishNotLoadedException if VNP isn't loaded
      */
     public static void toggleVanishWithAnnounce(Player player) throws VanishNotLoadedException {
         VanishNoPacket.check(false);
@@ -109,7 +111,7 @@ public final class VanishNoPacket {
     private static void check() throws VanishNotLoadedException {
         VanishNoPacket.check(true);
     }
-    
+
     private static void check(boolean safe) throws VanishNotLoadedException {
         if (VanishNoPacket.instance == null) {
             throw new VanishNotLoadedException();

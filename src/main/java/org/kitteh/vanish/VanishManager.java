@@ -90,8 +90,9 @@ public final class VanishManager {
     }
 
     /**
+     * Gets the announcement manipulator
      * Called by JSONAPI
-     * 
+     *
      * @return the Announce Manipulator
      */
     public VanishAnnounceManipulator getAnnounceManipulator() {
@@ -103,9 +104,9 @@ public final class VanishManager {
     }
 
     /**
-     * Is the player vanished?
-     * 
-     * @param player
+     * Gets if a player is vanished
+     *
+     * @param player player to query
      * @return true if vanished
      */
     public boolean isVanished(Player player) {
@@ -113,7 +114,9 @@ public final class VanishManager {
     }
 
     /**
-     * @param playerName
+     * Gets if a player is vanished
+     *
+     * @param playerName name of the player to query
      * @return if the named player is currently vanished
      */
     public boolean isVanished(String playerName) {
@@ -127,12 +130,20 @@ public final class VanishManager {
     }
 
     /**
+     * Gets the number of vanished players
+     *
      * @return the number of players currently vanished
      */
     public int numVanished() {
         return this.vanishedPlayerNames.size();
     }
 
+    /**
+     * Marks a player as having quit the game
+     * Do not call this method
+     *
+     * @param player the player who has quit
+     */
     public void playerQuit(Player player) {
         Debuggle.log("Quitting: " + player.getName());
         this.resetSleepingIgnored(player);
@@ -141,9 +152,9 @@ public final class VanishManager {
     }
 
     /**
-     * Reset the player's info
-     * 
-     * @param player
+     * Resets a player's visibility status based on current permissions
+     *
+     * @param player player to refresh
      */
     public void playerRefresh(Player player) {
         this.resetSeeing(player);
@@ -153,9 +164,9 @@ public final class VanishManager {
     }
 
     /**
-     * Force a refresh of who a player can or can't see.
-     * 
-     * @param player
+     * Forces a visibility refresh on a player
+     *
+     * @param player player to refresh
      */
     public void resetSeeing(Player player) {
         Debuggle.log("Resetting visibility on " + player.getName());
@@ -169,12 +180,12 @@ public final class VanishManager {
     }
 
     /**
-     * Toggle a player's visibility
+     * Toggles a player's visibility
      * Called when a player calls /vanish
      * Talks to the player and everyone with vanish.see
-     * 
-     * @param togglingPlayer
-     *            The player disappearing
+     * Will trigger effects
+     *
+     * @param togglingPlayer the player disappearing
      */
     public void toggleVanish(Player togglingPlayer) {
         this.toggleVanishQuiet(togglingPlayer);
@@ -198,11 +209,11 @@ public final class VanishManager {
     }
 
     /**
-     * Handle vanishing or unvanishing for a player
+     * Toggles a player's visibility
      * Does not say anything.
-     * Will call effects
+     * Will trigger effects
      * Called by toggleVanish(Player)
-     * 
+     *
      * @param vanishingPlayer
      */
     public void toggleVanishQuiet(Player vanishingPlayer) {
@@ -210,12 +221,11 @@ public final class VanishManager {
     }
 
     /**
-     * Handle vanishing or unvanishing for a player
+     * Toggles a player's visibility
      * Does not say anything.
-     * 
+     *
      * @param vanishingPlayer
-     * @param effects
-     *            if true, do effects
+     * @param effects if true, trigger effects
      */
     public void toggleVanishQuiet(Player vanishingPlayer, boolean effects) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
@@ -374,9 +384,6 @@ public final class VanishManager {
         }
     }
 
-    /**
-     * Only call this when disabling the plugin
-     */
     void onPluginDisable() {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
@@ -394,23 +401,12 @@ public final class VanishManager {
         }
     }
 
-    /**
-     * Reset SleepingIgnored to its old value for a player.
-     * 
-     * @param player
-     */
     void resetSleepingIgnored(Player player) {
         if (this.sleepIgnored.containsKey(player.getName())) {
             player.setSleepingIgnored(this.sleepIgnored.remove(player.getName()));
         }
     }
 
-    /**
-     * Set SleepingIgnored to true for a player, and save the old
-     * value.
-     * 
-     * @param player
-     */
     void setSleepingIgnored(Player player) {
         if (!this.sleepIgnored.containsKey(player.getName())) {
             this.sleepIgnored.put(player.getName(), player.isSleepingIgnored());

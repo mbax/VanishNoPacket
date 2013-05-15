@@ -19,12 +19,6 @@ public final class ListenPlayerJoin implements Listener {
         this.plugin = instance;
     }
 
-    /**
-     * Handle setting who the player can see and setting invisibility if needed
-     * here.
-     * 
-     * @param event
-     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerJoinEarly(PlayerJoinEvent event) {
         event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(event.getPlayer().getName())));
@@ -37,11 +31,6 @@ public final class ListenPlayerJoin implements Listener {
         this.plugin.hooksJoin(event.getPlayer());
     }
 
-    /**
-     * Handle any messages to the player here
-     * 
-     * @param event
-     */
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoinLate(PlayerJoinEvent event) {
         final StringBuilder statusUpdate = new StringBuilder();

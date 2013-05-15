@@ -66,10 +66,9 @@ public final class VanishPlugin extends JavaPlugin {
     private final HookManager hookManager = new HookManager(this);
 
     /**
-     * Inform VNP that the user has closed their fake chest
-     * 
-     * @param name
-     *            user's name
+     * Informs VNP that a user has closed their fake chest
+     *
+     * @param name user's name
      */
     public void chestFakeClose(String name) {
         synchronized (this.haveInventoriesOpen) {
@@ -78,10 +77,9 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Query if a user is currently using a fake chest
-     * 
-     * @param name
-     *            user's name
+     * Queries if a user is currently using a fake chest
+     *
+     * @param name the user's name
      * @return true if currently using a fake chest
      */
     public boolean chestFakeInUse(String name) {
@@ -91,10 +89,9 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Inform VNP that the user has opened their fake chest
-     * 
-     * @param name
-     *            user's name
+     * Informs VNP that a user has opened their fake chest
+     *
+     * @param name user's name
      */
     public void chestFakeOpen(String name) {
         synchronized (this.haveInventoriesOpen) {
@@ -103,29 +100,36 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Version string of VNP
-     * 
+     * Gets the current version
+     *
      * @return version of VanishNoPacket in use
      */
     public String getCurrentVersion() {
         return "${project.version}";
     }
 
+    /**
+     * Gets the hook manager
+     *
+     * @return the hook manager
+     */
     public HookManager getHookManager() {
         return this.hookManager;
     }
 
     /**
+     * Gets the latest found version
      * Will show this version, if update checks are disabled
-     * 
-     * @return The latest found version of VanishNoPacket
+     *
+     * @return the latest found version of VanishNoPacket
      */
     public String getLatestKnownVersion() {
         return this.latestVersion;
     }
 
     /**
-     * 
+     * Gets the vanish manager
+     *
      * @return the VanishManager
      */
     public VanishManager getManager() {
@@ -133,22 +137,20 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Indicate a player has just joined the server.
+     * Indicates a player has just joined the server.
      * Internal use only please
-     * 
-     * @param player
-     *            player who has joined the server
+     *
+     * @param player player who has joined the server
      */
     public void hooksJoin(Player player) {
         this.hookManager.onJoin(player);
     }
 
     /**
-     * Indicate a player has left the server
+     * Indicates a player has left the server
      * Internal use only please
-     * 
-     * @param player
-     *            player who has left the server
+     *
+     * @param player player who has left the server
      */
     public void hooksQuit(Player player) {
         this.hookManager.onQuit(player);
@@ -156,40 +158,39 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * No touchy. Call hooks for when a player has unvanished
-     * 
-     * @param player
-     *            The un-vanishing user
+     * Calls hooks for when a player has unvanished
+     * Internal use only please
+     *
+     * @param player the un-vanishing user
      */
     public void hooksUnvanish(Player player) {
         this.hookManager.onUnvanish(player);
     }
 
     /**
-     * No touchy. Call hooks for when player has vanished
-     * 
-     * @param player
-     *            The vanishing player
+     * Calls hooks for when player has vanished
+     * Internal use only please.
+     *
+     * @param player the vanishing player
      */
     public void hooksVanish(Player player) {
         this.hookManager.onVanish(player);
     }
 
     /**
-     * Send a message to all players with vanish.statusupdates
-     * 
-     * @param message
+     * Sends a message to all players with vanish.statusupdates permission
+     *
+     * @param message the message to send
      */
     public void messageStatusUpdate(String message) {
         this.messageStatusUpdate(message, null);
     }
 
     /**
-     * Send a message to all players with vanish.statusupdates but one
-     * 
-     * @param message
-     * @param avoid
-     *            Player to not send the message to
+     * Sends a message to all players with vanish.statusupdates but one
+     *
+     * @param message the message to send
+     * @param avoid player to not send the message to
      */
     public void messageStatusUpdate(String message, Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
@@ -310,7 +311,7 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
-     * Reload the VNP config
+     * Reloads the VNP config
      */
     public void reload() {
         this.reloadConfig();
@@ -318,8 +319,9 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
+     * Gets if there is a difference in versions between this and latest
      * Will always be false if update checks are disabled
-     * 
+     *
      * @return whether or not there's a new version available
      */
     public boolean versionDifference() {

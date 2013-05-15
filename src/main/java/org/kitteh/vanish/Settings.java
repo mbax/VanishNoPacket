@@ -11,10 +11,7 @@ public final class Settings {
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
 
-    /**
-     * Tracking the config. Don't touch this.
-     */
-    private static final int confVersion = 5;
+    private static final int confVersion = 5; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;

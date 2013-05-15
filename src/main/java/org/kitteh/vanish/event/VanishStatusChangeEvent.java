@@ -4,16 +4,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * An event fired whenever a player changes their visibility
+ */
 public final class VanishStatusChangeEvent extends Event {
     public static HandlerList getHandlerList() {
         return VanishStatusChangeEvent.handlers;
     }
 
+    private static final HandlerList handlers = new HandlerList();
+
     private final String name;
     private final boolean vanishing;
     private final Player player;
-
-    private static final HandlerList handlers = new HandlerList();
 
     public VanishStatusChangeEvent(Player player, boolean vanishing) {
         this.name = player.getName();
@@ -27,6 +30,8 @@ public final class VanishStatusChangeEvent extends Event {
     }
 
     /**
+     * Gets the name of the player changing visibility
+     *
      * @return name of the user changing visibility
      */
     public String getName() {
@@ -34,6 +39,8 @@ public final class VanishStatusChangeEvent extends Event {
     }
 
     /**
+     * Gets the player changing visibility
+     *
      * @return the player changing visibility
      */
     public Player getPlayer() {
@@ -41,6 +48,8 @@ public final class VanishStatusChangeEvent extends Event {
     }
 
     /**
+     * Gets if this is a vanish or unvanish
+     *
      * @return true if vanishing, false is revealing
      */
     public boolean isVanishing() {

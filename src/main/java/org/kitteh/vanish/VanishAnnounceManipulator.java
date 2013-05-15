@@ -24,14 +24,6 @@ public final class VanishAnnounceManipulator {
     private final VanishPlugin plugin;
     private final Map<String, Boolean> playerOnlineStatus;
 
-    /**
-     * @param plugin
-     *            The running instance of the plugin
-     * @param fakeJoinMessage
-     *            The message to display. && for color, %p for player.getName(), %d for player.getDisplayName()
-     * @param fakeQuitMessage
-     * @param delayedJoinTrackingEnabled
-     */
     VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
         this.playerOnlineStatus = new HashMap<String, Boolean>();
@@ -47,19 +39,19 @@ public final class VanishAnnounceManipulator {
     }
 
     /**
-     * Remove a player's delayed announce
-     * 
-     * @param player
+     * Removes a player's delayed announce
+     *
+     * @param player name of the player
      */
     public void dropDelayedAnnounce(String player) {
         this.delayedAnnouncePlayerList.remove(player);
     }
 
     /**
+     * Gets the fake online status of a player
      * Called by JSONAPI
-     * 
-     * @param player
-     * 
+     *
+     * @param playerName name of the player to query
      * @return true if player is considered online, false if not (or if not on server)
      */
     public boolean getFakeOnlineStatus(String playerName) {
@@ -76,10 +68,10 @@ public final class VanishAnnounceManipulator {
     }
 
     /**
+     * Marks a player as quit
      * Called when a player quits
      * 
-     * @param player
-     *            Who just quit?
+     * @param player name of the player who just quit
      * @return the former fake online status of the player
      */
     public boolean playerHasQuit(String player) {
@@ -110,12 +102,6 @@ public final class VanishAnnounceManipulator {
         return message;
     }
 
-    /**
-     * Call a fake join announce for the player.
-     * Only fires if the server previously was saying they were offline
-     * 
-     * @param player
-     */
     void fakeJoin(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
@@ -125,12 +111,6 @@ public final class VanishAnnounceManipulator {
         }
     }
 
-    /**
-     * Call a fake quit for the player.
-     * Only fires if the server previously was saying they were online
-     * 
-     * @param player
-     */
     void fakeQuit(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
@@ -140,13 +120,6 @@ public final class VanishAnnounceManipulator {
         }
     }
 
-    /**
-     * Called when a player's vanish status has been toggled
-     * If the player has a queued up join announce from a silentjoin,
-     * it will fire at this time.
-     * 
-     * @param player
-     */
     void vanishToggled(Player player) {
         if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
             return;

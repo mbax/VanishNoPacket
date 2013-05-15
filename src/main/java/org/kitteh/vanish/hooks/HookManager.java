@@ -49,10 +49,9 @@ public final class HookManager {
     }
 
     /**
-     * Deregister a hook by object
-     * 
-     * @param hook
-     *            Hook object to deregister
+     * Deregisters a hook by object
+     *
+     * @param hook hook object to deregister
      * @return a list of deregistered hook names. Empty list if nothing deregistered.
      */
     public List<String> deregisterHook(Hook hook) {
@@ -67,10 +66,9 @@ public final class HookManager {
     }
 
     /**
-     * Deregister a hook
-     * 
-     * @param name
-     *            Hook name to deregister
+     * Deregisters a hook
+     *
+     * @param name hook name to deregister
      * @return the deregistered hook or null if no hook by the given name was registered
      */
     public Hook deregisterHook(String name) {
@@ -80,10 +78,9 @@ public final class HookManager {
     }
 
     /**
-     * Get a registered hook by HookType
-     * 
-     * @param hooktype
-     *            desired hook type
+     * Gets a registered hook by HookType
+     *
+     * @param hooktype desired hook type
      * @return the named Hook if registered, null if no match.
      */
     public Hook getHook(HookType hooktype) {
@@ -94,10 +91,9 @@ public final class HookManager {
     }
 
     /**
-     * Get a named, registered Hook
+     * Gets a named, registered Hook
      * 
-     * @param name
-     *            Hook name
+     * @param name hook name
      * @return the named Hook if registered, null if no match.
      */
     public Hook getHook(String name) {
@@ -135,13 +131,10 @@ public final class HookManager {
     }
 
     /**
-     * Register and initialize a hook
-     * 
-     * @param name
-     *            Name to register
-     * @param hookClazz
-     *            Hook class to register
-     * @param plugin
+     * Registers and initialize a hook
+     *
+     * @param name name to register
+     * @param hookClazz hook class to register
      */
     public void registerHook(String name, Class<? extends Hook> hookClazz) {
         try {
@@ -153,12 +146,10 @@ public final class HookManager {
     }
 
     /**
-     * Register an initialized hook object.
-     * 
-     * @param name
-     *            Name of the hook
-     * @param hook
-     *            Hook object
+     * Registers an initialized hook object.
+     *
+     * @param name name of the hook
+     * @param hook hook object
      */
     public void registerHook(String name, Hook hook) {
         this.hooks.put(name, hook);
