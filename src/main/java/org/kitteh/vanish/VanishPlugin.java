@@ -292,7 +292,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
 
         if (updateCheck) {
-            if ("${project.version}".contains("SNAPSHOT") || "${project.version}".equals("${project" + ".version}")) {
+            if (this.getCurrentVersion().contains("SNAPSHOT") || this.getCurrentVersion().equals("${project" + ".version}") || this.getCurrentVersion().endsWith("unofficial")) {
                 this.getLogger().info("Not a release version. Update check disabled");
             } else {
                 this.getServer().getScheduler().runTaskTimerAsynchronously(this, new UpdateCheck(this), 40, 432000);
