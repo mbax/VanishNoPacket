@@ -22,12 +22,6 @@ import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
-/**
- * It's the vanishing manager!
- * 
- * @author mbaxter
- * 
- */
 public final class VanishManager {
     private final class ShowPlayerEntry {
         private final Player player;
