@@ -11,6 +11,7 @@ import org.kitteh.vanish.VanishPlugin;
  */
 public final class VanishNoPacket {
     private static VanishPlugin instance;
+    private static Thread mainThread;
 
     /**
      * Query if player looking can see player uncertain
@@ -78,6 +79,7 @@ public final class VanishNoPacket {
      */
     public static void setInstance(VanishPlugin instance) {
         VanishNoPacket.instance = instance;
+        VanishNoPacket.mainThread = Thread.currentThread();
     }
 
     /**
@@ -88,7 +90,7 @@ public final class VanishNoPacket {
      * @throws VanishNotLoadedException
      */
     public static void toggleVanishSilent(Player player) throws VanishNotLoadedException {
-        VanishNoPacket.check();
+        VanishNoPacket.check(false);
         VanishNoPacket.instance.getManager().toggleVanishQuiet(player);
     }
 
@@ -100,13 +102,20 @@ public final class VanishNoPacket {
      * @throws VanishNotLoadedException
      */
     public static void toggleVanishWithAnnounce(Player player) throws VanishNotLoadedException {
-        VanishNoPacket.check();
+        VanishNoPacket.check(false);
         VanishNoPacket.instance.getManager().toggleVanish(player);
     }
 
     private static void check() throws VanishNotLoadedException {
+        VanishNoPacket.check(true);
+    }
+    
+    private static void check(boolean safe) throws VanishNotLoadedException {
         if (VanishNoPacket.instance == null) {
             throw new VanishNotLoadedException();
+        }
+        if (!safe && !VanishNoPacket.mainThread.equals(Thread.currentThread())) {
+            throw new RuntimeException("Cannot toggle visibility asynchronously");
         }
     }
 }
