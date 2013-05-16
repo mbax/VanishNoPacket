@@ -254,7 +254,7 @@ public final class VanishManager {
             this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
-            Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
+            final Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
             if (VanishPerms.canEffectSmoke(vanishingPlayer)) {
                 this.effectSmoke(vanishingPlayer.getLocation());
             }
