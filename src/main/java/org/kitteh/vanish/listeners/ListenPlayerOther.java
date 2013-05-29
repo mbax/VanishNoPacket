@@ -64,7 +64,7 @@ public final class ListenPlayerOther implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
-        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
+        if (!player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
             final Block block = event.getClickedBlock();
             Inventory inventory = null;
             final BlockState blockState = block.getState();
@@ -105,9 +105,6 @@ public final class ListenPlayerOther implements Listener {
             }
             if (inventory != null) {
                 event.setCancelled(true);
-                if (player.isSneaking()) {
-                    return;
-                }
                 if (fake) {
                     this.plugin.chestFakeOpen(player.getName());
                     player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
