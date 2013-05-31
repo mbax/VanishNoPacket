@@ -301,6 +301,32 @@ public final class VanishManager {
         }
     }
 
+    /**
+     * Vanishes a player. Poof.
+     * 
+     * @param vanishingPlayer
+     * @param silent if true, does not say anything
+     * @param effects if true, trigger effects
+     */
+    public void vanish(Player vanishingPlayer, boolean silent, boolean effects) {
+        if (this.isVanished(vanishingPlayer)) return;
+        if (silent) this.toggleVanishQuiet(vanishingPlayer, effects);
+        else this.toggleVanish(vanishingPlayer);
+    }
+    
+    /**
+     * Reveals a player.
+     * 
+     * @param revealingPlayer
+     * @param silent if true, does not say anything
+     * @param effects if true, trigger effects
+     */
+    public void reveal(Player revealingPlayer, boolean silent, boolean effects) {
+        if (!this.isVanished(revealingPlayer)) return;
+        if (silent) this.toggleVanishQuiet(revealingPlayer, effects);
+        else this.toggleVanish(revealingPlayer);
+    }
+
     private void effectBats(final Location location) {
         final Set<UUID> batty = new HashSet<UUID>();
         for (int x = 0; x < 10; x++) {
