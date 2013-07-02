@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.kitteh</groupId>
-  <artifactId>vnp-v1_5_R3</artifactId>
+  <artifactId>vnp-v1_6_R1</artifactId>
   <packaging>jar</packaging>
-  <name>VNP for v1_5_R3</name>
-  <version>v1_5_R3</version>
+  <name>VNP for v1_6_R1</name>
+  <version>v1_6_R1</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>craftbukkit</artifactId>
-      <version>1.5.2-R0.1-SNAPSHOT</version>
+      <version>1.6.1-R0.1-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
