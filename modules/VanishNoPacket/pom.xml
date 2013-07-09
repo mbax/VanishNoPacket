@@ -124,6 +124,19 @@
     </dependency>
     <dependency>
       <groupId>org.kitteh</groupId>
+      <artifactId>vnp-v1_6_R2</artifactId>
+      <version>v1_6_R2</version>
+      <type>jar</type>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
       <artifactId>vnp-api</artifactId>
       <version>API</version>
       <type>jar</type>
