@@ -303,6 +303,7 @@ public final class VanishManager {
 
     /**
      * Vanishes a player. Poof.
+     * This is a convenience method.
      * 
      * @param vanishingPlayer
      * @param silent if true, does not say anything
@@ -316,6 +317,7 @@ public final class VanishManager {
     
     /**
      * Reveals a player.
+     * This is a convenience method.
      * 
      * @param revealingPlayer
      * @param silent if true, does not say anything
