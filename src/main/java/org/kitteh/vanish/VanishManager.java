@@ -310,9 +310,14 @@ public final class VanishManager {
      * @param effects if true, trigger effects
      */
     public void vanish(Player vanishingPlayer, boolean silent, boolean effects) {
-        if (this.isVanished(vanishingPlayer)) return;
-        if (silent) this.toggleVanishQuiet(vanishingPlayer, effects);
-        else this.toggleVanish(vanishingPlayer);
+        if (this.isVanished(vanishingPlayer)) {
+            return;
+        }
+        if (silent) {
+            this.toggleVanishQuiet(vanishingPlayer, effects);
+        } else {
+            this.toggleVanish(vanishingPlayer);
+        }
     }
     
     /**
@@ -324,9 +329,14 @@ public final class VanishManager {
      * @param effects if true, trigger effects
      */
     public void reveal(Player revealingPlayer, boolean silent, boolean effects) {
-        if (!this.isVanished(revealingPlayer)) return;
-        if (silent) this.toggleVanishQuiet(revealingPlayer, effects);
-        else this.toggleVanish(revealingPlayer);
+        if (!this.isVanished(revealingPlayer)) {
+           return;
+        }
+        if (silent) {
+           this.toggleVanishQuiet(revealingPlayer, effects);
+        } else {
+           this.toggleVanish(revealingPlayer);
+        }
     }
 
     private void effectBats(final Location location) {
