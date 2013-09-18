@@ -61,14 +61,6 @@
 
   <repositories>
     <repository>
-      <id>spout-repo</id>
-      <url>http://nexus.spout.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>essentials-repo</id>
-      <url>http://ess.ementalo.com/nexus/content/groups/public/</url>
-    </repository>
-    <repository>
       <id>kitteh-repo</id>
       <url>http://repo.kitteh.org/content/groups/public</url>
     </repository>
@@ -159,7 +151,7 @@
     <dependency>
       <groupId>org.getspout</groupId>
       <artifactId>spoutplugin</artifactId>
-      <version>dev-SNAPSHOT</version>
+      <version>1.5.2-R1.0-SNAPSHOT-HOSTED</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -171,7 +163,7 @@
     <dependency>
       <groupId>de.bananaco</groupId>
       <artifactId>bPermissions</artifactId>
-      <version>dev-SNAPSHOT</version>
+      <version>v2.12-DEV</version>
       <optional>true</optional>
       <exclusions>
         <exclusion>
@@ -183,7 +175,7 @@
     <dependency>
       <groupId>com.earth2me</groupId>
       <artifactId>essentials</artifactId>
-      <version>2.9.1</version>
+      <version>2.11.1</version>
       <optional>true</optional>
     </dependency>
     <dependency>
