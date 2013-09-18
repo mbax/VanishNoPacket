@@ -30,7 +30,7 @@ public final class VaultHook extends Hook implements ChatProvider {
     }
 
     private String getVaultPrefix(Player player) {
-        return this.get(this.chat.getPlayerSuffix(player));
+        return this.get(this.chat.getPlayerPrefix(player));
     }
 
     private String getVaultSuffix(Player player) {
