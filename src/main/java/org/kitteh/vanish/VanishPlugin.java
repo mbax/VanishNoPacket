@@ -1,11 +1,15 @@
 package org.kitteh.vanish;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashSet;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,35 +31,58 @@ import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 public final class VanishPlugin extends JavaPlugin {
     private final class UpdateCheck implements Runnable {
+        private static final String CURRENT_VERSION = "v" + "${vnp-version}";
+
         private final VanishPlugin plugin;
 
-        public UpdateCheck(VanishPlugin vanishPlugin) {
+        private UpdateCheck(VanishPlugin vanishPlugin) {
             this.plugin = vanishPlugin;
         }
 
         @Override
         public void run() {
+            // Thank you Gravity, for your neat updater code
+            String latest = null;
+            InputStream inputStream = null;
             try {
-                final URLConnection connection = new URL("http://updates.kitteh.org/VanishNoPacket/version").openConnection();
-                connection.setConnectTimeout(8000);
-                connection.setReadTimeout(15000);
-                connection.setRequestProperty("User-agent", "VanishNoPacket");
-                final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String version;
-                if ((version = bufferedReader.readLine()) != null) {
-                    this.plugin.latestVersion = version;
-                    if (!"${vnp-version}".equals(version)) {
-                        this.plugin.getLogger().info("Found a different version available: " + version);
-                        this.plugin.getLogger().info("Check http://www.curse.com/server-mods/minecraft/vanish");
-                        this.plugin.versionDiff = true;
-                    }
-                    return;
-                }
-                bufferedReader.close();
-                connection.getInputStream().close();
-            } catch (final Exception e) {
+                inputStream = new URL("http://dev.bukkit.org/server-mods/vanish/files.rss").openStream();
+            } catch (final IOException e) {
+                this.plugin.getLogger().warning("Could not reach BukkitDev file stream for update checking. Is dev.bukkit.org offline?");
+                latest = null;
             }
-            this.plugin.getLogger().info("Error: Could not check if plugin was up to date. Will try later");
+            final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+            if (inputStream != null) {
+                try {
+                    final XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStream);
+                    String maybeLatest = null;
+                    while (eventReader.hasNext()) {
+                        XMLEvent event = eventReader.nextEvent();
+                        if (event.isStartElement()) {
+                            if (event.asStartElement().getName().getLocalPart().equals("title")) {
+                                event = eventReader.nextEvent();
+                                maybeLatest = event.asCharacters().getData();
+                            }
+                        } else if (event.isEndElement()) {
+                            if (event.asEndElement().getName().getLocalPart().equals("item")) {
+                                latest = maybeLatest;
+                                break;
+                            }
+                        }
+                    }
+                } catch (final XMLStreamException e) {
+                    this.plugin.getLogger().warning("Could not reach dev.bukkit.org for update checking. Is it offline?");
+                }
+            }
+            if (latest != null) {
+                this.plugin.latestVersion = latest;
+                if (!UpdateCheck.CURRENT_VERSION.equals(latest)) {
+                    this.plugin.getLogger().info("Found a different version available: " + latest);
+                    this.plugin.getLogger().info("Check http://www.curse.com/server-mods/minecraft/vanish");
+                    this.plugin.versionDiff = true;
+                }
+            } else {
+                this.plugin.getLogger().info("Error: Could not check if plugin was up to date. Will try later");
+            }
         }
     }
 
