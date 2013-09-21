@@ -26,7 +26,6 @@ import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
 import org.kitteh.vanish.listeners.ListenToYourHeart;
 import org.kitteh.vanish.listeners.TagAPIListener;
-import org.kitteh.vanish.metrics.MetricsOverlord;
 import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 public final class VanishPlugin extends JavaPlugin {
@@ -286,7 +285,6 @@ public final class VanishPlugin extends JavaPlugin {
             this.hookManager.getHook(HookType.ProtocolLib).onEnable();
         }
 
-        final VanishPlugin self = this;
         //Post-load stuff
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
             @Override
@@ -294,7 +292,6 @@ public final class VanishPlugin extends JavaPlugin {
                 if (VanishPlugin.this.getConfig().getBoolean("hooks.JSONAPI", false)) {
                     VanishPlugin.this.hookManager.getHook(HookType.JSONAPI).onEnable();
                 }
-                MetricsOverlord.init(self);
             }
         }, 1);
 
@@ -314,8 +311,6 @@ public final class VanishPlugin extends JavaPlugin {
             this.getLogger().info("This is your first startup (or you wiped your config).");
             this.getLogger().info("In future startups, VanishNoPacket will check for updates");
             this.getLogger().info("If you dislike it, disable 'checkupdates' in the config file");
-            this.getLogger().info("Note that this plugin also utilizes PluginMetrics with usage tracking");
-            this.getLogger().info("If you do not want usage tracking (paranoid) disable in that config");
         }
 
         if (updateCheck) {

@@ -20,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
-import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class VanishManager {
     private final class ShowPlayerEntry {
@@ -244,13 +243,11 @@ public final class VanishManager {
                 }
             }
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            MetricsOverlord.getVanishTracker().increment();
             this.plugin.getLogger().info(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
-            MetricsOverlord.getUnvanishTracker().increment();
             this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
