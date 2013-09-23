@@ -86,6 +86,10 @@
           <groupId>org.bukkit</groupId>
           <artifactId>craftbukkit</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.kitteh</groupId>
+          <artifactId>vnp-api</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -98,6 +102,10 @@
         <exclusion>
           <groupId>org.bukkit</groupId>
           <artifactId>craftbukkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.kitteh</groupId>
+          <artifactId>vnp-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -112,6 +120,10 @@
           <groupId>org.bukkit</groupId>
           <artifactId>craftbukkit</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.kitteh</groupId>
+          <artifactId>vnp-api</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -124,6 +136,10 @@
         <exclusion>
           <groupId>org.bukkit</groupId>
           <artifactId>craftbukkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.kitteh</groupId>
+          <artifactId>vnp-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -138,6 +154,10 @@
           <groupId>org.bukkit</groupId>
           <artifactId>craftbukkit</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.kitteh</groupId>
+          <artifactId>vnp-api</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -146,11 +166,17 @@
       <version>API</version>
       <type>jar</type>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.5.1-R0.2</version>
+      <version>1.6.2-R1.0</version>
       <type>jar</type>
       <optional>true</optional>
     </dependency>
@@ -182,6 +208,10 @@
         <exclusion>
           <groupId>org.bukkit</groupId>
           <artifactId>craftbukkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

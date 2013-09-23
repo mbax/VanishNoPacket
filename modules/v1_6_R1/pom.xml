@@ -30,6 +30,12 @@
       <artifactId>vnp-api</artifactId>
       <version>API</version>
       <type>jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
