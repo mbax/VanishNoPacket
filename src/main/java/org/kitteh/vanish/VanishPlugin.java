@@ -1,21 +1,23 @@
 package org.kitteh.vanish;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashSet;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
-
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
@@ -32,6 +34,7 @@ import org.kitteh.vanish.staticaccess.VanishNoPacket;
 public final class VanishPlugin extends JavaPlugin {
     private final class UpdateCheck implements Runnable {
         private static final String CURRENT_VERSION = "v" + "${vnp-version}";
+        private static final String CREDITS = "This updater code is based on the great work of Gravity";
 
         private final VanishPlugin plugin;
 
@@ -41,37 +44,48 @@ public final class VanishPlugin extends JavaPlugin {
 
         @Override
         public void run() {
-            // Thank you Gravity, for your neat updater code
+            UpdateCheck.CREDITS.toString();
+            final File pluginsFolder = this.plugin.getDataFolder().getParentFile();
+            final File updaterFolder = new File(pluginsFolder, "Updater");
+            final File updaterConfigFile = new File(updaterFolder, "config.yml");
+            String apiKey = null;
             String latest = null;
-            InputStream inputStream = null;
-            try {
-                inputStream = new URL("http://dev.bukkit.org/server-mods/vanish/files.rss").openStream();
-            } catch (final IOException e) {
-                this.plugin.getLogger().warning("Could not reach BukkitDev file stream for update checking. Is dev.bukkit.org offline?");
-                latest = null;
-            }
-            final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-            if (inputStream != null) {
-                try {
-                    final XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStream);
-                    String maybeLatest = null;
-                    while (eventReader.hasNext()) {
-                        XMLEvent event = eventReader.nextEvent();
-                        if (event.isStartElement()) {
-                            if (event.asStartElement().getName().getLocalPart().equals("title")) {
-                                event = eventReader.nextEvent();
-                                maybeLatest = event.asCharacters().getData();
-                            }
-                        } else if (event.isEndElement()) {
-                            if (event.asEndElement().getName().getLocalPart().equals("item")) {
-                                latest = maybeLatest;
-                                break;
-                            }
-                        }
-                    }
-                } catch (final XMLStreamException e) {
-                    this.plugin.getLogger().warning("Could not reach dev.bukkit.org for update checking. Is it offline?");
+
+            if (updaterFolder.exists()) {
+                if (updaterConfigFile.exists()) {
+                    final YamlConfiguration config = YamlConfiguration.loadConfiguration(updaterConfigFile);
+                    apiKey = config.getString("api-key");
                 }
+            }
+
+            URL url;
+            try {
+                url = new URL("https://api.curseforge.com/servermods/files?projectIds=30949");
+            } catch (final MalformedURLException e) {
+                return;
+            }
+
+            URLConnection conn;
+            try {
+                conn = url.openConnection();
+
+                conn.setConnectTimeout(5000);
+                if (apiKey != null) {
+                    conn.addRequestProperty("X-API-Key", apiKey);
+                }
+                conn.addRequestProperty("User-Agent", "KittehUpdater (by mbaxter)");
+                conn.setDoOutput(true);
+
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                final String response = reader.readLine();
+
+                final JSONArray array = (JSONArray) JSONValue.parse(response);
+                if (array.size() == 0) {
+                    return;
+                }
+
+                latest = (String) ((JSONObject) array.get(array.size() - 1)).get("name");
+            } catch (final IOException e) {
             }
             if (latest != null) {
                 this.plugin.latestVersion = latest;
