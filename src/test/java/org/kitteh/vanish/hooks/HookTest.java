@@ -11,8 +11,7 @@ import org.kitteh.vanish.hooks.HookManager.HookType;
 public class HookTest {
     @Test
     public void hookConstructors() {
-        HookType[] hooks = HookManager.HookType.values();
-        for (HookType hook : hooks) {
+        for (HookType hook : HookManager.HookType.values()) {
             boolean hasDesiredConstructor = false;
             for (Constructor<?> constructor : hook.get().getDeclaredConstructors()) {
                 if (Modifier.isPrivate(constructor.getModifiers()) || Modifier.isProtected(constructor.getModifiers())) {
@@ -25,6 +24,5 @@ public class HookTest {
             }
             Assert.assertTrue("Hook " + hook + " does not have a VanishPlugin constructor", hasDesiredConstructor);
         }
-        System.out.println("Found " + hooks.length + " hooks");
     }
 }
