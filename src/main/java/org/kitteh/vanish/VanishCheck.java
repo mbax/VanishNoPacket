@@ -2,19 +2,19 @@ package org.kitteh.vanish;
 
 import java.util.concurrent.Callable;
 
-import org.kitteh.vanish.staticaccess.VanishNoPacket;
-
 public final class VanishCheck implements Callable<Object> {
+    private final VanishManager manager;
     private final String name;
 
-    public VanishCheck(String name) {
+    public VanishCheck(VanishManager manager, String name) {
+        this.manager = manager;
         this.name = name;
     }
 
     @Override
     public Object call() {
         try {
-            return VanishNoPacket.isVanished(this.name);
+            return this.manager.isVanished(this.name);
         } catch (final Exception e) {
             return false;
         }

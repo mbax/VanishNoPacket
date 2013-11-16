@@ -8,7 +8,10 @@ import org.kitteh.vanish.VanishPlugin;
 /**
  * Static party!
  * This is where you can grab stuff easily
+ * 
+ * @deprecated This class will disappear in VNP 4.0
  */
+@Deprecated
 public final class VanishNoPacket {
     private static VanishPlugin instance;
     private static Thread mainThread;
@@ -34,7 +37,9 @@ public final class VanishNoPacket {
      *
      * @return the VNP manager itself, if you like it that way
      * @throws VanishNotLoadedException if VNP isn't loaded
+     * @deprecated Use the Bukkit API
      */
+    @Deprecated
     public static VanishManager getManager() throws VanishNotLoadedException {
         VanishNoPacket.check();
         return VanishNoPacket.instance.getManager();
@@ -46,7 +51,9 @@ public final class VanishNoPacket {
      *
      * @return the VNP plugin itself, if you like it that way
      * @throws VanishNotLoadedException if VNP isn't loaded
+     * @deprecated Use the Bukkit API
      */
+    @Deprecated
     public static VanishPlugin getPlugin() throws VanishNotLoadedException {
         VanishNoPacket.check();
         return VanishNoPacket.instance;
@@ -58,7 +65,9 @@ public final class VanishNoPacket {
      * @param name player to check
      * @return true if named player is invisible
      * @throws VanishNotLoadedException if VNP isn't loaded
+     * @deprecated Use the player metadata
      */
+    @Deprecated
     public static boolean isVanished(String name) throws VanishNotLoadedException {
         VanishNoPacket.check();
         return VanishNoPacket.instance.getManager().isVanished(name);
@@ -69,7 +78,9 @@ public final class VanishNoPacket {
      *
      * @return count of vanished players on server
      * @throws VanishNotLoadedException if VNP isn't loaded
+     * @deprecated Use player metadata and count.
      */
+    @Deprecated
     public static int numVanished() throws VanishNotLoadedException {
         VanishNoPacket.check();
         return VanishNoPacket.instance.getManager().numVanished();
@@ -79,7 +90,9 @@ public final class VanishNoPacket {
      * If you aren't VanishNoPacket itself, you shouldn't be here.
      *
      * @param instance STOP IT WHAT ARE YOU DOING
+     * @deprecated SERIOUSLY WHAT ARE YOU DOING
      */
+    @Deprecated
     public static void setInstance(VanishPlugin instance) {
         VanishNoPacket.instance = instance;
         VanishNoPacket.mainThread = Thread.currentThread();
@@ -90,7 +103,9 @@ public final class VanishNoPacket {
      *
      * @param player the vanishing player
      * @throws VanishNotLoadedException if VNP isn't loaded
+     * @deprecated Call non-statically, getting the VanishManager via Bukkit
      */
+    @Deprecated
     public static void toggleVanishSilent(Player player) throws VanishNotLoadedException {
         VanishNoPacket.check(false);
         VanishNoPacket.instance.getManager().toggleVanishQuiet(player);
@@ -102,7 +117,9 @@ public final class VanishNoPacket {
      *
      * @param player the vanishing player
      * @throws VanishNotLoadedException if VNP isn't loaded
+     * @deprecated Call non-statically, getting the VanishManager via Bukkit
      */
+    @Deprecated
     public static void toggleVanishWithAnnounce(Player player) throws VanishNotLoadedException {
         VanishNoPacket.check(false);
         VanishNoPacket.instance.getManager().toggleVanish(player);

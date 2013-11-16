@@ -319,7 +319,7 @@ public final class VanishPlugin extends JavaPlugin {
         this.manager = new VanishManager(this);
 
         for (final Player player : this.getServer().getOnlinePlayers()) {
-            player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(player.getName())));
+            player.setMetadata("vanished", new LazyMetadataValue(this, CacheStrategy.NEVER_CACHE, new VanishCheck(this.manager, player.getName())));
         }
 
         boolean updateCheck = this.getConfig().getBoolean("checkupdates", true);
