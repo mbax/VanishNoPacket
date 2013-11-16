@@ -12,7 +12,7 @@ public final class EssentialsHook extends Hook {
     private final VanishPlugin plugin;
     private IEssentials essentials;
 
-    public EssentialsHook(VanishPlugin plugin) {
+    EssentialsHook(VanishPlugin plugin) {
         super(plugin);
         this.plugin = plugin;
     }

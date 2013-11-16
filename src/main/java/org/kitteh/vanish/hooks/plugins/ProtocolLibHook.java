@@ -16,7 +16,7 @@ import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.reflect.StructureModifier;
 
 public final class ProtocolLibHook extends Hook {
-    public ProtocolLibHook(VanishPlugin plugin) {
+    ProtocolLibHook(VanishPlugin plugin) {
         super(plugin);
     }
 

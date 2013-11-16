@@ -64,7 +64,7 @@ public final class SpoutCraftHook extends Hook implements Listener {
     private Color boxColor;
     private HashMap<String, StatusBar> bars;
 
-    public SpoutCraftHook(VanishPlugin plugin) {
+    SpoutCraftHook(VanishPlugin plugin) {
         super(plugin);
     }
 
