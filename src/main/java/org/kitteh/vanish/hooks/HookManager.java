@@ -131,7 +131,7 @@ public final class HookManager {
     }
 
     /**
-     * Registers and initialize a hook
+     * Registers and initializes a hook
      *
      * @param name name to register
      * @param hookClazz hook class to register
