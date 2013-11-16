@@ -277,6 +277,12 @@
       <version>1.2.23-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <distributionManagement>
@@ -294,6 +300,7 @@
 
   <build>
     <finalName>${project.artifactId}</finalName>
+    <testSourceDirectory>../../src/test/java</testSourceDirectory>
     <sourceDirectory>../../target/filtered-sources/java</sourceDirectory>
     <directory>../../target</directory>
     <resources>
