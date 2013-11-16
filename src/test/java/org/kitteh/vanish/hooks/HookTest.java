@@ -2,6 +2,8 @@ package org.kitteh.vanish.hooks;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,6 +25,15 @@ public class HookTest {
                 }
             }
             Assert.assertTrue("Hook " + hook + " does not have a VanishPlugin constructor", hasDesiredConstructor);
+        }
+    }
+
+    @Test
+    public void hookUniqueness() {
+        Map<Class<?>, HookType> classes = new HashMap<Class<?>, HookType>();
+        for (HookType hook : HookManager.HookType.values()) {
+            Assert.assertTrue("Hooks " + hook + " and " + classes.get(hook.get()) + " have the same class", !classes.containsKey(hook.get()));
+            classes.put(hook.get(), hook);
         }
     }
 }
