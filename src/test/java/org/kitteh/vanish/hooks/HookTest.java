@@ -1,7 +1,6 @@
 package org.kitteh.vanish.hooks;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,10 +14,7 @@ public class HookTest {
     public void hookConstructors() {
         for (HookType hook : HookManager.HookType.values()) {
             boolean hasDesiredConstructor = false;
-            for (Constructor<?> constructor : hook.get().getDeclaredConstructors()) {
-                if (Modifier.isPrivate(constructor.getModifiers()) || Modifier.isProtected(constructor.getModifiers())) {
-                    continue; // Must be package-private or public
-                }
+            for (Constructor<?> constructor : hook.get().getConstructors()) {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
                 if (parameterTypes.length == 1 && parameterTypes[0].equals(VanishPlugin.class)) {
                     hasDesiredConstructor = true;
