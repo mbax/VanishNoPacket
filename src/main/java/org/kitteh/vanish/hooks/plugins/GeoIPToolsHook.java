@@ -11,7 +11,7 @@ import uk.org.whoami.geoip.GeoIPTools;
 public final class GeoIPToolsHook extends Hook {
     private GeoIPLookup geoip = null;
 
-    GeoIPToolsHook(VanishPlugin plugin) {
+    public GeoIPToolsHook(VanishPlugin plugin) {
         super(plugin);
     }
 

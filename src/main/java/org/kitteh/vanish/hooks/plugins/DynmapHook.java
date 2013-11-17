@@ -10,7 +10,7 @@ public final class DynmapHook extends Hook {
     private DynmapCommonAPI dynmap;
     private boolean enabled = false;
 
-    DynmapHook(VanishPlugin plugin) {
+    public DynmapHook(VanishPlugin plugin) {
         super(plugin);
     }
 

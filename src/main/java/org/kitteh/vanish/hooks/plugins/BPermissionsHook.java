@@ -9,7 +9,7 @@ import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
 public final class BPermissionsHook extends Hook implements ChatProvider {
-    BPermissionsHook(VanishPlugin plugin) {
+    public BPermissionsHook(VanishPlugin plugin) {
         super(plugin);
     }
 

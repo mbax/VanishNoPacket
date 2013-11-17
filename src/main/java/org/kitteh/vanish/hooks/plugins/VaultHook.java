@@ -11,7 +11,7 @@ import org.kitteh.vanish.hooks.Hook;
 public final class VaultHook extends Hook implements ChatProvider {
     private Chat chat;
 
-    VaultHook(VanishPlugin plugin) {
+    public VaultHook(VanishPlugin plugin) {
         super(plugin);
     }
 
