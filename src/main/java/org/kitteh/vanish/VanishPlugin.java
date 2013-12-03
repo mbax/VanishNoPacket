@@ -29,7 +29,6 @@ import org.kitteh.vanish.listeners.ListenPlayerOther;
 import org.kitteh.vanish.listeners.ListenToYourHeart;
 import org.kitteh.vanish.listeners.TagAPIListener;
 import org.kitteh.vanish.metrics.MetricsOverlord;
-import org.kitteh.vanish.staticaccess.VanishNoPacket;
 
 public final class VanishPlugin extends JavaPlugin {
     private final class UpdateCheck implements Runnable {
@@ -243,7 +242,7 @@ public final class VanishPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        VanishNoPacket.setInstance(null);
+        this.setInstance(null);
         Debuggle.nah();
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
@@ -260,7 +259,7 @@ public final class VanishPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         NMSManager.load(this);
-        VanishNoPacket.setInstance(this);
+        this.setInstance(this);
 
         final File check = new File(this.getDataFolder(), "config.yml");
         boolean firstTimeStarting = false;
@@ -367,5 +366,10 @@ public final class VanishPlugin extends JavaPlugin {
      */
     public boolean versionDifference() {
         return this.versionDiff;
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setInstance(VanishPlugin plugin) {
+        org.kitteh.vanish.staticaccess.VanishNoPacket.setInstance(plugin);
     }
 }
