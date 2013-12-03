@@ -31,9 +31,13 @@ import org.kitteh.vanish.listeners.TagAPIListener;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class VanishPlugin extends JavaPlugin {
-    private final class UpdateCheck implements Runnable {
+    final class UpdateCheck implements Runnable {
         private static final String CURRENT_VERSION = "v" + "${vnp-version}";
         private static final String CREDITS = "This updater code is based on the great work of Gravity";
+
+        String getCredits() {
+            return CREDITS;
+        }
 
         private final VanishPlugin plugin;
 
@@ -43,7 +47,6 @@ public final class VanishPlugin extends JavaPlugin {
 
         @Override
         public void run() {
-            UpdateCheck.CREDITS.toString();
             final File pluginsFolder = this.plugin.getDataFolder().getParentFile();
             final File updaterFolder = new File(pluginsFolder, "Updater");
             final File updaterConfigFile = new File(updaterFolder, "config.yml");
