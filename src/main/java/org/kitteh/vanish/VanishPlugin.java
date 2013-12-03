@@ -299,7 +299,11 @@ public final class VanishPlugin extends JavaPlugin {
             this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
         if (this.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
-            this.hookManager.getHook(HookType.ProtocolLib).onEnable();
+            try {
+                this.hookManager.getHook(HookType.ProtocolLib).onEnable();
+            } catch (Exception e) {
+                this.getLogger().warning("Cannot enable ProtocolLib support. Probably because the code isn't 1.7 compatible.");
+            }
         }
 
         final VanishPlugin self = this;
