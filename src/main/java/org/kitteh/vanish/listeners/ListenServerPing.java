@@ -22,7 +22,13 @@ public final class ListenServerPing implements Listener {
             return; // Pre-API server
         }
         final Set<String> invisibles = this.manager.getVanishedPlayers();
-        final Iterator<Player> players = event.iterator();
+        final Iterator<Player> players;
+        try {
+            players = event.iterator();
+        } catch (final UnsupportedOperationException e) {
+            return;
+            // NOOP
+        }
         Player player;
         while (players.hasNext()) {
             player = players.next();
