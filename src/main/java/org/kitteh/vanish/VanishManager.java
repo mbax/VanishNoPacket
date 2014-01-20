@@ -22,6 +22,8 @@ import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
+import com.google.common.collect.ImmutableSet;
+
 public final class VanishManager {
     private final class ShowPlayerEntry {
         private final Player player;
@@ -101,6 +103,10 @@ public final class VanishManager {
 
     public Set<UUID> getBats() {
         return this.bats;
+    }
+
+    public Set<String> getVanishedPlayers() {
+        return ImmutableSet.copyOf(this.vanishedPlayerNames);
     }
 
     /**
