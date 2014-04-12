@@ -1,5 +1,18 @@
 package org.kitteh.vanish;
 
+import com.google.common.collect.ImmutableSet;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.kitteh.vanish.event.VanishStatusChangeEvent;
+import org.kitteh.vanish.metrics.MetricsOverlord;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,22 +20,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.kitteh.vanish.compat.NMSManager;
-import org.kitteh.vanish.event.VanishStatusChangeEvent;
-import org.kitteh.vanish.metrics.MetricsOverlord;
-
-import com.google.common.collect.ImmutableSet;
 
 public final class VanishManager {
     private final class ShowPlayerEntry {
@@ -335,8 +332,8 @@ public final class VanishManager {
     }
 
     private void effectExplosion(Player player) {
-        NMSManager.getProvider().sendExplosionPacket(player.getLocation(), player);
-        player.getWorld().playSound(player.getLocation(), Sound.EXPLODE, 4F, 0.7F);
+        Location loc = player.getLocation();
+        player.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 0F, false, false);
     }
 
     private void effectFlames(Location location) {
@@ -397,10 +394,6 @@ public final class VanishManager {
         for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
             for (final Player player2 : this.plugin.getServer().getOnlinePlayers()) {
                 if ((player != null) && (player2 != null) && !player.equals(player2)) {
-                    if (this.isVanished(player2) && player.canSee(player2)) {
-                        player.hidePlayer(player2);
-                        NMSManager.getProvider().sendEntityDestroy(player, player2.getEntityId());
-                    }
                     player.showPlayer(player2);
                 }
             }

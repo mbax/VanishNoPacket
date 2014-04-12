@@ -1,14 +1,5 @@
 package org.kitteh.vanish;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashSet;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -18,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.kitteh.vanish.compat.NMSManager;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.ListenEntity;
@@ -31,9 +21,17 @@ import org.kitteh.vanish.listeners.ListenToYourHeart;
 import org.kitteh.vanish.listeners.TagAPIListener;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashSet;
+
 public final class VanishPlugin extends JavaPlugin {
     final class UpdateCheck implements Runnable {
-        private static final String CURRENT_VERSION = "v" + "${vnp-version}";
         private static final String CREDITS = "This updater code is based on the great work of Gravity";
 
         String getCredits() {
@@ -92,7 +90,7 @@ public final class VanishPlugin extends JavaPlugin {
             }
             if (latest != null) {
                 this.plugin.latestVersion = latest;
-                if (!UpdateCheck.CURRENT_VERSION.equals(latest)) {
+                if (!this.plugin.getCurrentVersion().equals(latest)) {
                     this.plugin.getLogger().info("Found a different version available: " + latest);
                     this.plugin.getLogger().info("Check http://www.curse.com/server-mods/minecraft/vanish");
                     this.plugin.versionDiff = true;
@@ -149,7 +147,7 @@ public final class VanishPlugin extends JavaPlugin {
      * @return version of VanishNoPacket in use
      */
     public String getCurrentVersion() {
-        return "${project.version}";
+        return this.getDescription().getVersion();
     }
 
     /**
@@ -257,12 +255,11 @@ public final class VanishPlugin extends JavaPlugin {
         }
         this.hookManager.onDisable();
         this.manager.onPluginDisable();
-        this.getLogger().info("v${project.version} unloaded.");
+        this.getLogger().info(this.getCurrentVersion() + " unloaded.");
     }
 
     @Override
     public void onEnable() {
-        NMSManager.load(this);
         this.setInstance(this);
 
         final File check = new File(this.getDataFolder(), "config.yml");
@@ -342,7 +339,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
 
         if (updateCheck) {
-            if (this.getCurrentVersion().contains("SNAPSHOT") || this.getCurrentVersion().equals("${project" + ".version}") || this.getCurrentVersion().endsWith("unofficial")) {
+            if (this.getCurrentVersion().contains("SNAPSHOT") || this.getCurrentVersion().equals("${project.version}") || this.getCurrentVersion().endsWith("unofficial")) {
                 this.getLogger().info("Not a release version. Update check disabled");
             } else {
                 this.getServer().getScheduler().runTaskTimerAsynchronously(this, new UpdateCheck(this), 40, 432000);
@@ -358,7 +355,7 @@ public final class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
 
-        this.getLogger().info("v${project.version} loaded.");
+        this.getLogger().info(this.getCurrentVersion()+" loaded.");
     }
 
     /**
