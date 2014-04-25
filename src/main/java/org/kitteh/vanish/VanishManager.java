@@ -286,7 +286,7 @@ public final class VanishManager {
             }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
             if (vanishing) {
-                if (VanishPerms.canSeeAll(otherPlayer)) {
+                if (VanishPerms.canSeeAll(otherPlayer) && !(VanishPerms.canHideFromSeeAll(vanishingPlayer) && !VanishPerms.canHideFromSeeAll(otherPlayer))) {
                     otherPlayer.hidePlayer(vanishingPlayer);
                     this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
                 } else {
@@ -296,7 +296,7 @@ public final class VanishManager {
                     }
                 }
             } else {
-                if (VanishPerms.canSeeAll(otherPlayer)) {
+                if (VanishPerms.canSeeAll(otherPlayer) && !(VanishPerms.canHideFromSeeAll(vanishingPlayer) && !VanishPerms.canHideFromSeeAll(otherPlayer))) {
                     otherPlayer.hidePlayer(vanishingPlayer);
                 }
                 if (!otherPlayer.canSee(vanishingPlayer)) {
@@ -384,7 +384,7 @@ public final class VanishManager {
 
     private void showVanished(Player player) {
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer)) {
+            if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer) && !(VanishPerms.canHideFromSeeAll(otherPlayer) && !VanishPerms.canHideFromSeeAll(player))) {
                 this.showPlayer.add(new ShowPlayerEntry(player, otherPlayer));
             }
         }

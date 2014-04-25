@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 public final class VanishUser {
     private boolean seeAll;
+    private boolean hideFromSeeAll;
     private boolean noPickup;
     private boolean noFollow;
     private boolean preventIncomingDamage;
@@ -20,6 +21,7 @@ public final class VanishUser {
 
     public VanishUser(Player player) {
         this.seeAll = player.hasPermission("vanish.see");
+        this.hideFromSeeAll = player.hasPermission("vanish.hide");
         this.noPickup = player.hasPermission("vanish.nopickup");
         this.noFollow = player.hasPermission("vanish.nofollow");
         this.preventIncomingDamage = player.hasPermission("vanish.preventincomingdamage");
@@ -91,6 +93,10 @@ public final class VanishUser {
         return this.seeAll;
     }
 
+    public boolean getHideFromSeeAll() {
+        return this.hideFromSeeAll;
+    }
+
     public boolean toggleEffectBats() {
         this.bats = !this.bats;
         return this.bats;
@@ -154,6 +160,11 @@ public final class VanishUser {
     public boolean toggleSeeAll() {
         this.seeAll = !this.seeAll;
         return this.seeAll;
+    }
+
+    public boolean toggleHideFromSeeAll() {
+        this.hideFromSeeAll = !this.hideFromSeeAll;
+        return this.hideFromSeeAll;
     }
 
     public boolean toggleSilentChestReads() {
