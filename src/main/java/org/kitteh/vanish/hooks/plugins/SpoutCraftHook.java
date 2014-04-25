@@ -168,7 +168,7 @@ public final class SpoutCraftHook extends Hook implements Listener {
         final SpoutPlayer revealingPlayer = SpoutManager.getPlayer(revealing);
         this.removeStatusBar(revealingPlayer);
         for (final SpoutPlayer player : SpoutManager.getOnlinePlayers()) {
-            if ((player != null) && player.hasPermission("vanish.see") && player.isSpoutCraftEnabled()) {
+            if ((player != null) && VanishPerms.canSeeAll(player) && player.isSpoutCraftEnabled()) {
                 revealingPlayer.resetSkinFor(player);
                 revealingPlayer.resetCapeFor(player);
                 revealingPlayer.resetTitleFor(player);
@@ -237,7 +237,7 @@ public final class SpoutCraftHook extends Hook implements Listener {
     }
 
     private void playerUpdate(SpoutPlayer vanished, PlayerData data, SpoutPlayer target) {
-        if ((target != null) && target.hasPermission("vanish.see") && target.isSpoutCraftEnabled()) {
+        if ((target != null) && VanishPerms.canSeeAll(target) && target.isSpoutCraftEnabled()) {
             if (data.skin != null) {
                 vanished.setSkinFor(target, data.skin);
             }
