@@ -286,14 +286,14 @@ public final class VanishManager {
             }
             Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
             if (vanishing) {
-                if (!VanishPerms.canSeeAll(otherPlayer)) {
+                if (VanishPerms.canSeeAll(otherPlayer)) {
+                    otherPlayer.hidePlayer(vanishingPlayer);
+                    this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
+                } else {
                     if (otherPlayer.canSee(vanishingPlayer)) {
                         Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + otherPlayer.getName());
                         otherPlayer.hidePlayer(vanishingPlayer);
                     }
-                } else {
-                    otherPlayer.hidePlayer(vanishingPlayer);
-                    this.showPlayer.add(new ShowPlayerEntry(otherPlayer, vanishingPlayer));
                 }
             } else {
                 if (VanishPerms.canSeeAll(otherPlayer)) {
