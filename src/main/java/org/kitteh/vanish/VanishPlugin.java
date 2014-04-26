@@ -67,6 +67,7 @@ public final class VanishPlugin extends JavaPlugin {
             }
 
             URLConnection conn;
+            IOException exceptional = null;
             try {
                 conn = url.openConnection();
 
@@ -87,6 +88,7 @@ public final class VanishPlugin extends JavaPlugin {
 
                 latest = (String) ((JSONObject) array.get(array.size() - 1)).get("name");
             } catch (final IOException e) {
+                exceptional = e;
             }
             if (latest != null) {
                 this.plugin.latestVersion = latest;
@@ -97,6 +99,9 @@ public final class VanishPlugin extends JavaPlugin {
                 }
             } else {
                 this.plugin.getLogger().info("Error: Could not check if plugin was up to date. Will try later");
+                if (exceptional != null) {
+                    this.plugin.getLogger().info("Exception message: " + exceptional.getMessage());
+                }
             }
         }
     }
