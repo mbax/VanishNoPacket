@@ -176,12 +176,19 @@ public final class VanishManager {
      */
     public void resetSeeing(Player player) {
         Debuggle.log("Resetting visibility on " + player.getName());
-        if (VanishPerms.canSeeAll(player)) {
-            this.showVanished(player);
-            Debuggle.log("Showing all to " + player.getName());
-        } else {
-            this.hideVanished(player);
-            Debuggle.log("Hiding all to " + player.getName());
+        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
+            if (!player.equals(otherPlayer) && this.isVanished(otherPlayer)) {
+                Debuggle.log("Determining what to do about " + vanishingPlayer.getName() + " for " + otherPlayer.getName());
+                if (VanishPerms.canSeeAll(player) && !(VanishPerms.canHideFromSeeAll(otherPlayer) && !VanishPerms.canHideFromSeeAll(player))) {
+                    if (!player.canSee(otherPlayer)) {
+                        this.showPlayer.add(new ShowPlayerEntry(player, otherPlayer));
+                        Debuggle.log("Showing " + vanishingPlayer.getName() + " to " + otherPlayer.getName());
+                    }
+                } else {
+                    player.hidePlayer(otherPlayer);
+                    Debuggle.log("Hiding " + vanishingPlayer.getName() + " from " + otherPlayer.getName());
+                }
+            }
         }
     }
 
@@ -370,24 +377,8 @@ public final class VanishManager {
         }
     }
 
-    private void hideVanished(Player player) {
-        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if (!player.equals(otherPlayer) && this.isVanished(otherPlayer) && player.canSee(otherPlayer)) {
-                player.hidePlayer(otherPlayer);
-            }
-        }
-    }
-
     private void removeVanished(String name) {
         this.vanishedPlayerNames.remove(name);
-    }
-
-    private void showVanished(Player player) {
-        for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
-            if (this.isVanished(otherPlayer) && !player.canSee(otherPlayer) && !(VanishPerms.canHideFromSeeAll(otherPlayer) && !VanishPerms.canHideFromSeeAll(player))) {
-                this.showPlayer.add(new ShowPlayerEntry(player, otherPlayer));
-            }
-        }
     }
 
     void onPluginDisable() {
