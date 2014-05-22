@@ -1,5 +1,6 @@
 package org.kitteh.vanish.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,6 +23,12 @@ public final class ListenPlayerMessages implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
+            // Vanish chat
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.hasPermission("vanish.vanish")) {
+                    player.sendMessage(ChatColor.AQUA + "[VNP] " + player.getName() + ": " + event.getMessage());
+                }
+            }
         }
     }
 
