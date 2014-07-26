@@ -70,7 +70,7 @@ public final class VanishAnnounceManipulator {
     /**
      * Marks a player as quit
      * Called when a player quits
-     * 
+     *
      * @param player name of the player who just quit
      * @return the former fake online status of the player
      */

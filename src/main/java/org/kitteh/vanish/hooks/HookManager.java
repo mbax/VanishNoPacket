@@ -92,7 +92,7 @@ public final class HookManager {
 
     /**
      * Gets a named, registered Hook
-     * 
+     *
      * @param name hook name
      * @return the named Hook if registered, null if no match.
      */

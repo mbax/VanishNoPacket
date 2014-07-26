@@ -80,7 +80,7 @@ public final class VanishManager {
             @Override
             public void onPluginMessageReceived(String channel, Player player, byte[] message) {
                 if (channel.equals("vanishStatus") && new String(message).equals("check")) {
-                    player.sendPluginMessage(plugin, "vanishStatus", VanishManager.this.isVanished(player) ? new byte[] { 0x01 } : new byte[] { 0x00 });
+                    player.sendPluginMessage(plugin, "vanishStatus", VanishManager.this.isVanished(player) ? new byte[]{0x01} : new byte[]{0x00});
                 }
             }
         });
@@ -278,7 +278,7 @@ public final class VanishManager {
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
-        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] { 0x01 } : new byte[] { 0x00 });
+        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[]{0x01} : new byte[]{0x00});
         final Player[] playerList = this.plugin.getServer().getOnlinePlayers();
         for (final Player otherPlayer : playerList) {
             if (vanishingPlayer.equals(otherPlayer)) {
@@ -336,12 +336,12 @@ public final class VanishManager {
      */
     public void reveal(Player revealingPlayer, boolean silent, boolean effects) {
         if (!this.isVanished(revealingPlayer)) {
-           return;
+            return;
         }
         if (silent) {
-           this.toggleVanishQuiet(revealingPlayer, effects);
+            this.toggleVanishQuiet(revealingPlayer, effects);
         } else {
-           this.toggleVanish(revealingPlayer);
+            this.toggleVanish(revealingPlayer);
         }
     }
 
