@@ -22,6 +22,7 @@ effects:
     lightning:
         count: 30
 colornametags: true
+vanishchat: true
 
 permtest: false
 debug: false

@@ -10,6 +10,7 @@ public final class Settings {
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
+    private static boolean vanishChat;
 
     private static final int confVersion = 5; // Tracking config version
 
@@ -31,6 +32,10 @@ public final class Settings {
 
     public static int getLightningCount() {
         return Settings.lightningEffectCount;
+    }
+
+    public static boolean getVanishChat() {
+        return Settings.vanishChat;
     }
 
     public static boolean getWorldChangeCheck() {
@@ -64,6 +69,9 @@ public final class Settings {
             if ((ver <= 4)) {
                 config.set("colornametags", true);
             }
+            if ((ver <= 5)) {
+                config.set("vanishchat", true);
+            }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
         }
@@ -72,6 +80,7 @@ public final class Settings {
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
+        Settings.vanishChat = config.getBoolean("vanishchat", true);
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {
             Settings.lightningEffectCount = 1;
