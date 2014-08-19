@@ -10,6 +10,7 @@ import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.kitteh.vanish.VanishCheck;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
+import org.kitteh.vanish.event.VanishFakeJoinEvent;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class ListenPlayerJoin implements Listener {
@@ -49,6 +50,7 @@ public final class ListenPlayerJoin implements Listener {
                 statusUpdate.append(" and ");
             }
             statusUpdate.append("silently");
+            this.plugin.getServer().getPluginManager().callEvent(new VanishFakeJoinEvent(event.getPlayer()));
         }
         if (statusUpdate.length() != 0) {
             this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
