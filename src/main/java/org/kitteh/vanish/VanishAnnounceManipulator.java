@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.kitteh.vanish.event.VanishFakeJoinEvent;
+import org.kitteh.vanish.event.VanishFakeQuitEvent;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.hooks.plugins.BPermissionsHook;
 import org.kitteh.vanish.hooks.plugins.GeoIPToolsHook;
@@ -106,6 +108,7 @@ public final class VanishAnnounceManipulator {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().info(player.getName() + " faked joining");
+            this.plugin.getServer().getPluginManager().callEvent(new VanishFakeJoinEvent(player, "has joined."));
             MetricsOverlord.getFakejoinTracker().increment();
             this.playerOnlineStatus.put(player.getName(), true);
         }
@@ -115,6 +118,7 @@ public final class VanishAnnounceManipulator {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
+            this.plugin.getServer().getPluginManager().callEvent(new VanishFakeQuitEvent(player, "has quit."));
             MetricsOverlord.getFakequitTracker().increment();
             this.playerOnlineStatus.put(player.getName(), false);
         }
