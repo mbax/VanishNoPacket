@@ -13,7 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vnp-version>${project.version}-unofficial</vnp-version>
-        <bukkit.version>1.8</bukkit.version>
+        <bukkit.version>1.8.3</bukkit.version>
     </properties>
 
     <profiles>
@@ -61,14 +61,18 @@
     </scm>
 
     <repositories>
+        <!--
         <repository>
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
+        -->
+        <!--
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
+        -->
         <repository>
             <id>cnaude-repo</id>
             <url>http://cnaude.org/repo/</url>
@@ -78,7 +82,7 @@
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>spigot-api</artifactId>
+            <artifactId>spigot</artifactId>
             <version>${bukkit.version}</version>
             <type>jar</type>
             <scope>provided</scope>

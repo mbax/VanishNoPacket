@@ -1,5 +1,6 @@
 package org.kitteh.vanish;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -61,9 +62,9 @@ public final class VanishCommand implements CommandExecutor {
             }
             return true;
         }
-        if (goal.equalsIgnoreCase("list")) {
+        if (goal.equalsIgnoreCase("list")) {            
             if (VanishPerms.canList(sender)) {
-                final StringBuilder list = new StringBuilder();
+                final StringBuilder list = new StringBuilder();                
                 for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
                     if ((player != null) && this.plugin.getManager().isVanished(player)) {
                         if (list.length() > 0) {
