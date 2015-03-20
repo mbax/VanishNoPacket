@@ -1,6 +1,5 @@
 package org.kitteh.vanish;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class VanishCommand implements CommandExecutor {
+
     private final VanishPlugin plugin;
 
     public VanishCommand(VanishPlugin plugin) {
@@ -62,9 +62,9 @@ public final class VanishCommand implements CommandExecutor {
             }
             return true;
         }
-        if (goal.equalsIgnoreCase("list")) {            
+        if (goal.equalsIgnoreCase("list")) {
             if (VanishPerms.canList(sender)) {
-                final StringBuilder list = new StringBuilder();                
+                final StringBuilder list = new StringBuilder();
                 for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
                     if ((player != null) && this.plugin.getManager().isVanished(player)) {
                         if (list.length() > 0) {
@@ -106,7 +106,7 @@ public final class VanishCommand implements CommandExecutor {
             if (args.length == 1) {
                 final StringBuilder toggleReply = new StringBuilder();
                 if (VanishPerms.canToggleSee(player)) {
-                    toggleReply.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
+                    toggleReply.append(this.colorize(VanishPerms.canSeeAll(player))).append("see").append(ChatColor.DARK_AQUA);
                 }
                 if (VanishPerms.canToggleNoPickup(player)) {
                     this.appendList(toggleReply, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
@@ -135,7 +135,7 @@ public final class VanishCommand implements CommandExecutor {
                 if (toggleReply.length() > 0) {
                     toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                 } else {
-                    toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
+                    toggleReply.append(ChatColor.DARK_AQUA).append("You cannot toggle anything");
                 }
                 player.sendMessage(toggleReply.toString());
             } else {
@@ -150,7 +150,7 @@ public final class VanishCommand implements CommandExecutor {
             if (args.length == 1) {
                 final StringBuilder toggleReply = new StringBuilder();
                 if (VanishPerms.canToggleSmoke(player)) {
-                    toggleReply.append(this.colorize(VanishPerms.canEffectSmoke(player)) + "smoke" + ChatColor.DARK_AQUA);
+                    toggleReply.append(this.colorize(VanishPerms.canEffectSmoke(player))).append("smoke").append(ChatColor.DARK_AQUA);
                 }
                 if (VanishPerms.canToggleEffectExplode(player)) {
                     this.appendList(toggleReply, this.colorize(VanishPerms.canEffectExplode(player)) + "explode" + ChatColor.DARK_AQUA);
@@ -167,7 +167,7 @@ public final class VanishCommand implements CommandExecutor {
                 if (toggleReply.length() > 0) {
                     toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                 } else {
-                    toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle any effects");
+                    toggleReply.append(ChatColor.DARK_AQUA).append("You cannot toggle any effects");
                 }
                 player.sendMessage(toggleReply.toString());
             } else {
@@ -208,7 +208,6 @@ public final class VanishCommand implements CommandExecutor {
         }
 
         // Below this point, user must be able to /vanish
-
         if (!VanishPerms.canVanish(player)) {
             this.denied(sender);
             return true;
@@ -250,14 +249,10 @@ public final class VanishCommand implements CommandExecutor {
             return true;
         }
 
-        // Continue? 
-
+        // Continue?
         // 3
-
         // 2
-
         // 1
-
         return true;
     }
 

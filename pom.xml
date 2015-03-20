@@ -5,7 +5,7 @@
     <artifactId>VanishNoPacket</artifactId>
     <packaging>jar</packaging>
 
-    <name>VanishNoPacket</name>
+    <name>VanishNoPacket-spigot</name>
     <version>3.19.2-SNAPSHOT</version>
 
     <url>http://github.com/mbax/VanishNoPacket</url>
@@ -61,22 +61,20 @@
     </scm>
 
     <repositories>
-        <!--
         <repository>
             <id>kitteh-repo</id>
             <url>http://repo.kitteh.org/content/groups/public</url>
         </repository>
-        -->
+        <repository>
+            <id>cnaude-repo</id>
+            <url>http://cnaude.org/repo/</url>
+        </repository>
         <!--
         <repository>
             <id>bukkit-repo</id>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
         -->
-        <repository>
-            <id>cnaude-repo</id>
-            <url>http://cnaude.org/repo/</url>
-        </repository>
     </repositories>
 
     <dependencies>
