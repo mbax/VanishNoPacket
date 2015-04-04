@@ -106,7 +106,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
     }
 
-    private final HashSet<String> haveInventoriesOpen = new HashSet<String>();
+    private final HashSet<String> haveInventoriesOpen = new HashSet<>();
     private String latestVersion = null;
     private boolean versionDiff = false;
     private VanishManager manager;

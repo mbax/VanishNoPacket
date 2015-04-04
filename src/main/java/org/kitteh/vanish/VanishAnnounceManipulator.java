@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,8 +29,8 @@ public final class VanishAnnounceManipulator {
 
     VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
-        this.playerOnlineStatus = new HashMap<String, Boolean>();
-        this.delayedAnnouncePlayerList = new ArrayList<String>();
+        this.playerOnlineStatus = new HashMap<>();
+        this.delayedAnnouncePlayerList = new ArrayList<>();
     }
 
     public void addToDelayedAnnounce(String player) {
@@ -107,7 +108,7 @@ public final class VanishAnnounceManipulator {
     void fakeJoin(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
-            this.plugin.getLogger().info(player.getName() + " faked joining");
+            this.plugin.getLogger().log(Level.INFO, "{0} faked joining", player.getName());
             this.plugin.getServer().getPluginManager().callEvent(new VanishFakeJoinEvent(player, "has joined."));
             MetricsOverlord.getFakejoinTracker().increment();
             this.playerOnlineStatus.put(player.getName(), true);
@@ -117,7 +118,7 @@ public final class VanishAnnounceManipulator {
     void fakeQuit(Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
-            this.plugin.getLogger().info(player.getName() + " faked quitting");
+            this.plugin.getLogger().log(Level.INFO, "{0} faked quitting", player.getName());
             this.plugin.getServer().getPluginManager().callEvent(new VanishFakeQuitEvent(player, "has quit."));
             MetricsOverlord.getFakequitTracker().increment();
             this.playerOnlineStatus.put(player.getName(), false);

@@ -213,19 +213,19 @@ public final class SpoutCraftHook extends Hook implements Listener {
         String skin = null;
         String cloak = null;
         String title = null;
-        for (final String skinGroup : new HashSet<String>(this.skins.keySet())) {
+        for (final String skinGroup : new HashSet<>(this.skins.keySet())) {
             if (player.hasPermission("vanish.spout.skin." + skinGroup)) {
                 skin = this.skins.get(skinGroup);
                 break;
             }
         }
-        for (final String cloakGroup : new HashSet<String>(this.cloaks.keySet())) {
+        for (final String cloakGroup : new HashSet<>(this.cloaks.keySet())) {
             if (player.hasPermission("vanish.spout.cloak." + cloakGroup)) {
                 cloak = this.cloaks.get(cloakGroup);
                 break;
             }
         }
-        for (final String titleGroup : new HashSet<String>(this.titles.keySet())) {
+        for (final String titleGroup : new HashSet<>(this.titles.keySet())) {
             if (player.hasPermission("vanish.spout.title." + titleGroup)) {
                 title = this.titles.get(titleGroup).replace("%n", player.getName());
                 break;

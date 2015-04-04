@@ -42,8 +42,8 @@ public final class VanishManager {
     }
 
     private final class ShowPlayerHandler implements Runnable {
-        Set<ShowPlayerEntry> entries = new HashSet<ShowPlayerEntry>();
-        Set<ShowPlayerEntry> next = new HashSet<ShowPlayerEntry>();
+        Set<ShowPlayerEntry> entries = new HashSet<>();
+        Set<ShowPlayerEntry> next = new HashSet<>();
 
         public void add(ShowPlayerEntry player) {
             this.entries.add(player);
@@ -66,8 +66,8 @@ public final class VanishManager {
 
     private final VanishPlugin plugin;
     private final Set<String> vanishedPlayerNames = Collections.synchronizedSet(new HashSet<String>());
-    private final Map<String, Boolean> sleepIgnored = new HashMap<String, Boolean>();
-    private final Set<UUID> bats = new HashSet<UUID>();
+    private final Map<String, Boolean> sleepIgnored = new HashMap<>();
+    private final Set<UUID> bats = new HashSet<>();
     private final VanishAnnounceManipulator announceManipulator;
     private final Random random = new Random();
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
@@ -346,7 +346,7 @@ public final class VanishManager {
     }
 
     private void effectBats(final Location location) {
-        final Set<UUID> batty = new HashSet<UUID>();
+        final Set<UUID> batty = new HashSet<>();
         for (int x = 0; x < 10; x++) {
             batty.add(location.getWorld().spawnEntity(location, EntityType.BAT).getUniqueId());
         }
