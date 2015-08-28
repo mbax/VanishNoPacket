@@ -28,7 +28,6 @@ import org.bukkit.inventory.Inventory;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class ListenPlayerOther implements Listener {
     private final VanishPlugin plugin;
@@ -141,7 +140,6 @@ public final class ListenPlayerOther implements Listener {
         this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().playerHasQuit(player.getName()) || VanishPerms.silentQuit(player)) {
-            MetricsOverlord.getQuitInvisTracker().increment();
             event.setQuitMessage(null);
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());
