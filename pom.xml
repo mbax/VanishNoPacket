@@ -13,7 +13,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vnp-version>${project.version}-unofficial</vnp-version>
-        <bukkit.version>1.8.3</bukkit.version>
+        <bukkit.version>1.8.8</bukkit.version>
     </properties>
 
     <profiles>
