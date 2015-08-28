@@ -11,7 +11,7 @@ public final class Settings {
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
 
-    private static final int confVersion = 5; // Tracking config version
+    private static final int CONF_VERSION = 5; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -41,7 +41,7 @@ public final class Settings {
         final FileConfiguration config = plugin.getConfig();
         config.options().copyDefaults(true);
         final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
-        if (ver != Settings.confVersion) {
+        if (ver != Settings.CONF_VERSION) {
             plugin.getLogger().info("Attempting to update your configuration. Check to make sure it's ok");
             if (ver < 1) {
                 config.set("hooks.spoutcraft", config.getBoolean("spoutcraft.enable", true));
@@ -64,7 +64,7 @@ public final class Settings {
             if ((ver <= 4)) {
                 config.set("colornametags", true);
             }
-            config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
+            config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.CONF_VERSION);
             plugin.saveConfig();
         }
         Settings.enablePermTest = config.getBoolean("permtest", false);

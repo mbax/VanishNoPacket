@@ -8,10 +8,10 @@ import org.bukkit.event.HandlerList;
  * An event fired whenever a player fake joins
  */
 public final class VanishFakeJoinEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
     public static HandlerList getHandlerList() {
-        return VanishFakeJoinEvent.handlers;
+        return VanishFakeJoinEvent.HANDLERS;
     }
     
     private final String message;
@@ -24,7 +24,7 @@ public final class VanishFakeJoinEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return VanishFakeJoinEvent.handlers;
+        return VanishFakeJoinEvent.HANDLERS;
     }
 
     /**

@@ -11,19 +11,20 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
-import org.kitteh.vanish.metrics.MetricsOverlord;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public final class VanishManager {
+
     private final class ShowPlayerEntry {
+
         private final Player player;
         private final Player target;
 
@@ -42,6 +43,7 @@ public final class VanishManager {
     }
 
     private final class ShowPlayerHandler implements Runnable {
+
         Set<ShowPlayerEntry> entries = new HashSet<>();
         Set<ShowPlayerEntry> next = new HashSet<>();
 
@@ -81,7 +83,7 @@ public final class VanishManager {
             @Override
             public void onPluginMessageReceived(String channel, Player player, byte[] message) {
                 if (channel.equals("vanishStatus") && new String(message).equals("check")) {
-                    player.sendPluginMessage(plugin, "vanishStatus", VanishManager.this.isVanished(player) ? new byte[] { 0x01 } : new byte[] { 0x00 });
+                    player.sendPluginMessage(plugin, "vanishStatus", VanishManager.this.isVanished(player) ? new byte[]{0x01} : new byte[]{0x00});
                 }
             }
         });
@@ -90,8 +92,7 @@ public final class VanishManager {
     }
 
     /**
-     * Gets the announcement manipulator
-     * Called by JSONAPI
+     * Gets the announcement manipulator Called by JSONAPI
      *
      * @return the Announce Manipulator
      */
@@ -143,8 +144,7 @@ public final class VanishManager {
     }
 
     /**
-     * Marks a player as having quit the game
-     * Do not call this method
+     * Marks a player as having quit the game Do not call this method
      *
      * @param player the player who has quit
      */
@@ -187,10 +187,8 @@ public final class VanishManager {
     }
 
     /**
-     * Toggles a player's visibility
-     * Called when a player calls /vanish
-     * Talks to the player and everyone with vanish.see
-     * Will trigger effects
+     * Toggles a player's visibility Called when a player calls /vanish Talks to
+     * the player and everyone with vanish.see Will trigger effects
      *
      * @param togglingPlayer the player disappearing
      */
@@ -216,9 +214,7 @@ public final class VanishManager {
     }
 
     /**
-     * Toggles a player's visibility
-     * Does not say anything.
-     * Will trigger effects
+     * Toggles a player's visibility Does not say anything. Will trigger effects
      * Called by toggleVanish(Player)
      *
      * @param vanishingPlayer
@@ -228,8 +224,7 @@ public final class VanishManager {
     }
 
     /**
-     * Toggles a player's visibility
-     * Does not say anything.
+     * Toggles a player's visibility Does not say anything.
      *
      * @param vanishingPlayer
      * @param effects if true, trigger effects
@@ -244,21 +239,19 @@ public final class VanishManager {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
                     if ((entity != null) && (entity instanceof Creature)) {
                         final Creature creature = ((Creature) entity);
-                        if ((creature != null) && (creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
+                        if ((creature.getTarget() != null) && creature.getTarget().equals(vanishingPlayer)) {
                             creature.setTarget(null);
                         }
                     }
                 }
             }
             this.vanishedPlayerNames.add(vanishingPlayerName);
-            MetricsOverlord.getVanishTracker().increment();
-            this.plugin.getLogger().info(vanishingPlayerName + " disappeared.");
+            this.plugin.getLogger().log(Level.INFO, "{0} disappeared.", vanishingPlayerName);
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
-            MetricsOverlord.getUnvanishTracker().increment();
-            this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
+            this.plugin.getLogger().log(Level.INFO, "{0} reappeared.", vanishingPlayerName);
         }
         if (effects) {
             final Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
@@ -279,7 +272,7 @@ public final class VanishManager {
             }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
-        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[] { 0x01 } : new byte[] { 0x00 });
+        vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[]{0x01} : new byte[]{0x00});
         for (final Player otherPlayer : this.plugin.getServer().getOnlinePlayers()) {
             if (vanishingPlayer.equals(otherPlayer)) {
                 continue;
@@ -308,8 +301,7 @@ public final class VanishManager {
     }
 
     /**
-     * Vanishes a player. Poof.
-     * This is a convenience method.
+     * Vanishes a player. Poof. This is a convenience method.
      *
      * @param vanishingPlayer player to hide
      * @param silent if true, does not say anything
@@ -327,8 +319,7 @@ public final class VanishManager {
     }
 
     /**
-     * Reveals a player.
-     * This is a convenience method.
+     * Reveals a player. This is a convenience method.
      *
      * @param revealingPlayer player to reveal
      * @param silent if true, does not say anything
@@ -336,12 +327,12 @@ public final class VanishManager {
      */
     public void reveal(Player revealingPlayer, boolean silent, boolean effects) {
         if (!this.isVanished(revealingPlayer)) {
-           return;
+            return;
         }
         if (silent) {
-           this.toggleVanishQuiet(revealingPlayer, effects);
+            this.toggleVanishQuiet(revealingPlayer, effects);
         } else {
-           this.toggleVanish(revealingPlayer);
+            this.toggleVanish(revealingPlayer);
         }
     }
 

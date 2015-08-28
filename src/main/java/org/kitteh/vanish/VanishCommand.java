@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class VanishCommand implements CommandExecutor {
 
@@ -17,7 +16,6 @@ public final class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        MetricsOverlord.getCommandTracker().increment();
         // First, the short aliases
         if (label.length() == 2) {
             if (sender instanceof Player) {
@@ -277,7 +275,6 @@ public final class VanishCommand implements CommandExecutor {
 
     private void toggle(Player player, String toggle) {
         final StringBuilder message = new StringBuilder();
-        MetricsOverlord.getToggleTracker().increment();
         boolean status = false;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {
             status = VanishPerms.toggleSeeAll(player);

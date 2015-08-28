@@ -8,10 +8,10 @@ import org.bukkit.event.HandlerList;
  * An event fired whenever a player changes their visibility
  */
 public final class VanishStatusChangeEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
     public static HandlerList getHandlerList() {
-        return VanishStatusChangeEvent.handlers;
+        return VanishStatusChangeEvent.HANDLERS;
     }
 
     private final String name;
@@ -26,7 +26,7 @@ public final class VanishStatusChangeEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return VanishStatusChangeEvent.handlers;
+        return VanishStatusChangeEvent.HANDLERS;
     }
 
     /**

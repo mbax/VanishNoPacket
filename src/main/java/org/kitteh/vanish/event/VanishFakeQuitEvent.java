@@ -8,10 +8,10 @@ import org.bukkit.event.HandlerList;
  * An event fired whenever a player fake quits
  */
 public final class VanishFakeQuitEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList HANDLERS = new HandlerList();
 
     public static HandlerList getHandlerList() {
-        return VanishFakeQuitEvent.handlers;
+        return VanishFakeQuitEvent.HANDLERS;
     }
     
     private final String message;
@@ -24,7 +24,7 @@ public final class VanishFakeQuitEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
-        return VanishFakeQuitEvent.handlers;
+        return VanishFakeQuitEvent.HANDLERS;
     }
 
     /**

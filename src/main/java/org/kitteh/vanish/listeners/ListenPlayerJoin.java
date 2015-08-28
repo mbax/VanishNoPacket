@@ -10,7 +10,6 @@ import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.kitteh.vanish.VanishCheck;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.metrics.MetricsOverlord;
 
 public final class ListenPlayerJoin implements Listener {
     private final VanishPlugin plugin;
@@ -24,7 +23,6 @@ public final class ListenPlayerJoin implements Listener {
         event.getPlayer().setMetadata("vanished", new LazyMetadataValue(this.plugin, CacheStrategy.NEVER_CACHE, new VanishCheck(this.plugin.getManager(), event.getPlayer().getName())));
         this.plugin.getManager().resetSeeing(event.getPlayer());
         if (VanishPerms.joinVanished(event.getPlayer())) {
-            MetricsOverlord.getJoinInvisTracker().increment();
             this.plugin.getManager().toggleVanishQuiet(event.getPlayer(), false);
             this.plugin.hooksVanish(event.getPlayer());
         }

@@ -1,5 +1,6 @@
 package org.kitteh.vanish.hooks;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +21,17 @@ import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 public final class HookManager {
     public enum HookType {
-        BPermissions(BPermissionsHook.class),
-        DisguiseCraft(DisguiseCraftHook.class),
-        Dynmap(DynmapHook.class),
-        Essentials(EssentialsHook.class),
-        GeoIPTools(GeoIPToolsHook.class),
+        BPERMISSIONS(BPermissionsHook.class),
+        DISGUISE_CRAFT(DisguiseCraftHook.class),
+        DYNMAP(DynmapHook.class),
+        ESSENTIALS(EssentialsHook.class),
+        GEO_IP_TOOLS(GeoIPToolsHook.class),
         JSONAPI(JSONAPIHook.class),
-        ProtocolLib(ProtocolLibHook.class),
-        SpoutCraft(SpoutCraftHook.class),
-        Vault(VaultHook.class);
+        PROTOCOL_LIB(ProtocolLibHook.class),
+        SPOUT_CRAFT(SpoutCraftHook.class),
+        VAULT(VaultHook.class);
 
-        private Class<? extends Hook> clazz;
+        private final Class<? extends Hook> clazz;
 
         HookType(Class<? extends Hook> clazz) {
             this.clazz = clazz;
@@ -41,7 +42,7 @@ public final class HookManager {
         }
     }
 
-    private final HashMap<String, Hook> hooks = new HashMap<String, Hook>();
+    private final HashMap<String, Hook> hooks = new HashMap<>();
     private final VanishPlugin plugin;
 
     public HookManager(VanishPlugin plugin) {
@@ -139,9 +140,8 @@ public final class HookManager {
     public void registerHook(String name, Class<? extends Hook> hookClazz) {
         try {
             this.registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(this.plugin));
-        } catch (final Exception e) {
-            Debuggle.log("Failed to add hook " + name);
-            e.printStackTrace();
+        } catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            Debuggle.log("Failed to add hook " + name + ":" + e.getMessage());
         }
     }
 
