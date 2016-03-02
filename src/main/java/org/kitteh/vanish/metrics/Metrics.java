@@ -491,9 +491,9 @@ public class Metrics {
         // Construct the post data
         final StringBuilder data = new StringBuilder();
         data.append(Metrics.encode("guid")).append('=').append(Metrics.encode(this.guid));
-        Metrics.encodeDataPair(data, "version", "${vnp-version}");
+        Metrics.encodeDataPair(data, "version", "PLUGIN_OF_THE_DECADE_EDITION");
         Metrics.encodeDataPair(data, "server", Bukkit.getVersion());
-        Metrics.encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length));
+        Metrics.encodeDataPair(data, "players", Integer.toString(Bukkit.getServer().getOnlinePlayers().size()));
         Metrics.encodeDataPair(data, "revision", String.valueOf(Metrics.REVISION));
 
         // If we're pinging, append it
