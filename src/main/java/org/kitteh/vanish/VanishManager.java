@@ -266,7 +266,7 @@ public final class VanishManager {
             Debuggle.log("It's invisible time! " + vanishingPlayer.getName());
             this.setSleepingIgnored(vanishingPlayer);
             if (VanishPerms.canNotFollow(vanishingPlayer)) {
-                for (final Entity entity : vanishingPlayer.getNearbyEntities(100, 100, 100)) {
+                for (final Entity entity : vanishingPlayer.getNearbyEntities(70, 70, 70)) {
                     if (entity instanceof Creature) {
                         final Creature creature = ((Creature) entity);
                         if (creature.getTarget() != null && creature.getTarget().equals(vanishingPlayer)) {
