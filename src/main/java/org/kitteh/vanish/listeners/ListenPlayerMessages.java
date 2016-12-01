@@ -22,6 +22,13 @@ public final class ListenPlayerMessages implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
+            if (Settings.getVanishChat()) {
+                for (final Player player : this.plugin.getServer().getOnlinePlayers()) {
+                    if (player.hasPermission("vanish.vanish")) {
+                        player.sendMessage(ChatColor.AQUA + "[VNP] " + event.getPlayer().getName() + ": " + event.getMessage());
+                    }
+                }
+            }
         }
     }
 
