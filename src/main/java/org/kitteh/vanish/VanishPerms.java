@@ -86,6 +86,10 @@ public final class VanishPerms {
         return VanishPerms.getUser(player).getSeeAll();
     }
 
+    public static boolean canHideFromSeeAll(Player player) {
+        return VanishPerms.getUser(player).getHideFromSeeAll();
+    }
+
     public static boolean canSeeSpoutStatus(Player player) {
         return player.hasPermission("vanish.spout.status");
     }
@@ -232,6 +236,10 @@ public final class VanishPerms {
 
     public static boolean toggleSeeAll(Player player) {
         return VanishPerms.getUser(player).toggleSeeAll();
+    }
+
+    public static boolean toggleHideFromSeeAll(Player player) {
+        return VanishPerms.getUser(player).toggleHideFromSeeAll();
     }
 
     public static boolean toggleSilentChestReads(Player player) {

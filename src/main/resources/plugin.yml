@@ -29,6 +29,9 @@ permissions:
   vanish.see:
     default: false
     description: Allows player to see vanished players
+  vanish.hide:
+    default: false
+    description: Hide from players who have vanish.see but not vanish.hide
   vanish.statusupdates:
     default: false
     description: Informed about players changing status
