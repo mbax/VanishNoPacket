@@ -20,15 +20,15 @@ import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 public final class HookManager {
     public enum HookType {
-        BPermissions(BPermissionsHook.class), // bperms!
-        DisguiseCraft(DisguiseCraftHook.class), // disguisecraft!
-        Dynmap(DynmapHook.class), // dynmap!
-        Essentials(EssentialsHook.class), // essentials! 
-        GeoIPTools(GeoIPToolsHook.class), // geoiptools!
-        JSONAPI(JSONAPIHook.class), // jsonapi!
-        ProtocolLib(ProtocolLibHook.class), // protocollib!
-        SpoutCraft(SpoutCraftHook.class), // spoutcraft!
-        Vault(VaultHook.class); // vault!
+        BPermissions(BPermissionsHook.class),
+        DisguiseCraft(DisguiseCraftHook.class),
+        Dynmap(DynmapHook.class),
+        Essentials(EssentialsHook.class),
+        GeoIPTools(GeoIPToolsHook.class),
+        JSONAPI(JSONAPIHook.class),
+        ProtocolLib(ProtocolLibHook.class),
+        SpoutCraft(SpoutCraftHook.class),
+        Vault(VaultHook.class);
 
         private Class<? extends Hook> clazz;
 
@@ -92,7 +92,7 @@ public final class HookManager {
 
     /**
      * Gets a named, registered Hook
-     * 
+     *
      * @param name hook name
      * @return the named Hook if registered, null if no match.
      */
@@ -131,7 +131,7 @@ public final class HookManager {
     }
 
     /**
-     * Registers and initialize a hook
+     * Registers and initializes a hook
      *
      * @param name name to register
      * @param hookClazz hook class to register

@@ -15,7 +15,7 @@ public final class MetricsOverlord {
     private static Tracker joininvis = new Tracker("");
     private static Metrics metrics;
 
-    private static final String[] PERMS_PLUGINS = { "DroxPerms", "GroupManager", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions" };
+    private static final String[] PERMS_PLUGINS = {"DroxPerms", "GroupManager", "PermissionsBukkit", "PermissionsEx", "Privileges", "SimplyPerms", "Starburst", "bPermissions", "zPermissions"};
 
     public static Tracker getCommandTracker() {
         return MetricsOverlord.command;
