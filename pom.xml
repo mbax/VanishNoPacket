@@ -6,11 +6,14 @@
   <packaging>jar</packaging>
 
   <name>VanishNoPacket</name>
-  <version>3.20</version>
+  <version>3.21</version>
 
   <url>http://github.com/mbax/VanishNoPacket</url>
 
   <properties>
+	<spigot.version>1.12-R0.1-SNAPSHOT</spigot.version>
+	<spigot.groupId>org.spigotmc</spigot.groupId>       <!-- To switch between Bukkit & Spigot -->
+	<spigot.artifactId>spigot-api</spigot.artifactId>   <!-- To switch between Bukkit & Spigot -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <vnp-version>${project.version}-unofficial</vnp-version>
   </properties>
@@ -64,37 +67,59 @@
       <id>kitteh-repo</id>
       <url>http://repo.kitteh.org/content/groups/public</url>
     </repository>
-    <repository>
+    <!-- <repository>
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public</url>
-    </repository>
+    </repository> -->
+    <repository>
+	  <id>spigot-repo</id>
+	  <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+	</repository>
+	<repository>
+	  <id>dynmap-repo</id>
+	  <url>http://repo.mikeprimm.com/</url>
+	</repository>
+	<repository>
+      <id>dmulloy2-repo</id>
+      <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
+	</repository>
+	<repository>
+	  <id>vault-repo</id>
+	  <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+	</repository>
   </repositories>
 
   <dependencies>
-    <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.7.10-R0.1-SNAPSHOT</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
+    <!--Spigot API-->
+		<dependency>
+			<groupId>${spigot.groupId}</groupId>
+			<artifactId>${spigot.artifactId}</artifactId>
+			<version>${spigot.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${spigot.groupId}</groupId>
+			<artifactId>${spigot.artifactId}</artifactId>
+			<version>${spigot.version}</version>
+			<classifier>javadoc</classifier>
+		</dependency>
+		<dependency>
+			<groupId>${spigot.groupId}</groupId>
+			<artifactId>${spigot.artifactId}</artifactId>
+			<version>${spigot.version}</version>
+			<classifier>sources</classifier>
+		</dependency>
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
-      <artifactId>ProtocolLib</artifactId>
-      <version>1.5.1</version>
+      <artifactId>ProtocolLib-API</artifactId>
+      <version>4.3.0</version>
       <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.getspout</groupId>
-      <artifactId>spoutplugin</artifactId>
-      <version>1.5.2-R1.0-SNAPSHOT-HOSTED</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.dynmap</groupId>
       <artifactId>DynmapCoreAPI</artifactId>
-      <version>1.7</version>
+      <version>2.0</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -140,7 +165,7 @@
     <dependency>
       <groupId>org.kitteh</groupId>
       <artifactId>tagapi</artifactId>
-      <version>3.0</version>
+      <version>3.0.6-SNAPSHOT</version>
       <optional>true</optional>
       <exclusions>
         <exclusion>
@@ -171,14 +196,14 @@
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <artifactId>Vault</artifactId>
-      <version>1.2.32</version>
+      <artifactId>VaultAPI</artifactId>
+      <version>1.6</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -207,7 +232,6 @@
         <includes>
           <include>plugin.yml</include>
           <include>config.yml</include>
-          <include>spoutcraft.yml</include>
         </includes>
       </resource>
       <resource>
@@ -222,20 +246,20 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
+        <version>2.8.2</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.0.2</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>
