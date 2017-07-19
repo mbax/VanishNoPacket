@@ -8,6 +8,7 @@ import org.kitteh.vanish.hooks.Hook;
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.util.CalculableType;
 
+@SuppressWarnings("deprecation")
 public final class BPermissionsHook extends Hook implements ChatProvider {
     public BPermissionsHook(VanishPlugin plugin) {
         super(plugin);

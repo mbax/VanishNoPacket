@@ -324,10 +324,6 @@ public final class VanishPlugin extends JavaPlugin {
             }
         }, 1);
 
-        if (this.getConfig().getBoolean("hooks.spoutcraft", false)) {
-            this.hookManager.getHook(HookType.SpoutCraft).onEnable();
-        }
-
         this.manager = new VanishManager(this);
 
         for (final Player player : this.getServer().getOnlinePlayers()) {
