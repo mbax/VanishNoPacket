@@ -61,7 +61,8 @@ public final class ListenPlayerOther implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @SuppressWarnings("incomplete-switch")
+	@EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {

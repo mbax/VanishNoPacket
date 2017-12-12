@@ -1,25 +1,21 @@
 package org.kitteh.vanish;
 
-import com.google.common.collect.ImmutableSet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 import org.kitteh.vanish.metrics.MetricsOverlord;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
+import com.google.common.collect.ImmutableSet;
 
 public final class VanishManager {
     private final class ShowPlayerEntry {
@@ -68,7 +64,6 @@ public final class VanishManager {
     private final Map<String, Boolean> sleepIgnored = new HashMap<String, Boolean>();
     private final Set<UUID> bats = new HashSet<UUID>();
     private final VanishAnnounceManipulator announceManipulator;
-    private final Random random = new Random();
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
 
     public VanishManager(final VanishPlugin plugin) {
@@ -214,26 +209,14 @@ public final class VanishManager {
         this.plugin.messageStatusUpdate(message, togglingPlayer);
     }
 
-    /**
-     * Toggles a player's visibility
-     * Does not say anything.
-     * Will trigger effects
-     * Called by toggleVanish(Player)
-     *
-     * @param vanishingPlayer
-     */
-    public void toggleVanishQuiet(Player vanishingPlayer) {
-        this.toggleVanishQuiet(vanishingPlayer, true);
-    }
 
     /**
      * Toggles a player's visibility
      * Does not say anything.
      *
      * @param vanishingPlayer
-     * @param effects if true, trigger effects
      */
-    public void toggleVanishQuiet(Player vanishingPlayer, boolean effects) {
+    public void toggleVanishQuiet(Player vanishingPlayer) {
         final boolean vanishing = !this.isVanished(vanishingPlayer);
         final String vanishingPlayerName = vanishingPlayer.getName();
         if (vanishing) {
@@ -258,24 +241,6 @@ public final class VanishManager {
             this.removeVanished(vanishingPlayerName);
             MetricsOverlord.getUnvanishTracker().increment();
             this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
-        }
-        if (effects) {
-            final Location oneUp = vanishingPlayer.getLocation().add(0, 1, 0);
-            if (VanishPerms.canEffectSmoke(vanishingPlayer)) {
-                this.effectSmoke(vanishingPlayer.getLocation());
-            }
-            if (VanishPerms.canEffectExplode(vanishingPlayer)) {
-                this.effectExplosion(vanishingPlayer);
-            }
-            if (VanishPerms.canEffectLightning(vanishingPlayer)) {
-                this.effectLightning(vanishingPlayer.getLocation());
-            }
-            if (VanishPerms.canEffectFlames(vanishingPlayer)) {
-                this.effectFlames(oneUp);
-            }
-            if (VanishPerms.canEffectBats(vanishingPlayer)) {
-                this.effectBats(oneUp);
-            }
         }
         this.plugin.getServer().getPluginManager().callEvent(new VanishStatusChangeEvent(vanishingPlayer, vanishing));
         vanishingPlayer.sendPluginMessage(this.plugin, "vanishStatus", vanishing ? new byte[]{0x01} : new byte[]{0x00});
@@ -319,11 +284,7 @@ public final class VanishManager {
         if (this.isVanished(vanishingPlayer)) {
             return;
         }
-        if (silent) {
-            this.toggleVanishQuiet(vanishingPlayer, effects);
-        } else {
-            this.toggleVanish(vanishingPlayer);
-        }
+        this.toggleVanish(vanishingPlayer);
     }
 
     /**
@@ -338,74 +299,7 @@ public final class VanishManager {
         if (!this.isVanished(revealingPlayer)) {
             return;
         }
-        if (silent) {
-            this.toggleVanishQuiet(revealingPlayer, effects);
-        } else {
-            this.toggleVanish(revealingPlayer);
-        }
-    }
-
-    private void effectBats(final Location location) {
-        final Set<UUID> batty = new HashSet<UUID>();
-        for (int x = 0; x < 10; x++) {
-            batty.add(location.getWorld().spawnEntity(location, EntityType.BAT).getUniqueId());
-        }
-        this.bats.addAll(batty);
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, new Runnable() {
-            @Override
-            public void run() {
-                VanishManager.this.effectBatsCleanup(location.getWorld(), batty);
-                VanishManager.this.bats.removeAll(batty);
-            }
-        }, 3 * 20);
-    }
-
-    private void effectBatsCleanup(World world, Set<UUID> bats) {
-        for (final Entity entity : world.getEntities()) {
-            if (bats.contains(entity.getUniqueId())) {
-                world.playEffect(entity.getLocation(), Effect.SMOKE, this.random.nextInt(9));
-                entity.remove();
-            }
-        }
-    }
-
-    private void effectExplosion(Player player) {
-        Location loc = player.getLocation();
-        player.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 0F, false, false);
-    }
-
-    private void effectFlames(Location location) {
-        for (int i = 0; i < 10; i++) {
-            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, this.random.nextInt(9));
-        }
-    }
-
-    private void effectLightning(Location location) {
-        final int x = location.getBlockX();
-        final double y = location.getBlockY();
-        final int z = location.getBlockZ();
-        for (int i = 0; i < Settings.getLightningCount(); i++) {
-            double xToStrike;
-            double zToStrike;
-            if (this.random.nextBoolean()) {
-                xToStrike = x + this.random.nextInt(6);
-            } else {
-                xToStrike = x - this.random.nextInt(6);
-            }
-            if (this.random.nextBoolean()) {
-                zToStrike = z + this.random.nextInt(6);
-            } else {
-                zToStrike = z - this.random.nextInt(6);
-            }
-            final Location toStrike = new Location(location.getWorld(), xToStrike, y, zToStrike);
-            location.getWorld().strikeLightningEffect(toStrike);
-        }
-    }
-
-    private void effectSmoke(Location location) {
-        for (int i = 0; i < 10; i++) {
-            location.getWorld().playEffect(location, Effect.SMOKE, this.random.nextInt(9));
-        }
+        this.toggleVanish(revealingPlayer);
     }
 
     private void hideVanished(Player player) {
@@ -435,9 +329,6 @@ public final class VanishManager {
                     player.showPlayer(player2);
                 }
             }
-        }
-        for (final World world : this.plugin.getServer().getWorlds()) {
-            this.effectBatsCleanup(world, this.bats);
         }
     }
 
