@@ -1,4 +1,4 @@
-  package org.kitteh.vanish;
+package org.kitteh.vanish;
 
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.ChatColor;
