@@ -2,7 +2,6 @@ package org.kitteh.vanish.hooks.plugins;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -99,14 +98,14 @@ public final class SpoutCraftHook extends Hook implements Listener {
         final File confFile = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
         final FileConfiguration config = YamlConfiguration.loadConfiguration(confFile);
         config.options().copyDefaults(true);
-        final InputStream stream = this.plugin.getResource("spoutcraft.yml");
-        if (stream == null) {
+        final File spoutcraft = new File(this.plugin.getDataFolder(), "spoutcraft.yml");
+        if (!spoutcraft.canRead()) {
             this.plugin.getLogger().info("Defaults for spoutcraft.yml not loaded");
             this.plugin.getLogger().info("The /reload command is not fully supported by this plugin or Spout");
             this.enabled = false;
             return;
         }
-        config.setDefaults(YamlConfiguration.loadConfiguration(stream));
+        config.setDefaults(YamlConfiguration.loadConfiguration(spoutcraft));
         try {
             config.save(confFile);
         } catch (final IOException e) {
