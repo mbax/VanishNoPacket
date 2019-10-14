@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
 
   <name>VanishNoPacket</name>
-  <version>3.19.2-SNAPSHOT</version>
+  <version>3.20.1</version>
 
   <url>http://github.com/mbax/VanishNoPacket</url>
 
@@ -74,7 +74,7 @@
     <dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.7.2-R0.3</version>
+      <version>1.7.10-R0.1-SNAPSHOT</version>
       <type>jar</type>
       <optional>true</optional>
     </dependency>
@@ -233,6 +233,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>

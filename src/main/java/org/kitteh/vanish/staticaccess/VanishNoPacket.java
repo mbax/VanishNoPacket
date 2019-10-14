@@ -8,7 +8,7 @@ import org.kitteh.vanish.VanishPlugin;
 /**
  * Static party!
  * This is where you can grab stuff easily
- * 
+ *
  * @deprecated This class will disappear in VNP 4.0
  */
 @Deprecated

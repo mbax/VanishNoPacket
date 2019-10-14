@@ -282,7 +282,8 @@ public final class VanishPlugin extends JavaPlugin {
 
         Settings.freshStart(this);
 
-        dance: if (this.getConfig().getBoolean("colornametags", true)) {
+        dance:
+        if (this.getConfig().getBoolean("colornametags", true)) {
             if (this.getServer().getPluginManager().isPluginEnabled("TagAPI")) {
                 try {
                     Class.forName("org.kitteh.tag.AsyncPlayerReceiveNameTagEvent");
@@ -360,7 +361,7 @@ public final class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
 
-        this.getLogger().info(this.getCurrentVersion()+" loaded.");
+        this.getLogger().info(this.getCurrentVersion() + " loaded.");
     }
 
     /**
