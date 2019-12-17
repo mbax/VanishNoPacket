@@ -308,9 +308,15 @@ public final class VanishPlugin extends JavaPlugin {
         if (this.getConfig().getBoolean("hooks.dynmap", false)) {
             this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
-        //if (this.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
-        //    this.hookManager.getHook(HookType.ProtocolLib).onEnable();
-        //}
+        if (this.getServer().getPluginManager().getPlugin("LibsDisguises") != null) {
+            this.hookManager.getHook(HookType.LibsDisguises).onEnable();
+        }
+        if (this.getServer().getPluginManager().getPlugin("DisguiseCraft") != null) {
+            this.hookManager.getHook(HookType.DisguiseCraft).onEnable();
+        }
+        if (this.getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
+            this.hookManager.getHook(HookType.ProtocolLib).onEnable();
+        }
 
         final VanishPlugin self = this;
         //Post-load stuff

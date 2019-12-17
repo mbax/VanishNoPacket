@@ -57,4 +57,5 @@ public final class EssentialsHook extends Hook {
             this.essentials.getUser(player).setHidden(hide);
         }
     }
+    
 }

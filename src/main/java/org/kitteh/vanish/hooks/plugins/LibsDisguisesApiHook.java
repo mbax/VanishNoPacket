@@ -15,11 +15,11 @@ import org.kitteh.vanish.hooks.Hook;
  * Created for the AddstarMC Project.
  * Created by Narimm on 15/02/2017.
  */
-public class LibsDisguiseApiHook extends Hook implements Listener{
+public class LibsDisguisesApiHook extends Hook implements Listener{
 private boolean enabled = false;
 
 
-    public LibsDisguiseApiHook(VanishPlugin plugin) {
+    public LibsDisguisesApiHook(VanishPlugin plugin) {
         super(plugin);
     }
 
