@@ -2,7 +2,6 @@ package org.kitteh.vanish.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.BrewingStand;
@@ -63,8 +62,7 @@ public final class ListenPlayerOther implements Listener {
         }
     }
 
-    @SuppressWarnings("incomplete-switch")
-	@EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
@@ -102,6 +100,8 @@ public final class ListenPlayerOther implements Listener {
                 case BREWING_STAND:
                     inventory = ((BrewingStand) blockState).getInventory();
                     break;
+			    default:
+				    break;
             }
             if (inventory != null) {
                 event.setCancelled(true);
@@ -124,7 +124,8 @@ public final class ListenPlayerOther implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotPickUp(event.getPlayer())) {
             event.setCancelled(true);
@@ -148,7 +149,7 @@ public final class ListenPlayerOther implements Listener {
     }
     
     @EventHandler
-    public void onOpen(InventoryOpenEvent event) {
+    public void onOpenBeacon(InventoryOpenEvent event) {
     	final Player player = (Player) event.getPlayer();
         if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && this.plugin.getManager().isVanished(player) && VanishPerms.canReadChestsSilently(player)) {
         	if(event.getInventory().getType().equals(InventoryType.BEACON)) {

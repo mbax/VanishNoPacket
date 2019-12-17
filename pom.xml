@@ -6,11 +6,52 @@
   <packaging>jar</packaging>
 
   <name>VanishNoPacket</name>
-  <version>3.20</version>
+  <version>3.21</version>
+
+  <url>http://github.com/mbax/VanishNoPacket</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <vnp-version>${project.version}-unofficial</vnp-version>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>jenkins</id>
+      <properties>
+        <vnp-version>${project.version}-${buildNumber}</vnp-version>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>buildnumber-maven-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <phase>validate</phase>
+                <goals>
+                  <goal>create</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <doCheck>true</doCheck>
+              <revisionOnScmFailure>no-rev</revisionOnScmFailure>
+              <scmDirectory>../../</scmDirectory>
+              <shortRevisionLength>7</shortRevisionLength>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <properties>
+        <vnp-version>${project.version}</vnp-version>
+      </properties>
+    </profile>
+  </profiles>
 
   <scm>
     <connection>scm:git:git://github.com/mbax/VanishNoPacket.git</connection>
@@ -18,13 +59,90 @@
     <url>https://github.com/mbax/VanishNoPacket</url>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>kitteh-repo</id>
+      <url>http://repo.kitteh.org/content/groups/public</url>
+    </repository>
+    <repository>
+      <id>bukkit-repo</id>
+      <url>http://repo.bukkit.org/content/groups/public</url>
+    </repository>
+    <repository>
+      <id>drkmatr-repo</id>
+      <url>https://minevolt.net/repo/</url>
+    </repository>
+    <repository>
+      <id>md5</id>
+      <url>http://repo.md-5.net/content/groups/public</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
       <version>1.15-R0.1-SNAPSHOT</version>
       <type>jar</type>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.comphenix.protocol</groupId>
+      <artifactId>ProtocolLib</artifactId>
+      <version>4.5.0-SNAPSHOT</version>
+      <type>jar</type>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.getspout</groupId>
+      <artifactId>spoutplugin</artifactId>
+      <version>1.5.2-R1.0-SNAPSHOT-HOSTED</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.dynmap</groupId>
+      <artifactId>DynmapCoreAPI</artifactId>
+      <version>1.7</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>de.bananaco</groupId>
+      <artifactId>bPermissions</artifactId>
+      <version>v2.12-DEV</version>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.earth2me</groupId>
+      <artifactId>essentials</artifactId>
+      <version>2.11.1</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>LibsDisguises</groupId>
+      <artifactId>LibsDisguises</artifactId>
+      <version>9.8.6</version>
+      <optional>true</optional>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.spigotmc</groupId>
+          <artifactId>spigot-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.comphenix.protocol</groupId>
+          <artifactId>ProtocolLib</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
     <dependency>
@@ -32,21 +150,82 @@
       <artifactId>json-simple</artifactId>
       <version>1.1.1</version>
     </dependency>
-
     <dependency>
-      <groupId>com.comphenix.protocol</groupId>
-      <artifactId>ProtocolLib-API</artifactId>
-      <version>4.4.0-SNAPSHOT</version>
-      <type>jar</type>
+      <groupId>uk.org.whoami</groupId>
+      <artifactId>GeoIPTools</artifactId>
+      <version>1.0</version>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
+      <artifactId>JSONAPI</artifactId>
+      <version>bleeding</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.kitteh</groupId>
+      <artifactId>tagapi</artifactId>
+      <version>3.0</version>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>bukkit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>pgDev</groupId>
+      <artifactId>disguisecraft</artifactId>
+      <version>2.8-SNAPSHOT</version>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.bukkit</groupId>
+          <artifactId>craftbukkit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>lishid</groupId>
+          <artifactId>orebfuscator</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.getspout</groupId>
+          <artifactId>spoutplugin</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.milkbowl.vault</groupId>
+      <artifactId>Vault</artifactId>
+      <version>1.2.32</version>
+      <type>jar</type>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>kittehReleases</id>
+      <name>Kitteh Releases</name>
+      <url>http://repo.kitteh.org/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>kittehSnapshots</id>
+      <name>Kitteh Snapshots</name>
+      <url>http://repo.kitteh.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -59,6 +238,7 @@
         <includes>
           <include>plugin.yml</include>
           <include>config.yml</include>
+          <include>spoutcraft.yml</include>
         </includes>
       </resource>
       <resource>
@@ -72,6 +252,11 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.4</version>
       </plugin>
@@ -80,12 +265,12 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
       </plugin>
       <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.0</version>
                 <executions>
@@ -102,8 +287,8 @@
                             </artifactSet>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
+                </executions>  
+      </plugin>
     </plugins>
   </build>
 </project>
