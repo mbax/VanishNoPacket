@@ -5,13 +5,10 @@ import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
-import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ConnectionSide;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.injector.GamePhase;
 import com.comphenix.protocol.reflect.FieldAccessException;
 import com.comphenix.protocol.reflect.StructureModifier;
 
@@ -24,7 +21,7 @@ public final class ProtocolLibHook extends Hook {
     public void onEnable() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("ProtocolLib");
         if (grab != null) {
-            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this.plugin, ConnectionSide.SERVER_SIDE, ListenerPriority.HIGHEST, GamePhase.LOGIN, Packets.Server.KICK_DISCONNECT) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this.plugin, PacketType.Login.Server.DISCONNECT) {
                 @Override
                 public void onPacketSending(PacketEvent event) {
                     try {
