@@ -62,6 +62,7 @@ public final class ProtocolLibHook extends Hook {
                     }
                 }
             });
+            this.plugin.getLogger().info("Now hooking into ProtocolLib");
         } else {
             return;
         }

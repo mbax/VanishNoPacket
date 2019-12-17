@@ -25,7 +25,7 @@ private boolean enabled = false;
 
     @Override
     public void onEnable() {
-        final Plugin LibDisguise = this.plugin.getServer().getPluginManager().getPlugin("Libsdisguises");
+        final Plugin LibDisguise = this.plugin.getServer().getPluginManager().getPlugin("LibsDisguises");
         if (LibDisguise != null) {
             this.plugin.getLogger().info("Now hooking into LibsDisguises");
             this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
