@@ -22,7 +22,7 @@ effects:
     lightning:
         count: 30
 colornametags: true
-
+nocollidewheninvis: false
 permtest: false
 debug: false
 configVersionDoNotTouch: 

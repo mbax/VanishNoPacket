@@ -9,6 +9,7 @@ public final class Settings {
     private static String fakeJoin;
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
+    private static boolean noCollideWhenInvis;
     private static int lightningEffectCount;
 
     private static final int confVersion = 5; // Tracking config version
@@ -27,6 +28,10 @@ public final class Settings {
 
     public static String getFakeQuit() {
         return Settings.fakeQuit;
+    }
+    
+    public static boolean getNoCollide() {
+    	return Settings.noCollideWhenInvis;
     }
 
     public static int getLightningCount() {
@@ -63,6 +68,7 @@ public final class Settings {
             }
             if ((ver <= 4)) {
                 config.set("colornametags", true);
+                config.set("nocollidewheninvis", false);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
@@ -73,6 +79,7 @@ public final class Settings {
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
+        Settings.noCollideWhenInvis = config.getBoolean("nocollidewheninvis", false);
         if (Settings.lightningEffectCount < 1) {
             Settings.lightningEffectCount = 1;
         }
