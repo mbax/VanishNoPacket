@@ -6,7 +6,6 @@ import org.bukkit.plugin.Plugin;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
-@SuppressWarnings("deprecation")
 public final class EssentialsHook extends Hook {
     private final VanishPlugin plugin;
     private IEssentials essentials;

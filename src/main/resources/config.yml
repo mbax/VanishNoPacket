@@ -4,7 +4,7 @@
 #   https://www.kitteh.org
 #
 #  See documentation for details:
-#  https://dev.bukkit.org/server-mods/vanish/pages/configuration/
+#  https://dev.bukkit.org/projects/vanish/pages/configuration
 #
 fakeannounce:
     automaticforsilentjoin: false

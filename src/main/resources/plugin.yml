@@ -5,7 +5,7 @@ website: http://kitteh.org
 softdepend: [Essentials,dynmap,Vault]
 author: mbaxter
 description: Vanish for the distinguished admin
-dev-url: http://dev.bukkit.org/server-mods/vanish/
+dev-url: https://dev.bukkit.org/projects/vanish
 commands:
   vanish:
     description: poof
