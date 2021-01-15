@@ -44,7 +44,6 @@ public final class Settings {
         if (ver != Settings.confVersion) {
             plugin.getLogger().info("Attempting to update your configuration. Check to make sure it's ok");
             if (ver < 1) {
-                config.set("hooks.spoutcraft", config.getBoolean("spoutcraft.enable", true));
                 config.set("spoutcraft.enable", null);
                 config.set("spoutcraft", null);
             }
@@ -54,15 +53,10 @@ public final class Settings {
                 config.set("permtest", permtest);
                 config.set("enableColoration", null);
                 config.set("enableTabControl", null);
-                final boolean updates = config.getBoolean("updates.check", true);
                 config.set("updates.check", null);
-                config.set("checkupdates", updates);
             }
             if ((ver <= 3)) {
                 config.set("effects.lightning.count", 30);
-            }
-            if ((ver <= 4)) {
-                config.set("colornametags", true);
             }
             if (ver <= 5) {
                 config.set("hooks.dynmap", null);
