@@ -18,6 +18,7 @@ public class HookTest {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
                 if (parameterTypes.length == 1 && parameterTypes[0].equals(VanishPlugin.class)) {
                     hasDesiredConstructor = true;
+                    break;
                 }
             }
             Assert.assertTrue("Hook " + hook + " does not have a VanishPlugin constructor", hasDesiredConstructor);
@@ -26,7 +27,7 @@ public class HookTest {
 
     @Test
     public void hookUniqueness() {
-        Map<Class<?>, HookType> classes = new HashMap<Class<?>, HookType>();
+        Map<Class<?>, HookType> classes = new HashMap<>();
         for (HookType hook : HookManager.HookType.values()) {
             Assert.assertTrue("Hooks " + hook + " and " + classes.get(hook.get()) + " have the same class", !classes.containsKey(hook.get()));
             classes.put(hook.get(), hook);

@@ -1,14 +1,14 @@
 package org.kitteh.vanish;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 public final class VanishPerms {
-    private static Map<String, VanishUser> users = Collections.synchronizedMap(new HashMap<String, VanishUser>());
+    private static final Map<String, VanishUser> users = Collections.synchronizedMap(new HashMap<>());
 
     public static boolean blockIncomingDamage(Player player) {
         return VanishPerms.getUser(player).getPreventIncomingDamage();

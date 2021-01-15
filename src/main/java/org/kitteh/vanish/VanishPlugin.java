@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.HashSet;
 
 public final class VanishPlugin extends JavaPlugin {
-    private final HashSet<String> haveInventoriesOpen = new HashSet<String>();
+    private final HashSet<String> haveInventoriesOpen = new HashSet<>();
     private VanishManager manager;
     private final HookManager hookManager = new HookManager(this);
 

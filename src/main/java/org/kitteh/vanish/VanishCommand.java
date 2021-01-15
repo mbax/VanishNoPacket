@@ -103,7 +103,7 @@ public final class VanishCommand implements CommandExecutor {
             if (args.length == 1) {
                 final StringBuilder toggleReply = new StringBuilder();
                 if (VanishPerms.canToggleSee(player)) {
-                    toggleReply.append(this.colorize(VanishPerms.canSeeAll(player)) + "see" + ChatColor.DARK_AQUA);
+                    toggleReply.append(this.colorize(VanishPerms.canSeeAll(player))).append("see").append(ChatColor.DARK_AQUA);
                 }
                 if (VanishPerms.canToggleNoPickup(player)) {
                     this.appendList(toggleReply, this.colorize(VanishPerms.canNotPickUp(player)) + "nopickup" + ChatColor.DARK_AQUA);
@@ -132,7 +132,7 @@ public final class VanishCommand implements CommandExecutor {
                 if (toggleReply.length() > 0) {
                     toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                 } else {
-                    toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle anything");
+                    toggleReply.append(ChatColor.DARK_AQUA).append("You cannot toggle anything");
                 }
                 player.sendMessage(toggleReply.toString());
             } else {
@@ -147,7 +147,7 @@ public final class VanishCommand implements CommandExecutor {
             if (args.length == 1) {
                 final StringBuilder toggleReply = new StringBuilder();
                 if (VanishPerms.canToggleSmoke(player)) {
-                    toggleReply.append(this.colorize(VanishPerms.canEffectSmoke(player)) + "smoke" + ChatColor.DARK_AQUA);
+                    toggleReply.append(this.colorize(VanishPerms.canEffectSmoke(player))).append("smoke").append(ChatColor.DARK_AQUA);
                 }
                 if (VanishPerms.canToggleEffectExplode(player)) {
                     this.appendList(toggleReply, this.colorize(VanishPerms.canEffectExplode(player)) + "explode" + ChatColor.DARK_AQUA);
@@ -164,7 +164,7 @@ public final class VanishCommand implements CommandExecutor {
                 if (toggleReply.length() > 0) {
                     toggleReply.insert(0, ChatColor.DARK_AQUA + "You can toggle: ");
                 } else {
-                    toggleReply.append(ChatColor.DARK_AQUA + "You cannot toggle any effects");
+                    toggleReply.append(ChatColor.DARK_AQUA).append("You cannot toggle any effects");
                 }
                 player.sendMessage(toggleReply.toString());
             } else {

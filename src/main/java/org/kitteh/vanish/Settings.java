@@ -64,7 +64,7 @@ public final class Settings {
             if ((ver <= 4)) {
                 config.set("colornametags", true);
             }
-            if (ver <=5) {
+            if (ver <= 5) {
                 config.set("hooks.dynmap", null);
                 config.set("hooks.JSONAPI", null);
                 config.set("hooks.spoutcraft", null);

@@ -1,10 +1,5 @@
 package org.kitteh.vanish.hooks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
@@ -12,13 +7,18 @@ import org.kitteh.vanish.hooks.plugins.DynmapHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public final class HookManager {
     public enum HookType {
         Dynmap(DynmapHook.class),
         Essentials(EssentialsHook.class),
         Vault(VaultHook.class);
 
-        private Class<? extends Hook> clazz;
+        private final Class<? extends Hook> clazz;
 
         HookType(Class<? extends Hook> clazz) {
             this.clazz = clazz;
@@ -29,7 +29,7 @@ public final class HookManager {
         }
     }
 
-    private final HashMap<String, Hook> hooks = new HashMap<String, Hook>();
+    private final HashMap<String, Hook> hooks = new HashMap<>();
     private final VanishPlugin plugin;
 
     public HookManager(VanishPlugin plugin) {
@@ -43,7 +43,7 @@ public final class HookManager {
      * @return a list of deregistered hook names. Empty list if nothing deregistered.
      */
     public List<String> deregisterHook(Hook hook) {
-        final List<String> ret = new ArrayList<String>();
+        final List<String> ret = new ArrayList<>();
         for (final Map.Entry<String, Hook> i : this.hooks.entrySet()) {
             if (i.getValue().equals(hook)) {
                 this.deregisterHook(i.getKey());

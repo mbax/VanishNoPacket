@@ -51,12 +51,12 @@ public final class ListenPlayerMessages implements Listener {
                 } else if ((split.length == 3) && otherTest) {
                     final Player target = this.plugin.getServer().getPlayer(split[1]);
                     if (target == null) {
-                        message.append("Cannot find player: " + ChatColor.AQUA + split[1]);
+                        message.append("Cannot find player: ").append(ChatColor.AQUA).append(split[1]);
                         event.getPlayer().sendMessage(message.toString());
                         event.setCancelled(true);
                         return;
                     }
-                    message.append("Player " + ChatColor.AQUA + target.getName() + ChatColor.DARK_AQUA);
+                    message.append("Player ").append(ChatColor.AQUA).append(target.getName()).append(ChatColor.DARK_AQUA);
                     permission = split[2];
                     if (!target.hasPermission(permission)) {
                         message.append(" does not have ");
@@ -67,7 +67,7 @@ public final class ListenPlayerMessages implements Listener {
                     return;
                 }
                 event.setCancelled(true);
-                message.append(ChatColor.AQUA + permission);
+                message.append(ChatColor.AQUA).append(permission);
                 event.getPlayer().sendMessage(message.toString());
             }
 

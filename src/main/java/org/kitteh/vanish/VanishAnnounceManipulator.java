@@ -1,14 +1,14 @@
 package org.kitteh.vanish;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller of announcing joins and quits that aren't their most honest.
@@ -23,8 +23,8 @@ public final class VanishAnnounceManipulator {
 
     VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
-        this.playerOnlineStatus = new HashMap<String, Boolean>();
-        this.delayedAnnouncePlayerList = new ArrayList<String>();
+        this.playerOnlineStatus = new HashMap<>();
+        this.delayedAnnouncePlayerList = new ArrayList<>();
     }
 
     public void addToDelayedAnnounce(String player) {
@@ -57,11 +57,7 @@ public final class VanishAnnounceManipulator {
             return false;
         }
         playerName = player.getName();
-        if (this.playerOnlineStatus.containsKey(playerName)) {
-            return this.playerOnlineStatus.get(playerName);
-        } else {
-            return true;
-        }
+        return this.playerOnlineStatus.getOrDefault(playerName, true);
     }
 
     /**

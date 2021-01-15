@@ -1,7 +1,6 @@
 package org.kitteh.vanish.hooks.plugins;
 
 import net.milkbowl.vault.chat.Chat;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.kitteh.vanish.VanishPlugin;
