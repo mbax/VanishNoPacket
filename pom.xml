@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
 
   <name>VanishNoPacket</name>
-  <version>3.20.1</version>
+  <version>3.21-SNAPSHOT</version>
 
   <url>http://github.com/mbax/VanishNoPacket</url>
 
@@ -16,35 +16,6 @@
   </properties>
 
   <profiles>
-    <profile>
-      <id>jenkins</id>
-      <properties>
-        <vnp-version>${project.version}-${buildNumber}</vnp-version>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>buildnumber-maven-plugin</artifactId>
-            <version>1.2</version>
-            <executions>
-              <execution>
-                <phase>validate</phase>
-                <goals>
-                  <goal>create</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <doCheck>true</doCheck>
-              <revisionOnScmFailure>no-rev</revisionOnScmFailure>
-              <scmDirectory>../../</scmDirectory>
-              <shortRevisionLength>7</shortRevisionLength>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>release</id>
       <properties>
@@ -61,140 +32,55 @@
 
   <repositories>
     <repository>
-      <id>kitteh-repo</id>
-      <url>http://repo.kitteh.org/content/groups/public</url>
+      <id>papermc</id>
+      <url>https://papermc.io/repo/repository/maven-public/</url>
     </repository>
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public</url>
+      <id>ess-repo</id>
+      <url>https://ci.ender.zone/plugin/repository/everything/</url>
+    </repository>
+    <repository>
+      <id>repo.mikeprimm.com</id>
+      <url>http://repo.mikeprimm.com/</url>
+    </repository>
+    <repository>
+      <id>vault-repo</id>
+      <url>http://nexus.hc.to/content/repositories/pub_releases</url>
     </repository>
   </repositories>
 
   <dependencies>
     <dependency>
-      <groupId>org.bukkit</groupId>
-      <artifactId>bukkit</artifactId>
-      <version>1.7.10-R0.1-SNAPSHOT</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.comphenix.protocol</groupId>
-      <artifactId>ProtocolLib</artifactId>
-      <version>1.5.1</version>
-      <type>jar</type>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.getspout</groupId>
-      <artifactId>spoutplugin</artifactId>
-      <version>1.5.2-R1.0-SNAPSHOT-HOSTED</version>
-      <optional>true</optional>
+      <groupId>com.destroystokyo.paper</groupId>
+      <artifactId>paper-api</artifactId>
+      <version>1.16.4-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.dynmap</groupId>
-      <artifactId>DynmapCoreAPI</artifactId>
-      <version>1.7</version>
-      <optional>true</optional>
+      <artifactId>dynmap</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>de.bananaco</groupId>
-      <artifactId>bPermissions</artifactId>
-      <version>v2.12-DEV</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>craftbukkit</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.earth2me</groupId>
-      <artifactId>essentials</artifactId>
-      <version>2.11.1</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>uk.org.whoami</groupId>
-      <artifactId>GeoIPTools</artifactId>
-      <version>1.0</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.ramblingwood.minecraft.jsonapi</groupId>
-      <artifactId>JSONAPI</artifactId>
-      <version>bleeding</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>tagapi</artifactId>
-      <version>3.0</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>bukkit</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pgDev</groupId>
-      <artifactId>disguisecraft</artifactId>
-      <version>2.8-SNAPSHOT</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bukkit</groupId>
-          <artifactId>craftbukkit</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>lishid</groupId>
-          <artifactId>orebfuscator</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.getspout</groupId>
-          <artifactId>spoutplugin</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>net.ess3</groupId>
+      <artifactId>EssentialsX</artifactId>
+      <version>2.16.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <artifactId>Vault</artifactId>
-      <version>1.2.32</version>
-      <type>jar</type>
+      <artifactId>VaultAPI</artifactId>
+      <version>1.7</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <distributionManagement>
-    <repository>
-      <id>kittehReleases</id>
-      <name>Kitteh Releases</name>
-      <url>http://repo.kitteh.org/content/repositories/releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>kittehSnapshots</id>
-      <name>Kitteh Snapshots</name>
-      <url>http://repo.kitteh.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
 
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -207,7 +93,6 @@
         <includes>
           <include>plugin.yml</include>
           <include>config.yml</include>
-          <include>spoutcraft.yml</include>
         </includes>
       </resource>
       <resource>
@@ -221,21 +106,16 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.2.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.8.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>

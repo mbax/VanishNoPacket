@@ -1,8 +1,0 @@
-cloaks:
-    moderator: http://s3.amazonaws.com/MinecraftCloaks/jeb_.png
-    admin: http://s3.amazonaws.com/MinecraftCloaks/Notch.png
-skins:
-    moderator: http://s3.amazonaws.com/MinecraftSkins/jeb_.png
-    admin: http://s3.amazonaws.com/MinecraftSkins/Notch.png
-titles:
-    vanished: '&&b%n%rVanished'

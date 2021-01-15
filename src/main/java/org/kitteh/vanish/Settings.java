@@ -11,7 +11,7 @@ public final class Settings {
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
 
-    private static final int confVersion = 5; // Tracking config version
+    private static final int confVersion = 6; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -63,6 +63,13 @@ public final class Settings {
             }
             if ((ver <= 4)) {
                 config.set("colornametags", true);
+            }
+            if (ver <=5) {
+                config.set("hooks.dynmap", null);
+                config.set("hooks.JSONAPI", null);
+                config.set("hooks.spoutcraft", null);
+                config.set("colornametags", null);
+                config.set("checkupdates", null);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();

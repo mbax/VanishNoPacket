@@ -1,10 +1,10 @@
 #
 # VanishNoPacket
 #   A fine choice of invisibility for the discerning server administrator.
-#   http://www.kitteh.org
+#   https://www.kitteh.org
 #
 #  See documentation for details:
-#  http://dev.bukkit.org/server-mods/vanish/pages/configuration/
+#  https://dev.bukkit.org/server-mods/vanish/pages/configuration/
 #
 fakeannounce:
     automaticforsilentjoin: false
@@ -12,18 +12,13 @@ fakeannounce:
     quit: '%p left the game.'
 hooks:
     essentials: false
-    dynmap: false
-    JSONAPI: false
-    spoutcraft: false
-checkupdates: true
 permissionsupdates:
     checkonworldchange: false
 effects:
     lightning:
         count: 30
-colornametags: true
 
 permtest: false
 debug: false
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 5
+    SeriouslyThisWillEraseYourConfig: 6
