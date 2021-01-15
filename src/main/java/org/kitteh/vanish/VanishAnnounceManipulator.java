@@ -1,5 +1,6 @@
 package org.kitteh.vanish;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.vanish.hooks.HookManager.HookType;
@@ -20,11 +21,13 @@ public final class VanishAnnounceManipulator {
     private final List<String> delayedAnnouncePlayerList;
     private final VanishPlugin plugin;
     private final Map<String, Boolean> playerOnlineStatus;
+    private final boolean placeholderAPI;
 
     VanishAnnounceManipulator(VanishPlugin plugin) {
         this.plugin = plugin;
         this.playerOnlineStatus = new HashMap<>();
         this.delayedAnnouncePlayerList = new ArrayList<>();
+        this.placeholderAPI = plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
     public void addToDelayedAnnounce(String player) {
@@ -78,6 +81,9 @@ public final class VanishAnnounceManipulator {
         final VaultHook vault = (VaultHook) this.plugin.getHookManager().getHook(HookType.Vault);
         message = message.replace("%p", player.getName());
         message = message.replace("%d", player.getDisplayName());
+        if (this.placeholderAPI) {
+            message = PlaceholderAPI.setPlaceholders(player, message);
+        }
         return message;
     }
 
