@@ -1,6 +1,8 @@
 package org.kitteh.vanish.hooks;
 
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.plugins.DynmapHook;
@@ -32,7 +34,7 @@ public final class HookManager {
     private final HashMap<String, Hook> hooks = new HashMap<>();
     private final VanishPlugin plugin;
 
-    public HookManager(VanishPlugin plugin) {
+    public HookManager(@NonNull VanishPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -42,7 +44,7 @@ public final class HookManager {
      * @param hook hook object to deregister
      * @return a list of deregistered hook names. Empty list if nothing deregistered.
      */
-    public List<String> deregisterHook(Hook hook) {
+    public @NonNull List<String> deregisterHook(@NonNull Hook hook) {
         final List<String> ret = new ArrayList<>();
         for (final Map.Entry<String, Hook> i : this.hooks.entrySet()) {
             if (i.getValue().equals(hook)) {
@@ -59,7 +61,7 @@ public final class HookManager {
      * @param name hook name to deregister
      * @return the deregistered hook or null if no hook by the given name was registered
      */
-    public Hook deregisterHook(String name) {
+    public @Nullable Hook deregisterHook(@NonNull String name) {
         final Hook ret = this.hooks.get(name);
         this.hooks.remove(name);
         return ret;
@@ -71,7 +73,7 @@ public final class HookManager {
      * @param hooktype desired hook type
      * @return the named Hook if registered, null if no match.
      */
-    public Hook getHook(HookType hooktype) {
+    public @NonNull Hook getHook(@NonNull HookType hooktype) {
         if (!this.hooks.containsKey(hooktype.name())) {
             this.registerHook(hooktype);
         }
@@ -84,7 +86,7 @@ public final class HookManager {
      * @param name hook name
      * @return the named Hook if registered, null if no match.
      */
-    public Hook getHook(String name) {
+    public @Nullable Hook getHook(@NonNull String name) {
         return this.hooks.get(name);
     }
 
@@ -94,25 +96,25 @@ public final class HookManager {
         }
     }
 
-    public void onJoin(Player player) {
+    public void onJoin(@NonNull Player player) {
         for (final Hook hook : this.hooks.values()) {
             hook.onJoin(player);
         }
     }
 
-    public void onQuit(Player player) {
+    public void onQuit(@NonNull Player player) {
         for (final Hook hook : this.hooks.values()) {
             hook.onQuit(player);
         }
     }
 
-    public void onUnvanish(Player player) {
+    public void onUnvanish(@NonNull Player player) {
         for (final Hook hook : this.hooks.values()) {
             hook.onUnvanish(player);
         }
     }
 
-    public void onVanish(Player player) {
+    public void onVanish(@NonNull Player player) {
         for (final Hook hook : this.hooks.values()) {
             hook.onVanish(player);
         }
@@ -124,7 +126,7 @@ public final class HookManager {
      * @param name name to register
      * @param hookClazz hook class to register
      */
-    public void registerHook(String name, Class<? extends Hook> hookClazz) {
+    public void registerHook(@NonNull String name, @NonNull Class<? extends Hook> hookClazz) {
         try {
             this.registerHook(name, hookClazz.getConstructor(VanishPlugin.class).newInstance(this.plugin));
         } catch (final Exception e) {
@@ -139,11 +141,11 @@ public final class HookManager {
      * @param name name of the hook
      * @param hook hook object
      */
-    public void registerHook(String name, Hook hook) {
+    public void registerHook(@NonNull String name, @NonNull Hook hook) {
         this.hooks.put(name, hook);
     }
 
-    private void registerHook(HookType hook) {
+    private void registerHook(@NonNull HookType hook) {
         this.registerHook(hook.name(), hook.get());
     }
 }

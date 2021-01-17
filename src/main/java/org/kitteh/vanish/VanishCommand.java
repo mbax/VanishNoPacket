@@ -5,16 +5,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class VanishCommand implements CommandExecutor {
     private final VanishPlugin plugin;
 
-    public VanishCommand(VanishPlugin plugin) {
+    public VanishCommand(@NonNull VanishPlugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, @NonNull String[] args) {
         // First, the short aliases
         if (label.length() == 2) {
             if (sender instanceof Player) {
@@ -258,14 +259,14 @@ public final class VanishCommand implements CommandExecutor {
         return true;
     }
 
-    private void appendList(StringBuilder builder, String string) {
+    private void appendList(@NonNull StringBuilder builder, @NonNull String string) {
         if (builder.length() > 0) {
             builder.append(", ");
         }
         builder.append(string);
     }
 
-    private String colorize(boolean has) {
+    private @NonNull String colorize(boolean has) {
         if (has) {
             return ChatColor.GREEN.toString();
         } else {
@@ -273,11 +274,11 @@ public final class VanishCommand implements CommandExecutor {
         }
     }
 
-    private void denied(CommandSender sender) {
+    private void denied(@NonNull CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "[Vanish] " + ChatColor.DARK_AQUA + "Access denied.");
     }
 
-    private void toggle(Player player, String toggle) {
+    private void toggle(@NonNull Player player, @NonNull String toggle) {
         final StringBuilder message = new StringBuilder();
         boolean status = false;
         if (toggle.equalsIgnoreCase("see") && VanishPerms.canToggleSee(player)) {

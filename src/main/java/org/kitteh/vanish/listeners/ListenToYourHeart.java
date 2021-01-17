@@ -6,18 +6,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
 public final class ListenToYourHeart implements Listener {
     private final VanishPlugin plugin;
 
-    public ListenToYourHeart(VanishPlugin plugin) {
+    public ListenToYourHeart(@NonNull VanishPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void badReview(HangingBreakEvent criticism) {
+    public void badReview(@NonNull HangingBreakEvent criticism) {
         if (criticism instanceof HangingBreakByEntityEvent) {
             final Entity critic = ((HangingBreakByEntityEvent) criticism).getRemover();
             if (critic instanceof Player) {

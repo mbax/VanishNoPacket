@@ -10,18 +10,19 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
 public final class ListenEntity implements Listener {
     private final VanishPlugin plugin;
 
-    public ListenEntity(VanishPlugin instance) {
+    public ListenEntity(@NonNull VanishPlugin instance) {
         this.plugin = instance;
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDamage(EntityDamageEvent event) {
+    public void onEntityDamage(@NonNull EntityDamageEvent event) {
         final Entity smacked = event.getEntity();
         if (this.plugin.getManager().getBats().contains(smacked.getUniqueId())) {
             event.setCancelled(true);
@@ -52,14 +53,14 @@ public final class ListenEntity implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityTarget(EntityTargetEvent event) {
+    public void onEntityTarget(@NonNull EntityTargetEvent event) {
         if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onVehicleDestroy(VehicleDestroyEvent event) {
+    public void onVehicleDestroy(@NonNull VehicleDestroyEvent event) {
         final Entity entity = event.getAttacker();
         if ((entity instanceof Player) && this.plugin.getManager().isVanished((Player) event.getAttacker())) {
             if (VanishPerms.canNotInteract((Player) entity)) {
@@ -69,7 +70,7 @@ public final class ListenEntity implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onVehicleEntityCollision(VehicleEntityCollisionEvent event) {
+    public void onVehicleEntityCollision(@NonNull VehicleEntityCollisionEvent event) {
         if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
             event.setCancelled(true);
         }

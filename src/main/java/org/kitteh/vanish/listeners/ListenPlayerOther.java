@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.Inventory;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
@@ -31,26 +32,26 @@ import org.kitteh.vanish.VanishPlugin;
 public final class ListenPlayerOther implements Listener {
     private final VanishPlugin plugin;
 
-    public ListenPlayerOther(VanishPlugin instance) {
+    public ListenPlayerOther(@NonNull VanishPlugin instance) {
         this.plugin = instance;
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onBucketFill(PlayerBucketFillEvent event) {
+    public void onBucketFill(@NonNull PlayerBucketFillEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onDrop(PlayerDropItemEvent event) {
+    public void onDrop(@NonNull PlayerDropItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onFoodChange(FoodLevelChangeEvent event) {
+    public void onFoodChange(@NonNull FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             final Player player = (Player) event.getEntity();
             if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
@@ -60,9 +61,9 @@ public final class ListenPlayerOther implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(@NonNull PlayerInteractEvent event) {
         final Player player = event.getPlayer();
-        if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
+        if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
             final Block block = event.getClickedBlock();
             Inventory inventory = null;
             final BlockState blockState = block.getState();
@@ -112,7 +113,7 @@ public final class ListenPlayerOther implements Listener {
             event.setCancelled(true);
             return;
         }
-        if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock().getType() == Material.FARMLAND)) {
+        if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock() != null) && (event.getClickedBlock().getType() == Material.FARMLAND)) {
             if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotTrample(player)) {
                 event.setCancelled(true);
             }
@@ -120,14 +121,14 @@ public final class ListenPlayerOther implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+    public void onPlayerPickupItem(@NonNull PlayerPickupItemEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotPickUp(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(@NonNull PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         if (this.plugin.getManager().isVanished(player)) {
             this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit vanished");
@@ -142,14 +143,14 @@ public final class ListenPlayerOther implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onShear(PlayerShearEntityEvent event) {
+    public void onShear(@NonNull PlayerShearEntityEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotInteract(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onWorldChange(PlayerChangedWorldEvent event) {
+    public void onWorldChange(@NonNull PlayerChangedWorldEvent event) {
         if (Settings.getWorldChangeCheck()) {
             this.plugin.getManager().playerRefresh(event.getPlayer());
         }

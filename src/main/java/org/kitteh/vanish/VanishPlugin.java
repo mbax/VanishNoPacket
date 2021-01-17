@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.ListenEntity;
@@ -28,7 +30,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param name user's name
      */
-    public void chestFakeClose(String name) {
+    public void chestFakeClose(@NonNull String name) {
         synchronized (this.haveInventoriesOpen) {
             this.haveInventoriesOpen.remove(name);
         }
@@ -40,7 +42,7 @@ public final class VanishPlugin extends JavaPlugin {
      * @param name the user's name
      * @return true if currently using a fake chest
      */
-    public boolean chestFakeInUse(String name) {
+    public boolean chestFakeInUse(@NonNull String name) {
         synchronized (this.haveInventoriesOpen) {
             return this.haveInventoriesOpen.contains(name);
         }
@@ -51,7 +53,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param name user's name
      */
-    public void chestFakeOpen(String name) {
+    public void chestFakeOpen(@NonNull String name) {
         synchronized (this.haveInventoriesOpen) {
             this.haveInventoriesOpen.add(name);
         }
@@ -62,7 +64,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @return version of VanishNoPacket in use
      */
-    public String getCurrentVersion() {
+    public @NonNull String getCurrentVersion() {
         return this.getDescription().getVersion();
     }
 
@@ -71,7 +73,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @return the hook manager
      */
-    public HookManager getHookManager() {
+    public @NonNull HookManager getHookManager() {
         return this.hookManager;
     }
 
@@ -80,7 +82,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @return the VanishManager
      */
-    public VanishManager getManager() {
+    public @NonNull VanishManager getManager() {
         return this.manager;
     }
 
@@ -90,7 +92,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param player player who has joined the server
      */
-    public void hooksJoin(Player player) {
+    public void hooksJoin(@NonNull Player player) {
         this.hookManager.onJoin(player);
     }
 
@@ -100,7 +102,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param player player who has left the server
      */
-    public void hooksQuit(Player player) {
+    public void hooksQuit(@NonNull Player player) {
         this.hookManager.onQuit(player);
         this.hookManager.onUnvanish(player);
     }
@@ -111,7 +113,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param player the un-vanishing user
      */
-    public void hooksUnvanish(Player player) {
+    public void hooksUnvanish(@NonNull Player player) {
         this.hookManager.onUnvanish(player);
     }
 
@@ -121,7 +123,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param player the vanishing player
      */
-    public void hooksVanish(Player player) {
+    public void hooksVanish(@NonNull Player player) {
         this.hookManager.onVanish(player);
     }
 
@@ -130,7 +132,7 @@ public final class VanishPlugin extends JavaPlugin {
      *
      * @param message the message to send
      */
-    public void messageStatusUpdate(String message) {
+    public void messageStatusUpdate(@NonNull String message) {
         this.messageStatusUpdate(message, null);
     }
 
@@ -140,7 +142,7 @@ public final class VanishPlugin extends JavaPlugin {
      * @param message the message to send
      * @param avoid player to not send the message to
      */
-    public void messageStatusUpdate(String message, Player avoid) {
+    public void messageStatusUpdate(@NonNull String message, @Nullable Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
             if ((player != null) && !player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
                 player.sendMessage(message);
@@ -218,7 +220,7 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     @SuppressWarnings("deprecation")
-    private void setInstance(VanishPlugin plugin) {
+    private void setInstance(@Nullable VanishPlugin plugin) {
         org.kitteh.vanish.staticaccess.VanishNoPacket.setInstance(plugin);
     }
 }

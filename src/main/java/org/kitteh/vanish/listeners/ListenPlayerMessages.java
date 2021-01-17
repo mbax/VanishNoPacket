@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
@@ -14,19 +15,19 @@ import org.kitteh.vanish.VanishPlugin;
 public final class ListenPlayerMessages implements Listener {
     private final VanishPlugin plugin;
 
-    public ListenPlayerMessages(VanishPlugin instance) {
+    public ListenPlayerMessages(@NonNull VanishPlugin instance) {
         this.plugin = instance;
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerChat(AsyncPlayerChatEvent event) {
+    public void onPlayerChat(@NonNull AsyncPlayerChatEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+    public void onPlayerCommandPreprocess(@NonNull PlayerCommandPreprocessEvent event) {
         if (event.getMessage().toLowerCase().startsWith("/me ") && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotChat(event.getPlayer())) {
             event.setCancelled(true);
         }

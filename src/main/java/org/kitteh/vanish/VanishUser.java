@@ -1,6 +1,7 @@
 package org.kitteh.vanish;
 
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class VanishUser {
     private boolean seeAll;
@@ -18,7 +19,7 @@ public final class VanishUser {
     private boolean lightning;
     private boolean bats;
 
-    public VanishUser(Player player) {
+    public VanishUser(@NonNull Player player) {
         this.seeAll = player.hasPermission("vanish.see");
         this.noPickup = player.hasPermission("vanish.nopickup");
         this.noFollow = player.hasPermission("vanish.nofollow");

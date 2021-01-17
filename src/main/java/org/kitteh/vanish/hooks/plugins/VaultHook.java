@@ -3,6 +3,8 @@ package org.kitteh.vanish.hooks.plugins;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.ChatProvider;
 import org.kitteh.vanish.hooks.Hook;
@@ -10,29 +12,29 @@ import org.kitteh.vanish.hooks.Hook;
 public final class VaultHook extends Hook implements ChatProvider {
     private Chat chat;
 
-    public VaultHook(VanishPlugin plugin) {
+    public VaultHook(@NonNull VanishPlugin plugin) {
         super(plugin);
     }
 
     @Override
-    public String getPrefix(Player player) {
+    public @NonNull String getPrefix(@NonNull Player player) {
         return this.whatsInTheVault() ? this.getVaultPrefix(player) : "";
     }
 
     @Override
-    public String getSuffix(Player player) {
+    public @NonNull String getSuffix(@NonNull Player player) {
         return this.whatsInTheVault() ? this.getVaultSuffix(player) : "";
     }
 
-    private String get(String value) {
+    private @NonNull String get(@Nullable String value) {
         return value != null ? value : "";
     }
 
-    private String getVaultPrefix(Player player) {
+    private @NonNull String getVaultPrefix(@NonNull Player player) {
         return this.get(this.chat.getPlayerPrefix(player));
     }
 
-    private String getVaultSuffix(Player player) {
+    private @NonNull String getVaultSuffix(@NonNull Player player) {
         return this.get(this.chat.getPlayerSuffix(player));
     }
 

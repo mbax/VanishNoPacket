@@ -2,6 +2,7 @@ package org.kitteh.vanish.hooks.plugins;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.dynmap.DynmapCommonAPI;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
@@ -10,7 +11,7 @@ public final class DynmapHook extends Hook {
     private DynmapCommonAPI dynmap;
     private boolean enabled = false;
 
-    public DynmapHook(VanishPlugin plugin) {
+    public DynmapHook(@NonNull VanishPlugin plugin) {
         super(plugin);
     }
 
@@ -38,21 +39,21 @@ public final class DynmapHook extends Hook {
     }
 
     @Override
-    public void onJoin(Player player) {
+    public void onJoin(@NonNull Player player) {
         if (player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
             this.onVanish(player);
         }
     }
 
     @Override
-    public void onUnvanish(Player player) {
+    public void onUnvanish(@NonNull Player player) {
         if (this.enabled && (this.dynmap != null) && !player.hasPermission("vanish.hooks.dynmap.alwayshidden")) {
             this.dynmap.assertPlayerInvisibility(player.getName(), false, "VanishNoPacket");
         }
     }
 
     @Override
-    public void onVanish(Player player) {
+    public void onVanish(@NonNull Player player) {
         if (this.enabled && (this.dynmap != null)) {
             this.dynmap.assertPlayerInvisibility(player.getName(), true, "VanishNoPacket");
         }

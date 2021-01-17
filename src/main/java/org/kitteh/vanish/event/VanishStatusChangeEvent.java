@@ -3,6 +3,7 @@ package org.kitteh.vanish.event;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * An event fired whenever a player changes their visibility
@@ -10,7 +11,7 @@ import org.bukkit.event.HandlerList;
 public final class VanishStatusChangeEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return VanishStatusChangeEvent.handlers;
     }
 
@@ -18,14 +19,14 @@ public final class VanishStatusChangeEvent extends Event {
     private final boolean vanishing;
     private final Player player;
 
-    public VanishStatusChangeEvent(Player player, boolean vanishing) {
+    public VanishStatusChangeEvent(@NonNull Player player, boolean vanishing) {
         this.name = player.getName();
         this.vanishing = vanishing;
         this.player = player;
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return VanishStatusChangeEvent.handlers;
     }
 
@@ -34,7 +35,7 @@ public final class VanishStatusChangeEvent extends Event {
      *
      * @return name of the user changing visibility
      */
-    public String getName() {
+    public @NonNull String getName() {
         return this.name;
     }
 
@@ -43,7 +44,7 @@ public final class VanishStatusChangeEvent extends Event {
      *
      * @return the player changing visibility
      */
-    public Player getPlayer() {
+    public @NonNull Player getPlayer() {
         return this.player;
     }
 

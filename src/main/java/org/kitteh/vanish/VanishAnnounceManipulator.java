@@ -3,6 +3,7 @@ package org.kitteh.vanish;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
@@ -23,14 +24,14 @@ public final class VanishAnnounceManipulator {
     private final Map<String, Boolean> playerOnlineStatus;
     private final boolean placeholderAPI;
 
-    VanishAnnounceManipulator(VanishPlugin plugin) {
+    VanishAnnounceManipulator(@NonNull VanishPlugin plugin) {
         this.plugin = plugin;
         this.playerOnlineStatus = new HashMap<>();
         this.delayedAnnouncePlayerList = new ArrayList<>();
         this.placeholderAPI = plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 
-    public void addToDelayedAnnounce(String player) {
+    public void addToDelayedAnnounce(@NonNull String player) {
         this.playerOnlineStatus.put(player, false);
         if (!Settings.getAutoFakeJoinSilent()) {
             return;
@@ -43,18 +44,17 @@ public final class VanishAnnounceManipulator {
      *
      * @param player name of the player
      */
-    public void dropDelayedAnnounce(String player) {
+    public void dropDelayedAnnounce(@NonNull String player) {
         this.delayedAnnouncePlayerList.remove(player);
     }
 
     /**
      * Gets the fake online status of a player
-     * Called by JSONAPI
      *
      * @param playerName name of the player to query
      * @return true if player is considered online, false if not (or if not on server)
      */
-    public boolean getFakeOnlineStatus(String playerName) {
+    public boolean getFakeOnlineStatus(@NonNull String playerName) {
         final Player player = this.plugin.getServer().getPlayerExact(playerName);
         if (player == null) {
             return false;
@@ -70,14 +70,14 @@ public final class VanishAnnounceManipulator {
      * @param player name of the player who just quit
      * @return the former fake online status of the player
      */
-    public boolean playerHasQuit(String player) {
+    public boolean playerHasQuit(@NonNull String player) {
         if (this.playerOnlineStatus.containsKey(player)) {
             return this.playerOnlineStatus.remove(player);
         }
         return true;
     }
 
-    private String injectPlayerInformation(String message, Player player) {
+    private @NonNull String injectPlayerInformation(@NonNull String message, @NonNull Player player) {
         final VaultHook vault = (VaultHook) this.plugin.getHookManager().getHook(HookType.Vault);
         message = message.replace("%p", player.getName());
         message = message.replace("%d", player.getDisplayName());
@@ -87,7 +87,7 @@ public final class VanishAnnounceManipulator {
         return message;
     }
 
-    void fakeJoin(Player player, boolean force) {
+    void fakeJoin(@NonNull Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().info(player.getName() + " faked joining");
@@ -95,7 +95,7 @@ public final class VanishAnnounceManipulator {
         }
     }
 
-    void fakeQuit(Player player, boolean force) {
+    void fakeQuit(@NonNull Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
@@ -103,7 +103,7 @@ public final class VanishAnnounceManipulator {
         }
     }
 
-    void vanishToggled(Player player) {
+    void vanishToggled(@NonNull Player player) {
         if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
             return;
         }

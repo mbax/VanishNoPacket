@@ -2,6 +2,7 @@ package org.kitteh.vanish;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public final class Settings {
     private static boolean enablePermTest;
@@ -37,7 +38,7 @@ public final class Settings {
         return Settings.worldChangeCheck;
     }
 
-    static void freshStart(VanishPlugin plugin) {
+    static void freshStart(@NonNull VanishPlugin plugin) {
         final FileConfiguration config = plugin.getConfig();
         config.options().copyDefaults(true);
         final int ver = config.getInt("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", 0);
