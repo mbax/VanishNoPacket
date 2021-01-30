@@ -40,6 +40,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.raid.RaidTriggerEvent;
 import org.bukkit.inventory.Inventory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.Settings;
@@ -170,6 +171,13 @@ public final class ListenPlayerOther implements Listener {
     public void onWorldChange(@NonNull PlayerChangedWorldEvent event) {
         if (Settings.getWorldChangeCheck()) {
             this.plugin.getManager().playerRefresh(event.getPlayer());
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onRaidTrigger(@NonNull RaidTriggerEvent event) {
+        if (this.plugin.getManager().isVanished(event.getPlayer())) {
+            event.setCancelled(true);
         }
     }
 }
