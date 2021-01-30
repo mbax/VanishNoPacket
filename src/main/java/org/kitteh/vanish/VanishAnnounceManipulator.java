@@ -50,10 +50,9 @@ public final class VanishAnnounceManipulator {
 
     public void addToDelayedAnnounce(@NonNull String player) {
         this.playerOnlineStatus.put(player, false);
-        if (!Settings.getAutoFakeJoinSilent()) {
-            return;
+        if (Settings.getAutoFakeJoinSilent()) {
+            this.delayedAnnouncePlayerList.add(player);
         }
-        this.delayedAnnouncePlayerList.add(player);
     }
 
     /**
@@ -121,10 +120,9 @@ public final class VanishAnnounceManipulator {
     }
 
     void vanishToggled(@NonNull Player player) {
-        if (!Settings.getAutoFakeJoinSilent() || !this.delayedAnnouncePlayerList.contains(player.getName())) {
-            return;
+        if (Settings.getAutoFakeJoinSilent() && this.delayedAnnouncePlayerList.contains(player.getName())) {
+            this.fakeJoin(player, false);
+            this.dropDelayedAnnounce(player.getName());
         }
-        this.fakeJoin(player, false);
-        this.dropDelayedAnnounce(player.getName());
     }
 }
