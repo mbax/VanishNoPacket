@@ -23,6 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Container;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.Furnace;
@@ -101,21 +102,9 @@ public final class ListenPlayerOther implements Listener {
                     }
                     inventory = player.getEnderChest();
                     break;
-                case DISPENSER:
-                    inventory = ((Dispenser) blockState).getInventory();
-                    break;
-                case HOPPER:
-                    inventory = ((Hopper) blockState).getInventory();
-                    break;
-                case DROPPER:
-                    inventory = ((Dropper) blockState).getInventory();
-                    break;
-                case FURNACE:
-                    inventory = ((Furnace) blockState).getInventory();
-                    break;
-                case BREWING_STAND:
-                    inventory = ((BrewingStand) blockState).getInventory();
-                    break;
+            }
+            if (inventory == null && blockState instanceof Container) {
+                inventory = ((Container)blockState).getInventory();
             }
             if (inventory != null) {
                 event.setCancelled(true);
