@@ -21,11 +21,13 @@ import com.google.common.collect.ImmutableSet;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.event.VanishStatusChangeEvent;
 
@@ -88,6 +90,7 @@ public final class VanishManager {
     private final VanishAnnounceManipulator announceManipulator;
     private final Random random = new Random();
     private final ShowPlayerHandler showPlayer = new ShowPlayerHandler();
+    private final NamespacedKey vanishCollideState;
 
     public VanishManager(final @NonNull VanishPlugin plugin) {
         this.plugin = plugin;
@@ -100,7 +103,7 @@ public final class VanishManager {
             }
         });
         this.plugin.getServer().getMessenger().registerOutgoingPluginChannel(this.plugin, VanishManager.VANISH_PLUGIN_CHANNEL);
-
+        this.vanishCollideState = new NamespacedKey(this.plugin, "collidable");
     }
 
     /**
@@ -263,12 +266,20 @@ public final class VanishManager {
                     }
                 }
             }
+            vanishingPlayer.getPersistentDataContainer().set(this.vanishCollideState, PersistentDataType.BYTE, (byte) (vanishingPlayer.isCollidable() ? 0x01 : 0x00));
+            if (vanishingPlayer.isCollidable()) {
+                vanishingPlayer.setCollidable(false);
+            }
             this.vanishedPlayerNames.add(vanishingPlayerName);
             this.plugin.getLogger().info(vanishingPlayerName + " disappeared.");
         } else {
             Debuggle.log("It's visible time! " + vanishingPlayer.getName());
             this.resetSleepingIgnored(vanishingPlayer);
             this.removeVanished(vanishingPlayerName);
+            byte coll = vanishingPlayer.getPersistentDataContainer().getOrDefault(this.vanishCollideState, PersistentDataType.BYTE, (byte) 0x00);
+            if (coll == 0x01) {
+                vanishingPlayer.setCollidable(true);
+            }
             this.plugin.getLogger().info(vanishingPlayerName + " reappeared.");
         }
         if (effects) {
