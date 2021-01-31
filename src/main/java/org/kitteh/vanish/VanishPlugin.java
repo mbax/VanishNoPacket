@@ -28,6 +28,7 @@ import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.ListenEntity;
 import org.kitteh.vanish.listeners.ListenInventory;
+import org.kitteh.vanish.listeners.ListenPaper;
 import org.kitteh.vanish.listeners.ListenPlayerJoin;
 import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
@@ -186,6 +187,34 @@ public final class VanishPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         this.setInstance(this);
+
+        // Thanks, PaperLib
+        // https://github.com/PaperMC/PaperLib
+        try {
+            Class.forName("com.destroystokyo.paper.PaperConfig");
+            this.getServer().getPluginManager().registerEvents(new ListenPaper(this), this);
+        } catch (ClassNotFoundException ignored) {
+            final String benefitsProperty = "paperlib.shown-benefits";
+            this.getLogger().warning("====================================================");
+            this.getLogger().warning(" VanishNoPacket works better if you use Paper ");
+            this.getLogger().warning(" as your server software. ");
+            if (System.getProperty(benefitsProperty) == null) {
+                System.setProperty(benefitsProperty, "1");
+                this.getLogger().warning("  ");
+                this.getLogger().warning(" Paper offers significant performance improvements,");
+                this.getLogger().warning(" bug fixes, security enhancements and optional");
+                this.getLogger().warning(" features for server owners to enhance their server.");
+                this.getLogger().warning("  ");
+                this.getLogger().warning(" Paper includes Timings v2, which is significantly");
+                this.getLogger().warning(" better at diagnosing lag problems over v1.");
+                this.getLogger().warning("  ");
+                this.getLogger().warning(" All of your plugins should still work, and the");
+                this.getLogger().warning(" Paper community will gladly help you fix any issues.");
+                this.getLogger().warning("  ");
+                this.getLogger().warning(" Join the Paper Community @ https://papermc.io");
+            }
+            this.getLogger().warning("====================================================");
+        }
 
         final File check = new File(this.getDataFolder(), "config.yml");
         boolean firstTimeStarting = false;

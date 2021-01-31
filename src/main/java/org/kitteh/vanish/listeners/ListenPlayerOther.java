@@ -21,18 +21,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.BrewingStand;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
-import org.bukkit.block.Dispenser;
-import org.bukkit.block.Dropper;
-import org.bukkit.block.Furnace;
-import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -40,6 +36,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.event.raid.RaidTriggerEvent;
@@ -105,7 +102,7 @@ public final class ListenPlayerOther implements Listener {
                     break;
             }
             if (inventory == null && blockState instanceof Container) {
-                inventory = ((Container)blockState).getInventory();
+                inventory = ((Container) blockState).getInventory();
             }
             if (inventory != null) {
                 event.setCancelled(true);
@@ -134,6 +131,13 @@ public final class ListenPlayerOther implements Listener {
             return;
         }
         if (this.plugin.getManager().isVanished((Player) event.getEntity()) && VanishPerms.canNotPickUp((Player) event.getEntity())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPickupArrow(@NonNull PlayerPickupArrowEvent event) {
+        if (this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canNotPickUp(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
@@ -177,6 +181,13 @@ public final class ListenPlayerOther implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onRaidTrigger(@NonNull RaidTriggerEvent event) {
         if (this.plugin.getManager().isVanished(event.getPlayer())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityBlockForm(@NonNull EntityBlockFormEvent event) {
+        if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
             event.setCancelled(true);
         }
     }
