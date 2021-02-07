@@ -12,6 +12,7 @@ fakeannounce:
     quit: '%p left the game.'
 hooks:
     essentials: false
+    dynmap: false
 permissionsupdates:
     checkonworldchange: false
 effects:
