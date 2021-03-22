@@ -243,6 +243,8 @@ permissions:
       vanish.toggle.all: true
       vanish.hooks.dynmap.alwayshidden: true
       vanish.hooks.essentials.hide: true
+      vanish.hooks.discordsrv.broadcastfakejoin: true
+      vanish.hooks.discordsrv.broadcastfakequit: true
       vanish.permtest.all: true
       vanish.spout.status: true
       vanish.reload: true
