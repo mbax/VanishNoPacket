@@ -108,6 +108,7 @@ public final class VanishAnnounceManipulator {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().info(player.getName() + " faked joining");
             this.playerOnlineStatus.put(player.getName(), true);
+            this.plugin.hooksFakeJoin(player);
         }
     }
 
@@ -116,6 +117,7 @@ public final class VanishAnnounceManipulator {
             this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
             this.playerOnlineStatus.put(player.getName(), false);
+            this.plugin.hooksFakeQuit(player);
         }
     }
 
