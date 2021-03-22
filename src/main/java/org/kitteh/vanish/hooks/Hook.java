@@ -51,4 +51,12 @@ public abstract class Hook {
     public void onVanish(@NonNull Player player) {
 
     }
+
+    public void onFakeJoin(@NonNull Player player) {
+
+    }
+
+    public void onFakeQuit(@NonNull Player player) {
+
+    }
 }
