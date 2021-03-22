@@ -137,6 +137,18 @@ public final class HookManager {
         }
     }
 
+    public void onFakeJoin(@NonNull Player player) {
+        for(final Hook hook : this.hooks.values()) {
+            hook.onFakeJoin(player);
+        }
+    }
+
+    public void onFakeQuit(@NonNull Player player) {
+        for(final Hook hook : this.hooks.values()) {
+            hook.onFakeQuit(player);
+        }
+    }
+
     /**
      * Registers and initializes a hook
      *

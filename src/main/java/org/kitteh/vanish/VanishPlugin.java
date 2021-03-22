@@ -40,8 +40,8 @@ import java.util.HashSet;
 
 public final class VanishPlugin extends JavaPlugin {
     private final HashSet<String> haveInventoriesOpen = new HashSet<>();
-    private VanishManager manager;
     private final HookManager hookManager = new HookManager(this);
+    private VanishManager manager;
 
     /**
      * Informs VNP that a user has closed their fake chest
@@ -146,6 +146,22 @@ public final class VanishPlugin extends JavaPlugin {
     }
 
     /**
+     * Calls hooks for when player has sent a fake join message
+     * Internal use only please.
+     *
+     * @param player the fake joining player
+     */
+    public void hooksFakeJoin(@NonNull Player player) { this.hookManager.onFakeJoin(player); }
+
+    /**
+     * Calls hooks for when player has sent a fake quit message
+     * Internal use only please.
+     *
+     * @param player the fake quitting player
+     */
+    public void hooksFakeQuit(@NonNull Player player) { this.hookManager.onFakeQuit(player); }
+
+    /**
      * Sends a message to all players with vanish.statusupdates permission
      *
      * @param message the message to send
@@ -158,7 +174,7 @@ public final class VanishPlugin extends JavaPlugin {
      * Sends a message to all players with vanish.statusupdates but one
      *
      * @param message the message to send
-     * @param avoid player to not send the message to
+     * @param avoid   player to not send the message to
      */
     public void messageStatusUpdate(@NonNull String message, @Nullable Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
