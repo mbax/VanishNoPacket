@@ -13,6 +13,7 @@ fakeannounce:
 hooks:
     essentials: false
     dynmap: false
+    discordsrv: false
 permissionsupdates:
     checkonworldchange: false
 effects:

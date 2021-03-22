@@ -153,6 +153,12 @@ permissions:
   vanish.hooks.essentials.hide:
     default: false
     description: Hide user in Essentials
+  vanish.hooks.discordsrv.broadcastfakejoin:
+    default: false
+    description: Broadcast fake join messages to DiscordSRV
+  vanish.hooks.discordsrv.broadcastfakequit:
+    default: false
+    description: Broadcast fake quit messages to DiscordSRV
   vanish.spout.status:
     default: false
     description: See a status bar if vanished in spoutcraft

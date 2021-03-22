@@ -252,6 +252,9 @@ public final class VanishPlugin extends JavaPlugin {
         if (this.getConfig().getBoolean("hooks.dynmap", false)) {
             this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
+        if (this.getConfig().getBoolean("hooks.discordsrv", false)) {
+            this.hookManager.getHook(HookType.DiscordSRV).onEnable();
+        }
 
         final VanishPlugin self = this;
 
