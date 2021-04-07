@@ -19,6 +19,9 @@ package org.kitteh.vanish;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,7 +41,7 @@ import org.kitteh.vanish.listeners.ListenToYourHeart;
 import java.io.File;
 import java.util.HashSet;
 
-public final class VanishPlugin extends JavaPlugin {
+public final class VanishPlugin extends JavaPlugin implements Listener {
     private final HashSet<String> haveInventoriesOpen = new HashSet<>();
     private final HookManager hookManager = new HookManager(this);
     private VanishManager manager;
@@ -252,7 +255,8 @@ public final class VanishPlugin extends JavaPlugin {
         if (this.getConfig().getBoolean("hooks.dynmap", false)) {
             this.hookManager.getHook(HookType.Dynmap).onEnable();
         }
-        if (this.getConfig().getBoolean("hooks.discordsrv", false)) {
+        if (this.getConfig().getBoolean("hooks.discordsrv", false) && this.getServer().getPluginManager().isPluginEnabled("DiscordSRV")) {
+            // Shouldn't happen here, but if the load order gets broken...
             this.hookManager.getHook(HookType.DiscordSRV).onEnable();
         }
 
@@ -265,6 +269,7 @@ public final class VanishPlugin extends JavaPlugin {
         }
 
         this.getCommand("vanish").setExecutor(new VanishCommand(this));
+        this.getServer().getPluginManager().registerEvents(this, this);
         this.getServer().getPluginManager().registerEvents(new ListenEntity(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerMessages(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenPlayerJoin(this), this);
@@ -274,6 +279,13 @@ public final class VanishPlugin extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
 
         this.getLogger().info(this.getCurrentVersion() + " loaded.");
+    }
+
+    @EventHandler
+    public void onPluginEnable(PluginEnableEvent event) {
+        if (event.getPlugin().getName().equalsIgnoreCase("DiscordSRV") && this.getConfig().getBoolean("hooks.discordsrv", false)) {
+            this.hookManager.getHook(HookType.DiscordSRV).onEnable();
+        }
     }
 
     /**

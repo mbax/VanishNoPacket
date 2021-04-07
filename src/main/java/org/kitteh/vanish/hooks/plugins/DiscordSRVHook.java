@@ -35,7 +35,7 @@ public class DiscordSRVHook extends Hook {
     @Override
     public void onEnable() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("DiscordSRV");
-        if (grab != null) {
+        if (grab != null && grab.isEnabled()) {
             this.discordsrv = ((DiscordSRV) grab);
             this.plugin.getLogger().info("Now hooking into DiscordSRV");
             this.enabled = true;

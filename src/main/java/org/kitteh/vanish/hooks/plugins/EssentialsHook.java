@@ -46,7 +46,7 @@ public final class EssentialsHook extends Hook {
     @Override
     public void onEnable() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("Essentials");
-        if (grab != null) {
+        if (grab != null && grab.isEnabled()) {
             this.essentials = ((IEssentials) grab);
             this.plugin.getLogger().info("Now hooking into Essentials");
         } else {

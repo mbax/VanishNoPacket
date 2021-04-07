@@ -44,7 +44,7 @@ public final class DynmapHook extends Hook {
     @Override
     public void onEnable() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("dynmap");
-        if (grab != null) {
+        if (grab != null && grab.isEnabled()) {
             this.dynmap = ((DynmapCommonAPI) grab);
             this.plugin.getLogger().info("Now hooking into Dynmap");
             this.enabled = true;
