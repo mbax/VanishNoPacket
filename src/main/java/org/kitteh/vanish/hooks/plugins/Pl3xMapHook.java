@@ -32,14 +32,14 @@ public class Pl3xMapHook extends Hook {
 
     @Override
     public void onVanish(@NonNull Player player) {
-        if(this.enabled && this.pl3xMap != null) {
+        if (this.enabled && this.pl3xMap != null) {
             this.pl3xMap.playerManager().hidden(player.getUniqueId(), true);
         }
     }
 
     @Override
     public void onUnvanish(@NonNull Player player) {
-        if(this.enabled && this.pl3xMap != null) {
+        if (this.enabled && this.pl3xMap != null) {
             this.pl3xMap.playerManager().hidden(player.getUniqueId(), false);
         }
     }

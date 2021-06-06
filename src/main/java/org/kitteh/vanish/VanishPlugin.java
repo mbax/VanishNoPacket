@@ -259,7 +259,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
             // Shouldn't happen here, but if the load order gets broken...
             this.hookManager.getHook(HookType.DiscordSRV).onEnable();
         }
-        if(this.getConfig().getBoolean("hooks.pl3xmap", false)) {
+        if (this.getConfig().getBoolean("hooks.pl3xmap", false)) {
             this.hookManager.getHook(HookType.Pl3xMap).onEnable();
         }
 

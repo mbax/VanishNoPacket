@@ -22,7 +22,11 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.hooks.plugins.*;
+import org.kitteh.vanish.hooks.plugins.DiscordSRVHook;
+import org.kitteh.vanish.hooks.plugins.DynmapHook;
+import org.kitteh.vanish.hooks.plugins.EssentialsHook;
+import org.kitteh.vanish.hooks.plugins.VaultHook;
+import org.kitteh.vanish.hooks.plugins.Pl3xMapHook;
 
 import java.util.ArrayList;
 import java.util.HashMap;
