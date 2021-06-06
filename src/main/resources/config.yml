@@ -14,6 +14,7 @@ hooks:
     essentials: false
     dynmap: false
     discordsrv: false
+    pl3xmap: false
 permissionsupdates:
     checkonworldchange: false
 effects:
@@ -23,4 +24,4 @@ effects:
 permtest: false
 debug: false
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 8
+    SeriouslyThisWillEraseYourConfig: 9

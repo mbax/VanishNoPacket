@@ -22,10 +22,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.Debuggle;
 import org.kitteh.vanish.VanishPlugin;
-import org.kitteh.vanish.hooks.plugins.DiscordSRVHook;
-import org.kitteh.vanish.hooks.plugins.DynmapHook;
-import org.kitteh.vanish.hooks.plugins.EssentialsHook;
-import org.kitteh.vanish.hooks.plugins.VaultHook;
+import org.kitteh.vanish.hooks.plugins.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +34,8 @@ public final class HookManager {
         Dynmap(DynmapHook.class),
         Essentials(EssentialsHook.class),
         Vault(VaultHook.class),
-        DiscordSRV(DiscordSRVHook.class);
+        DiscordSRV(DiscordSRVHook.class),
+        Pl3xMap(Pl3xMapHook.class);
 
         private final Class<? extends Hook> clazz;
 

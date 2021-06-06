@@ -29,7 +29,7 @@ public final class Settings {
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
 
-    private static final int confVersion = 8; // Tracking config version
+    private static final int confVersion = 9; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -87,6 +87,9 @@ public final class Settings {
             }
             if (ver <= 7) {
                 config.set("hooks.discordsrv", false);
+            }
+            if (ver <= 8) {
+                config.set("hooks.pl3xmap", false);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
