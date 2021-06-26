@@ -44,9 +44,8 @@
             <url>https://repo.mikeprimm.com/</url>
         </repository>
         <repository>
-            <id>vault-repo</id>
-            <!--suppress HttpUrlsUsage -->
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -77,8 +76,9 @@
             <version>2.18.2</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://github.com/MilkBowl/VaultAPI/blob/master/README.md -->
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
