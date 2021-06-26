@@ -104,7 +104,7 @@
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <version>1.21.1</version>
+            <version>1.23.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
