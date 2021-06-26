@@ -236,7 +236,6 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         }
 
         final File check = new File(this.getDataFolder(), "config.yml");
-        boolean firstTimeStarting = false;
         if (!check.exists()) {
             this.saveDefaultConfig();
             this.reloadConfig();
@@ -259,8 +258,6 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
             // Shouldn't happen here, but if the load order gets broken...
             this.hookManager.getHook(HookType.DiscordSRV).onEnable();
         }
-
-        final VanishPlugin self = this;
 
         this.manager = new VanishManager(this);
 
