@@ -60,14 +60,14 @@ public final class ListenPlayerJoin implements Listener {
         }
         if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
             this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
-            event.setJoinMessage(null);
+            event.joinMessage(null);
             if (statusUpdate.length() != 0) {
                 statusUpdate.append(" and ");
             }
             statusUpdate.append("silently");
         }
         if (statusUpdate.length() != 0) {
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate.toString());
+            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has joined " + statusUpdate);
         }
     }
 }

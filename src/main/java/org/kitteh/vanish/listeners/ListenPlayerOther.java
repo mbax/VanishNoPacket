@@ -152,7 +152,7 @@ public final class ListenPlayerOther implements Listener {
         this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().playerHasQuit(player.getName()) || VanishPerms.silentQuit(player)) {
-            event.setQuitMessage(null);
+            event.quitMessage(null);
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());
     }
