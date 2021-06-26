@@ -18,12 +18,10 @@
 package org.kitteh.vanish;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.kitteh.vanish.hooks.HookManager.HookType;
-import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,19 +92,18 @@ public final class VanishAnnounceManipulator {
         return true;
     }
 
-    private @NonNull String injectPlayerInformation(@NonNull String message, @NonNull Player player) {
-        final VaultHook vault = (VaultHook) this.plugin.getHookManager().getHook(HookType.Vault);
+    private @NonNull Component injectPlayerInformation(@NonNull String message, @NonNull Player player) {
         message = message.replace("%p", player.getName());
         message = message.replace("%d", LegacyComponentSerializer.legacyAmpersand().serialize(player.displayName()));
         if (this.placeholderAPI) {
             message = PlaceholderAPI.setPlaceholders(player, message);
         }
-        return message;
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
     }
 
     void fakeJoin(@NonNull Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
-            this.plugin.getServer().broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player)));
+            this.plugin.getServer().broadcast(this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().info(player.getName() + " faked joining");
             this.playerOnlineStatus.put(player.getName(), true);
             this.plugin.hooksFakeJoin(player);
@@ -115,7 +112,7 @@ public final class VanishAnnounceManipulator {
 
     void fakeQuit(@NonNull Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
-            this.plugin.getServer().broadcast(LegacyComponentSerializer.legacyAmpersand().deserialize(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player)));
+            this.plugin.getServer().broadcast(this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
             this.playerOnlineStatus.put(player.getName(), false);
             this.plugin.hooksFakeQuit(player);
