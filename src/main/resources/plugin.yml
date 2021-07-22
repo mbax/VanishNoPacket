@@ -11,7 +11,7 @@ commands:
   vanish:
     description: poof
     usage: /vanish
-    aliases: [v,np,nf,ni,nc,nh]
+    aliases: [v]
 permissions:
   vanish.vanish:
     default: false
