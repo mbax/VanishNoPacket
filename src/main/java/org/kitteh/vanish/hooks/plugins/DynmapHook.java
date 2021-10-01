@@ -20,12 +20,12 @@ package org.kitteh.vanish.hooks.plugins;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.dynmap.DynmapCommonAPI;
+import org.dynmap.DynmapAPI;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
 
 public final class DynmapHook extends Hook {
-    private DynmapCommonAPI dynmap;
+    private DynmapAPI dynmap;
     private boolean enabled = false;
 
     public DynmapHook(@NonNull VanishPlugin plugin) {
@@ -45,7 +45,7 @@ public final class DynmapHook extends Hook {
     public void onEnable() {
         final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("dynmap");
         if (grab != null && grab.isEnabled()) {
-            this.dynmap = ((DynmapCommonAPI) grab);
+            this.dynmap = ((DynmapAPI) grab);
             this.plugin.getLogger().info("Now hooking into Dynmap");
             this.enabled = true;
         } else {
