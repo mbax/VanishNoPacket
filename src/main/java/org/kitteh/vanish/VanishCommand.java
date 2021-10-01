@@ -237,10 +237,7 @@ public final class VanishCommand implements CommandExecutor {
                 } else {
                     player.sendMessage(ChatColor.RED + "Already invisible :)");
                 }
-                boolean forced = false;
-                if ((args.length > 1) && (args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("force"))) {
-                    forced = true;
-                }
+                boolean forced = (args.length > 1) && (args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("force"));
                 this.plugin.getManager().getAnnounceManipulator().fakeQuit(player, forced);
             } else {
                 this.denied(sender);
@@ -254,10 +251,7 @@ public final class VanishCommand implements CommandExecutor {
                 } else {
                     player.sendMessage(ChatColor.RED + "Already visible :)");
                 }
-                boolean forced = false;
-                if ((args.length > 1) && (args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("force"))) {
-                    forced = true;
-                }
+                boolean forced = (args.length > 1) && (args[1].equalsIgnoreCase("f") || args[1].equalsIgnoreCase("force"));
                 this.plugin.getManager().getAnnounceManipulator().fakeJoin(player, forced);
             } else {
                 this.denied(sender);

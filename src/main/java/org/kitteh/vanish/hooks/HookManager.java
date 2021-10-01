@@ -80,6 +80,7 @@ public final class HookManager {
      * @param name hook name to deregister
      * @return the deregistered hook or null if no hook by the given name was registered
      */
+    @SuppressWarnings("UnusedReturnValue")
     public @Nullable Hook deregisterHook(@NonNull String name) {
         final Hook ret = this.hooks.get(name);
         this.hooks.remove(name);

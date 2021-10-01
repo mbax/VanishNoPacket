@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.VanishPlugin;
 
+@SuppressWarnings("EmptyMethod")
 public abstract class Hook {
     protected final VanishPlugin plugin;
 
