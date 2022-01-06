@@ -25,6 +25,7 @@ import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.plugins.DiscordSRVHook;
 import org.kitteh.vanish.hooks.plugins.DynmapHook;
 import org.kitteh.vanish.hooks.plugins.EssentialsHook;
+import org.kitteh.vanish.hooks.plugins.SquaremapHook;
 import org.kitteh.vanish.hooks.plugins.VaultHook;
 
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ public final class HookManager {
         Dynmap(DynmapHook.class),
         Essentials(EssentialsHook.class),
         Vault(VaultHook.class),
-        DiscordSRV(DiscordSRVHook.class);
+        DiscordSRV(DiscordSRVHook.class),
+        squaremap(SquaremapHook.class);
 
         private final Class<? extends Hook> clazz;
 
