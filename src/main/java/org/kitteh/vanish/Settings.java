@@ -28,6 +28,11 @@ public final class Settings {
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
+    private static boolean doubleSneakDuringVanishTogglesGamemode = true;
+
+    public static boolean isDoubleSneakDuringVanishTogglesGamemode(){
+        return Settings.doubleSneakDuringVanishTogglesGamemode;
+    }
 
     private static final int confVersion = 8; // Tracking config version
 

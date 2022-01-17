@@ -22,5 +22,6 @@ effects:
 
 permtest: false
 debug: false
+double-sneak-during-vanish-toggles-gamemode: true
 configVersionDoNotTouch: 
     SeriouslyThisWillEraseYourConfig: 8

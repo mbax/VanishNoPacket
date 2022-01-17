@@ -29,14 +29,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
-import org.kitteh.vanish.listeners.ListenEntity;
-import org.kitteh.vanish.listeners.ListenInventory;
-import org.kitteh.vanish.listeners.ListenPaper;
-import org.kitteh.vanish.listeners.ListenPlayerJoin;
-import org.kitteh.vanish.listeners.ListenPlayerMessages;
-import org.kitteh.vanish.listeners.ListenPlayerOther;
-import org.kitteh.vanish.listeners.ListenServerPing;
-import org.kitteh.vanish.listeners.ListenToYourHeart;
+import org.kitteh.vanish.listeners.*;
 
 import java.io.File;
 import java.util.HashSet;
@@ -277,6 +270,9 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
+        if(Settings.isDoubleSneakDuringVanishTogglesGamemode()){
+            this.getServer().getPluginManager().registerEvents(new ListenShift(this), this);
+        }
 
         this.getLogger().info(this.getCurrentVersion() + " loaded.");
     }
