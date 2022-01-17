@@ -21,10 +21,12 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.HookManager.HookType;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HookTest {
     @Test
@@ -38,7 +40,7 @@ public class HookTest {
                     break;
                 }
             }
-            Assert.assertTrue("Hook " + hook + " does not have a VanishPlugin constructor", hasDesiredConstructor);
+            assertTrue(hasDesiredConstructor, "Hook " + hook + " does not have a VanishPlugin constructor");
         }
     }
 
@@ -46,7 +48,7 @@ public class HookTest {
     public void hookUniqueness() {
         Map<Class<?>, HookType> classes = new HashMap<>();
         for (HookType hook : HookManager.HookType.values()) {
-            Assert.assertTrue("Hooks " + hook + " and " + classes.get(hook.get()) + " have the same class", !classes.containsKey(hook.get()));
+            assertFalse(classes.containsKey(hook.get()), "Hooks " + hook + " and " + classes.get(hook.get()) + " have the same class");
             classes.put(hook.get(), hook);
         }
     }
