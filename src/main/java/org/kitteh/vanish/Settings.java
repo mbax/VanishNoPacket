@@ -28,13 +28,13 @@ public final class Settings {
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
-    private static boolean doubleSneakDuringVanishTogglesGamemode = false;
+    private static boolean doubleSneakDuringVanishSwitchesGameMode = false;
 
-    public static boolean isDoubleSneakDuringVanishTogglesGamemode(){
-        return Settings.doubleSneakDuringVanishTogglesGamemode;
+    public static boolean isDoubleSneakDuringVanishSwitchesGameMode(){
+        return Settings.doubleSneakDuringVanishSwitchesGameMode;
     }
 
-    private static final int confVersion = 8; // Tracking config version
+    private static final int confVersion = 9; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -93,6 +93,9 @@ public final class Settings {
             if (ver <= 7) {
                 config.set("hooks.discordsrv", false);
             }
+            if (ver <= 8){
+                config.set("double-sneak-during-vanish-switches-gamemode", false);
+            }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
         }
@@ -101,7 +104,7 @@ public final class Settings {
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
-        Settings.doubleSneakDuringVanishTogglesGamemode = config.getBoolean("double-sneak-during-vanish-toggles-gamemode", false);
+        Settings.doubleSneakDuringVanishSwitchesGameMode = config.getBoolean("double-sneak-during-vanish-switches-gamemode", false);
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {
             Settings.lightningEffectCount = 1;

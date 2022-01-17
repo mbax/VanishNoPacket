@@ -270,8 +270,8 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new ListenToYourHeart(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenInventory(this), this);
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
-        if(Settings.isDoubleSneakDuringVanishTogglesGamemode()){
-            this.getServer().getPluginManager().registerEvents(new ListenShift(this), this);
+        if (Settings.isDoubleSneakDuringVanishSwitchesGameMode()) {
+            this.getServer().getPluginManager().registerEvents(new ListenPlayerSneak(this), this);
         }
 
         this.getLogger().info(this.getCurrentVersion() + " loaded.");

@@ -17,7 +17,6 @@
  */
 package org.kitteh.vanish.listeners;
 
-import it.unimi.dsi.fastutil.Hash;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -25,44 +24,42 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.metadata.LazyMetadataValue;
-import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.kitteh.vanish.VanishCheck;
-import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-public final class ListenShift implements Listener {
+public final class ListenPlayerSneak implements Listener {
     private final VanishPlugin plugin;
     private final HashMap<UUID, Long> playersAndLastTimeSneaked;
+    private final HashMap<UUID, GameMode> playersAndLastGameMode;
 
-    public ListenShift(@NonNull VanishPlugin instance) {
+    public ListenPlayerSneak(@NonNull VanishPlugin instance) {
         this.plugin = instance;
-        playersAndLastTimeSneaked = new HashMap<>();
+        this.playersAndLastTimeSneaked = new HashMap<>();
+        this.playersAndLastGameMode = new HashMap<>();
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerShift(@NonNull PlayerToggleSneakEvent event) {
-        if(event.isSneaking()){
+        if (event.isSneaking()) {
             if (this.plugin.getManager().isVanished(event.getPlayer())) {
                 Player player = event.getPlayer();
-                if(playersAndLastTimeSneaked.containsKey(player.getUniqueId())){
+                if (playersAndLastTimeSneaked.containsKey(player.getUniqueId())) {
                     long lastTime = playersAndLastTimeSneaked.get(player.getUniqueId());
-                    if(System.currentTimeMillis() - lastTime < 500){
-                        player.sendMessage(ChatColor.GREEN + "Gamemode changed!");
-                        if(player.getGameMode() == GameMode.SPECTATOR){
-                            player.setGameMode(GameMode.CREATIVE);
-                        }else{
+                    if (System.currentTimeMillis() - lastTime < 500) {
+                        player.sendMessage(ChatColor.GREEN + "GameMode changed!");
+                        if (player.getGameMode() == GameMode.SPECTATOR) {
+                            player.setGameMode(playersAndLastGameMode.getOrDefault(player.getUniqueId(), GameMode.CREATIVE));
+                        } else {
+                            playersAndLastGameMode.put(player.getUniqueId(), player.getGameMode());
                             player.setGameMode(GameMode.SPECTATOR);
                         }
                         playersAndLastTimeSneaked.remove(player.getUniqueId());
                         return;
                     }
                 }
-
                 playersAndLastTimeSneaked.put(player.getUniqueId(), System.currentTimeMillis());
             }
         }
