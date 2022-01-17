@@ -28,7 +28,7 @@ public final class Settings {
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
-    private static boolean doubleSneakDuringVanishTogglesGamemode = true;
+    private static boolean doubleSneakDuringVanishTogglesGamemode = false;
 
     public static boolean isDoubleSneakDuringVanishTogglesGamemode(){
         return Settings.doubleSneakDuringVanishTogglesGamemode;
@@ -101,6 +101,7 @@ public final class Settings {
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
+        Settings.doubleSneakDuringVanishTogglesGamemode = config.getBoolean("double-sneak-during-vanish-toggles-gamemode", false);
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {
             Settings.lightningEffectCount = 1;
