@@ -30,7 +30,7 @@ public final class Settings {
     private static int lightningEffectCount;
     private static boolean doubleSneakDuringVanishSwitchesGameMode = false;
 
-    public static boolean isDoubleSneakDuringVanishSwitchesGameMode(){
+    public static boolean isDoubleSneakDuringVanishSwitchesGameMode() {
         return Settings.doubleSneakDuringVanishSwitchesGameMode;
     }
 
