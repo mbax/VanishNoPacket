@@ -69,8 +69,7 @@ public final class ListenPlayerOther implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onFoodChange(@NonNull FoodLevelChangeEvent event) {
-        if (event.getEntity() instanceof Player) {
-            final Player player = (Player) event.getEntity();
+        if (event.getEntity() instanceof final Player player) {
             if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
                 event.setCancelled(true);
             }
@@ -86,20 +85,19 @@ public final class ListenPlayerOther implements Listener {
             final BlockState blockState = block.getState();
             boolean fake = false;
             switch (block.getType()) {
-                case TRAPPED_CHEST:
-                case CHEST:
+                case TRAPPED_CHEST, CHEST -> {
                     final Chest chest = (Chest) blockState;
                     inventory = this.plugin.getServer().createInventory(player, chest.getInventory().getSize());
                     inventory.setContents(chest.getInventory().getContents());
                     fake = true;
-                    break;
-                case ENDER_CHEST:
+                }
+                case ENDER_CHEST -> {
                     if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
                         event.setCancelled(true);
                         return;
                     }
                     inventory = player.getEnderChest();
-                    break;
+                }
             }
             if (inventory == null && blockState instanceof Container) {
                 inventory = ((Container) blockState).getInventory();

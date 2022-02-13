@@ -45,20 +45,17 @@ public final class ListenEntity implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (smacked instanceof Player) {
-            final Player player = (Player) smacked;
+        if (smacked instanceof final Player player) {
             if (this.plugin.getManager().isVanished(player) && VanishPerms.blockIncomingDamage(player)) {
                 event.setCancelled(true);
             }
         }
-        if (event instanceof EntityDamageByEntityEvent) {
-            final EntityDamageByEntityEvent ev = (EntityDamageByEntityEvent) event;
+        if (event instanceof final EntityDamageByEntityEvent ev) {
             final Entity damager = ev.getDamager();
             Player player = null;
             if (damager instanceof Player) {
                 player = (Player) damager;
-            } else if (damager instanceof Projectile) {
-                final Projectile projectile = (Projectile) damager;
+            } else if (damager instanceof final Projectile projectile) {
                 if ((projectile.getShooter() != null) && (projectile.getShooter() instanceof Player)) {
                     player = (Player) projectile.getShooter();
                 }

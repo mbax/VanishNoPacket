@@ -99,12 +99,11 @@ public final class VanishCommand implements CommandExecutor {
             return true;
         }
         // Goodbye console!
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof final Player player)) {
             sender.sendMessage(ChatColor.AQUA + "Did you mean " + ChatColor.WHITE + "vanish reload" + ChatColor.AQUA + " or " + ChatColor.WHITE + "vanish list" + ChatColor.AQUA + "?");
             return true;
         }
         // No more console options below this point
-        final Player player = (Player) sender;
 
         // Check if I'm vanished
         if (goal.equalsIgnoreCase("check")) {

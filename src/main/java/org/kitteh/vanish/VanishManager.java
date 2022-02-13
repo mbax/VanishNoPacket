@@ -264,8 +264,7 @@ public final class VanishManager {
             this.setSleepingIgnored(vanishingPlayer);
             if (VanishPerms.canNotFollow(vanishingPlayer)) {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(70, 70, 70)) {
-                    if (entity instanceof Creature) {
-                        final Creature creature = ((Creature) entity);
+                    if (entity instanceof final Creature creature) {
                         if (creature.getTarget() != null && creature.getTarget().equals(vanishingPlayer)) {
                             creature.setTarget(null);
                         }
