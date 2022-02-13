@@ -29,6 +29,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.EntityBlockFormEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -38,6 +39,7 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.event.raid.RaidTriggerEvent;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.Settings;
@@ -82,7 +84,12 @@ public final class ListenPlayerOther implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            Inventory inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), "Silently opened inventory");
+            Inventory inventory;
+            if (container.getInventory() instanceof DoubleChestInventory) {
+                inventory = this.plugin.getServer().createInventory(player, 54, "Silently opened inventory");
+            } else {
+                inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), "Silently opened inventory");
+            }
             inventory.setContents(container.getInventory().getContents());
             this.plugin.chestFakeOpen(player.getName());
             player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
