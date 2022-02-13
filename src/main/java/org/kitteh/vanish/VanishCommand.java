@@ -33,27 +33,6 @@ public final class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, @NonNull String[] args) {
-        // First, the short aliases
-        if (label.length() == 2) {
-            if (sender instanceof Player) {
-                if (label.equals("np")) {
-                    this.toggle((Player) sender, "nopickup");
-                }
-                if (label.equals("nf")) {
-                    this.toggle((Player) sender, "nofollow");
-                }
-                if (label.equals("nh")) {
-                    this.toggle((Player) sender, "nohunger");
-                }
-                if (label.equals("ni")) {
-                    this.toggle((Player) sender, "nointeract");
-                }
-                if (label.equals("nc")) {
-                    this.toggle((Player) sender, "nochat");
-                }
-            }
-            return true;
-        }
         // Plain /vanish
         if (args.length == 0) {
             if (sender instanceof Player) {

@@ -6,12 +6,12 @@ softdepend: [Essentials,dynmap,PlaceholderAPI,Vault,squaremap]
 author: mbaxter
 description: Vanish for the distinguished admin
 dev-url: https://dev.bukkit.org/projects/vanish
-api-version: 1.16
+api-version: 1.18
 commands:
   vanish:
     description: poof
     usage: /vanish
-    aliases: [v,np,nf,ni,nc,nh]
+    aliases: [v]
 permissions:
   vanish.vanish:
     default: false
