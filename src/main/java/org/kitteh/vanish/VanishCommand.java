@@ -172,7 +172,7 @@ public final class VanishCommand implements CommandExecutor {
 
         // The non-toggles
         if (goal.equalsIgnoreCase("on")) {
-            if (!VanishPerms.canVanishOn(player)) {
+            if (!VanishPerms.canVanish(player)) {
                 this.denied(sender);
                 return true;
             }
@@ -186,7 +186,7 @@ public final class VanishCommand implements CommandExecutor {
             return true;
         }
         if (goal.equalsIgnoreCase("off")) {
-            if (!VanishPerms.canVanishOff(player)) {
+            if (!VanishPerms.canVanish(player)) {
                 this.denied(sender);
                 return true;
             }

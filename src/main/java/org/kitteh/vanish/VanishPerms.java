@@ -172,14 +172,6 @@ public final class VanishPerms {
         return player.hasPermission("vanish.vanish");
     }
 
-    public static boolean canVanishOff(@NonNull Player player) {
-        return player.hasPermission("vanish.vanish.off");
-    }
-
-    public static boolean canVanishOn(@NonNull Player player) {
-        return player.hasPermission("vanish.vanish.on");
-    }
-
     public static boolean joinVanished(@NonNull Player player) {
         return player.hasPermission("vanish.joinvanished");
     }
