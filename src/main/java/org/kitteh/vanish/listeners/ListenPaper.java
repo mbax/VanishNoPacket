@@ -39,7 +39,7 @@ public final class ListenPaper implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onMount(@NonNull EntityMountEvent event) {
-        if ((event.getMount() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getMount()) && VanishPerms.canNotInteract(((Player) event.getMount()))) {
+        if ((event.getMount() instanceof Player player) && this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract((player))) {
             event.setCancelled(true);
         }
     }
@@ -53,7 +53,7 @@ public final class ListenPaper implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPhantom(@NonNull PhantomPreSpawnEvent event) {
-        if ((event.getSpawningEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getSpawningEntity())) {
+        if ((event.getSpawningEntity() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
         }
     }
@@ -67,7 +67,7 @@ public final class ListenPaper implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onProjectileCollide(@NonNull ProjectileCollideEvent event) {
-        if ((event.getCollidedWith() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getCollidedWith())) {
+        if ((event.getCollidedWith() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
         }
     }

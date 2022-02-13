@@ -35,9 +35,9 @@ public final class VanishCommand implements CommandExecutor {
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, @NonNull String[] args) {
         // Plain /vanish
         if (args.length == 0) {
-            if (sender instanceof Player) {
-                if (VanishPerms.canVanish((Player) sender)) {
-                    this.plugin.getManager().toggleVanish((Player) sender);
+            if (sender instanceof Player player) {
+                if (VanishPerms.canVanish(player)) {
+                    this.plugin.getManager().toggleVanish(player);
                 } else {
                     this.denied(sender);
                 }

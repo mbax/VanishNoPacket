@@ -45,10 +45,8 @@ public final class ListenEntity implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (smacked instanceof final Player player) {
-            if (this.plugin.getManager().isVanished(player) && VanishPerms.blockIncomingDamage(player)) {
-                event.setCancelled(true);
-            }
+        if (smacked instanceof final Player player && this.plugin.getManager().isVanished(player) && VanishPerms.blockIncomingDamage(player)) {
+            event.setCancelled(true);
         }
         if (event instanceof final EntityDamageByEntityEvent ev) {
             final Entity damager = ev.getDamager();
@@ -68,7 +66,7 @@ public final class ListenEntity implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityTarget(@NonNull EntityTargetEvent event) {
-        if ((event.getTarget() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getTarget()) && VanishPerms.canNotFollow((Player) event.getTarget())) {
+        if ((event.getTarget() instanceof Player player) && this.plugin.getManager().isVanished(player) && VanishPerms.canNotFollow(player)) {
             event.setCancelled(true);
         }
     }
@@ -76,16 +74,14 @@ public final class ListenEntity implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onVehicleDestroy(@NonNull VehicleDestroyEvent event) {
         final Entity entity = event.getAttacker();
-        if ((entity instanceof Player) && this.plugin.getManager().isVanished((Player) event.getAttacker())) {
-            if (VanishPerms.canNotInteract((Player) entity)) {
-                event.setCancelled(true);
-            }
+        if ((entity instanceof Player player) && this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onVehicleEntityCollision(@NonNull VehicleEntityCollisionEvent event) {
-        if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
+        if ((event.getEntity() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
         }
     }
