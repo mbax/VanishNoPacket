@@ -21,10 +21,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.hooks.HookManager;
@@ -40,11 +43,13 @@ import org.kitteh.vanish.listeners.ListenToYourHeart;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Set;
 
 public final class VanishPlugin extends JavaPlugin implements Listener {
-    private final HashSet<String> haveInventoriesOpen = new HashSet<>();
+    private final Set<String> haveInventoriesOpen = new HashSet<>();
     private final HookManager hookManager = new HookManager(this);
     private VanishManager manager;
+    private boolean paper;
 
     /**
      * Informs VNP that a user has closed their fake chest
@@ -129,7 +134,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls hooks for when a player has unvanished
+     * Calls hooks for when a player has unvanished.
      * Internal use only please
      *
      * @param player the un-vanishing user
@@ -139,7 +144,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls hooks for when player has vanished
+     * Calls hooks for when player has vanished.
      * Internal use only please.
      *
      * @param player the vanishing player
@@ -149,23 +154,27 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls hooks for when player has sent a fake join message
+     * Calls hooks for when player has sent a fake join message.
      * Internal use only please.
      *
      * @param player the fake joining player
      */
-    public void hooksFakeJoin(@NonNull Player player) { this.hookManager.onFakeJoin(player); }
+    public void hooksFakeJoin(@NonNull Player player) {
+        this.hookManager.onFakeJoin(player);
+    }
 
     /**
-     * Calls hooks for when player has sent a fake quit message
+     * Calls hooks for when player has sent a fake quit message.
      * Internal use only please.
      *
      * @param player the fake quitting player
      */
-    public void hooksFakeQuit(@NonNull Player player) { this.hookManager.onFakeQuit(player); }
+    public void hooksFakeQuit(@NonNull Player player) {
+        this.hookManager.onFakeQuit(player);
+    }
 
     /**
-     * Sends a message to all players with vanish.statusupdates permission
+     * Sends a message to all players with vanish.statusupdates permission.
      *
      * @param message the message to send
      */
@@ -174,10 +183,10 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Sends a message to all players with vanish.statusupdates but one
+     * Sends a message to all players with vanish.statusupdates but one.
      *
      * @param message the message to send
-     * @param avoid   player to not send the message to
+     * @param avoid player to not send the message to
      */
     public void messageStatusUpdate(@NonNull String message, @Nullable Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
@@ -212,6 +221,16 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         try {
             Class.forName("com.destroystokyo.paper.PaperConfig");
             this.getServer().getPluginManager().registerEvents(new ListenPaper(this), this);
+            this.paper = true;
+            new BukkitRunnable() {
+                @SuppressWarnings("deprecation")
+                @Override
+                public void run() {
+                    if (AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length == 1) {
+                        AsyncPlayerChatEvent.getHandlerList().unregister((Plugin) VanishPlugin.this);
+                    }
+                }
+            }.runTaskLater(this, 1);
         } catch (ClassNotFoundException ignored) {
             final String benefitsProperty = "paperlib.shown-benefits";
             this.getLogger().warning("====================================================");
@@ -292,11 +311,20 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Reloads the VNP config
+     * Reloads the VNP config.
      */
     public void reload() {
         this.reloadConfig();
         Settings.freshStart(this);
+    }
+
+    /**
+     * Gets if Paper is present.
+     *
+     * @return true if Paper is present
+     */
+    public boolean isPaper() {
+        return this.paper;
     }
 
     @SuppressWarnings("deprecation")

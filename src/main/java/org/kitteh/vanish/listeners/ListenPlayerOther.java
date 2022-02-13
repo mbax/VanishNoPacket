@@ -17,6 +17,7 @@
  */
 package org.kitteh.vanish.listeners;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Container;
@@ -83,9 +84,19 @@ public final class ListenPlayerOther implements Listener {
             }
             Inventory inventory;
             if (container.getInventory() instanceof DoubleChestInventory) {
-                inventory = this.plugin.getServer().createInventory(player, 54, "Silently opened inventory");
+                if (this.plugin.isPaper()) {
+                    inventory = this.plugin.getServer().createInventory(player, 54, Component.text("Silently opened inventory"));
+                } else {
+                    //noinspection deprecation
+                    inventory = this.plugin.getServer().createInventory(player, 54, "Silently opened inventory");
+                }
             } else {
-                inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), "Silently opened inventory");
+                if (this.plugin.isPaper()) {
+                    inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), Component.text("Silently opened inventory"));
+                } else {
+                    //noinspection deprecation
+                    inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), "Silently opened inventory");
+                }
             }
             inventory.setContents(container.getInventory().getContents());
             this.plugin.chestFakeOpen(player.getName());
@@ -123,7 +134,12 @@ public final class ListenPlayerOther implements Listener {
         this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().playerHasQuit(player.getName()) || VanishPerms.silentQuit(player)) {
-            event.setQuitMessage(null);
+            if (this.plugin.isPaper()) {
+                event.quitMessage(null);
+            } else {
+                //noinspection deprecation
+                event.setQuitMessage(null);
+            }
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());
     }
