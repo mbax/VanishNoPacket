@@ -105,6 +105,16 @@
             <artifactId>discordsrv</artifactId>
             <version>1.24.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-platform-bukkit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.kyori</groupId>
+                    <artifactId>adventure-text-minimessage</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>xyz.jpenilla</groupId>
