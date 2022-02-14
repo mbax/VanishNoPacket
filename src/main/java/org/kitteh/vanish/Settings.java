@@ -36,8 +36,12 @@ public final class Settings {
         return Settings.doubleSneakDuringVanishSwitchesGameMode;
     }
 
-    public static int getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS(){
+    public static int getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS() {
         return doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS;
+    }
+
+    public static String getDoubleSneakDuringVanishSwitchesGameModeMessage() {
+        return doubleSneakDuringVanishSwitchesGameModeMessage;
     }
 
     private static final int confVersion = 9; // Tracking config version
@@ -103,6 +107,7 @@ public final class Settings {
                 config.set("hooks.squaremap", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
+                config.set("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
@@ -114,6 +119,7 @@ public final class Settings {
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
         Settings.doubleSneakDuringVanishSwitchesGameMode = config.getBoolean("double-sneak-during-vanish-switches-gamemode.enabled", false);
         Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = config.getInt("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
+        Settings.doubleSneakDuringVanishSwitchesGameModeMessage = config.getString("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
 
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {

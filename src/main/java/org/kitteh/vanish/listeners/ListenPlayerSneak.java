@@ -29,6 +29,7 @@ import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPlugin;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 public final class ListenPlayerSneak implements Listener {
@@ -50,6 +51,7 @@ public final class ListenPlayerSneak implements Listener {
                 if (playersAndLastTimeSneaked.containsKey(player.getUniqueId())) {
                     long lastTime = playersAndLastTimeSneaked.get(player.getUniqueId());
                     if (System.currentTimeMillis() - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS()) {
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage()));
                         player.sendMessage(ChatColor.GREEN + "GameMode changed!");
                         if (player.getGameMode() == GameMode.SPECTATOR) {
                             player.setGameMode(playersAndLastGameMode.getOrDefault(player.getUniqueId(), GameMode.CREATIVE));
