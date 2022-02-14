@@ -1,6 +1,6 @@
 /*
  * VanishNoPacket
- * Copyright (C) 2011-2021 Matt Baxter
+ * Copyright (C) 2011-2022 Matt Baxter
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -264,11 +264,8 @@ public final class VanishManager {
             this.setSleepingIgnored(vanishingPlayer);
             if (VanishPerms.canNotFollow(vanishingPlayer)) {
                 for (final Entity entity : vanishingPlayer.getNearbyEntities(70, 70, 70)) {
-                    if (entity instanceof Creature) {
-                        final Creature creature = ((Creature) entity);
-                        if (creature.getTarget() != null && creature.getTarget().equals(vanishingPlayer)) {
-                            creature.setTarget(null);
-                        }
+                    if (entity instanceof final Creature creature && creature.getTarget() != null && creature.getTarget().equals(vanishingPlayer)) {
+                        creature.setTarget(null);
                     }
                 }
             }

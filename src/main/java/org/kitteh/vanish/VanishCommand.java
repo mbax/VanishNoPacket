@@ -1,6 +1,6 @@
 /*
  * VanishNoPacket
- * Copyright (C) 2011-2021 Matt Baxter
+ * Copyright (C) 2011-2022 Matt Baxter
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,32 +33,11 @@ public final class VanishCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NonNull CommandSender sender, @NonNull Command command, @NonNull String label, @NonNull String[] args) {
-        // First, the short aliases
-        if (label.length() == 2) {
-            if (sender instanceof Player) {
-                if (label.equals("np")) {
-                    this.toggle((Player) sender, "nopickup");
-                }
-                if (label.equals("nf")) {
-                    this.toggle((Player) sender, "nofollow");
-                }
-                if (label.equals("nh")) {
-                    this.toggle((Player) sender, "nohunger");
-                }
-                if (label.equals("ni")) {
-                    this.toggle((Player) sender, "nointeract");
-                }
-                if (label.equals("nc")) {
-                    this.toggle((Player) sender, "nochat");
-                }
-            }
-            return true;
-        }
         // Plain /vanish
         if (args.length == 0) {
-            if (sender instanceof Player) {
-                if (VanishPerms.canVanish((Player) sender)) {
-                    this.plugin.getManager().toggleVanish((Player) sender);
+            if (sender instanceof Player player) {
+                if (VanishPerms.canVanish(player)) {
+                    this.plugin.getManager().toggleVanish(player);
                 } else {
                     this.denied(sender);
                 }
@@ -99,12 +78,11 @@ public final class VanishCommand implements CommandExecutor {
             return true;
         }
         // Goodbye console!
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof final Player player)) {
             sender.sendMessage(ChatColor.AQUA + "Did you mean " + ChatColor.WHITE + "vanish reload" + ChatColor.AQUA + " or " + ChatColor.WHITE + "vanish list" + ChatColor.AQUA + "?");
             return true;
         }
         // No more console options below this point
-        final Player player = (Player) sender;
 
         // Check if I'm vanished
         if (goal.equalsIgnoreCase("check")) {
@@ -194,7 +172,7 @@ public final class VanishCommand implements CommandExecutor {
 
         // The non-toggles
         if (goal.equalsIgnoreCase("on")) {
-            if (!VanishPerms.canVanishOn(player)) {
+            if (!VanishPerms.canVanish(player)) {
                 this.denied(sender);
                 return true;
             }
@@ -208,7 +186,7 @@ public final class VanishCommand implements CommandExecutor {
             return true;
         }
         if (goal.equalsIgnoreCase("off")) {
-            if (!VanishPerms.canVanishOff(player)) {
+            if (!VanishPerms.canVanish(player)) {
                 this.denied(sender);
                 return true;
             }

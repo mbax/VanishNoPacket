@@ -2,31 +2,23 @@ name: VanishNoPacket
 main: org.kitteh.vanish.VanishPlugin
 version: '${vnp-version}'
 website: https://kitteh.org
-softdepend: [Essentials,dynmap,PlaceholderAPI,Vault]
+softdepend: [Essentials,dynmap,PlaceholderAPI,Vault,squaremap]
 author: mbaxter
 description: Vanish for the distinguished admin
 dev-url: https://dev.bukkit.org/projects/vanish
-api-version: 1.16
+api-version: 1.18
 commands:
   vanish:
     description: poof
     usage: /vanish
-    aliases: [v,np,nf,ni,nc,nh]
+    aliases: [v]
+    permission: vanish.vanish
 permissions:
   vanish.vanish:
     default: false
     description: |
       Allows player to vanish. 
       REALLY should give players with this access to vanish.see
-    children:
-      vanish.vanish.on: true
-      vanish.vanish.off: true
-  vanish.vanish.on:
-    default: false
-    description: Can set state to vanished
-  vanish.vanish.off:
-    default: false
-    description: Can set state to unvanished from vanished
   vanish.see:
     default: false
     description: Allows player to see vanished players

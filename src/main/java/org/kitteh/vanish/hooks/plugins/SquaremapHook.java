@@ -17,46 +17,46 @@
  */
 package org.kitteh.vanish.hooks.plugins;
 
-import github.scarsz.discordsrv.DiscordSRV;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.VanishPlugin;
 import org.kitteh.vanish.hooks.Hook;
+import xyz.jpenilla.squaremap.api.Squaremap;
 
-public class DiscordSRVHook extends Hook {
+public final class SquaremapHook extends Hook {
     private boolean enabled = false;
-    private DiscordSRV discordsrv;
+    private Squaremap squaremap;
 
-    public DiscordSRVHook(@NonNull VanishPlugin plugin) {
+    public SquaremapHook(final @NonNull VanishPlugin plugin) {
         super(plugin);
     }
 
     @Override
     public void onEnable() {
-        final Plugin grab = this.plugin.getServer().getPluginManager().getPlugin("DiscordSRV");
-        if (grab != null && grab.isEnabled()) {
-            this.discordsrv = ((DiscordSRV) grab);
-            this.plugin.getLogger().info("Now hooking into DiscordSRV");
+        final @Nullable RegisteredServiceProvider<Squaremap> registration = this.plugin.getServer().getServicesManager().getRegistration(Squaremap.class);
+        final @Nullable Squaremap instance = registration == null ? null : registration.getProvider();
+        if (instance != null) {
+            this.squaremap = instance;
+            this.plugin.getLogger().info("Now hooking into squaremap");
             this.enabled = true;
         } else {
-            this.plugin.getLogger().info("You wanted DiscordSRV support. I could not find DiscordSRV.");
-            this.discordsrv = null;
-            this.enabled = false;
+            this.plugin.getLogger().info("You wanted squaremap support. I could not find squaremap.");
         }
     }
 
     @Override
-    public void onFakeJoin(@NonNull Player player) {
-        if (this.enabled && player.hasPermission("vanish.hooks.discordsrv.broadcastfakejoin")) {
-            this.discordsrv.sendJoinMessage(player, "");
+    public void onVanish(final @NonNull Player player) {
+        if (this.enabled) {
+            this.squaremap.playerManager().hide(player.getUniqueId());
         }
     }
 
     @Override
-    public void onFakeQuit(@NonNull Player player) {
-        if (this.enabled && player.hasPermission("vanish.hooks.discordsrv.broadcastfakequit")) {
-            this.discordsrv.sendLeaveMessage(player, "");
+    public void onUnvanish(final @NonNull Player player) {
+        if (this.enabled) {
+            this.squaremap.playerManager().show(player.getUniqueId());
         }
     }
 }

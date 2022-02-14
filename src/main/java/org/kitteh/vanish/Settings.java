@@ -1,6 +1,6 @@
 /*
  * VanishNoPacket
- * Copyright (C) 2011-2021 Matt Baxter
+ * Copyright (C) 2011-2022 Matt Baxter
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,8 @@ public final class Settings {
             if (ver <= 7) {
                 config.set("hooks.discordsrv", false);
             }
-            if (ver <= 8){
+            if (ver <= 8) {
+                config.set("hooks.squaremap", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
             }

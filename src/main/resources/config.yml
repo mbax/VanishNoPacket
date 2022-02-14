@@ -14,6 +14,7 @@ hooks:
     essentials: false
     dynmap: false
     discordsrv: false
+    squaremap: false
 permissionsupdates:
     checkonworldchange: false
 effects:
@@ -26,4 +27,4 @@ double-sneak-during-vanish-switches-gamemode:
     enabled: false
     max-ms-time-between-sneaks: 500
 configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 8
+    SeriouslyThisWillEraseYourConfig: 9
