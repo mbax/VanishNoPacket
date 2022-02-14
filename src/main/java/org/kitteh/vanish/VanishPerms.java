@@ -1,6 +1,6 @@
 /*
  * VanishNoPacket
- * Copyright (C) 2011-2021 Matt Baxter
+ * Copyright (C) 2011-2022 Matt Baxter
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,14 +170,6 @@ public final class VanishPerms {
 
     public static boolean canVanish(@NonNull Player player) {
         return player.hasPermission("vanish.vanish");
-    }
-
-    public static boolean canVanishOff(@NonNull Player player) {
-        return player.hasPermission("vanish.vanish.off");
-    }
-
-    public static boolean canVanishOn(@NonNull Player player) {
-        return player.hasPermission("vanish.vanish.on");
     }
 
     public static boolean joinVanished(@NonNull Player player) {

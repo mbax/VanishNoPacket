@@ -1,6 +1,6 @@
 /*
  * VanishNoPacket
- * Copyright (C) 2011-2021 Matt Baxter
+ * Copyright (C) 2011-2022 Matt Baxter
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,11 @@
  */
 package org.kitteh.vanish.listeners;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
 import org.bukkit.block.Container;
+import org.bukkit.block.EnderChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -40,6 +39,7 @@ import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.event.raid.RaidTriggerEvent;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.Settings;
@@ -69,68 +69,50 @@ public final class ListenPlayerOther implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onFoodChange(@NonNull FoodLevelChangeEvent event) {
-        if (event.getEntity() instanceof Player) {
-            final Player player = (Player) event.getEntity();
-            if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
-                event.setCancelled(true);
-            }
+        if (event.getEntity() instanceof final Player player && this.plugin.getManager().isVanished(player) && VanishPerms.canNotHunger(player)) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(@NonNull PlayerInteractEvent event) {
         final Player player = event.getPlayer();
-        if (!this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && (event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null) && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
-            final Block block = event.getClickedBlock();
-            Inventory inventory = null;
-            final BlockState blockState = block.getState();
-            boolean fake = false;
-            switch (block.getType()) {
-                case TRAPPED_CHEST:
-                case CHEST:
-                    final Chest chest = (Chest) blockState;
-                    inventory = this.plugin.getServer().createInventory(player, chest.getInventory().getSize());
-                    inventory.setContents(chest.getInventory().getContents());
-                    fake = true;
-                    break;
-                case ENDER_CHEST:
-                    if (this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                    inventory = player.getEnderChest();
-                    break;
-            }
-            if (inventory == null && blockState instanceof Container) {
-                inventory = ((Container) blockState).getInventory();
-            }
-            if (inventory != null) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null) && (event.getClickedBlock().getState() instanceof Container container) && !this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
+            if (container instanceof EnderChest && this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
                 event.setCancelled(true);
-                if (fake) {
-                    this.plugin.chestFakeOpen(player.getName());
-                    player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
-                }
-                player.openInventory(inventory);
                 return;
             }
-        }
-        if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
-            event.setCancelled(true);
-            return;
-        }
-        if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock() != null) && (event.getClickedBlock().getType() == Material.FARMLAND)) {
-            if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotTrample(player)) {
-                event.setCancelled(true);
+            Inventory inventory;
+            if (container.getInventory() instanceof DoubleChestInventory) {
+                if (this.plugin.isPaper()) {
+                    inventory = this.plugin.getServer().createInventory(player, 54, Component.text("Silently opened inventory"));
+                } else {
+                    //noinspection deprecation
+                    inventory = this.plugin.getServer().createInventory(player, 54, "Silently opened inventory");
+                }
+            } else {
+                if (this.plugin.isPaper()) {
+                    inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), Component.text("Silently opened inventory"));
+                } else {
+                    //noinspection deprecation
+                    inventory = this.plugin.getServer().createInventory(player, container.getInventory().getType(), "Silently opened inventory");
+                }
             }
+            inventory.setContents(container.getInventory().getContents());
+            this.plugin.chestFakeOpen(player.getName());
+            player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
+            player.openInventory(inventory);
+            event.setCancelled(true);
+        } else if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
+            event.setCancelled(true);
+        } else if ((event.getAction() == Action.PHYSICAL) && (event.getClickedBlock() != null) && (event.getClickedBlock().getType() == Material.FARMLAND) && this.plugin.getManager().isVanished(player) && VanishPerms.canNotTrample(player)) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerPickupItem(@NonNull EntityPickupItemEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
-            return;
-        }
-        if (this.plugin.getManager().isVanished((Player) event.getEntity()) && VanishPerms.canNotPickUp((Player) event.getEntity())) {
+        if (event.getEntity() instanceof Player player && this.plugin.getManager().isVanished(player) && VanishPerms.canNotPickUp(player)) {
             event.setCancelled(true);
         }
     }
@@ -152,7 +134,12 @@ public final class ListenPlayerOther implements Listener {
         this.plugin.hooksQuit(player);
         this.plugin.getManager().getAnnounceManipulator().dropDelayedAnnounce(player.getName());
         if (!this.plugin.getManager().getAnnounceManipulator().playerHasQuit(player.getName()) || VanishPerms.silentQuit(player)) {
-            event.setQuitMessage(null);
+            if (this.plugin.isPaper()) {
+                event.quitMessage(null);
+            } else {
+                //noinspection deprecation
+                event.setQuitMessage(null);
+            }
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());
     }
@@ -187,7 +174,7 @@ public final class ListenPlayerOther implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityBlockForm(@NonNull EntityBlockFormEvent event) {
-        if ((event.getEntity() instanceof Player) && this.plugin.getManager().isVanished((Player) event.getEntity())) {
+        if ((event.getEntity() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
         }
     }
