@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPlugin;
 
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public final class ListenPlayerSneak implements Listener {
                 Player player = event.getPlayer();
                 if (playersAndLastTimeSneaked.containsKey(player.getUniqueId())) {
                     long lastTime = playersAndLastTimeSneaked.get(player.getUniqueId());
-                    if (System.currentTimeMillis() - lastTime < 500) {
+                    if (System.currentTimeMillis() - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS()) {
                         player.sendMessage(ChatColor.GREEN + "GameMode changed!");
                         if (player.getGameMode() == GameMode.SPECTATOR) {
                             player.setGameMode(playersAndLastGameMode.getOrDefault(player.getUniqueId(), GameMode.CREATIVE));
