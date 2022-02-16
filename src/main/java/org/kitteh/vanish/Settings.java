@@ -28,6 +28,9 @@ public final class Settings {
     private static boolean autoFakeJoinSilent;
     private static boolean worldChangeCheck;
     private static int lightningEffectCount;
+    private static boolean doubleSneakDuringVanishSwitchesGameMode = false;
+    private static int doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = 500;
+    private static String doubleSneakDuringVanishSwitchesGameModeMessage = "&aGameMode changed!";
 
     private static final int confVersion = 9; // Tracking config version
 
@@ -53,6 +56,18 @@ public final class Settings {
 
     public static boolean getWorldChangeCheck() {
         return Settings.worldChangeCheck;
+    }
+
+    public static boolean isDoubleSneakDuringVanishSwitchesGameMode() {
+        return Settings.doubleSneakDuringVanishSwitchesGameMode;
+    }
+
+    public static int getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS() {
+        return Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS;
+    }
+
+    public static String getDoubleSneakDuringVanishSwitchesGameModeMessage() {
+        return Settings.doubleSneakDuringVanishSwitchesGameModeMessage;
     }
 
     static void freshStart(@NonNull VanishPlugin plugin) {
@@ -90,6 +105,9 @@ public final class Settings {
             }
             if (ver <= 8) {
                 config.set("hooks.squaremap", false);
+                config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
+                config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
+                config.set("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
@@ -99,6 +117,9 @@ public final class Settings {
         Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
+        Settings.doubleSneakDuringVanishSwitchesGameMode = config.getBoolean("double-sneak-during-vanish-switches-gamemode.enabled", false);
+        Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = config.getInt("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
+        Settings.doubleSneakDuringVanishSwitchesGameModeMessage = config.getString("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {
             Settings.lightningEffectCount = 1;

@@ -19,7 +19,9 @@ package org.kitteh.vanish.listeners;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Container;
 import org.bukkit.block.EnderChest;
 import org.bukkit.entity.Player;
@@ -38,19 +40,29 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.raid.RaidTriggerEvent;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.Settings;
 import org.kitteh.vanish.VanishPerms;
 import org.kitteh.vanish.VanishPlugin;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public final class ListenPlayerOther implements Listener {
     private final VanishPlugin plugin;
+    private final NamespacedKey lastGameModeNamespacedKey;
+    private final Map<UUID, Long> playersAndLastTimeSneaked = new HashMap<>();
 
     public ListenPlayerOther(@NonNull VanishPlugin instance) {
         this.plugin = instance;
+        this.lastGameModeNamespacedKey = new NamespacedKey(instance, "LastGameMode");
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -176,6 +188,29 @@ public final class ListenPlayerOther implements Listener {
     public void onEntityBlockForm(@NonNull EntityBlockFormEvent event) {
         if ((event.getEntity() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerShift(@NonNull PlayerToggleSneakEvent event) {
+        if (!event.isSneaking() || !Settings.isDoubleSneakDuringVanishSwitchesGameMode() || !this.plugin.getManager().isVanished(event.getPlayer())) {
+            return;
+        }
+        final Player player = event.getPlayer();
+        final long now = System.currentTimeMillis();
+        final long lastTime = this.playersAndLastTimeSneaked.computeIfAbsent(player.getUniqueId(), u -> now);
+        if ((now != lastTime) && (now - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
+            if (!Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage().isBlank()) { //In case the user doesn't want a message to be sent at all
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage()));
+            }
+            final PersistentDataContainer persistentDataContainer = player.getPersistentDataContainer();
+            if (player.getGameMode() == GameMode.SPECTATOR) {
+                player.setGameMode(GameMode.valueOf(persistentDataContainer.getOrDefault(this.lastGameModeNamespacedKey, PersistentDataType.STRING, "CREATIVE")));
+            } else {
+                persistentDataContainer.set(this.lastGameModeNamespacedKey, PersistentDataType.STRING, player.getGameMode().name());
+                player.setGameMode(GameMode.SPECTATOR);
+            }
+            this.playersAndLastTimeSneaked.remove(player.getUniqueId());
         }
     }
 }
