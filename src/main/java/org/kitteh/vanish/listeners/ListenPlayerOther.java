@@ -198,8 +198,9 @@ public final class ListenPlayerOther implements Listener {
         }
         final Player player = event.getPlayer();
         final long now = System.currentTimeMillis();
-        final long lastTime = this.playersAndLastTimeSneaked.computeIfAbsent(player.getUniqueId(), u -> now);
-        if ((now != lastTime) && (now - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
+        final long lastTimeSneaked = this.playersAndLastTimeSneaked.computeIfAbsent(player.getUniqueId(), u -> now);
+
+        if ((now != lastTimeSneaked) && (now - lastTimeSneaked < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
             if (!Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage().isBlank()) { //In case the user doesn't want a message to be sent at all
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage()));
             }
@@ -211,6 +212,10 @@ public final class ListenPlayerOther implements Listener {
                 player.setGameMode(GameMode.SPECTATOR);
             }
             this.playersAndLastTimeSneaked.remove(player.getUniqueId());
+        }else{
+            //Without this, if the player is in the playersAndLastTimeSneaked and after that does not reach the minimum time to vanish at least once,
+            //the last time sneaked would not be updated anymore
+            this.playersAndLastTimeSneaked.replace(player.getUniqueId(), now);
         }
     }
 }
