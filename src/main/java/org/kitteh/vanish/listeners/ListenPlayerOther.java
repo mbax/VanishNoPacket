@@ -211,7 +211,7 @@ public final class ListenPlayerOther implements Listener {
                 player.setGameMode(GameMode.SPECTATOR);
             }
             this.playersAndLastTimeSneaked.remove(player.getUniqueId());
-        }else{
+        } else {
             //Without this, if the player is in the playersAndLastTimeSneaked and after that does not reach the minimum time to vanish at least once,
             //the last time sneaked would not be updated anymore
             this.playersAndLastTimeSneaked.replace(player.getUniqueId(), now);
