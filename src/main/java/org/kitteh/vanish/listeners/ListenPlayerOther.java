@@ -199,7 +199,6 @@ public final class ListenPlayerOther implements Listener {
         final Player player = event.getPlayer();
         final long now = System.currentTimeMillis();
         final long lastTimeSneaked = this.playersAndLastTimeSneaked.computeIfAbsent(player.getUniqueId(), u -> now);
-
         if ((now != lastTimeSneaked) && (now - lastTimeSneaked < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
             if (!Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage().isBlank()) { //In case the user doesn't want a message to be sent at all
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage()));
