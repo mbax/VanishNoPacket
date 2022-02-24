@@ -21,20 +21,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.metadata.LazyMetadataValue;
 import org.bukkit.metadata.LazyMetadataValue.CacheStrategy;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.kitteh.vanish.hooks.HookManager;
 import org.kitteh.vanish.hooks.HookManager.HookType;
 import org.kitteh.vanish.listeners.ListenEntity;
 import org.kitteh.vanish.listeners.ListenInventory;
-import org.kitteh.vanish.listeners.ListenPaper;
 import org.kitteh.vanish.listeners.ListenPlayerJoin;
 import org.kitteh.vanish.listeners.ListenPlayerMessages;
 import org.kitteh.vanish.listeners.ListenPlayerOther;
@@ -49,7 +45,6 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     private final Set<String> haveInventoriesOpen = new HashSet<>();
     private final HookManager hookManager = new HookManager(this);
     private VanishManager manager;
-    private boolean paper;
 
     /**
      * Informs VNP that a user has closed their fake chest
@@ -198,7 +193,6 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        this.setInstance(null);
         Debuggle.nah();
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
@@ -214,44 +208,14 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        this.setInstance(this);
-
-        // Thanks, PaperLib
-        // https://github.com/PaperMC/PaperLib
         try {
             Class.forName("com.destroystokyo.paper.PaperConfig");
-            this.getServer().getPluginManager().registerEvents(new ListenPaper(this), this);
-            this.paper = true;
-            new BukkitRunnable() {
-                @SuppressWarnings("deprecation")
-                @Override
-                public void run() {
-                    if (AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length == 1) {
-                        AsyncPlayerChatEvent.getHandlerList().unregister((Plugin) VanishPlugin.this);
-                    }
-                }
-            }.runTaskLater(this, 1);
         } catch (ClassNotFoundException ignored) {
-            final String benefitsProperty = "paperlib.shown-benefits";
-            this.getLogger().warning("====================================================");
-            this.getLogger().warning(" VanishNoPacket works better if you use Paper ");
-            this.getLogger().warning(" as your server software. ");
-            if (System.getProperty(benefitsProperty) == null) {
-                System.setProperty(benefitsProperty, "1");
-                this.getLogger().warning("  ");
-                this.getLogger().warning(" Paper offers significant performance improvements,");
-                this.getLogger().warning(" bug fixes, security enhancements and optional");
-                this.getLogger().warning(" features for server owners to enhance their server.");
-                this.getLogger().warning("  ");
-                this.getLogger().warning(" Paper includes Timings v2, which is significantly");
-                this.getLogger().warning(" better at diagnosing lag problems over v1.");
-                this.getLogger().warning("  ");
-                this.getLogger().warning(" All of your plugins should still work, and the");
-                this.getLogger().warning(" Paper community will gladly help you fix any issues.");
-                this.getLogger().warning("  ");
-                this.getLogger().warning(" Join the Paper Community @ https://papermc.io");
-            }
-            this.getLogger().warning("====================================================");
+            this.getLogger().severe("====================================================");
+            this.getLogger().severe("   VanishNoPacket requires Paper (or derivatives)!  ");
+            this.getLogger().severe("====================================================");
+            this.setEnabled(false);
+            return;
         }
 
         final File check = new File(this.getDataFolder(), "config.yml");
@@ -316,19 +280,5 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
     public void reload() {
         this.reloadConfig();
         Settings.freshStart(this);
-    }
-
-    /**
-     * Gets if Paper is present.
-     *
-     * @return true if Paper is present
-     */
-    public boolean isPaper() {
-        return this.paper;
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setInstance(@Nullable VanishPlugin plugin) {
-        org.kitteh.vanish.staticaccess.VanishNoPacket.setInstance(plugin);
     }
 }

@@ -60,12 +60,7 @@ public final class ListenPlayerJoin implements Listener {
         }
         if (VanishPerms.joinWithoutAnnounce(event.getPlayer())) {
             this.plugin.getManager().getAnnounceManipulator().addToDelayedAnnounce(event.getPlayer().getName());
-            if (this.plugin.isPaper()) {
-                event.joinMessage(null);
-            } else {
-                //noinspection deprecation
-                event.setJoinMessage(null);
-            }
+            event.joinMessage(null);
             if (statusUpdate.length() != 0) {
                 statusUpdate.append(" and ");
             }
