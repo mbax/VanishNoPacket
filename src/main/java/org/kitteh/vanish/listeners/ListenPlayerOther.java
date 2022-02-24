@@ -154,6 +154,7 @@ public final class ListenPlayerOther implements Listener {
             }
         }
         this.plugin.chestFakeClose(event.getPlayer().getName());
+        this.playersAndLastTimeSneaked.remove(player.getUniqueId());
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -198,8 +199,8 @@ public final class ListenPlayerOther implements Listener {
         }
         final Player player = event.getPlayer();
         final long now = System.currentTimeMillis();
-        final long lastTime = this.playersAndLastTimeSneaked.computeIfAbsent(player.getUniqueId(), u -> now);
-        if ((now != lastTime) && (now - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
+        final Long lastTime = this.playersAndLastTimeSneaked.put(player.getUniqueId(), now);
+        if ((lastTime != null) && (now - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
             if (!Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage().isBlank()) { //In case the user doesn't want a message to be sent at all
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage()));
             }
