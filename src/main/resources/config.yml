@@ -25,7 +25,7 @@ permtest: false
 debug: false
 double-sneak-during-vanish-switches-gamemode:
     enabled: false
-    max-ms-time-between-sneaks: 500
+    max-ms-time-between-sneaks: 1000
     message: '&aGameMode changed!'
 configVersionDoNotTouch: 
     SeriouslyThisWillEraseYourConfig: 9
