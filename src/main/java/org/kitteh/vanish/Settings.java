@@ -106,7 +106,7 @@ public final class Settings {
             if (ver <= 8) {
                 config.set("hooks.squaremap", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
-                config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
+                config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 1000);
                 config.set("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
