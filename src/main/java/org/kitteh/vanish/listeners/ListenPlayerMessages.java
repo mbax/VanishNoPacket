@@ -18,7 +18,9 @@
 package org.kitteh.vanish.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,7 +50,7 @@ public final class ListenPlayerMessages implements Listener {
         }.runTaskLater(this.plugin, 1);
     }
 
-    public final class Outdated implements Listener {
+    public static final class Outdated implements Listener {
         private final VanishPlugin plugin;
 
         public Outdated(@NonNull VanishPlugin instance) {
@@ -83,37 +85,33 @@ public final class ListenPlayerMessages implements Listener {
                 if (!selfTest && !otherTest) {
                     return;
                 }
-                final StringBuilder message = new StringBuilder();
                 String permission;
-                message.append(ChatColor.DARK_AQUA);
                 if ((split.length == 2) && selfTest) {
                     permission = split[1];
+                    final StringBuilder message = new StringBuilder();
                     message.append("You");
                     if (!event.getPlayer().hasPermission(permission)) {
                         message.append(" do not");
                     }
                     message.append(" have ");
+                    event.getPlayer().sendMessage(Component.text().color(Settings.getDark()).content(message.toString()).append(Component.text().color(Settings.getLight()).content(permission)));
                 } else if ((split.length == 3) && otherTest) {
                     final Player target = this.plugin.getServer().getPlayer(split[1]);
                     if (target == null) {
-                        message.append("Cannot find player: ").append(ChatColor.AQUA).append(split[1]);
-                        event.getPlayer().sendMessage(message.toString());
-                        event.setCancelled(true);
-                        return;
-                    }
-                    message.append("Player ").append(ChatColor.AQUA).append(target.getName()).append(ChatColor.DARK_AQUA);
-                    permission = split[2];
-                    if (!target.hasPermission(permission)) {
-                        message.append(" does not have ");
+                        event.getPlayer().sendMessage(Component.text().color(Settings.getDark()).content("Cannot find player: ").append(Component.text().color(Settings.getLight()).content(split[1])));
                     } else {
-                        message.append(" has ");
+                        permission = split[2];
+                        event.getPlayer().sendMessage(
+                                Component.text().color(Settings.getDark()).content("Player ")
+                                        .append(Component.text().color(Settings.getLight()).content(target.getName()))
+                                        .append(Component.text(target.hasPermission(permission) ? " has " : " does not have "))
+                                        .append(Component.text().color(Settings.getLight()).content(permission))
+                        );
                     }
                 } else {
                     return;
                 }
                 event.setCancelled(true);
-                message.append(ChatColor.AQUA).append(permission);
-                event.getPlayer().sendMessage(message.toString());
             }
 
         }

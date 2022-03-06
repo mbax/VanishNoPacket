@@ -18,7 +18,11 @@
 package org.kitteh.vanish;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.kitteh.vanish.hooks.HookManager.HookType;
@@ -93,19 +97,34 @@ public final class VanishAnnounceManipulator {
         return true;
     }
 
-    private @NonNull String injectPlayerInformation(@NonNull String message, @NonNull Player player) {
+    private @NonNull Component injectPlayerInformation(@NonNull String message, @NonNull Player player) {
         final VaultHook vault = (VaultHook) this.plugin.getHookManager().getHook(HookType.Vault);
-        message = message.replace("%p", player.getName());
-        message = message.replace("%d", player.getDisplayName());
+        TagResolver.Builder builder = TagResolver.builder();
+        builder.tag("player", (queue, context) -> {
+            if (queue.hasNext()) {
+                String arg = queue.pop().value();
+                if (arg.equals("displayname")) {
+                    return Tag.selfClosingInserting(player.displayName());
+                } else {
+                    return Tag.selfClosingInserting(player.name());
+                }
+            }
+            return Tag.selfClosingInserting(Component.empty());
+        });
         if (this.placeholderAPI) {
-            message = PlaceholderAPI.setPlaceholders(player, message);
+            builder.tag("papi", (queue, context) -> {
+                if (queue.hasNext()) {
+                    return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(PlaceholderAPI.setPlaceholders(player, '%' + queue.pop().value() + '%')));
+                }
+                return Tag.selfClosingInserting(Component.empty());
+            });
         }
-        return message;
+        return MiniMessage.miniMessage().deserialize(message, builder.build());
     }
 
     void fakeJoin(@NonNull Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && this.playerOnlineStatus.get(player.getName()))) {
-            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeJoin(), player));
+            this.plugin.getServer().broadcast(this.injectPlayerInformation(Settings.getFakeJoin(), player));
             this.plugin.getLogger().info(player.getName() + " faked joining");
             this.playerOnlineStatus.put(player.getName(), true);
             this.plugin.hooksFakeJoin(player);
@@ -114,7 +133,7 @@ public final class VanishAnnounceManipulator {
 
     void fakeQuit(@NonNull Player player, boolean force) {
         if (force || !(this.playerOnlineStatus.containsKey(player.getName()) && !this.playerOnlineStatus.get(player.getName()))) {
-            this.plugin.getServer().broadcastMessage(ChatColor.YELLOW + this.injectPlayerInformation(Settings.getFakeQuit(), player));
+            this.plugin.getServer().broadcast(this.injectPlayerInformation(Settings.getFakeQuit(), player));
             this.plugin.getLogger().info(player.getName() + " faked quitting");
             this.playerOnlineStatus.put(player.getName(), false);
             this.plugin.hooksFakeQuit(player);

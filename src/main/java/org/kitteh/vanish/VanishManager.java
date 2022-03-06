@@ -18,7 +18,8 @@
 package org.kitteh.vanish;
 
 import com.google.common.collect.ImmutableSet;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -220,7 +221,6 @@ public final class VanishManager {
         this.toggleVanishQuiet(togglingPlayer);
         final String vanishingPlayerName = togglingPlayer.getName();
         final String messageBit;
-        final String base = ChatColor.YELLOW + vanishingPlayerName + " has ";
         if (this.isVanished(togglingPlayer)) {
             Debuggle.log("LoudVanishToggle Vanishing " + togglingPlayer.getName());
             this.plugin.hooksVanish(togglingPlayer);
@@ -232,9 +232,8 @@ public final class VanishManager {
             messageBit = "become visible.";
             this.announceManipulator.vanishToggled(togglingPlayer);
         }
-        final String message = base + messageBit;
-        togglingPlayer.sendMessage(ChatColor.DARK_AQUA + "You have " + messageBit);
-        this.plugin.messageStatusUpdate(message, togglingPlayer);
+        togglingPlayer.sendMessage(Component.text().color(Settings.getDark()).content("You have " + messageBit));
+        this.plugin.messageStatusUpdate(Component.text().color(NamedTextColor.YELLOW).content(vanishingPlayerName + " has " + messageBit), togglingPlayer);
     }
 
     /**

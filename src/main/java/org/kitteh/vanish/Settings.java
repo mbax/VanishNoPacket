@@ -17,9 +17,16 @@
  */
 package org.kitteh.vanish;
 
-import org.bukkit.ChatColor;
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.regex.Matcher;
 
 public final class Settings {
     private static boolean enablePermTest;
@@ -30,9 +37,18 @@ public final class Settings {
     private static int lightningEffectCount;
     private static boolean doubleSneakDuringVanishSwitchesGameMode = false;
     private static int doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = 500;
-    private static String doubleSneakDuringVanishSwitchesGameModeMessage = "&aGameMode changed!";
+    private static Component doubleSneakDuringVanishSwitchesGameModeMessageBack;
+    private static Component doubleSneakDuringVanishSwitchesGameModeMessageSpec;
 
-    private static final int confVersion = 9; // Tracking config version
+    private static final int confVersion = 10; // Tracking config version
+
+    public static TextColor getDark() {
+        return TextColor.fromHexString("#028090");//#05668D
+    }
+
+    public static TextColor getLight() {
+        return TextColor.fromHexString("#7CFEF0");
+    }
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -66,8 +82,12 @@ public final class Settings {
         return Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS;
     }
 
-    public static String getDoubleSneakDuringVanishSwitchesGameModeMessage() {
-        return Settings.doubleSneakDuringVanishSwitchesGameModeMessage;
+    public static ComponentLike getDoubleSneakDuringVanishSwitchesGameModeMessageBack() {
+        return Settings.doubleSneakDuringVanishSwitchesGameModeMessageBack;
+    }
+
+    public static ComponentLike getDoubleSneakDuringVanishSwitchesGameModeMessageSpec() {
+        return Settings.doubleSneakDuringVanishSwitchesGameModeMessageSpec;
     }
 
     static void freshStart(@NonNull VanishPlugin plugin) {
@@ -106,28 +126,56 @@ public final class Settings {
             if (ver <= 8) {
                 config.set("hooks.squaremap", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
-                config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
-                config.set("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
+                config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 750);
+            }
+            if (ver <= 9) {
+                config.set("double-sneak-during-vanish-switches-gamemode.message", null);
+                config.set("double-sneak-during-vanish-switches-gamemode.messagespec", "<#05668D>Game mode changed to spectator!");
+                config.set("double-sneak-during-vanish-switches-gamemode.messageback", "<#05668D>Game mode restored!");
+                config.set("fakeannounce.join", Settings.unlegacize(config.getString("fakeannounce.join", "%p joined the game.")));
+                config.set("fakeannounce.quit", Settings.unlegacize(config.getString("fakeannounce.quit", "%p left the game.")));
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
         }
         Settings.enablePermTest = config.getBoolean("permtest", false);
-        Settings.fakeJoin = config.getString("fakeannounce.join", "%p joined the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
-        Settings.fakeQuit = config.getString("fakeannounce.quit", "%p left the game.").replace("&&", String.valueOf(ChatColor.COLOR_CHAR));
+        Settings.fakeJoin = config.getString("fakeannounce.join", "<yellow><player:name> joined the game.");
+        Settings.fakeQuit = config.getString("fakeannounce.quit", "<yellow><player:name> left the game.");
         Settings.autoFakeJoinSilent = config.getBoolean("fakeannounce.automaticforsilentjoin", false);
         Settings.worldChangeCheck = config.getBoolean("permissionsupdates.checkonworldchange", false);
         Settings.doubleSneakDuringVanishSwitchesGameMode = config.getBoolean("double-sneak-during-vanish-switches-gamemode.enabled", false);
         Settings.doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = config.getInt("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
-        Settings.doubleSneakDuringVanishSwitchesGameModeMessage = config.getString("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
+        Settings.doubleSneakDuringVanishSwitchesGameModeMessageBack = MiniMessage.miniMessage().deserialize(config.getString("double-sneak-during-vanish-switches-gamemode.messageback", "<aqua>Game mode restored!"));
+        Settings.doubleSneakDuringVanishSwitchesGameModeMessageSpec = MiniMessage.miniMessage().deserialize(config.getString("double-sneak-during-vanish-switches-gamemode.messagespec", "<aqua>Game mode changed to spectator!"));
         Settings.lightningEffectCount = config.getInt("effects.lightning.count", 30);
         if (Settings.lightningEffectCount < 1) {
             Settings.lightningEffectCount = 1;
+        }
+        if (plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            Settings.fakeJoin = Settings.placeholderer(Settings.fakeJoin);
+            Settings.fakeQuit = Settings.placeholderer(Settings.fakeQuit);
         }
         if (config.getBoolean("debug", false)) {
             Debuggle.itsGoTime(plugin);
         } else {
             Debuggle.nah();
         }
+    }
+
+    private static String unlegacize(String string) {
+        string  = string.replace("&&", String.valueOf(org.bukkit.ChatColor.COLOR_CHAR));
+        string = MiniMessage.miniMessage().serialize(LegacyComponentSerializer.legacySection().deserialize(org.bukkit.ChatColor.YELLOW + string).compact());
+        string = string.replace("%p", "<player:name>");
+        string = string.replace("%d", "<player:displayname>");
+        return string;
+    }
+
+    private static String placeholderer(String string) {
+        Matcher matcher = PlaceholderAPI.getPlaceholderPattern().matcher(string);
+        while (matcher.find()) {
+            String placeholder = matcher.group(1);
+            string = string.replace('%' + placeholder + '%', "<papi:" + placeholder + '>');
+        }
+        return string;
     }
 }

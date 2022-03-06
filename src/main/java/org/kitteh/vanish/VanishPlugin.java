@@ -17,7 +17,9 @@
  */
 package org.kitteh.vanish;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -173,7 +175,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
      *
      * @param message the message to send
      */
-    public void messageStatusUpdate(@NonNull String message) {
+    public void messageStatusUpdate(@NonNull ComponentLike message) {
         this.messageStatusUpdate(message, null);
     }
 
@@ -183,9 +185,9 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
      * @param message the message to send
      * @param avoid player to not send the message to
      */
-    public void messageStatusUpdate(@NonNull String message, @Nullable Player avoid) {
+    public void messageStatusUpdate(@NonNull ComponentLike message, @Nullable Player avoid) {
         for (final Player player : this.getServer().getOnlinePlayers()) {
-            if ((player != null) && !player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
+            if (!player.equals(avoid) && VanishPerms.canSeeStatusUpdates(player)) {
                 player.sendMessage(message);
             }
         }
@@ -197,7 +199,7 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         for (final Player player : VanishPlugin.this.getServer().getOnlinePlayers()) {
             if (player != null) {
                 if (this.manager.isVanished(player)) {
-                    player.sendMessage(ChatColor.DARK_AQUA + "[Vanish] You have been forced visible by a reload.");
+                    player.sendMessage(Component.text().color(Settings.getDark()).content("[Vanish] You have been forced visible by a reload."));
                 }
             }
         }

@@ -23,7 +23,7 @@ import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.player.PlayerAdvancementCriterionGrantEvent;
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -108,7 +108,7 @@ public final class ListenPlayerOther implements Listener {
             }
             inventory.setContents(container.getInventory().getContents());
             this.plugin.chestFakeOpen(player.getName());
-            player.sendMessage(ChatColor.AQUA + "[VNP] Opening chest silently. Can not edit.");
+            player.sendMessage(Component.text().content("[VNP] Opening chest silently. Can not edit.").color(Settings.getLight()));
             player.openInventory(inventory);
             event.setCancelled(true);
         } else if (this.plugin.getManager().isVanished(player) && VanishPerms.canNotInteract(player)) {
@@ -136,7 +136,7 @@ public final class ListenPlayerOther implements Listener {
     public void onPlayerQuit(@NonNull PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         if (this.plugin.getManager().isVanished(player)) {
-            this.plugin.messageStatusUpdate(ChatColor.DARK_AQUA + event.getPlayer().getName() + " has quit vanished");
+            this.plugin.messageStatusUpdate(Component.text().color(Settings.getDark()).content(event.getPlayer().getName() + " has quit vanished"));
         }
         this.plugin.getManager().playerQuit(player);
         this.plugin.hooksQuit(player);
@@ -192,13 +192,12 @@ public final class ListenPlayerOther implements Listener {
         final long now = System.currentTimeMillis();
         final Long lastTime = this.playersAndLastTimeSneaked.put(player.getUniqueId(), now);
         if ((lastTime != null) && (now - lastTime < Settings.getDoubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS())) {
-            if (!Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage().isBlank()) { //In case the user doesn't want a message to be sent at all
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', Settings.getDoubleSneakDuringVanishSwitchesGameModeMessage()));
-            }
             final PersistentDataContainer persistentDataContainer = player.getPersistentDataContainer();
             if (player.getGameMode() == GameMode.SPECTATOR) {
+                player.sendMessage(Settings.getDoubleSneakDuringVanishSwitchesGameModeMessageBack());
                 player.setGameMode(GameMode.valueOf(persistentDataContainer.getOrDefault(this.lastGameModeNamespacedKey, PersistentDataType.STRING, "CREATIVE")));
             } else {
+                player.sendMessage(Settings.getDoubleSneakDuringVanishSwitchesGameModeMessageSpec());
                 persistentDataContainer.set(this.lastGameModeNamespacedKey, PersistentDataType.STRING, player.getGameMode().name());
                 player.setGameMode(GameMode.SPECTATOR);
             }

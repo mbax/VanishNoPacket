@@ -8,8 +8,8 @@
 #
 fakeannounce:
     automaticforsilentjoin: false
-    join: '%p joined the game.'
-    quit: '%p left the game.'
+    join: '<yellow><player:name> joined the game.'
+    quit: '<yellow><player:name> left the game.'
 hooks:
     essentials: false
     dynmap: false
@@ -20,12 +20,13 @@ permissionsupdates:
 effects:
     lightning:
         count: 30
+double-sneak-during-vanish-switches-gamemode:
+    enabled: false
+    max-ms-time-between-sneaks: 750
+    messagespec: '<aqua>Game mode changed to spectator!'
+    messageback: '<aqua>Game mode restored!'
 
 permtest: false
 debug: false
-double-sneak-during-vanish-switches-gamemode:
-    enabled: false
-    max-ms-time-between-sneaks: 500
-    message: '&aGameMode changed!'
-configVersionDoNotTouch: 
-    SeriouslyThisWillEraseYourConfig: 9
+configVersionDoNotTouch:
+    SeriouslyThisWillEraseYourConfig: 10
