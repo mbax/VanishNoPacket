@@ -18,6 +18,7 @@
 package org.kitteh.vanish;
 
 import com.google.common.collect.ImmutableSet;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -174,10 +175,12 @@ public final class VanishManager {
      * @param player the player who has quit
      */
     public void playerQuit(@NonNull Player player) {
-        Debuggle.log("Quitting: " + player.getName());
+        String name = player.getName();
+        Debuggle.log("Quitting: " + name);
         this.resetSleepingIgnored(player);
         VanishPerms.userQuit(player);
-        this.removeVanished(player.getName());
+        // Run one tick later so plugins listening on higher priorities can still retrieve their vanish state.
+        Bukkit.getScheduler().runTaskLater(plugin, () -> this.removeVanished(player.getName()), 1L);
     }
 
     /**
