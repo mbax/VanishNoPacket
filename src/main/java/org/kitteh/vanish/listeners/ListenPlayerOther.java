@@ -86,10 +86,37 @@ public final class ListenPlayerOther implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerInteractShulker(@NonNull PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null) && (event.getClickedBlock().getState() instanceof Container container) && !this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
+            if (event.getClickedBlock().getType().name().contains("SHULKER")) {
+                Inventory inventory;
+                if (this.plugin.isPaper()) {
+                    inventory = this.plugin.getServer().createInventory(player, 27, Component.text("Silently opened inventory"));
+                } else {
+                    //noinspection deprecation
+                    inventory = this.plugin.getServer().createInventory(player, 27, "Silently opened inventory");
+                }
+                inventory.setContents(container.getInventory().getContents());
+                this.plugin.chestFakeOpen(player.getName());
+                player.sendMessage(ChatColor.AQUA + "[VNP] Opening shulker silently. Can not edit.");
+                player.openInventory(inventory);
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(@NonNull PlayerInteractEvent event) {
         final Player player = event.getPlayer();
         if ((event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getClickedBlock() != null) && (event.getClickedBlock().getState() instanceof Container container) && !this.plugin.chestFakeInUse(player.getName()) && !player.isSneaking() && this.plugin.getManager().isVanished(event.getPlayer()) && VanishPerms.canReadChestsSilently(event.getPlayer())) {
+            if(event.getClickedBlock().getType().name().contains("SHULKER")){
+            return;
+            }
+
+
             if (container instanceof EnderChest && this.plugin.getServer().getPluginManager().isPluginEnabled("EnderChestPlus") && VanishPerms.canNotInteract(player)) {
                 event.setCancelled(true);
                 return;
