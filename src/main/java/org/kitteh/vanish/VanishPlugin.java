@@ -301,6 +301,18 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(new ListenServerPing(this.manager), this);
 
         this.getLogger().info(this.getCurrentVersion() + " loaded.");
+        
+                Bukkit.getScheduler().runTaskTimer(this,()->{
+            for(Player p: Bukkit.getOnlinePlayers()){
+                if(manager.isVanished(p)) {
+                    Audience a = (Audience) p;
+                    a.sendActionBar(Component.text(ChatColor.GREEN + "You are vanished"));
+                }
+            }
+        },20,20);
+
+        
+        
     }
 
     @EventHandler
