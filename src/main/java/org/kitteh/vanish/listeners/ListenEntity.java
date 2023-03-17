@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockReceiveGameEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -83,6 +84,17 @@ public final class ListenEntity implements Listener {
     public void onVehicleEntityCollision(@NonNull VehicleEntityCollisionEvent event) {
         if ((event.getEntity() instanceof Player player) && this.plugin.getManager().isVanished(player)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockReceiveGameEvent(@NonNull BlockReceiveGameEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+
+            if (this.plugin.getManager().isVanished(player)) {
+                event.setCancelled(true);
+            }
         }
     }
 }
