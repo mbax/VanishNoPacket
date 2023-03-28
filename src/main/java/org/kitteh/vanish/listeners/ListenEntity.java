@@ -90,7 +90,6 @@ public final class ListenEntity implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onBlockReceiveGameEvent(@NonNull BlockReceiveGameEvent event) {
         if (event.getEntity() instanceof Player player) {
-
             if (this.plugin.getManager().isVanished(player)) {
                 event.setCancelled(true);
             }
