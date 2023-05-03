@@ -15,6 +15,7 @@ hooks:
     dynmap: false
     discordsrv: false
     squaremap: false
+    pl3xmap: false
 permissionsupdates:
     checkonworldchange: false
 effects:
