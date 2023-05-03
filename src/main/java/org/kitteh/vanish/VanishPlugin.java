@@ -281,6 +281,9 @@ public final class VanishPlugin extends JavaPlugin implements Listener {
         if (this.getConfig().getBoolean("hooks.squaremap", false)) {
             this.hookManager.getHook(HookType.squaremap).onEnable();
         }
+        if (this.getConfig().getBoolean("hooks.pl3xmap", false)) {
+            this.hookManager.getHook(HookType.Pl3xMap).onEnable();
+        }
 
         final VanishPlugin self = this;
 
