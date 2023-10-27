@@ -32,7 +32,7 @@ public final class Settings {
     private static int doubleSneakDuringVanishSwitchesGameModeTimeBetweenSneaksInMS = 500;
     private static String doubleSneakDuringVanishSwitchesGameModeMessage = "&aGameMode changed!";
 
-    private static final int confVersion = 9; // Tracking config version
+    private static final int confVersion = 10; // Tracking config version
 
     public static boolean getAutoFakeJoinSilent() {
         return Settings.autoFakeJoinSilent;
@@ -108,6 +108,9 @@ public final class Settings {
                 config.set("double-sneak-during-vanish-switches-gamemode.enabled", false);
                 config.set("double-sneak-during-vanish-switches-gamemode.max-ms-time-between-sneaks", 500);
                 config.set("double-sneak-during-vanish-switches-gamemode.message", "&aGameMode changed!");
+            }
+            if (ver <= 9) {
+                config.set("hooks.pl3xmap", false);
             }
             config.set("configVersionDoNotTouch.SeriouslyThisWillEraseYourConfig", Settings.confVersion);
             plugin.saveConfig();
